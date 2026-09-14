@@ -1,51 +1,197 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#163e34"><meta name="description" content="Lead Babar, his elephant kingdom, family and royal council against Lord Rataxes in a storybook real-time strategy game.">
-  <title>Babar — Battle for Celesteville</title><link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <header>
-    <div class="brand"><span class="crown">♛</span><div>BABAR<small>BATTLE FOR CELESTEVILLE</small></div></div>
-    <div class="resources"><span>● <b id="ore">300</b><em>FRUIT</em></span><span>⚑ <b id="supply">10 / 30</b><em>POPULATION</em></span></div>
-    <button id="court-open" class="court-button">Family & council</button><button id="pause" title="Pause (Space)">Pause</button><button id="help" aria-label="How to play">?</button>
-  </header>
-  <main>
-    <section class="field">
-      <canvas id="game" aria-label="Battlefield. Select elephants, then choose an order and tap the map. Use the minimap to travel." tabindex="0"></canvas>
-      <div class="mission"><span>CHAPTER ONE · TROUBLE AT THE BORDER</span><strong>Protect Celesteville. Capture Rataxes’s fortress.</strong><small id="phase">Rhinos arrive in 01:40</small></div>
-      <div id="toast" role="status">The fruit gatherers are already at work.</div>
-      <div class="camera-tools"><button id="zoom-out" aria-label="Zoom out">−</button><button id="zoom-in" aria-label="Zoom in">+</button><button id="pan" aria-pressed="false">Pan map</button></div>
-      <div class="map-label">THE GREAT FOREST <span> / </span> CELESTEVILLE</div>
-      <div id="overlay">
-        <div class="brief">
-          <div class="story-portrait" aria-hidden="true"></div>
-          <p class="eyebrow">AN ELEPHANT KINGDOM ADVENTURE</p><h1>A kingdom.<br>A family.<br>A very cross rhino.</h1>
-          <p>Rataxes is on the march! Help Babar gather fruit, build Celesteville, and lead the elephants to victory.</p>
-          <div class="steps"><p><b>1</b> Gather fruit and train elephants at your palace and Guard School.</p><p><b>2</b> Ask the <strong>Family & council</strong> for special help.</p><p><b>3</b> Select your army, choose <strong>Attack</strong>, and tap a destination.</p></div>
-          <div class="launch"><select id="difficulty" aria-label="Difficulty"><option value="easy">Family adventure · Easy</option><option value="normal">Royal challenge · Normal</option></select><button id="start">Begin adventure →</button></div>
-          <small>Mouse or touch · Single player · Use the minimap to explore</small>
-        </div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#163e34" />
+    <meta
+      name="description"
+      content="Lead Babar, his elephant kingdom, family and royal council against Lord Rataxes in a storybook real-time strategy game."
+    />
+    <title>Babar — The Siege of Celesteville</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="crown">♛</span>
+        <div>BABAR<small>THE SIEGE OF CELESTEVILLE</small></div>
       </div>
-    </section>
-    <aside>
-      <div class="panel-title">MAP OF THE KINGDOM <span id="clock">00:00</span></div>
-      <canvas id="minimap" width="300" height="210" aria-label="Tap the kingdom map to move the camera"></canvas>
-      <div class="selection"><p class="eyebrow" id="selected-type">CELESTEVILLE</p><h2 id="selected-name">Royal Palace</h2><p id="selected-info">Choose an elephant or building.</p><div id="health"><i></i></div></div>
-      <div id="actions"></div>
-      <div class="quick"><button id="army">Army <kbd>F2</kbd></button><button id="home">Palace <kbd>H</kbd></button><button id="leader">Babar</button></div>
-      <div class="orders"><p class="eyebrow">YOUR ORDERS</p><button data-mode="move">Move <kbd>M</kbd></button><button data-mode="attack">Attack <kbd>A</kbd></button><button data-mode="gather">Gather <kbd>G</kbd></button><button id="stop">Stay <kbd>S</kbd></button></div>
-      <p class="hint">Click or drag to select. Right-click to command. On touch, choose an order, then tap its target. Use the minimap, arrows, or Pan map to explore.</p>
-    </aside>
-  </main>
-  <footer><span>ELEPHANTS <b>vs.</b> RHINOLAND</span><span class="fan-label">UNOFFICIAL FAN GAME</span><button id="restart">New adventure</button></footer>
-  <dialog id="court-dialog" aria-labelledby="court-title">
-    <div class="court-heading"><div><p class="eyebrow">EVERY KINGDOM TAKES A FAMILY</p><h2 id="court-title">The family & royal council</h2></div><button id="court-close" aria-label="Close family and council">✕</button></div>
-    <p class="court-intro">Choose a family member or adviser to help Celesteville. Each card explains its power. The adventure pauses while you choose.</p>
-    <div class="court-tabs" role="group" aria-label="Choose a kingdom"><button id="tab-elephants" aria-pressed="true">Celesteville</button><button id="tab-rhinos" aria-pressed="false">Rhinoland</button></div>
-    <p id="court-funds"></p><div id="court-roster"></div>
-    <p class="court-note">This storybook crossover brings together the classic family, the Badou generation, and family-history tributes. Powers are invented for this game.</p>
-  </dialog>
-  <script src="cast.js"></script><script src="game.js"></script><script src="court.js"></script><script src="render.js"></script>
-</body></html>
+      <div class="resources">
+        <span>● <b id="ore">300</b><em>SUPPLIES</em></span
+        ><span>⚑ <b id="supply">10 / 30</b><em>POPULATION</em></span>
+      </div>
+      <button id="court-open" class="court-button">Family & council</button
+      ><button id="mute" aria-pressed="false">Sound on</button
+      ><button id="pause" title="Pause (Space)">Pause</button
+      ><button id="help" aria-label="How to play">?</button>
+    </header>
+    <main>
+      <section class="field">
+        <canvas
+          id="game"
+          aria-label="Battlefield. Select elephants, then choose an order and tap the map. Use the minimap to travel."
+          tabindex="0"
+        ></canvas>
+        <div class="mission">
+          <span>OPERATIONS ORDER 01 · HOLD THE BORDER</span
+          ><strong>Protect Celesteville. Capture Rataxes’s fortress.</strong
+          ><small id="phase">Assault expected in 02:00</small
+          ><small id="depot-status">Central depot contested</small>
+        </div>
+        <div id="toast" role="status">The supplies gatherers are already at work.</div>
+        <div class="camera-tools">
+          <button id="zoom-out" aria-label="Zoom out">−</button
+          ><button id="zoom-in" aria-label="Zoom in">+</button
+          ><button id="pan" aria-pressed="false">Pan map</button>
+        </div>
+        <div class="map-label">THE GREAT FOREST <span> / </span> CELESTEVILLE</div>
+        <div id="overlay">
+          <div class="brief">
+            <div class="story-portrait" aria-hidden="true"></div>
+            <p class="eyebrow">CELESTEVILLE · BORDER COMMAND</p>
+            <h1>
+              The Siege of<br />
+              Celesteville.
+            </h1>
+            <p>
+              Rataxes’s columns have crossed the border. Keep the palace supplied, hold the forest
+              approaches, and break his fortress before the town falls.
+            </p>
+            <div class="steps">
+              <p>
+                <b>1</b> Gather and deliver supplies. Recruit guards, scouts, and field artillery.
+              </p>
+              <p>
+                <b>2</b> Capture the central depot to cut Basil’s shipments. Use cover and withdraw
+                the wounded.
+              </p>
+              <p>
+                <b>3</b> Consult the <strong>Family & council</strong>. Their support can keep the
+                defense alive.
+              </p>
+            </div>
+            <div class="launch">
+              <select id="difficulty" aria-label="Difficulty">
+                <option value="easy">Story · Forgiving defenses</option>
+                <option value="normal">Commander · Contested supply</option></select
+              ><button id="start">Take command →</button>
+            </div>
+            <small>Mouse or touch · Single player · Use the minimap to explore</small>
+          </div>
+        </div>
+      </section>
+      <aside>
+        <div class="panel-title">MAP INTELLIGENCE <span id="clock">00:00</span></div>
+        <canvas
+          id="minimap"
+          width="300"
+          height="210"
+          aria-label="Tap the kingdom map to move the camera"
+        ></canvas>
+        <div class="selection">
+          <p class="eyebrow" id="selected-type">CELESTEVILLE</p>
+          <h2 id="selected-name">Royal Palace</h2>
+          <p id="selected-info">Choose an elephant or building.</p>
+          <p id="tactical-status"></p>
+          <div id="health"><i></i></div>
+        </div>
+        <div id="actions"></div>
+        <div class="quick">
+          <button id="army">Army <kbd>F2</kbd></button><button id="home">Palace <kbd>H</kbd></button
+          ><button id="leader">Babar</button>
+        </div>
+        <div class="orders">
+          <p class="eyebrow">FIELD ORDERS</p>
+          <button data-mode="move">Move <kbd>M</kbd></button
+          ><button data-mode="attack">Attack-move <kbd>A</kbd></button
+          ><button data-mode="gather">Gather <kbd>G</kbd></button
+          ><button data-mode="repair">Repair <kbd>E</kbd></button
+          ><button id="retreat">Retreat <kbd>R</kbd></button
+          ><button id="stop">Hold <kbd>S</kbd></button>
+        </div>
+        <p class="hint">
+          Click or drag to select. Right-click to command. On touch, choose an order, then tap its
+          target. Use the minimap, arrows, or Pan map to explore.
+        </p>
+      </aside>
+    </main>
+    <footer>
+      <span>ELEPHANTS <b>vs.</b> RHINOLAND</span><span class="fan-label">UNOFFICIAL FAN GAME</span
+      ><button id="restart">Restart mission</button>
+    </footer>
+    <dialog id="court-dialog" aria-labelledby="court-title">
+      <div class="court-heading">
+        <div>
+          <p class="eyebrow">THE FAMILY BEHIND THE DEFENSE</p>
+          <h2 id="court-title">The family & royal council</h2>
+        </div>
+        <button id="court-close" aria-label="Close family and council">✕</button>
+      </div>
+      <p class="court-intro">
+        Choose a family member or adviser to help Celesteville. Each card explains its power. The
+        battle pauses while you choose.
+      </p>
+      <div class="court-tabs" role="group" aria-label="Choose a kingdom">
+        <button id="tab-elephants" aria-pressed="true">Celesteville</button
+        ><button id="tab-rhinos" aria-pressed="false">Rhinoland</button>
+      </div>
+      <p id="court-funds"></p>
+      <div id="court-roster"></div>
+      <p class="court-note">
+        This storybook crossover brings together the classic family, the Badou generation, and
+        family-history tributes. Powers are invented for this game.
+      </p>
+    </dialog>
+    <dialog id="help-dialog" aria-labelledby="help-title">
+      <div class="court-heading">
+        <h2 id="help-title">Field manual</h2>
+        <button id="help-close">Close</button>
+      </div>
+      <p>
+        Protect the palace and destroy Rataxes’s fortress in the northeast. Choose Story for more
+        time to recover or Commander for stronger, faster assaults.
+      </p>
+      <p>
+        <b>Supplies:</b> provisioners collect physical caches and deliver to a supplied palace or
+        home. Buildings connect within 360m. Enemy soldiers within 85m of a link cut it: isolated
+        training runs at 25%. Clear raiders or build connecting homes. A provisioner’s Repair order
+        costs 0.3 supplies per health.
+      </p>
+      <p>
+        <b>Depot:</b> hold the central depot with soldiers for 8 uncontested seconds. It grants 2
+        supplies per second and stops Basil’s reserve income. Destroy his Guard School to stop
+        recruitment altogether. The reserve report is public convoy intelligence.
+      </p>
+      <p>
+        <b>Army:</b> guards hold ground; scouts move quickly and see farther; field artillery
+        outranges towers and deals 80% extra damage to buildings. Protect artillery with guards.
+        Sandbag cover reduces incoming damage by 35% for either faction.
+      </p>
+      <p>
+        <b>Morale:</b> hits suppress units; below 25 they withdraw automatically. After 3 seconds
+        without fire, morale recovers by 4/s, 12/s near a commander, or 10/s at an aid station.
+        Below 45, movement and firing slow. Retreat moves 20% faster and avoids engagement.
+      </p>
+      <p>
+        <b>Recovery:</b> linked homes and palaces heal nearby units by 2/s after 5 seconds without
+        fire; Celeste raises this to 6/s. Commanders recover for 45 seconds, then return when 100
+        supplies are available. Periwinkle reduces the wait to 25 seconds.
+      </p>
+      <p>
+        <b>Orders:</b> drag to select; Shift adds units; right-click moves or focuses a visible
+        enemy. A selects attack-move, M move, G gather, E repair, S hold, R retreat. F2 selects the
+        army; H returns to the palace. Space pauses. Touch uses the same explicit order buttons and
+        Pan map. Scroll or +/− zooms. Family & council pauses the simulation; closing it restores
+        the previous pause state.
+      </p>
+    </dialog>
+    <script src="cast.js"></script>
+    <script src="game.js"></script>
+    <script src="navigation.js"></script>
+    <script src="tactics.js"></script>
+    <script src="audio.js"></script>
+    <script src="court.js"></script>
+    <script src="render.js"></script>
+  </body>
+</html>

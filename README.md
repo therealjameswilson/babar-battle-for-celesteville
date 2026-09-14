@@ -1,41 +1,40 @@
-# Babar: Battle for Celesteville
+# Babar: The Siege of Celesteville
 
-A playable browser real-time strategy fan game. Gather fruit, build Celesteville, train an elephant army, and capture Lord Rataxes’s fortress.
+A static, single-player Canvas RTS: a storybook kingdom caught in a border war. Protect the palace, keep supplies moving, capture the contested depot, and break Rataxes’s fortress. One skirmish map, two approaches, Story and Commander difficulties, and the original 23-character family/council crossover.
 
-## Play
+## Play locally
 
-Open `dist/index.html` directly, or run `npm start` and open `http://localhost:8000`. The game uses plain HTML, CSS and JavaScript with local image assets. There are no npm dependencies, API keys, sign-in requirements or server-side services.
+Run `npm start`, then open http://localhost:8000. Or open `dist/index.html` directly. No install, build, backend, API key, or sign-in is needed to play. Requires Node 20+ for checks and Python 3 for the optional local server.
 
-- **Desktop:** click or drag to select; right-click to command. Arrow keys or the minimap move the camera. Scroll or use +/− to zoom.
-- **Touch:** select an elephant or building; choose Move, Attack or Gather; tap the target. Pan map enables drag-to-pan. The minimap jumps to another part of the world.
-- **Economy:** gatherers automatically collect fruit. The palace trains gatherers; the Guard School trains guards; the Champion Academy trains champions. Village Homes increase the population cap.
-- **Family & council:** open the paused roster to activate support powers. The roster includes 23 family members, advisers, commanders and family-history entries. Babar and Rataxes are battlefield commanders; other named characters have council or support roles.
-- **Commanders:** Babar and Rataxes return home to recover when defeated. A captured palace or fortress ends the game.
+- Click or drag to select; Shift adds units. Right-click a location to move or a visible enemy to focus fire.
+- **A** attack-move, **M** move, **G** gather, **E** repair, **S** hold, **R** retreat. **F2** selects the army, **H** returns to the palace, **Space** pauses. Arrow keys/minimap pan; wheel or +/− zoom.
+- Touch uses explicit orders, then a map target. Toggle **Pan map** to drag the camera. No gesture on the battlefield scrolls the page.
+- The field manual (`?`) explains supply lines, suppression, cover and recovery. Family & council pauses the simulation and restores the previous pause state on close. Sound starts only following interaction; mute is stored locally.
+
+## Tactical loop
+
+Provisioners physically collect supply caches and deliver to connected palaces or homes. Recruit guards and scouts at the Guard School, artillery at Artillery Works, and provisioners at the palace. Homes raise population and extend supply. Construction is an abstract organized work detail; repair requires provisioners.
+
+Buildings link within 360m; hostile soldiers within 85m of a link interrupt it. Isolated recruitment operates at 25%. Clear raiders or add connecting buildings. Selecting a building shows visible supply links. The depot requires eight uncontested seconds with soldiers: ownership grants 2 supplies/s and cuts enemy reserve shipments. Destroy Basil’s barracks to stop his recruitment.
+
+Guards screen long-range guns; scouts are fast and see farther. Sandbags reduce incoming damage by 35% for both sides. Fire suppresses units; low morale causes withdrawal. Commanders and supplied aid stations recover morale, and aid stations heal wounds after five seconds without fire. Commander returns require time and 100 supplies. Losses therefore consume both time and logistics.
+
+## Development and verification
+
+```
+npm run check
+npm test
+npm start
+```
+
+No `npm install` is required. `dist/` is both source and client output; keep it tracked. Code is formatted with Prettier, but formatting is not a runtime/test dependency.
+
+For browser QA, serve the **repository root** separately with `python3 -m http.server 8001`, then visit http://localhost:8001/tests/browser.html. Its fixtures are local test tools and are excluded from Pages. They include real Canvas checks, a repeatable accelerated Story victory, unattended loss, a 60-unit battle, and frame measurement. Responsive fixtures are under `tests/responsive.html?width=390&height=844` and `?width=844&height=390`.
+
+See [architecture and balance](docs/ARCHITECTURE.md), [character continuity](docs/CHARACTERS.md), [asset provenance](docs/ASSETS.md), [QA evidence](docs/QA.md), and [publication handoff](docs/CODEX-HANDOFF.md).
 
 ## GitHub Pages
 
-Upload this project into a repository. In repository **Settings → Pages**, choose **GitHub Actions** as the source. The included `.github/workflows/pages.yml` checks the game and publishes `dist/` whenever `main` changes. The workflow can also be run manually. The source is ready for GitHub, but repository creation and Pages enablement are separate account actions.
+The workflow checks pull requests and publishes **only `dist/`** from `main`. Enable **Settings → Pages → GitHub Actions** after the repository exists. It preserves branch and environment protection rules. Current account/deployment status is recorded in the handoff; a workflow file by itself is not proof of a successful deployment.
 
-The GitHub export deliberately excludes `.openai/hosting.json` and source credentials. Every game asset is local and paths work beneath a GitHub project subdirectory.
-
-## Development
-
-Run `npm test` for the deterministic simulation checks. Run `npm run check` for JavaScript syntax validation. Neither command requires `npm install`.
-
-| File | Responsibility |
-| --- | --- |
-| `dist/game.js` | Economy, movement, combat, waves, selection and controls |
-| `dist/cast.js` | Character relationships and power descriptions |
-| `dist/court.js` | Council interface and support powers |
-| `dist/render.js` | Canvas terrain, sprites, fog, effects and minimap |
-| `dist/style.css` | Desktop and mobile layout |
-| `dist/assets/` | Generated character and building atlases |
-| `tests/smoke.cjs` | Engine checks with a minimal DOM/canvas harness |
-| `docs/CHARACTERS.md` | Roster, sources and continuity choices |
-| `docs/CODEX-HANDOFF.md` | Current state and next development steps |
-
-## Current scope
-
-One skirmish map, two difficulties, an opponent that trains reinforcements and attacks in waves, construction and recruitment queues, fog of war, a family/council upgrade system, and mouse/touch controls. No multiplayer, saved campaigns, speech, or complete directional sprite animation yet. Unit movement uses direct steering and separation rather than navigation-mesh pathfinding. Browser playtesting has not yet been performed; the included checks exercise the simulation, not a real browser.
-
-This is an unofficial fan game based on Babar. Character names and settings belong to their respective rights holders. All gameplay powers are inventions for this game, not claims about events in the books or television series.
+This is an unofficial fan game. Names and setting belong to their respective rights holders. The game’s wartime roles, powers, dialogue and numerical rules are original inventions, not franchise canon. The crossover is not an exhaustive family tree.

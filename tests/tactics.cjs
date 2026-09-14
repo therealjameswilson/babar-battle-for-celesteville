@@ -1,0 +1,150 @@
+const assert = require('node:assert/strict');
+const { run, tick } = require('./smoke.cjs');
+function fresh() {
+  run('easy=true;reset();running=true;nextWave=9999;enemySpawn=9999;');
+}
+fresh();
+run("const navUnit=add('scout',0,690,600);navUnit.order={kind:'move',x:1050,y:600}");
+tick(300);
+assert(run('navUnit.x>1000'), 'Scout routes around impassable forest.');
+assert(run('!solidAt(navUnit.x,navUnit.y,navUnit.r)'), 'Path ends outside obstacles.');
+fresh();
+run("const navUnit2=add('trooper',0,200,900);navUnit2.order={kind:'move',x:440,y:900}");
+tick(200);
+assert(run('navUnit2.x>400'), 'Unit routes around the palace footprint.');
+fresh();
+run("const outpost=add('forge',0,675,900);rebuildSupply();");
+assert(run('supplied(outpost)'));
+run("const raider=add('trooper',1,570,900);rebuildSupply()");
+assert(!run('supplied(outpost)'), 'Raiders interrupt the supply segment.');
+run('outpost.queue=["trooper"];const progressBefore=outpost.progress;update(.4)');
+assert.equal(run('outpost.progress-progressBefore'), 0.1, 'Isolated training operates at 25%.');
+run('raider.hp=0;rebuildSupply()');
+assert(run('supplied(outpost)'), 'Clearing a route restores supply.');
+fresh();
+run(
+  "const gun=add('walker',0,1050,600),exposed=add('trooper',1,1100,600),protectedUnit=add('trooper',1,1090,875);const oldExposed=exposed.hp,oldProtected=protectedUnit.hp;shoot(gun,exposed);shoot(gun,protectedUnit)"
+);
+assert(
+  run('oldExposed-exposed.hp>oldProtected-protectedUnit.hp'),
+  'Cover reduces damage for enemy too.'
+);
+run('exposed.morale=20;updateTactics(.05)');
+assert.equal(run('exposed.order.kind'), 'retreat', 'Suppressed enemy withdraws.');
+fresh();
+run(
+  "const held=alive(0).find(u=>u.type==='trooper');selected=[held];tacticalOrders('hold');units=units.filter(u=>!defs[u.type].speed||u===held);const hx=held.x,hy=held.y;add('trooper',1,held.x+210,held.y)"
+);
+tick(10);
+assert(run('Math.hypot(held.x-hx,held.y-hy)<3'), 'Hold does not chase targets out of range.');
+fresh();
+run(
+  "const repairer=alive(0).find(u=>u.type==='worker'),damaged=alive(0).find(u=>u.type==='core');damaged.hp-=300;repairer.x=390;repairer.y=920;repairer.order={kind:'repair',target:damaged};const healthBefore=damaged.hp;ore=1000"
+);
+tick(100);
+assert(run('damaged.hp>healthBefore'), 'Worker repairs damage.');
+fresh();
+run(
+  "units=units.filter(u=>u.team===0||!defs[u.type].speed);const captureUnit=add('trooper',0,950,830);const budgetBefore=enemyBudget"
+);
+tick(170);
+assert.equal(run('depot.team'), 0, 'Depot captured by holding ground.');
+run('const depotBudget=enemyBudget');
+tick(100);
+assert.equal(run('enemyBudget'), run('depotBudget'), 'Captured depot cuts reserve income.');
+run(
+  "units.filter(u=>u.team===1&&u.type==='forge').forEach(u=>u.hp=0);enemySpawn=0;const enemyCount=alive(1).length"
+);
+tick(100);
+assert.equal(
+  run('alive(1).length'),
+  run('enemyCount'),
+  'Destroying Basil’s barracks stops recruitment.'
+);
+fresh();
+run(
+  "const hiddenEnemy=alive(1).find(u=>u.type==='hero');selected=[alive(0).find(u=>u.type==='hero')];mode='attack';command({x:hiddenEnemy.x,y:hiddenEnemy.y})"
+);
+assert(run('!selected[0].order.target'), 'Focus fire cannot acquire an unseen enemy.');
+assert(!run('sees(1,selected[0])'), 'Enemy also lacks distant vision.');
+fresh();
+run(
+  "units=units.filter(u=>!defs[u.type].speed);const recovering=add('trooper',0,390,970,{hp:50,morale:30});t=10;updateTactics(1)"
+);
+assert(run('recovering.hp>50&&recovering.morale>30'), 'Aid stations recover wounds and morale.');
+fresh();
+run(
+  "ore=0;heroRecovery=[{team:0,name:'King Babar',at:0}];units=units.filter(u=>u.type!=='hero'&&u.type!=='worker');update(.05)"
+);
+assert.equal(run("alive(0).filter(u=>u.type==='hero').length"), 0, 'Commander needs return cost.');
+run('ore=100;update(.05)');
+assert.equal(run("alive(0).filter(u=>u.type==='hero').length"), 1);
+// Direct focus fire can kill; suppression and retreat are tested separately.
+fresh();
+run(
+  "const attacker=alive(0).find(u=>u.type==='hero'),victim=alive(1).find(u=>u.type==='trooper');for(let i=0;i<10;i++)if(victim.hp>0)shoot(attacker,victim)"
+);
+assert(run('kills>0'));
+console.log(
+  'PASS: obstacle and building routes, blocked supply and restoration, isolated queues, cover, suppression, hold, repair, depot capture, finite recruitment, fog fairness, wounded recovery, paid commander return, lethal focus fire.'
+);
+// Numerical effects behind every support description, beyond activation checks.
+fresh();
+run("ore=1000;usePower('pom');selected=[alive(0)[0]];build('relay');command({x:600,y:1030})");
+assert.equal(
+  run('alive(0).find(u=>u.x===600).buildDuration'),
+  6.3,
+  'Pom cuts construction time by 30%.'
+);
+fresh();
+run(
+  "ore=1000;usePower('troubadour');selected=[alive(0).find(u=>u.type==='forge')];train('trooper');update(1)"
+);
+assert.equal(
+  run('selected[0].progress'),
+  1.25,
+  'Troubadour adds 25% production speed (20% less time).'
+);
+fresh();
+run(
+  "units=units.filter(u=>u.type!=='worker');const courier=add('worker',0,388,900,{carrying:10,order:{kind:'gather',node:nodes[0]}});benefits.add('pompadour');const oldOre=ore;update(.05)"
+);
+assert.equal(run('ore-oldOre'), 12.5, 'Pompadour increases each delivery by 25%.');
+fresh();
+run(
+  "const runner=add('scout',0,550,650);const beforeX=runner.x;move(runner,{x:700,y:650},.1);const plainDistance=runner.x-beforeX;runner.x=beforeX;benefits.add('arthur');move(runner,{x:700,y:650},.1)"
+);
+assert(
+  Math.abs(run('(runner.x-beforeX)/plainDistance') - 1.15) < 0.001,
+  'Arthur adds 15% movement speed.'
+);
+fresh();
+run(
+  "units=units.filter(u=>!defs[u.type].speed);const patient=add('trooper',0,390,970,{hp:50});benefits.add('celeste');t=10;updateTactics(1)"
+);
+assert.equal(run('patient.hp'), 56, 'Celeste increases recovery to 6/s.');
+fresh();
+run('t=50;nextWave=50;wave=2;enemyThink()');
+assert.equal(run('nextWave'), 170, 'Victor buys 20 extra seconds after wave three.');
+fresh();
+run('wave=2;enemySpawn=0;enemyThink()');
+assert.equal(run('enemySpawn'), 14.4, 'Basil accelerates recruitment by 20%.');
+fresh();
+run(
+  "const rhino=add('scout',1,1000,650);const startX=rhino.x;wave=0;move(rhino,{x:1150,y:650},.1);const ordinary=rhino.x-startX;rhino.x=startX;wave=4;move(rhino,{x:1150,y:650},.1)"
+);
+assert(Math.abs(run('(rhino.x-startX)/ordinary') - 1.1) < 0.001, 'Rhudi adds 10% movement speed.');
+console.log('PASS: all support powers have numerical-effect checks.');
+fresh();
+run('nextWave=0;enemyThink()');
+assert.equal(
+  run("alive(1).find(u=>u.type==='hero').order"),
+  null,
+  'Rataxes remains in reserve for wave one.'
+);
+run('nextWave=0;enemyThink()');
+assert.equal(
+  run("alive(1).find(u=>u.type==='hero').order.kind"),
+  'attack',
+  'Rataxes joins wave two.'
+);

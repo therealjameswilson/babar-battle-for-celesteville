@@ -6,24 +6,24 @@ This game intentionally combines generations. The main roster follows the animat
 
 | Character | Relationship or office | Game role |
 | --- | --- | --- |
-| Babar | King | Recovering field commander; nearby courage rally |
+| Babar | King | Recovering field commander; nearby health/morale rally |
 | Celeste | Wife and queen | Healing near palace and homes |
 | Pom | Son | Faster construction |
 | Flora | Daughter | Wider vision |
 | Alexander | Son | Delay a wave |
-| Isabelle | Youngest child | Extra courage |
+| Isabelle | Youngest child | Extra health |
 | Arthur | Celeste’s brother; Babar’s brother-in-law in TV continuity | Faster movement |
 | Cornelius | Chief adviser | Building discount |
-| Pompadour | Finance and protocol adviser | Improved fruit deliveries |
+| Pompadour | Finance and protocol adviser | Improved supply deliveries |
 | Troubadour | Pompadour’s assistant | Faster recruitment |
 | Zephir | Monkey friend | Temporary map reveal |
 | Madame | The Old Lady who raised Babar | Population allowance |
-| Chef Truffles | Palace cook | Whole-army recovery |
-| Periwinkle | Pom’s wife; Badou’s mother | Faster commander recovery |
-| Badou | Babar’s grandson; Pom’s son | Discover an orchard |
-| Babar’s mother | Family history | Gatherer courage tribute |
+| Chef Truffles | Palace cook | Whole-army health recovery |
+| Periwinkle | Pom’s wife; Badou’s mother | 25-second paid commander recovery |
+| Badou | Babar’s grandson; Pom’s son | Discover a supply cache |
+| Babar’s mother | Family history | Provisioner health tribute |
 | Celeste’s mother | Movie family history | Village population tribute |
-| Old Tusk | Celeste’s grandfather in the movie | Champion courage tribute |
+| Old Tusk | Celeste’s grandfather in the movie | Artillery health tribute |
 
 ## Rhinoland
 
@@ -31,7 +31,7 @@ This game intentionally combines generations. The main roster follows the animat
 | --- | --- | --- |
 | Lord Rataxes | Ruler | Recovering field commander; joins from wave two |
 | Lady Rataxes / Louise | Wife | Fortress strength after wave one |
-| Basil | Chief adviser | Faster reinforcements after wave two |
+| Basil | Chief adviser | Faster reinforcements after wave two; destroy his barracks to stop recruitment |
 | Victor | Son | Friendship with elephant children delays the next wave after wave three |
 | Rhudi | Grandson | Faster rhinos after wave four |
 
@@ -49,3 +49,7 @@ This covers the principal animated families and councils plus selected later-gen
 ## Artwork
 
 Two built-in image-generation requests created the transparent 1254×1254 atlases. Character brief: 4×2 atlas of Babar, fruit gatherer, elephant guard, elephant champion, Rataxes, rhino gatherer, rhino guard, rhino champion; full-body storybook figures with readable silhouettes. Building brief: 4×2 atlas of palace, guard school, academy, home, rhino fortress, barracks, champion hall and lookout tower. Both use custom crop boundaries in `render.js` because generated cells are not exactly equal. No reference book illustrations or television frames were copied into the assets.
+
+## Siege version roles
+
+Only Babar and Rataxes are named battlefield units. All children remain civilian planners, messengers, scouts in the story, or family morale support; buying a card never deploys a child soldier. Cornelius and Celeste remain advisers/support leaders rather than recruitable frontline units. History tributes change doctrine statistics without reviving characters. The full card descriptions and cooldowns in `dist/cast.js` are authoritative for current game powers. See ARCHITECTURE.md for numerical rules and ASSETS.md for the revised military artwork.

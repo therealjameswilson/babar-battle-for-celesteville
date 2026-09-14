@@ -1,44 +1,46 @@
-# Development handoff
+# Siege release handoff
 
-## User goal
+## Verified local result
 
-James wants a StarCraft-like game featuring Babar and the elephants versus Lord Rataxes, including their relatives and seconds-in-command, with the project living on his GitHub account `therealjameswilson`.
+Version 0.3.0 continues the supplied prototype. Original imported baseline: `4109fb621b93a626fdb5cfcb1c04d8497ce66c5a`. It contains the unmodified archive content; commit author metadata was changed to the verified account’s GitHub noreply identity before any push.
 
-## Implemented
+The revised source adds clearance-aware A*, formations, two roads around forest obstacles, cover, scouts and artillery, suppression/retreat, a supply graph, paid repair, wounded recovery, paid commander returns, a capturable depot, enemy recruitment reserves, scouting/flanking/regroup decisions, grittier generated art and damage feedback, original synthesized audio, and a command-post interface. The 23-member roster remains intact. See QA.md for what was actually tested.
 
-- Complete playable static browser skirmish with original Babar-themed interface and two generated transparent atlases.
-- Fruit gathering, construction, recruitment, population, waves, fog, combat, win/loss and recovering commanders.
-- 23 named roster entries: two field commanders, family and adviser powers, rhino court progression, and three family-history tributes. See CHARACTERS.md.
-- Mobile command buttons, camera pan/zoom controls, minimap and desktop shortcuts.
-- A deterministic smoke test covering all player powers, economy, battle, court effects and end states.
-- GitHub Pages deployment workflow and local instructions.
+## Publication is blocked on account authorization
 
-## Outstanding publication step
+The connected GitHub integration identifies `therealjameswilson` (account ID 30484292). It exposes repository read/write operations but no repository creation or Pages configuration operation. The intended repository lookup returned 404 and it was absent from the accessible repository listing. A 404 alone cannot rule out a private repository outside the integration’s access.
 
-At the time of this handoff the connected GitHub toolset could read/write existing repositories but could not create repositories. No game repository or GitHub Pages deployment was created. Have the user supply a new or explicitly selected repository before uploading. Prefer a dedicated repository named `babar-battle-for-celesteville`. Preserve any existing content and read repository guidance first.
+There is currently **no verified repository URL, remote commit, Pages Actions run, or Pages URL** for this game. The local repository has no remote. No repository visibility was changed.
+
+GitHub CLI was installed from the official cli/cli release into `~/.local/bin/gh`; it is not yet authenticated. Both browser/device authorization attempts expired without consent. Restart the official flow when the user is ready:
+
+```
+~/.local/bin/gh auth login --hostname github.com --git-protocol https --web
+```
+
+The user must perform the real GitHub sign-in/consent step as `therealjameswilson`. Never ask for a password or token in chat. Verify afterwards:
+
+```
+~/.local/bin/gh auth status --hostname github.com
+~/.local/bin/gh api user --jq .login
+```
+
+## Resume publication after authorization
+
+1. Recheck `therealjameswilson/babar-battle-for-celesteville` through the authenticated CLI. Inspect contents, visibility, default branch, permissions and guidance. Distinguish a true absence from a network/permission failure.
+2. If an existing substantive repository is found, work on a feature branch and preserve its unrelated changes. Do not push this local history over it blindly.
+3. If absent, create a dedicated **private** repository from this correctly initialized local project after verifying remotes. Push the validated commit without force. Verify the remote SHA.
+4. Enable Actions-based Pages using an authorized operation, or ask the user for **Settings → Pages → GitHub Actions** if configuration is unavailable. GitHub Free only supports Pages from public repositories; private source requires a supported paid plan. Do not change visibility without an explicit account decision.
+5. Watch the actual workflow through completion, respect any review/environment gate, fix failures, obtain the URL from GitHub, and load that URL in the real browser. Check assets under the project subpath. Only then report publication as complete.
 
 ## Validation commands
 
-`npm test`
+`npm run check`, `npm test`, `npm run test:balance`, `npm start`.
 
-`npm run check`
+No npm installation or runtime dependencies. Node 20+ and Python 3 suffice. `dist/` is the only deployable client directory. The root-served browser harness, review screenshots, archives, credentials, `.git` directories and `.openai` metadata are not deployed.
 
-For a local development environment, `npm start` serves `dist` on port 8000. The game also opens directly from `dist/index.html`.
+## Next development task
 
-## Recommended next tasks
+After publication, expand directional walk/fire animations and conduct hands-on Commander balancing and physical iPhone Safari testing. Current mobile verification uses real browser iframe viewports and synthesized touch pointer events, not physical hardware. There is no campaign, multiplayer, save system, or full eight-direction character animation.
 
-1. Browser playtest on desktop and iPhone-sized screens. Check sprite framing, court dialog focus, touch orders, panning, map movement and a complete easy-mode win.
-2. Improve pathfinding around buildings. Current direct steering plus collision separation can crowd units at structures.
-3. Add named family sprites and map units if requested. Currently council characters use initial badges, and their mechanics run through the council panel; only Babar and Rataxes are named battlefield units.
-4. Add multi-direction animation and sound if requested.
-5. Expand into campaigns or multiplayer only after the skirmish loop has been playtested. Multiplayer requires an authoritative server and a larger architecture decision.
-
-The project has no dependency installation or build step. Keep it simple unless a specific requested feature requires a change. All artwork is in `dist/assets/`; do not substitute remote hotlinks.
-
-## Continuity
-
-The roster is an intentional crossover between the classic TV series, the Badou generation and the movie’s family history. Abilities are original game rules. Do not present new game lore as franchise canon. The game does not claim exhaustive coverage of every relative in all Babar books, films and adaptations.
-
-## Current-source integrity
-
-`dist` is both authored source and deployable output; keep it tracked. `package.json` contains no external dependencies. The GitHub export omits the private Sites identity. Do not carry any temporary archive or credentials into GitHub.
+Official references: [GitHub CLI login](https://cli.github.com/manual/gh_auth_login), [custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Siege browser QA</title>
+    <style>
+      body {
+        margin: 0;
+        background: #111;
+        color: #ddd;
+        font: 13px monospace;
+      }
+      nav {
+        display: flex;
+        gap: 8px;
+        padding: 8px;
+        align-items: center;
+      }
+      button {
+        padding: 8px;
+        cursor: pointer;
+      }
+      iframe {
+        border: 0;
+        width: 100%;
+        height: calc(100vh - 54px);
+      }
+      pre {
+        white-space: pre-wrap;
+        max-height: 200px;
+        overflow: auto;
+        margin: 0;
+        padding: 10px;
+      }
+      #report:empty {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <button id="suite">Run browser checks</button
+      ><button id="victory">Story playthrough ×20</button
+      ><button id="loss">Loss playthrough ×20</button
+      ><button id="battle">Representative battle</button
+      ><button id="performance">Measure 120 frames</button><button id="review">Battle review</button
+      ><span id="status">Loading game</span>
+    </nav>
+    <pre id="report"></pre>
+    <iframe id="play" src="../dist/index.html"></iframe>
+    <script>
+      const frame = document.getElementById('play');
+      frame.onload = () => {
+        for (const file of ['strategy.js', 'browser-driver.js']) {
+          const s = frame.contentDocument.createElement('script');
+          s.src = '../tests/' + file;
+          s.async = false;
+          frame.contentDocument.body.append(s);
+        }
+        document.getElementById('status').textContent = 'Ready';
+      };
+      for (const [id, fn] of [
+        ['suite', 'browserSuite'],
+        ['victory', 'browserVictory'],
+        ['loss', 'browserLoss'],
+        ['battle', 'browserBattle'],
+        ['performance', 'browserPerformance'],
+        ['review', 'browserReview'],
+      ])
+        document.getElementById(id).onclick = () => frame.contentWindow[fn]();
+    </script>
+  </body>
+</html>

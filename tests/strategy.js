@@ -1,0 +1,58 @@
+// Reproducible balance opponent: only normal player actions and earned supplies.
+// Shared by Node and the real-browser accelerated Story playthrough.
+function strategyStep() {
+  if (ended) return;
+  const base = alive(0).find((u) => u.type === 'core');
+  if (!base) return;
+  const factory = alive(0).find((u) => u.type === 'factory');
+  if (!factory && ore >= buildingCost('factory')) {
+    selected = [base];
+    build('factory');
+    command({ x: 480, y: 1080 });
+  }
+  if (cap() < 60 && supply() > cap() - 6 && ore >= buildingCost('relay')) {
+    for (const p of [
+      { x: 570, y: 1070 },
+      { x: 620, y: 970 },
+      { x: 625, y: 1130 },
+      { x: 675, y: 1060 },
+      { x: 680, y: 920 },
+      { x: 540, y: 1170 },
+    ])
+      if (validBuild(p, 'relay')) {
+        selected = [base];
+        build('relay');
+        command(p);
+        break;
+      }
+  }
+  if (!benefits.has('celeste') && ore > 350) usePower('celeste');
+  if (!benefits.has('troubadour') && ore > 400) usePower('troubadour');
+  if (!benefits.has('pompadour') && ore > 400) usePower('pompadour');
+  if (!benefits.has('old-tusk') && ore > 400) usePower('old-tusk');
+  if (t % 45 < 2) usePower('babar');
+  const guns = alive(0).filter((u) => u.type === 'walker').length;
+  if (factory && !factory.construction && factory.queue.length < 2 && guns < 12) {
+    selected = [factory];
+    train('walker');
+  }
+  const school = alive(0).find((u) => u.type === 'forge');
+  if (
+    school &&
+    !school.construction &&
+    school.queue.length < 2 &&
+    alive(0).filter((u) => u.type === 'trooper').length < 28 &&
+    ore > 60
+  ) {
+    selected = [school];
+    train('trooper');
+  }
+  const army = alive(0).filter(
+    (u) => defs[u.type].damage && defs[u.type].speed && u.order?.kind !== 'retreat'
+  );
+  if (army.length >= 18 || t > 350) {
+    selected = army;
+    mode = 'attack';
+    command(depot.team === 0 ? { x: 1400, y: 360 } : { x: 950, y: 830 });
+  }
+}
