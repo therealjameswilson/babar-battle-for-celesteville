@@ -64,6 +64,8 @@ function segmentDistance(p, a, b) {
   return Math.hypot(p.x - a.x - q * dx, p.y - a.y - q * dy);
 }
 function orderRetreat(u) {
+  u.orders = [];
+  u.followup = null;
   const base = nearest(
     u,
     alive(u.team).filter((b) => b.type === 'core' || (b.type === 'relay' && supplied(b)))
@@ -80,7 +82,7 @@ function tacticalOrders(kind) {
   if (!running || paused || ended) return;
   for (const u of selected.filter((u) => defs[u.type].speed)) {
     if (kind === 'retreat') orderRetreat(u);
-    else u.order = { kind: 'hold' };
+    else issueOrder(u, { kind: 'hold' });
   }
   placing = null;
   mode = null;
@@ -91,7 +93,7 @@ function tacticalOrders(kind) {
   );
   updateUI(true);
 }
-function repairOrder(p) {
+function repairOrder(p, append = false) {
   const b = nearest(
     p,
     alive(0).filter((b) => !defs[b.type].speed)
@@ -99,7 +101,7 @@ function repairOrder(p) {
   if (!b || dist(p, b) > b.r + 25) return say('Choose a damaged friendly building.');
   let workers = selected.filter((u) => u.type === 'worker');
   if (!workers.length) return say('Select provisioners to repair.');
-  workers.forEach((u) => (u.order = { kind: 'repair', target: b }));
+  workers.forEach((u) => issueOrder(u, { kind: 'repair', target: b }, append));
   say('Repair detail assigned. Repairs use 0.3 supplies per health.');
   mode = null;
 }

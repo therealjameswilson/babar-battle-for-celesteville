@@ -387,6 +387,14 @@ function draw() {
     ctx.restore();
   }
   for (const u of selected) {
+    if (u.orders?.length) {
+      const route = [u.order, ...u.orders].map(o => o?.node || o?.target || o).filter(q => Number.isFinite(q?.x));
+      ctx.strokeStyle = '#d7ba7999'; ctx.lineWidth = 1; ctx.setLineDash([3, 5]);
+      ctx.beginPath(); ctx.moveTo(u.x, u.y);
+      for (const q of route) ctx.lineTo(q.x, q.y);
+      ctx.stroke(); ctx.setLineDash([]);
+      for (const q of route) { ctx.beginPath(); ctx.arc(q.x, q.y, 5, 0, Math.PI * 2); ctx.stroke(); }
+    }
     if (u.rally) {
       ctx.strokeStyle = '#d7ba79';
       ctx.lineWidth = 2;

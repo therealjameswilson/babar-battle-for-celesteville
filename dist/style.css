@@ -1475,3 +1475,6 @@ dialog {
 #group-actions button {min-height:44px;}
 .quick {grid-template-columns:repeat(4,1fr);}
 #actions {max-height:180px;overflow-y:auto;}
+
+.quick {grid-template-columns:repeat(5,1fr);}
+#queue-orders[aria-pressed="true"] {background:#6b5b37;color:#fff1c6;}

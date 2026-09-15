@@ -171,3 +171,17 @@ assert(run('ore===cancelOre+100 && cancelBase.progress===0 && cancelBase.queue.l
 run('cancelRecruit(cancelBase,0)');
 assert(run('ore===cancelOre+100'), 'Repeated cancellation cannot mint supplies.');
 console.log('PASS: recruitment cancellation and refunds.');
+fresh();
+run("const routeScout=add('scout',0,600,1060);selected=[routeScout];mode='move';command({x:720,y:1060});mode='move';command({x:720,y:1150},true)");
+assert(run('routeScout.order.x===720 && routeScout.order.y===1060 && routeScout.orders.length===1'), 'Appending preserves current waypoint.');
+tick(140);
+assert(run('Math.hypot(routeScout.x-720,routeScout.y-1150)<12 && !routeScout.order'), 'Queued route completes both waypoints.');
+run("issueOrder(routeScout,{kind:'move',x:600,y:1100});issueOrder(routeScout,{kind:'move',x:500,y:1100},true);tacticalOrders('hold')");
+assert(run("routeScout.order.kind==='hold' && routeScout.orders.length===0"), 'Hold clears pending waypoints.');
+run("issueOrder(routeScout,{kind:'move',x:500,y:1100},true);orderRetreat(routeScout)");
+assert(run('routeScout.orders.length===0'), 'Retreat clears pending waypoints.');
+fresh();
+run("const deliveryWorker=alive(0).find(u=>u.type==='worker');deliveryWorker.carrying=10;deliveryWorker.x=330;deliveryWorker.y=980;issueOrder(deliveryWorker,{kind:'gather',node:nodes[0]});issueOrder(deliveryWorker,{kind:'move',x:600,y:1100},true)");
+tick(50);
+assert(run("deliveryWorker.carrying===0 && deliveryWorker.order?.kind==='move'"), 'Gathering completes delivery before advancing queued order.');
+console.log('PASS: queued waypoints, delivery transitions, hold and retreat cancellation.');

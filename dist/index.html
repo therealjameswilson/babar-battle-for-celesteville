@@ -99,7 +99,7 @@
         <div id="actions"></div>
         <div class="quick">
           <button id="army">Army <kbd>F2</kbd></button><button id="home">Palace <kbd>H</kbd></button
-          ><button id="leader">Babar</button><button id="groups-open">Groups</button>
+          ><button id="leader">Babar</button><button id="groups-open">Groups</button><button id="queue-orders" aria-pressed="false">Queue</button>
         </div>
         <div class="orders">
           <p class="eyebrow">FIELD ORDERS</p>
@@ -181,7 +181,7 @@
       <p>
         <b>Orders:</b> drag to select; Shift adds units; right-click moves or focuses a visible
         enemy. A selects attack-move, M move, G gather, E repair, S hold, R retreat. F2 selects the
-        army; H returns to the palace. Ctrl/Command + 0–9 saves a control group; 0–9 recalls it; add Shift when saving to append. Select a production building and right-click (touch: Move then tap) to set its rally point. Rally provisioners to a cache to begin gathering. Space pauses. Touch uses the same explicit order buttons and
+        army; H returns to the palace. Hold Shift while giving orders, or enable Queue on touch, to append up to 16 waypoints. Hold and Retreat cancel the route. A queued order after gathering starts once the next delivery is complete. Ctrl/Command + 0–9 saves a control group; 0–9 recalls it; add Shift when saving to append. Select a production building and right-click (touch: Move then tap) to set its rally point. Rally provisioners to a cache to begin gathering. Space pauses. Touch uses the same explicit order buttons and
         Pan map. Scroll or +/− zooms. Family & council pauses the simulation; closing it restores
         the previous pause state.
       </p>
@@ -192,12 +192,12 @@
       <div id="group-actions"></div>
       <button id="groups-close">Return to command</button>
     </dialog>
-    <script src="cast.js"></script>
-    <script src="game.js"></script>
-    <script src="navigation.js"></script>
-    <script src="tactics.js"></script>
-    <script src="audio.js"></script>
-    <script src="court.js"></script>
-    <script src="render.js"></script>
+    <script src="cast.js?v=0.4.0"></script>
+    <script src="game.js?v=0.4.0"></script>
+    <script src="navigation.js?v=0.4.0"></script>
+    <script src="tactics.js?v=0.4.0"></script>
+    <script src="audio.js?v=0.4.0"></script>
+    <script src="court.js?v=0.4.0"></script>
+    <script src="render.js?v=0.4.0"></script>
   </body>
 </html>

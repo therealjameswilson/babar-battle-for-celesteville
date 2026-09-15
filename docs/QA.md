@@ -74,3 +74,14 @@ browser checks (rally behavior is covered by deterministic assertions).
 Deterministic cancellation tests verify exact refunds, preserved active progress
 when cancelling a waiting recruit, reset progress when cancelling the active recruit,
 and no duplicate refunds from an invalid repeated cancellation.
+
+## Queued orders (0.4.0)
+
+Deterministic checks cover two-waypoint completion, preservation of the first order,
+clearing routes on Hold/Retreat, and advancing from gathering after delivery. Updated
+Story balance bot wins at 133.65 simulated seconds. Versioned script URLs fix an
+observed browser cache mismatch where new HTML had loaded older game logic.
+After that fix, real browser clicks selected Babar, issued a ground move, enabled
+Queue, and appended a second ground move; live status showed `move · 1 queued` and
+Queue pressed. Six seconds later the queue was consumed and the second move active.
+Captured artifacts/queued-route.png. Mobile layout checks remain outstanding.

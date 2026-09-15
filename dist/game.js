@@ -169,7 +169,25 @@ function say(s) {
     logbook = logbook.slice(0, 12);
   }
 }
-let controlGroups = {};
+let controlGroups = {}, queueOrders = false;
+function issueOrder(u, order, append = false) {
+  if (append && u.order && u.order.kind !== 'hold') {
+    u.orders ||= [];
+    if (u.orders.length >= 16) return;
+    u.orders.push(order);
+  } else {
+    u.order = order;
+    u.orders = [];
+    u.followup = null;
+    u.path = null;
+  }
+}
+function completeOrder(u) {
+  u.order = u.orders?.shift() || u.followup || null;
+  u.followup = null;
+  u.path = null;
+}
+
 function controlGroup(number, save = false, append = false) {
   if (!running || paused || ended) return;
   if (save) {
@@ -184,6 +202,8 @@ function controlGroup(number, save = false, append = false) {
 }
 function reset() {
   controlGroups = {};
+  queueOrders = false;
+  $('queue-orders').setAttribute('aria-pressed', 'false');
   enemyScoutSent = false;
   sightAt = -1;
   sightCount = -1;
@@ -365,7 +385,7 @@ function update(dt) {
     if (u.type === 'worker' && u.order?.kind === 'repair') {
       const b = u.order.target;
       if (!b || b.hp <= 0 || b.hp >= b.max) {
-        u.order = null;
+        completeOrder(u);
         continue;
       }
       if (move(u, b, dt, b.r + u.r + 7)) {
@@ -400,6 +420,7 @@ function update(dt) {
           else enemyBudget += u.carrying;
           u.carrying = 0;
           u.harvest = 0;
+          if (u.orders?.length) completeOrder(u);
         }
       } else if (move(u, n, dt, 30)) {
         u.harvest += dt;
@@ -408,10 +429,12 @@ function update(dt) {
           n.amount -= amount;
           u.carrying += amount;
           u.harvest = 0;
+          if (u.orders?.length) completeOrder(u);
         }
       }
       continue;
     }
+    if (u.order?.target && (u.order.target.hp <= 0 || !sees(u.team, u.order.target))) completeOrder(u);
     if (d.damage && u.order?.kind !== 'move') {
       let target = null;
       const enemies = alive(1 - u.team).filter((a) => sees(u.team, a));
@@ -432,8 +455,7 @@ function update(dt) {
       if (u.order?.target && !sees(u.team, u.order.target)) u.order = null;
     }
     if (u.order && d.speed && Number.isFinite(u.order.x) && move(u, u.order, dt, 8)) {
-      u.order = u.followup || null;
-      u.followup = null;
+      completeOrder(u);
     }
   }
   separate();
@@ -520,7 +542,7 @@ function setMode(m) {
   );
   updateUI(true);
 }
-function command(p) {
+function command(p, append = queueOrders) {
   if (!running || paused || ended) return;
   if (placing) {
     if (!validBuild(p, placing))
@@ -536,7 +558,7 @@ function command(p) {
     return;
   }
   if (mode === 'repair') {
-    repairOrder(p);
+    repairOrder(p, append);
     return;
   }
   let enemy = nearest(p, alive(1).filter(visible)),
@@ -551,18 +573,18 @@ function command(p) {
   if (producers.length) say('Production rally point set. Provisioners gather when rallied to supplies.');
   let movers = selected.filter((u) => defs[u.type].speed);
   movers.forEach((u, i) => {
-    if (u.type === 'worker' && node) u.order = { kind: 'gather', node };
+    if (u.type === 'worker' && node) issueOrder(u, { kind: 'gather', node }, append);
     else if (mode === 'gather') return;
-    else if (enemy && defs[u.type].damage) u.order = { kind: 'attack', target: enemy };
+    else if (enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy }, append);
     else {
       let cols = Math.ceil(Math.sqrt(movers.length)),
         ox = ((i % cols) - (cols - 1) / 2) * 40,
         oy = (Math.floor(i / cols) - (Math.ceil(movers.length / cols) - 1) / 2) * 40;
-      u.order = {
+      issueOrder(u, {
         kind: mode === 'attack' ? 'attack' : 'move',
         x: clamp(p.x + ox, 25, W - 25),
         y: clamp(p.y + oy, 25, H - 25),
-      };
+      }, append);
     }
   });
   if (movers.length) {
@@ -574,7 +596,7 @@ function command(p) {
           ? 'Concentrate fire on the marked target.'
           : 'Orders confirmed.'
     );
-  } else say('Select mobile units first.');
+  } else if (!producers.length) say('Select mobile units first.');
   mode = null;
   updateUI(true);
 }
@@ -639,7 +661,7 @@ function updateUI(force = false) {
       ? 'Morale ' +
         Math.ceil(u.morale) +
         ' / 100 · ' +
-        (u.order?.kind || 'ready') +
+        (u.order?.kind || 'ready') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
         (inCover(u) ? ' · IN COVER' : '')
       : supplied(u)
         ? 'Supply line operational'
@@ -738,7 +760,7 @@ canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 canvas.addEventListener('pointerdown', (e) => {
   if (e.button === 2) {
     e.preventDefault();
-    command(world(eventPoint(e)));
+    command(world(eventPoint(e)), e.shiftKey || queueOrders);
     return;
   }
   try {
@@ -774,7 +796,7 @@ canvas.addEventListener('pointerup', (e) => {
     drag = Math.hypot(p.x - start.x, p.y - start.y) > 9;
   if (start.pan) return;
   if (mode || placing) {
-    command(wp);
+    command(wp, start.shift || queueOrders);
     return;
   }
   if (drag) {
@@ -829,9 +851,9 @@ window.addEventListener('keydown', (e) => {
   keys[e.key] = true;
   if (e.repeat) return;
   if ($('court-dialog').open || $('groups-dialog').open) return;
-  if (/^[0-9]$/.test(e.key)) {
+  if (/^[0-9]$/.test(e.key) || /^Digit[0-9]$/.test(e.code || '')) {
     e.preventDefault();
-    controlGroup(e.key, e.ctrlKey || e.metaKey, e.shiftKey);
+    controlGroup(e.code?.startsWith('Digit') ? e.code.slice(-1) : e.key, e.ctrlKey || e.metaKey, e.shiftKey);
     return;
   }
   if (e.key === ' ') togglePause();
@@ -922,3 +944,5 @@ $('groups-open').onclick = () => {
   $('groups-dialog').showModal();
 };
 $('groups-close').onclick = () => $('groups-dialog').close();
+
+$('queue-orders').onclick = () => { queueOrders = !queueOrders; $('queue-orders').setAttribute('aria-pressed', String(queueOrders)); say(queueOrders ? 'Queue enabled: destinations append to current orders (up to 16).' : 'New orders replace the current route.'); };

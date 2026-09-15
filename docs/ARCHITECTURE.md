@@ -58,3 +58,10 @@ cancelling a waiting item leaves active progress intact. Index and ownership gua
 prevent duplicate refunds. The actions list scrolls when a queue expands it.
 The Groups button exposes four saved selection slots through a paused dialog for
 touch users; closing restores the prior pause state. Keyboard users retain ten slots.
+
+Orders: Shift-command or the Queue toggle appends up to 16 orders per mobile unit.
+The current order finishes before the next starts. Gathering yields after a delivery
+when a follow-up exists; repair yields on completion or destruction. Lost/dead focus
+fire targets release their order. Hold and retreat discard pending routes. Order
+paths are drawn on the map, and status reports pending count. Script URLs are
+versioned with the release to avoid mixed HTML/engine caches.

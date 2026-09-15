@@ -164,7 +164,7 @@ assert.equal(run('ended'), true);
 // The static deployment is self-contained, including artwork.
 const html = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8');
 for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g))
-  assert(fs.existsSync(path.join(root, 'dist', match[1])), match[1]);
+  assert(fs.existsSync(path.join(root, 'dist', match[1].split('?')[0])), match[1]);
 for (const file of ['characters.png', 'buildings.png'])
   assert(fs.statSync(path.join(root, 'dist/assets', file)).size > 1000);
 console.log(

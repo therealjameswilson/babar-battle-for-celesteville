@@ -56,3 +56,8 @@ Further progress: cancellable recruitment with full refunds and four touch-acces
 control groups now implemented. New cancellation checks pass. Desktop preview
 recovered; keyboard groups, modal assignment, queue cancellation and rally pennant
 were tested through real UI. See latest QA section for remaining mobile checks.
+
+0.4.0 adds queued move/attack/gather/repair orders and visual routes. Tests and desktop
+UI verification pass; detailed evidence in QA.md. Next work remains mobile Groups/
+Queue layout verification, fuller production progression and detailed officer roles.
+GitHub publication is still pending authentication.
