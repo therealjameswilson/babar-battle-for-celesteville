@@ -44,3 +44,10 @@ Visibility sets and static collision candidates are cached once per simulation s
 ## Expansion boundary
 
 No campaign, accounts, multiplayer, paid APIs, save system, or backend. Characters other than Babar and Rataxes retain council/civilian/history roles. Full eight-direction animation and additional named officer sprites are future work.
+
+Control groups and rally points: Ctrl/Command + digit stores friendly living unit IDs;
+adding Shift appends. A digit recalls surviving members. Reset clears the groups.
+Production buildings retain a world-space rally point set through normal orders;
+new provisioners gather if it references a nonempty cache, otherwise recruits move
+there. Selected buildings draw a dashed brass line and pennant. Ground rallies
+replace the provisioner's default automatic gathering behavior.

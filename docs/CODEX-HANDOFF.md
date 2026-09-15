@@ -44,3 +44,10 @@ No npm installation or runtime dependencies. Node 20+ and Python 3 suffice. `dis
 After publication, expand directional walk/fire animations and conduct hands-on Commander balancing and physical iPhone Safari testing. Current mobile verification uses real browser iframe viewports and synthesized touch pointer events, not physical hardware. There is no campaign, multiplayer, save system, or full eight-direction character animation.
 
 Official references: [GitHub CLI login](https://cli.github.com/manual/gh_auth_login), [custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+
+Follow-up: saved control groups and production rally points implemented; deterministic
+and balance checks pass. Browser QA of these additions remains pending (see QA.md).
+The most recent device-login session no longer exists and gh auth status still reports
+unauthenticated. Do not reuse earlier device codes or claim GitHub publication.
+Next RTS work: queued waypoint orders, touch-accessible control-group UI, production
+queue cancellation, then broader tech progression and officer differentiation.

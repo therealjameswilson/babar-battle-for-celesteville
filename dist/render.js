@@ -387,6 +387,15 @@ function draw() {
     ctx.restore();
   }
   for (const u of selected) {
+    if (u.rally) {
+      ctx.strokeStyle = '#d7ba79';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 6]);
+      ctx.beginPath(); ctx.moveTo(u.x, u.y); ctx.lineTo(u.rally.x, u.rally.y); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.beginPath(); ctx.moveTo(u.rally.x, u.rally.y + 10); ctx.lineTo(u.rally.x, u.rally.y - 20);
+      ctx.lineTo(u.rally.x + 16, u.rally.y - 14); ctx.lineTo(u.rally.x, u.rally.y - 8); ctx.stroke();
+    }
     if (u.order && defs[u.type].speed) {
       const q = u.order.node || u.order.target || u.order;
       if (Number.isFinite(q.x)) {

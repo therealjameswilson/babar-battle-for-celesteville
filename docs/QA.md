@@ -45,3 +45,14 @@ Local review artifacts live in ignored `artifacts/`, outside `dist/`: desktop an
 No physical iPhone/Safari or other browser-engine testing has been performed. Touch pointer tests are synthetic. Reduced-motion behavior was implemented and code-reviewed, but the browser preference could not be toggled through the available test API. Audio startup/mute/storage paths were exercised; no subjective listening assessment is claimed. Commander rules have automated checks but still need extended human balancing. Multi-direction animation remains limited to two-way facing plus heading/gun rotation.
 
 GitHub creation, remote push verification, Actions deployment and the final hosted-page smoke test remain **blocked by CLI authorization**, not passed or omitted. See CODEX-HANDOFF.md.
+
+## Control-group and rally-point follow-up
+
+Engine checks, tactical tests, and earned-resource Story victory balance checks pass.
+New deterministic assertions cover group recall, append, dead-member exclusion,
+restart clearing, resource rallies and ground rallies overriding automatic gathering.
+These additions are NOT yet browser verified: the previous preview server had stopped;
+a replacement server was started, but the browser navigation tool rejected the
+existing connection-error document. Earlier browser evidence above predates these
+controls. Native computer access also reported the Mac locked. Resume direct keyboard,
+touch rally and visual pennant checks when preview access is restored.

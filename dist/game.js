@@ -169,7 +169,21 @@ function say(s) {
     logbook = logbook.slice(0, 12);
   }
 }
+let controlGroups = {};
+function controlGroup(number, save = false, append = false) {
+  if (!running || paused || ended) return;
+  if (save) {
+    const previous = append ? controlGroups[number] || [] : [];
+    controlGroups[number] = [...new Set([...previous, ...selected.filter(u => u.team === 0 && u.hp > 0).map(u => u.id)])];
+    say(`Group ${number} assigned.`);
+  } else {
+    selected = alive(0).filter(u => (controlGroups[number] || []).includes(u.id));
+    say(`Group ${number}: ${selected.length} selected.`);
+  }
+  updateUI(true);
+}
 function reset() {
+  controlGroups = {};
   enemyScoutSent = false;
   sightAt = -1;
   sightCount = -1;
@@ -334,6 +348,11 @@ function update(dt) {
               nodes.filter((a) => a.amount > 0)
             ),
           };
+        if (u.rally) {
+          n.order = type === 'worker' && u.rally.node?.amount > 0
+            ? { kind: 'gather', node: u.rally.node }
+            : { kind: 'move', x: u.rally.x, y: u.rally.y };
+        }
         u.queue.shift();
         u.progress = 0;
         say(defs[type].name + ' ready.');
@@ -519,6 +538,9 @@ function command(p) {
     );
   if (enemy && dist(p, enemy) > enemy.r + 22) enemy = null;
   if (node && dist(p, node) > 40) node = null;
+  const producers = selected.filter(u => ['core', 'forge', 'factory'].includes(u.type));
+  for (const b of producers) b.rally = { x: clamp(p.x, 25, W - 25), y: clamp(p.y, 25, H - 25), node };
+  if (producers.length) say('Production rally point set. Provisioners gather when rallied to supplies.');
   let movers = selected.filter((u) => defs[u.type].speed);
   movers.forEach((u, i) => {
     if (u.type === 'worker' && node) u.order = { kind: 'gather', node };
@@ -796,6 +818,11 @@ window.addEventListener('keydown', (e) => {
   keys[e.key] = true;
   if (e.repeat) return;
   if ($('court-dialog').open) return;
+  if (/^[0-9]$/.test(e.key)) {
+    e.preventDefault();
+    controlGroup(e.key, e.ctrlKey || e.metaKey, e.shiftKey);
+    return;
+  }
   if (e.key === ' ') togglePause();
   if (e.key === 'F2') selectArmy();
   if (e.key.toLowerCase() === 'h') goHome();

@@ -148,3 +148,18 @@ assert.equal(
   'attack',
   'Rataxes joins wave two.'
 );
+fresh();
+run("selected=alive(0).filter(u=>u.type==='worker');controlGroup('1',true);selected=[];controlGroup('1')");
+assert(run("selected.length>0 && selected.every(u=>u.type==='worker')"), 'Control groups recall assigned units.');
+run("const lostGroupUnit=selected[0];lostGroupUnit.hp=0;controlGroup('1')");
+assert(run('!selected.includes(lostGroupUnit)'), 'Dead units are omitted from groups.');
+run("selected=[alive(0).find(u=>u.type==='core')];controlGroup('1',true,true);controlGroup('1')");
+assert(run("selected.some(u=>u.type==='core') && selected.some(u=>u.type==='worker')"), 'Append preserves earlier group members.');
+fresh();
+run("const rallyBase=alive(0).find(u=>u.type==='core');selected=[rallyBase];const rallyCache=nodes[0];command(rallyCache);train('worker');rallyBase.progress=defs.worker.time;update(.01)");
+assert(run("units.at(-1).order.kind==='gather' && units.at(-1).order.node===rallyCache"), 'New provisioners honor resource rally points.');
+run("command({x:500,y:1000});train('worker');rallyBase.progress=defs.worker.time;update(.01)");
+assert(run("units.at(-1).order.kind==='move' && units.at(-1).order.x===500"), 'Ground rally overrides automatic gathering.');
+run('reset()');
+assert.equal(run('Object.keys(controlGroups).length'), 0, 'Restart clears saved groups.');
+console.log('PASS: control groups and production rally points.');
