@@ -61,3 +61,8 @@ were tested through real UI. See latest QA section for remaining mobile checks.
 UI verification pass; detailed evidence in QA.md. Next work remains mobile Groups/
 Queue layout verification, fuller production progression and detailed officer roles.
 GitHub publication is still pending authentication.
+
+Compact controls checked: readable Groups modal, two-row quick-command grid, portrait
+recall/Queue and landscape cancellation verified in real browser frames. See newest
+QA entry and screenshots. Next major work: research/tech progression and additional
+character-specific battlefield officer abilities, preserving family support roles.

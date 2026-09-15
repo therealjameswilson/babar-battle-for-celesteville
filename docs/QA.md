@@ -85,3 +85,20 @@ After that fix, real browser clicks selected Babar, issued a ground move, enable
 Queue, and appended a second ground move; live status showed `move · 1 queued` and
 Queue pressed. Six seconds later the queue was consumed and the second move active.
 Captured artifacts/queued-route.png. Mobile layout checks remain outstanding.
+
+## Compact control-panel verification
+
+Real browser iframe layouts at 390×844 and 844×390 exposed two issues: Groups dialog
+buttons inherited unreadable colors, and the five quick commands were squeezed into
+a flex row. Explicit dialog button colors and a two-row grid fix both. Portrait
+panel height is now 310px; landscape retains its compact panel. Final screenshots:
+artifacts/portrait-controls-v04.png and artifacts/landscape-controls-v04.png.
+Portrait body/client/scroll dimensions are 390×844; landscape 844×390, without inner
+page overflow. The larger QA wrapper itself scrolls to show the full portrait frame.
+Real UI clicks assigned the palace to group 1, selected Babar, recalled group 1 back
+to the palace, enabled Queue, and paused. Landscape recruitment cancellation and
+opening/closing Groups worked; the entire landscape dialog fits within 390px height.
+These are responsive browser checks, not physical iPhone or touch-hardware tests.
+The wrapper console again emitted unlocated MutationObserver errors during iframe
+navigation; no project code uses MutationObserver. Do not call this an error-free
+browser run; the control behavior and dimensions above were observed successfully.
