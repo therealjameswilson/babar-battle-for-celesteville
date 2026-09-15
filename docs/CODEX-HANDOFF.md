@@ -82,3 +82,12 @@ cancellation/refunds and resumption of gathering. Full 70-check real browser sui
 passes; new rendered Story victory 02:44 saved. Engine balance wins at 155.05s.
 Review accumulated QA gaps before claiming full verification; publication still
 requires verified GitHub CLI authorization and remote/Pages operations.
+
+Audit follow-up: README now matches worker construction, queues, groups, research
+and commander abilities. Ten expansion browser checks pass, including Rataxes's
+cast and movement, artillery damage and builder replacement/cancellation. Current
+battle fixture measurement remains ~60Hz; see QA.md. GitHub CLI was rechecked and
+is still unauthenticated; the connector still exposes no repository-creation or
+Pages-configuration operation. No remote exists. Publication requires the user to
+complete a successful CLI authorization (not an old device code), followed by
+account/repository/visibility verification before creation or push.

@@ -145,3 +145,20 @@ The updated normal-order/earned-resource strategy reached rendered Story VICTORY
 Deterministic run reaches victory at 155.05s; differing frame/random timing means
 these are separate results, not claims of identical runs. Real browser builder-loss
 and cancellation cases remain covered only by deterministic tests so far.
+
+## Expansion regression audit
+
+The new `Expansion checks` button runs ten additional assertions in a real browser
+and Canvas context. All ten passed: production exclusion during research; infantry
+and artillery research completion; 60-damage upgraded artillery hit; Rataxes's AI
+cast with visible opposition and an escort; measured 30% movement increase; builder
+loss and replacement; actual DOM cancellation availability and action. Saved text:
+artifacts/expansion-browser-checks.txt. These controlled browser fixtures use injected
+test positions and resources, and are distinct from the earned-resource Story
+playthrough. They supersede the earlier missing browser coverage for these rules.
+
+Current representative battle measurement: 120 frames in 1999ms, draw mean 0.5375ms
+(p95 0.70ms), update mean 0.6242ms (p95 0.90ms). Fixture began with 60 combatants;
+55 units remained at measurement completion as casualties occurred. Saved
+artifacts/performance-v07.json. These are short browser CPU timings, not a claim
+about all devices or GPU profiling; no new bottleneck warranted an optimization.

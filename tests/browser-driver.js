@@ -291,3 +291,47 @@ function browserReview() {
   parent.document.getElementById('report').style.display = 'none';
   parent.document.getElementById('play').style.height = '100vh';
 }
+
+async function browserExpansion() {
+  const checks = [];
+  const check = (ok, label) => { if (!ok) throw Error(label); checks.push('PASS ' + label); };
+  try {
+    qaReset(); nextWave = 9999; enemySpawn = 9999;
+    const school = alive(0).find(u => u.type === 'forge');
+    selected = [school]; ore = 1000;
+    startResearch('drill');
+    train('trooper');
+    check(school.queue.length === 0, 'Research prevents parallel recruitment');
+    qaTicks(26);
+    check(technologies.has('drill'), 'Infantry research completes in the browser');
+    const gunLab = add('factory', 0, 500, 1080);
+    selected = [gunLab]; startResearch('shells'); qaTicks(36);
+    check(technologies.has('shells'), 'Artillery research completes in the browser');
+    const gun = add('walker', 0, 600, 1100), target = add('trooper', 1, 650, 1100);
+    const oldHP = target.hp; shoot(gun, target);
+    check(Math.abs(oldHP - target.hp - 60) < .001, 'Calibrated shell deals 60 damage');
+    qaReset(); nextWave = 9999; enemySpawn = 9999;
+    const leader = alive(1).find(u => u.type === 'hero');
+    leader.x = 1050; leader.y = 1100;
+    const escort = add('trooper', 1, 1080, 1100);
+    add('trooper', 0, 1180, 1100); sightAt = -1;
+    enemyThink();
+    check(leader.commandEnergy === 10 && escort.advanceUntil > t, 'Rataxes AI casts when a visible enemy and escort are near');
+    const startX = escort.x; move(escort, {x:1150,y:1100}, .1, 0);
+    check(Math.abs(escort.x - startX - defs.trooper.speed * 1.3 * .1) < .01, 'Forced advance increases actual movement 30%');
+    qaReset(); nextWave = 9999; enemySpawn = 9999; ore = 1000;
+    selected = [alive(0).find(u => u.type === 'core')]; build('relay'); command({x:600,y:1030});
+    const site = units.at(-1), builder = alive(0).find(u => u.order?.target === site);
+    builder.hp = 0; const work = site.construction; qaTicks(2);
+    check(site.construction === work, 'Builder loss halts site in the browser');
+    const replacement = alive(0).find(u => u.type === 'worker'); replacement.x = 560; replacement.y = 1030;
+    selected = [replacement]; repairOrder(site); qaTicks(1);
+    check(site.construction < work, 'Replacement builder resumes site');
+    selected = [site]; updateUI(true);
+    const cancel = [...$('actions').querySelectorAll('button')].find(b => b.textContent.includes('Cancel construction'));
+    check(!!cancel, 'Construction cancellation is exposed in the actual DOM');
+    cancel.click(); check(site.hp === 0, 'Construction cancellation button removes site');
+    qaReset(); paused = true; draw();
+    qaReport(checks.join('\n')); parent.document.getElementById('status').textContent = checks.length + ' expansion checks passed';
+  } catch (error) { qaReport(checks.join('\n') + '\nFAIL ' + error.message); throw error; }
+}

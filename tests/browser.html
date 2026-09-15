@@ -39,7 +39,7 @@
   </head>
   <body>
     <nav>
-      <button id="suite">Run browser checks</button
+      <button id="expansion">Expansion checks</button><button id="suite">Run browser checks</button
       ><button id="victory">Story playthrough ×20</button
       ><button id="loss">Loss playthrough ×20</button
       ><button id="battle">Representative battle</button
@@ -53,7 +53,7 @@
       frame.onload = () => {
         for (const file of ['strategy.js', 'browser-driver.js']) {
           const s = frame.contentDocument.createElement('script');
-          s.src = '../tests/' + file;
+          s.src = '../tests/' + file + '?v=0.7.1';
           s.async = false;
           frame.contentDocument.body.append(s);
         }
@@ -61,6 +61,7 @@
       };
       for (const [id, fn] of [
         ['suite', 'browserSuite'],
+        ['expansion', 'browserExpansion'],
         ['victory', 'browserVictory'],
         ['loss', 'browserLoss'],
         ['battle', 'browserBattle'],
