@@ -21,8 +21,11 @@ through the authenticated GitHub CLI, then the Pages API accepted
 https://therealjameswilson.github.io/babar-battle-for-celesteville/
 
 The initial private-plan restriction is resolved. The workflow publishes only dist.
-Check the latest Actions run and load the returned URL before reporting deployment
-verified; a configured destination alone is not proof that the page is serving.
+Deployment verified: Actions run 35037872195 completed successfully, including all
+checks and deploy. The public URL was opened in a real browser; skirmish start,
+Babar’s active command, pause, artwork and empty warning/error logs were verified.
+All 13 public client files matched local bytes over HTTPS. The .nojekyll marker is
+not served as a public asset and is not required by this Actions deployment.
 
 ## Validation
 

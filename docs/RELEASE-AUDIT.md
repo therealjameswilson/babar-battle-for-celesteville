@@ -1,6 +1,6 @@
 # Release audit
 
-This is an evidence map, not a claim that the complete project is published.
+This is the evidence map for the published skirmish release.
 
 | Requirement | Current evidence / status |
 | --- | --- |
@@ -21,7 +21,7 @@ This is an evidence map, not a claim that the complete project is published.
 | Audio/accessibility | Interaction-started synthesized sound, persisted mute, reduced-motion code; no subjective audio or physical iPhone validation |
 | Documentation/tests | README, architecture, character continuity, art provenance, run commands and QA records updated |
 | GitHub repository/account | VERIFIED: CLI therealjameswilson; repository created, made public with user approval; main pushed and initial remote SHA confirmed |
-| GitHub Pages | CONFIGURED: user approved public source; Pages enabled; deployment verification in progress |
+| GitHub Pages | VERIFIED: Actions run 35037872195 succeeded; public page played in browser; all 13 public client files match local source |
 
 Known limits: two-way character facing with headings/gun rotation; no physical
 Safari/iPhone QA; reduced-motion setting not toggled in browser; intermittent
@@ -31,4 +31,5 @@ No additional named relatives were introduced. All wartime powers are inventions
 
 The user approved public visibility. GitHub accepted the change and Pages setup,
 returning https://therealjameswilson.github.io/babar-battle-for-celesteville/.
-The latest Actions run and served page must be verified before claiming publication.
+Actions run 35037872195 completed successfully. The public page and deployed assets
+were verified; documentation-only follow-up pushes use the same checked workflow.

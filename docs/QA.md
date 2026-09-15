@@ -172,3 +172,15 @@ panel corrected it. Final measured Hold bottom 803px, footer top 816px, body/cli
 and scroll height 844px. Screenshot artifacts/mobile-babar-command.png. This closes
 the earlier pending portrait commander-control check; physical touch remains untested.
 Current requirement/evidence map: RELEASE-AUDIT.md.
+
+## GitHub Pages verification
+
+Public-source visibility was explicitly approved. Actions run 35037872195 passed
+syntax/asset checks, tactical tests, balance simulation and deployment. The actual
+API-returned URL https://therealjameswilson.github.io/babar-battle-for-celesteville/
+was opened in the real browser. Started a Story skirmish, selected Babar, activated
+Stand together, observed energy/protection/cooldown, paused and inspected the
+rendered artwork. Browser warning/error log was empty. All 13 public client files
+returned HTTP 200 and matched local bytes (four atlases, HTML, CSS and seven scripts).
+The .nojekyll configuration marker returns 404, is not referenced by the client and
+is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pages-live.png.
