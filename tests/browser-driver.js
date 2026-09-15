@@ -80,7 +80,7 @@ async function browserSuite() {
     selected = [alive(0)[0]];
     build('relay');
     command({ x: 600, y: 1030 });
-    qaTicks(10);
+    qaTicks(25);
     check(cap() === 40, 'Construction finishes and increases population');
     const scout = alive(0).find((u) => u.type === 'scout');
     scout.x = 690;

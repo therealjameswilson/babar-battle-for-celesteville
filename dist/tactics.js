@@ -123,8 +123,8 @@ function repairOrder(p, append = false) {
   if (!b || dist(p, b) > b.r + 25) return say('Choose a damaged friendly building.');
   let workers = selected.filter((u) => u.type === 'worker');
   if (!workers.length) return say('Select provisioners to repair.');
-  workers.forEach((u) => issueOrder(u, { kind: 'repair', target: b }, append));
-  say('Repair detail assigned. Repairs use 0.3 supplies per health.');
+  workers.forEach((u) => issueOrder(u, { kind: b.construction ? 'build' : 'repair', target: b }, append));
+  say(b.construction ? 'Provisioners assigned to finish construction.' : 'Repair detail assigned. Repairs use 0.3 supplies per health.');
   mode = null;
 }
 function updateTactics(dt) {

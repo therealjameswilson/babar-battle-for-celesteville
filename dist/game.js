@@ -380,11 +380,12 @@ function update(dt) {
     const d = defs[u.type];
     u.cool = Math.max(0, u.cool - dt);
     if (u.construction) {
+      const builders = alive(u.team).filter(w => w.type === 'worker' && w.order?.kind === 'build' && w.order.target === u && dist(w, u) <= u.r + w.r + 12);
+      if (!builders.length) continue;
       const spent = Math.min(dt, u.construction);
       u.construction = Math.max(0, u.construction - dt);
       u.hp = Math.min(u.max, u.hp + (u.max * spent) / (u.buildDuration || d.build));
       if (!u.construction) {
-        u.hp = u.max;
         say(d.name + ' ready.');
       }
       continue;
@@ -423,6 +424,15 @@ function update(dt) {
         u.progress = 0;
         say(defs[type].name + ' ready.');
       }
+    }
+    if (u.type === 'worker' && u.order?.kind === 'build') {
+      const site = u.order.target;
+      if (!site || site.hp <= 0 || !site.construction) {
+        completeOrder(u);
+        if (!u.order && u.returnToWork) u.order = u.returnToWork;
+        u.returnToWork = null;
+      } else move(u, site, dt, site.r + u.r + 8);
+      continue;
     }
     if (u.order?.kind === 'retreat') {
       if (move(u, u.order, dt, 14)) u.order = { kind: 'hold' };
@@ -553,6 +563,14 @@ function cancelRecruit(b, index) {
   say(defs[type].name + ' cancelled. Supplies refunded.');
   updateUI(true);
 }
+function cancelConstruction(b) {
+  if (!running || paused || ended || !b || b.team !== 0 || b.hp <= 0 || !b.construction) return;
+  ore += (b.paid || 0) * .75;
+  b.hp = 0;
+  selected = selected.filter(u => u !== b);
+  say('Construction cancelled. 75% of supplies recovered.');
+  updateUI(true);
+}
 function buildingCost(type) {
   return Math.ceil(defs[type].cost * (benefits.has('cornelius') ? 0.85 : 1));
 }
@@ -595,10 +613,16 @@ function command(p, append = queueOrders) {
     if (!validBuild(p, placing))
       return say('Choose clear ground within reach of a friendly building.');
     if (ore < buildingCost(placing)) return say('Not enough supplies.');
+    const available = alive(0).filter(w => w.type === 'worker' && w.order?.kind !== 'build');
+    const builder = nearest(p, available.filter(w => selected.includes(w))) || nearest(p, available);
+    if (!builder) return say('Construction needs a free provisioner. Recruit one or finish the current site.');
     let d = defs[placing];
-    ore -= buildingCost(placing);
+    const paid = buildingCost(placing);
+    ore -= paid;
     const duration = d.build * (benefits.has('pom') ? 0.7 : 1);
-    add(placing, 0, p.x, p.y, { construction: duration, buildDuration: duration, hp: 1 });
+    const site = add(placing, 0, p.x, p.y, { construction: duration, buildDuration: duration, paid, hp: 1 });
+    builder.returnToWork = builder.order?.kind === 'gather' ? builder.order : null;
+    issueOrder(builder, { kind: 'build', target: site });
     say(d.name + ' construction started.');
     placing = null;
     updateUI(true);
@@ -672,7 +696,7 @@ function updateUI(force = false) {
     ? selected.length > 1
       ? 'Use Attack to engage enemies along the way.'
       : u.construction
-        ? 'Under construction · ' + Math.ceil(u.construction) + 's'
+        ? 'Construction · ' + Math.ceil(u.construction) + 's work remaining. Requires a provisioner on site.'
         : u.research
           ? researchDefs[u.research.id].name + ' · ' + Math.floor(100 * u.research.progress / researchDefs[u.research.id].time) + '% · recruitment suspended'
         : u.queue.length
@@ -738,6 +762,7 @@ function updateUI(force = false) {
         for (const type of ['forge', 'relay', 'factory', 'turret'])
           a.push([defs[type].name, '● ' + buildingCost(type), () => build(type)]);
     }
+    if (u?.construction && selected.length === 1) a.push(['Cancel construction', '75% refund', () => cancelConstruction(u)]);
     if (u && selected.length === 1 && !u.construction) {
       for (const [id, tech] of Object.entries(researchDefs)) {
         if (u.type !== tech.building) continue;

@@ -103,7 +103,7 @@ assert.equal(run("validBuild({x:320,y:900},'relay')"), false);
 run(
   "ore=10000;selected=[alive(0).find(u=>u.type==='core')];build('relay');command({x:600,y:1030})"
 );
-tick(190);
+tick(500); // Worker travel to the site plus nine seconds of construction.
 assert.equal(run('cap()'), 40);
 // Every purchasable character power activates; one-time powers cannot charge twice.
 run('reset();running=true;ore=10000');

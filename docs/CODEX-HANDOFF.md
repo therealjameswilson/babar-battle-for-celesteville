@@ -76,3 +76,9 @@ battlefield commands and research-aware balance testing. Publication auth still 
 area effects and visible rings. Automated effects and Babar's desktop activation
 verified; see QA.md for uncovered cases. Keep the full publication objective active:
 GitHub CLI authentication, remote push and Pages still have not been verified.
+
+0.7: worker-dependent construction, replacement builders through Repair, site
+cancellation/refunds and resumption of gathering. Full 70-check real browser suite
+passes; new rendered Story victory 02:44 saved. Engine balance wins at 155.05s.
+Review accumulated QA gaps before claiming full verification; publication still
+requires verified GitHub CLI authorization and remote/Pages operations.

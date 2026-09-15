@@ -84,3 +84,12 @@ reduction for 8s, multiplicative with cover. Rataxes applies 30% movement speed 
 within 300m, another friendly mobile unit in range, and no retreat order. Effects
 are static colored rings and explicit unit status; no camera shake. These abilities
 are distinct from the existing council powers and are invented game mechanics.
+
+Worker construction (0.7): placement reserves the cost and assigns the nearest free
+provisioner, preferring selected workers. Workers already assigned to another site
+are excluded. A site progresses at normal build speed only with a live assigned
+worker in footprint range; extra workers do not accelerate it. Builders move with
+the same navigation rules as other units. Repair can assign a replacement builder.
+The original gather order resumes after completion when no queued follow-up exists.
+Site cancellation refunds 75% once and releases builders. Destroyed sites refund
+nothing. Construction adds health progressively; completion does not erase damage.

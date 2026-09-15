@@ -128,3 +128,20 @@ isolated in a numerical test. Real browser selected Babar, activated Stand toget
 and showed Energy 19/100, PROTECTED, a 35s cooldown and affected-unit rings. Screenshot
 artifacts/babar-command.png. Rataxes's live cast and mobile ability UI still need
 browser checks; do not treat automated effects as full playtest coverage.
+
+## Worker construction 0.7
+
+All engine, tactical and Story balance checks pass. Added assertions cover automatic
+builder assignment, no progress before arrival, interruption after builder death,
+replacement through Repair, cancellation refund once, worker release and no-worker
+rejection without charging. Baseline construction wait now includes travel plus
+work time; the browser fixture similarly allows 25 simulated seconds instead of 10.
+The full real-Canvas browser suite passes all 70 checks on this release, including
+construction/population, council effects, routes, repairs, supply, selection, touch
+orders, mute and controls. Its coverage is defined in tests/browser-driver.js and
+must not be read as covering every newly added feature.
+The updated normal-order/earned-resource strategy reached rendered Story VICTORY at
+02:44 with 15 enemy casualties. Evidence: artifacts/story-victory-v07.png and .txt.
+Deterministic run reaches victory at 155.05s; differing frame/random timing means
+these are separate results, not claims of identical runs. Real browser builder-loss
+and cancellation cases remain covered only by deterministic tests so far.
