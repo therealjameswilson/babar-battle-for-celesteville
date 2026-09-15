@@ -162,3 +162,13 @@ Current representative battle measurement: 120 frames in 1999ms, draw mean 0.537
 55 units remained at measurement completion as casualties occurred. Saved
 artifacts/performance-v07.json. These are short browser CPU timings, not a claim
 about all devices or GPU profiling; no new bottleneck warranted an optimization.
+
+## Final compact commander audit
+
+Direct portrait UI activation of Stand together passed: energy reduced to 10,
+PROTECTED status and 35s cooldown appeared. Long selection copy initially pushed
+Hold below the screen; summary shortening, compact text height and a 340px portrait
+panel corrected it. Final measured Hold bottom 803px, footer top 816px, body/client
+and scroll height 844px. Screenshot artifacts/mobile-babar-command.png. This closes
+the earlier pending portrait commander-control check; physical touch remains untested.
+Current requirement/evidence map: RELEASE-AUDIT.md.

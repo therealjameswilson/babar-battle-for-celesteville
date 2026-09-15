@@ -708,7 +708,7 @@ function updateUI(force = false) {
             u.queue.length +
             ' queued'
           : u.type === 'hero'
-            ? 'Stand together: protect nearby troops for 8s and restore 20 morale. Officer aura restores morale; council rally restores health.'
+            ? 'Stand together: +20 morale and 25% less damage for nearby troops, for 8s.'
             : u.type === 'worker'
               ? 'Delivers supplies to linked palaces or homes. Can repair buildings.'
               : u.type === 'core'

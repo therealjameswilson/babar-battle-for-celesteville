@@ -1486,5 +1486,7 @@ dialog {
   #groups-dialog {width:calc(100% - 28px);max-height:calc(100% - 28px);overflow-y:auto;padding:14px;}
   #groups-dialog p {font-size:12px;}
 }
-@media (max-width:580px) {aside {height:310px;}}
+@media (max-width:580px) {aside {height:340px;}}
 #groups-dialog button {color:#f4e9c9;background:#344237;border-color:#8f805b;}
+
+@media (max-width:580px), (max-height:500px) and (min-width:581px) {#selected-info {max-height:42px;overflow:hidden;}}
