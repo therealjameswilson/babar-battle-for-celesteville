@@ -39,6 +39,8 @@ See [architecture and balance](docs/ARCHITECTURE.md), [character continuity](doc
 
 ## GitHub Pages
 
+[Source repository](https://github.com/therealjameswilson/babar-battle-for-celesteville) · [Play](https://therealjameswilson.github.io/babar-battle-for-celesteville/)
+
 The workflow checks pull requests and publishes **only `dist/`** from `main`. Enable **Settings → Pages → GitHub Actions** after the repository exists. It preserves branch and environment protection rules. Current account/deployment status is recorded in the handoff; a workflow file by itself is not proof of a successful deployment.
 
 This is an unofficial fan game. Names and setting belong to their respective rights holders. The game’s wartime roles, powers, dialogue and numerical rules are original inventions, not franchise canon. The crossover is not an exhaustive family tree.

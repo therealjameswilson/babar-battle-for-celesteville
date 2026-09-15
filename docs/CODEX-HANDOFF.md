@@ -6,19 +6,23 @@ Version 0.7.0 continues the supplied prototype; baseline commit `4109fb621b93a62
 
 ## Verified GitHub connection and source
 
-GitHub CLI now authenticates as `therealjameswilson`. Repository lookup under the authenticated owner returned not found, then this dedicated repository was created privately:
+GitHub CLI now authenticates as `therealjameswilson`. Repository lookup under the authenticated owner returned not found, then this dedicated repository was created privately (subsequently made public with explicit user approval):
 
 https://github.com/therealjameswilson/babar-battle-for-celesteville
 
-The account has ADMIN permission. `origin` points to that repository. The initial push to main was verified through the GitHub commits API as `59b307adf7c37bfcfed0844dd9d0382a61a24c9d`. Subsequent documentation commits record the publication blocker. No force push or public visibility change occurred.
+The account has ADMIN permission. `origin` points to that repository. The initial push to main was verified through the GitHub commits API as `59b307adf7c37bfcfed0844dd9d0382a61a24c9d`. Subsequent documentation commits record the publication blocker. No force push occurred. Public visibility was later explicitly authorized by the user.
 
-## Pages requires a visibility or account-plan decision
+## Public source and Pages
 
-Creating an Actions-based Pages site via GitHub's API returned HTTP 422: “Your current plan does not support GitHub Pages for this repository.” The repository is private. No Pages URL has been returned or verified.
+The user explicitly approved making the repository public. Visibility was changed
+through the authenticated GitHub CLI, then the Pages API accepted
+`build_type=workflow` and returned this destination:
 
-The user must choose whether to make this source public or retain private source and use a plan that supports private-repository Pages. Do not change visibility without explicit approval. Account billing/upgrades must be completed by the user.
+https://therealjameswilson.github.io/babar-battle-for-celesteville/
 
-After the decision, recheck the account/repository and enable Pages with build_type=workflow. Watch the workflow to a terminal result, resolve genuine failures, respect environment protections, obtain the actual page_url, and verify it in a browser. The initial push created Actions run 35037722075; inspect its current status rather than treating a workflow file as proof of deployment.
+The initial private-plan restriction is resolved. The workflow publishes only dist.
+Check the latest Actions run and load the returned URL before reporting deployment
+verified; a configured destination alone is not proof that the page is serving.
 
 ## Validation
 
