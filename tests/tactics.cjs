@@ -163,3 +163,11 @@ assert(run("units.at(-1).order.kind==='move' && units.at(-1).order.x===500"), 'G
 run('reset()');
 assert.equal(run('Object.keys(controlGroups).length'), 0, 'Restart clears saved groups.');
 console.log('PASS: control groups and production rally points.');
+fresh();
+run("const cancelBase=alive(0).find(u=>u.type==='core');selected=[cancelBase];train('worker');train('worker');cancelBase.progress=3;const cancelOre=ore;cancelRecruit(cancelBase,1)");
+assert(run('ore===cancelOre+50 && cancelBase.queue.length===1 && cancelBase.progress===3'), 'Cancelling waiting recruit refunds cost and preserves current progress.');
+run('cancelRecruit(cancelBase,0)');
+assert(run('ore===cancelOre+100 && cancelBase.progress===0 && cancelBase.queue.length===0'), 'Cancelling active recruit resets progress and refunds.');
+run('cancelRecruit(cancelBase,0)');
+assert(run('ore===cancelOre+100'), 'Repeated cancellation cannot mint supplies.');
+console.log('PASS: recruitment cancellation and refunds.');

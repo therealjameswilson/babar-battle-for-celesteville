@@ -51,3 +51,10 @@ Production buildings retain a world-space rally point set through normal orders;
 new provisioners gather if it references a nonempty cache, otherwise recruits move
 there. Selected buildings draw a dashed brass line and pennant. Ground rallies
 replace the provisioner's default automatic gathering behavior.
+
+Recruitment can be cancelled from a selected producer's action list. Full supply
+cost is refunded; cancelling the active item resets its elapsed training, while
+cancelling a waiting item leaves active progress intact. Index and ownership guards
+prevent duplicate refunds. The actions list scrolls when a queue expands it.
+The Groups button exposes four saved selection slots through a paused dialog for
+touch users; closing restores the prior pause state. Keyboard users retain ten slots.

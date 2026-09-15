@@ -1469,3 +1469,9 @@ dialog {
   }
 }
 @media(max-height:500px) and (min-width:581px){.mission span{display:none}.mission{padding:5px 8px}.mission strong{font-size:11px;margin:2px 0}.mission small{display:inline-block;font-size:9px;margin:2px 6px 0 0}#toast{font-size:10px;left:10px;right:110px;text-align:left;bottom:55px}footer button{min-height:20px;padding:2px;font-size:10px}}
+
+#group-actions {display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0;}
+#groups-dialog {max-width:460px;}
+#group-actions button {min-height:44px;}
+.quick {grid-template-columns:repeat(4,1fr);}
+#actions {max-height:180px;overflow-y:auto;}

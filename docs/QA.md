@@ -56,3 +56,21 @@ a replacement server was started, but the browser navigation tool rejected the
 existing connection-error document. Earlier browser evidence above predates these
 controls. Native computer access also reported the Mac locked. Resume direct keyboard,
 touch rally and visual pennant checks when preview access is restored.
+
+## Production management and groups browser follow-up
+
+Preview access recovered by opening a fresh tab after confirming HTTP 200 from the
+restarted server. Real browser input verified Ctrl+1 assignment and 1 recall after
+F2 changed selection; recruitment displayed its cancellation/refund button and
+cancelling removed the queue and released population. The Groups modal opened,
+assigned the palace to group 2, closed, and returned to running command. Right-click
+on ground produced the dashed rally line and pennant (artifacts/rally-and-groups.png).
+Desktop 1280×720 controls visually fit; browser warning/error log was empty.
+These observations supersede the earlier blanket pending status for desktop controls.
+New Groups dialog and queue overflow still need portrait/landscape checks. Touch
+hardware, group recall via modal, and recruit arrival at the rally remain pending
+browser checks (rally behavior is covered by deterministic assertions).
+
+Deterministic cancellation tests verify exact refunds, preserved active progress
+when cancelling a waiting recruit, reset progress when cancelling the active recruit,
+and no duplicate refunds from an invalid repeated cancellation.

@@ -51,3 +51,8 @@ The most recent device-login session no longer exists and gh auth status still r
 unauthenticated. Do not reuse earlier device codes or claim GitHub publication.
 Next RTS work: queued waypoint orders, touch-accessible control-group UI, production
 queue cancellation, then broader tech progression and officer differentiation.
+
+Further progress: cancellable recruitment with full refunds and four touch-accessible
+control groups now implemented. New cancellation checks pass. Desktop preview
+recovered; keyboard groups, modal assignment, queue cancellation and rally pennant
+were tested through real UI. See latest QA section for remaining mobile checks.

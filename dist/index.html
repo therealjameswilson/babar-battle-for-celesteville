@@ -99,7 +99,7 @@
         <div id="actions"></div>
         <div class="quick">
           <button id="army">Army <kbd>F2</kbd></button><button id="home">Palace <kbd>H</kbd></button
-          ><button id="leader">Babar</button>
+          ><button id="leader">Babar</button><button id="groups-open">Groups</button>
         </div>
         <div class="orders">
           <p class="eyebrow">FIELD ORDERS</p>
@@ -185,6 +185,12 @@
         Pan map. Scroll or +/− zooms. Family & council pauses the simulation; closing it restores
         the previous pause state.
       </p>
+    </dialog>
+    <dialog id="groups-dialog" aria-labelledby="groups-title">
+      <h2 id="groups-title">Control groups</h2>
+      <p>Assign the current selection, then recall it during battle. Fallen units are removed. Command is paused here.</p>
+      <div id="group-actions"></div>
+      <button id="groups-close">Return to command</button>
     </dialog>
     <script src="cast.js"></script>
     <script src="game.js"></script>

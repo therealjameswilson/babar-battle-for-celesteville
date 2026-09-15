@@ -476,6 +476,14 @@ function train(type) {
   say(defs[type].name + ' queued.');
   updateUI(true);
 }
+function cancelRecruit(b, index) {
+  if (!running || paused || ended || b.team !== 0 || b.hp <= 0 || !Number.isInteger(index) || index < 0 || index >= b.queue.length) return;
+  const [type] = b.queue.splice(index, 1);
+  ore += defs[type].cost;
+  if (index === 0) b.progress = 0;
+  say(defs[type].name + ' cancelled. Supplies refunded.');
+  updateUI(true);
+}
 function buildingCost(type) {
   return Math.ceil(defs[type].cost * (benefits.has('cornelius') ? 0.85 : 1));
 }
@@ -643,7 +651,7 @@ function updateUI(force = false) {
     ' · Enemy reserves ' +
     Math.floor(enemyBudget);
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
-  const key = (u?.type || 'none') + '-' + selected.length + '-' + !!u?.construction;
+  const key = (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '');
   if (force || key !== actionKey) {
     actionKey = key;
     let a = [];
@@ -657,6 +665,9 @@ function updateUI(force = false) {
       if (u.type === 'core' || u.type === 'worker')
         for (const type of ['forge', 'relay', 'factory', 'turret'])
           a.push([defs[type].name, '● ' + buildingCost(type), () => build(type)]);
+    }
+    if (u?.queue.length && selected.length === 1) {
+      u.queue.forEach((type, index) => a.push([`Cancel ${index + 1}: ${defs[type].name}`, `Refund ${defs[type].cost}`, () => cancelRecruit(u, index)]));
     }
     const holder = $('actions');
     holder.replaceChildren();
@@ -817,7 +828,7 @@ window.addEventListener('keydown', (e) => {
     e.preventDefault();
   keys[e.key] = true;
   if (e.repeat) return;
-  if ($('court-dialog').open) return;
+  if ($('court-dialog').open || $('groups-dialog').open) return;
   if (/^[0-9]$/.test(e.key)) {
     e.preventDefault();
     controlGroup(e.key, e.ctrlKey || e.metaKey, e.shiftKey);
@@ -886,3 +897,28 @@ $('help').onclick = () => {
   $('help-dialog').showModal();
 };
 $('help-close').onclick = () => $('help-dialog').close();
+
+$('groups-open').onclick = () => {
+  if (!running || ended) return;
+  const wasPaused = paused;
+  paused = true;
+  const holder = $('group-actions');
+  holder.replaceChildren();
+  for (let i = 1; i <= 4; i++) {
+    const count = alive(0).filter(u => (controlGroups[i] || []).includes(u.id)).length;
+    for (const save of [false, true]) {
+      const button = document.createElement('button');
+      button.textContent = save ? `Assign selection to ${i}` : `Select group ${i} · ${count}`;
+      button.onclick = () => {
+        $('groups-dialog').close();
+        paused = false;
+        controlGroup(i, save);
+        paused = wasPaused;
+      };
+      holder.appendChild(button);
+    }
+  }
+  $('groups-dialog').onclose = () => { paused = wasPaused; };
+  $('groups-dialog').showModal();
+};
+$('groups-close').onclick = () => $('groups-dialog').close();
