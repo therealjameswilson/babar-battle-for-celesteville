@@ -71,3 +71,8 @@ character-specific battlefield officer abilities, preserving family support role
 cost supplies and suffer isolation. Research rules and desktop progress/production
 blocking verified; see QA.md for exact coverage. Next: active character-specific
 battlefield commands and research-aware balance testing. Publication auth still pending.
+
+0.6 adds distinct active Babar/Rataxes battlefield commands with energy, cooldowns,
+area effects and visible rings. Automated effects and Babar's desktop activation
+verified; see QA.md for uncovered cases. Keep the full publication objective active:
+GitHub CLI authentication, remote push and Pages still have not been verified.

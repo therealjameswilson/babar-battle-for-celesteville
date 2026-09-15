@@ -116,3 +116,15 @@ at 1% and 58%, then observed completion and successfully queued a guard. Live tr
 damage and artillery research have not separately been browser tested; infantry
 numerical effects are deterministic checks. Mobile research layout and balance with
 active research strategies remain to be checked.
+
+## Active commanders 0.6
+
+Numerical tests verify Babar's energy payment, cooldown rejection, area/team scope,
+20 morale restoration, 25% protection and expiry; Rataxes's extra suppression,
+energy payment, timed effect, and no cast when no nearby enemy is visible. Energy
+regeneration tested numerically. Story bot still wins, now at 151.10 seconds against
+the stronger enemy command. The movement multiplier is implemented but not yet
+isolated in a numerical test. Real browser selected Babar, activated Stand together,
+and showed Energy 19/100, PROTECTED, a 35s cooldown and affected-unit rings. Screenshot
+artifacts/babar-command.png. Rataxes's live cast and mobile ability UI still need
+browser checks; do not treat automated effects as full playtest coverage.

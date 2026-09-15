@@ -57,3 +57,8 @@ Only Babar and Rataxes are named battlefield units. All children remain civilian
 Cornelius also sponsors the invented coordinated-volley research at the Guard School:
 this adds a production and supply decision to his role as chief adviser. It is an
 optional game doctrine, separate from canonical relationships and his council power.
+
+Babar and Rataxes now also have battlefield commands with regenerating energy,
+documented in ARCHITECTURE.md and their roster descriptions. Stand together emphasizes
+Babar's protective leadership; forced advance emphasizes Rataxes's aggressive command.
+These are invented abilities, separate from canonical personalities and family ties.

@@ -43,6 +43,11 @@ function atlas(image, col, row, x, y, w, h, building = false) {
   return true;
 }
 function drawUnit(u) {
+  if ((u.disciplineUntil || 0) > t || (u.advanceUntil || 0) > t) {
+    ctx.strokeStyle = (u.disciplineUntil || 0) > t ? '#dbc889' : '#d67d73';
+    ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(u.x, u.y + 4, u.r + 9, (u.r + 9) * .5, 0, 0, Math.PI * 2); ctx.stroke();
+  }
   const d = defs[u.type],
     color = u.team ? RED : BLUE;
   ctx.save();

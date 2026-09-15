@@ -74,3 +74,13 @@ units, once per match. Research occupies its producer; other buildings can conti
 recruiting. Isolated research runs at 25%. Cancellation refunds 75%; destruction
 loses unfinished work without refund. Restart clears upgrades. These doctrines are
 invented gameplay, not canonical character claims.
+
+Active commanders (0.6): heroes start with 60 command energy, capped at 100,
+regenerating 1.25/s. Both skills cost 50 energy and have a 35s cooldown; affected
+units are friendly mobile units within 180m at activation, including the officer.
+Babar's Stand together (Q or action button) restores 20 morale and applies 25% damage
+reduction for 8s, multiplicative with cover. Rataxes applies 30% movement speed and
+6 additional suppression per hit for 8s. AI activation requires a visible enemy
+within 300m, another friendly mobile unit in range, and no retreat order. Effects
+are static colored rings and explicit unit status; no camera shake. These abilities
+are distinct from the existing council powers and are invented game mechanics.

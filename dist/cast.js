@@ -11,7 +11,7 @@ const COURT = [
     team: 0,
     initials: 'B',
     title: 'Royal rally',
-    text: 'Restore 80 health and 35 morale to nearby elephants. Babar leads from the field.',
+    text: 'Restore 80 health and 35 morale to nearby elephants. On the battlefield, Stand together (Q) separately costs 50 energy with a 35s cooldown: allies within 180m gain 20 morale and take 25% less damage for 8s.',
     cost: 0,
     cooldown: 45,
   },
@@ -212,7 +212,7 @@ const COURT = [
     team: 1,
     initials: 'R',
     title: 'The rhino charge',
-    text: 'Leads the assault personally from wave two. Recovers for 45 seconds; returning costs 100 reserves.',
+    text: 'Leads the assault personally from wave two. Recovers for 45 seconds; returning costs 100 reserves. His battlefield command costs 50 energy with a 35s cooldown: nearby troops move 30% faster and inflict 6 extra suppression per hit for 8s.',
     cost: 0,
   },
   {

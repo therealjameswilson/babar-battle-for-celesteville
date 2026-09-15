@@ -1,3 +1,25 @@
+// Active commander skills are invented wartime roles, separate from council powers.
+function commanderAbility(u) {
+  if (!running || paused || ended || !u || u.hp <= 0 || u.type !== 'hero') return false;
+  if (u.commandEnergy < 50 || t < u.commandReadyAt) {
+    if (u.team === 0) say('Commander needs 50 energy and a ready command.');
+    return false;
+  }
+  u.commandEnergy -= 50;
+  u.commandReadyAt = t + 35;
+  const nearby = alive(u.team).filter(a => defs[a.type].speed && dist(a, u) <= 180);
+  for (const a of nearby) {
+    if (u.team === 0) {
+      a.disciplineUntil = t + 8;
+      a.morale = Math.min(100, a.morale + 20);
+    } else a.advanceUntil = t + 8;
+  }
+  if (u.team === 0 || visible(u)) say(u.team === 0
+    ? 'Babar: Stand together. Nearby troops take 25% less damage for 8 seconds.'
+    : 'Rataxes orders a forced advance. His formation is closing rapidly.');
+  updateUI(true);
+  return true;
+}
 'use strict';
 let enemyScoutSent = false;
 let depot = { x: 950, y: 830, r: 65, team: -1, progress: 0 },
@@ -146,6 +168,7 @@ function updateTactics(dt) {
     enemyBudget = Math.min(900, enemyBudget + (easy ? 0.8 : 1.3) * dt);
   const friendlyTeams = [alive(0), alive(1)];
   for (const u of units.filter((u) => u.hp > 0 && defs[u.type].speed)) {
+    if (u.type === 'hero') u.commandEnergy = Math.min(100, u.commandEnergy + dt * 1.25);
     const officer = friendlyTeams[u.team].some((b) => b.type === 'hero' && dist(u, b) < 190);
     const hospital = friendlyTeams[u.team].some(
       (b) => (b.type === 'core' || b.type === 'relay') && supplied(b) && dist(u, b) < 160
@@ -159,6 +182,12 @@ function updateTactics(dt) {
   }
 }
 function enemyThink() {
+  for (const leader of alive(1).filter(u => u.type === 'hero' && u.order?.kind !== 'retreat')) {
+    if (leader.commandEnergy >= 50 && t >= leader.commandReadyAt &&
+        alive(0).some(v => sees(1, v) && dist(leader, v) < 300) &&
+        alive(1).filter(v => defs[v.type].speed && dist(leader, v) <= 180).length >= 2)
+      commanderAbility(leader);
+  }
   if (t >= enemySpawn && alive(1).some((b) => b.type === 'forge')) {
     enemySpawn = t + (easy ? 18 : 12) * (wave >= 2 ? 0.8 : 1);
     let type = wave > 1 && wave % 2 === 0 ? 'walker' : 'trooper';

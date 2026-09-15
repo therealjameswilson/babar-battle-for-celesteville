@@ -113,6 +113,8 @@ function add(type, team, x, y, extra = {}) {
     r: d.r,
     angle: 0,
     morale: 100,
+    commandEnergy: type === 'hero' ? 60 : 0,
+    commandReadyAt: 0,
     cool: 0,
     order: null,
     queue: [],
@@ -341,9 +343,10 @@ function shoot(u, v) {
     d.damage * weaponMultiplier(u) *
     (u.team === 1 && easy ? 0.7 : 1) *
     (inCover(v) ? 0.65 : 1) *
+    ((v.disciplineUntil || 0) > t ? 0.75 : 1) *
     (u.type === 'walker' && !defs[v.type].speed ? 1.8 : 1);
   v.hp -= damage;
-  v.morale = Math.max(0, v.morale - (u.type === 'walker' ? 26 : 12));
+  v.morale = Math.max(0, v.morale - (u.type === 'walker' ? 26 : 12) - ((u.advanceUntil || 0) > t ? 6 : 0));
   v.hitAt = t;
   fx.push({
     x: u.x,
@@ -681,7 +684,7 @@ function updateUI(force = false) {
             u.queue.length +
             ' queued'
           : u.type === 'hero'
-            ? 'Officer aura restores morale. Council rally restores health and morale.'
+            ? 'Stand together: protect nearby troops for 8s and restore 20 morale. Officer aura restores morale; council rally restores health.'
             : u.type === 'worker'
               ? 'Delivers supplies to linked palaces or homes. Can repair buildings.'
               : u.type === 'core'
@@ -707,7 +710,7 @@ function updateUI(force = false) {
       ? 'Morale ' +
         Math.ceil(u.morale) +
         ' / 100 · ' +
-        (u.order?.kind || 'ready') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
+        (u.order?.kind || 'ready') + (u.type === 'hero' ? ` · Energy ${Math.floor(u.commandEnergy)}/100` : '') + ((u.disciplineUntil || 0) > t ? ' · PROTECTED' : '') + ((u.advanceUntil || 0) > t ? ' · ADVANCING' : '') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
         (inCover(u) ? ' · IN COVER' : '')
       : supplied(u)
         ? 'Supply line operational'
@@ -719,11 +722,12 @@ function updateUI(force = false) {
     ' · Enemy reserves ' +
     Math.floor(enemyBudget);
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
-  const key = (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',');
+  const key = (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   if (force || key !== actionKey) {
     actionKey = key;
     let a = [];
     if (u && !u.construction && selected.length === 1) {
+      if (u.type === 'hero') a.push(['Babar: Stand together', Math.max(0, u.commandReadyAt - t) > 0 ? Math.ceil(u.commandReadyAt - t) + 's cooldown' : '50 energy · Q', () => commanderAbility(u)]);
       if (u.type === 'core') a.push(['Provisioner', '● 50', () => train('worker')]);
       if (u.type === 'forge') {
         a.push(['Elephant Guard', '60', () => train('trooper')]);
@@ -912,6 +916,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === ' ') togglePause();
   if (e.key === 'F2') selectArmy();
   if (e.key.toLowerCase() === 'h') goHome();
+  if (e.key.toLowerCase() === 'q') commanderAbility(selected.find(u => u.type === 'hero'));
   if (e.key.toLowerCase() === 'a') setMode('attack');
   if (e.key.toLowerCase() === 'm') setMode('move');
   if (e.key.toLowerCase() === 'g') setMode('gather');

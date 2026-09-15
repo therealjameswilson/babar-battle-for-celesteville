@@ -175,7 +175,7 @@ function move(u, target, dt, stop = 3) {
     waypoint = u.path[0];
   } else u.path = null;
   const speed =
-    defs[u.type].speed *
+    defs[u.type].speed * ((u.advanceUntil || 0) > t ? 1.3 : 1) *
     (u.team === 0 && benefits.has('arthur') ? 1.15 : 1) *
     (u.team === 1 && wave >= 4 ? 1.1 : 1) *
     (u.order?.kind === 'retreat' ? 1.2 : u.morale < 45 ? 0.7 : 1);
