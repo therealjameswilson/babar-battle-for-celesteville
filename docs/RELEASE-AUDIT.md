@@ -20,8 +20,8 @@ This is an evidence map, not a claim that the complete project is published.
 | Performance | Current combat fixture ~60Hz, update mean .624ms, draw mean .538ms; scope in QA.md |
 | Audio/accessibility | Interaction-started synthesized sound, persisted mute, reduced-motion code; no subjective audio or physical iPhone validation |
 | Documentation/tests | README, architecture, character continuity, art provenance, run commands and QA records updated |
-| GitHub repository/account | BLOCKED: CLI unauthenticated; no remote, repository creation or push verified |
-| GitHub Pages | BLOCKED: workflow exists but no Pages configuration, Actions run or published URL verified |
+| GitHub repository/account | VERIFIED: CLI therealjameswilson; private repository created; main pushed and initial remote SHA confirmed |
+| GitHub Pages | BLOCKED: GitHub API rejects private-repository Pages on the current plan; visibility/plan decision required |
 
 Known limits: two-way character facing with headings/gun rotation; no physical
 Safari/iPhone QA; reduced-motion setting not toggled in browser; intermittent
@@ -29,9 +29,8 @@ unlocated MutationObserver errors in QA iframe wrapper; extended Commander human
 balance and research-aware strategy comparisons remain future validation work.
 No additional named relatives were introduced. All wartime powers are inventions.
 
-Publication requires successful GitHub CLI consent, account verification as
-therealjameswilson, authoritative repository lookup, and permission/plan inspection.
-Create a new repository privately only if absent and supported. Ask before any
-public-source visibility change. Then push, enable Pages, watch the workflow to
-completion and verify the actual returned deployment URL. None may be inferred
-from the workflow file or local tests.
+Publication now requires an explicit visibility/plan decision. The authenticated
+GitHub account is verified and the private repository/source push is complete.
+Pages creation returned HTTP 422 because the current plan does not support it for
+this private repository. Preserve private visibility until the user authorizes a
+change. Then enable Pages, watch Actions and verify the returned deployment URL.

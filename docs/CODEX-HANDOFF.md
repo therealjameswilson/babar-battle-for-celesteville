@@ -1,93 +1,29 @@
 # Siege release handoff
 
-## Verified local result
+## Current result
 
-Version 0.3.0 continues the supplied prototype. Original imported baseline: `4109fb621b93a626fdb5cfcb1c04d8497ce66c5a`. It contains the unmodified archive content; commit author metadata was changed to the verified account’s GitHub noreply identity before any push.
+Version 0.7.0 continues the supplied prototype; baseline commit `4109fb621b93a626fdb5cfcb1c04d8497ce66c5a` is preserved. The client has worker construction, supplies and delivery, recruitment and research, control groups, rally points and queued orders, A* navigation, suppression, cover, disrupted supply, finite enemy reserves, active Babar/Rataxes abilities, and all 23 roster entries. See RELEASE-AUDIT.md and QA.md for evidence and limitations.
 
-The revised source adds clearance-aware A*, formations, two roads around forest obstacles, cover, scouts and artillery, suppression/retreat, a supply graph, paid repair, wounded recovery, paid commander returns, a capturable depot, enemy recruitment reserves, scouting/flanking/regroup decisions, grittier generated art and damage feedback, original synthesized audio, and a command-post interface. The 23-member roster remains intact. See QA.md for what was actually tested.
+## Verified GitHub connection and source
 
-## Publication is blocked on account authorization
+GitHub CLI now authenticates as `therealjameswilson`. Repository lookup under the authenticated owner returned not found, then this dedicated repository was created privately:
 
-The connected GitHub integration identifies `therealjameswilson` (account ID 30484292). It exposes repository read/write operations but no repository creation or Pages configuration operation. The intended repository lookup returned 404 and it was absent from the accessible repository listing. A 404 alone cannot rule out a private repository outside the integration’s access.
+https://github.com/therealjameswilson/babar-battle-for-celesteville
 
-There is currently **no verified repository URL, remote commit, Pages Actions run, or Pages URL** for this game. The local repository has no remote. No repository visibility was changed.
+The account has ADMIN permission. `origin` points to that repository. The initial push to main was verified through the GitHub commits API as `59b307adf7c37bfcfed0844dd9d0382a61a24c9d`. Subsequent documentation commits record the publication blocker. No force push or public visibility change occurred.
 
-GitHub CLI was installed from the official cli/cli release into `~/.local/bin/gh`; it is not yet authenticated. Both browser/device authorization attempts expired without consent. Restart the official flow when the user is ready:
+## Pages requires a visibility or account-plan decision
 
-```
-~/.local/bin/gh auth login --hostname github.com --git-protocol https --web
-```
+Creating an Actions-based Pages site via GitHub's API returned HTTP 422: “Your current plan does not support GitHub Pages for this repository.” The repository is private. No Pages URL has been returned or verified.
 
-The user must perform the real GitHub sign-in/consent step as `therealjameswilson`. Never ask for a password or token in chat. Verify afterwards:
+The user must choose whether to make this source public or retain private source and use a plan that supports private-repository Pages. Do not change visibility without explicit approval. Account billing/upgrades must be completed by the user.
 
-```
-~/.local/bin/gh auth status --hostname github.com
-~/.local/bin/gh api user --jq .login
-```
+After the decision, recheck the account/repository and enable Pages with build_type=workflow. Watch the workflow to a terminal result, resolve genuine failures, respect environment protections, obtain the actual page_url, and verify it in a browser. The initial push created Actions run 35037722075; inspect its current status rather than treating a workflow file as proof of deployment.
 
-## Resume publication after authorization
+## Validation
 
-1. Recheck `therealjameswilson/babar-battle-for-celesteville` through the authenticated CLI. Inspect contents, visibility, default branch, permissions and guidance. Distinguish a true absence from a network/permission failure.
-2. If an existing substantive repository is found, work on a feature branch and preserve its unrelated changes. Do not push this local history over it blindly.
-3. If absent, create a dedicated **private** repository from this correctly initialized local project after verifying remotes. Push the validated commit without force. Verify the remote SHA.
-4. Enable Actions-based Pages using an authorized operation, or ask the user for **Settings → Pages → GitHub Actions** if configuration is unavailable. GitHub Free only supports Pages from public repositories; private source requires a supported paid plan. Do not change visibility without an explicit account decision.
-5. Watch the actual workflow through completion, respect any review/environment gate, fix failures, obtain the URL from GitHub, and load that URL in the real browser. Check assets under the project subpath. Only then report publication as complete.
+Run `npm run check`, `npm test`, `npm run test:balance`, `npm start`. No installation/build is needed. Only dist is deployed. The local browser suite has 70 base checks and 10 expansion checks; rendered Story victory, mobile layout evidence and measured battle performance are documented in QA.md. These do not imply physical iPhone, every browser engine, subjective audio verification, or extended human Commander balancing.
 
-## Validation commands
+## Recommended next development work
 
-`npm run check`, `npm test`, `npm run test:balance`, `npm start`.
-
-No npm installation or runtime dependencies. Node 20+ and Python 3 suffice. `dist/` is the only deployable client directory. The root-served browser harness, review screenshots, archives, credentials, `.git` directories and `.openai` metadata are not deployed.
-
-## Next development task
-
-After publication, expand directional walk/fire animations and conduct hands-on Commander balancing and physical iPhone Safari testing. Current mobile verification uses real browser iframe viewports and synthesized touch pointer events, not physical hardware. There is no campaign, multiplayer, save system, or full eight-direction character animation.
-
-Official references: [GitHub CLI login](https://cli.github.com/manual/gh_auth_login), [custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
-
-Follow-up: saved control groups and production rally points implemented; deterministic
-and balance checks pass. Browser QA of these additions remains pending (see QA.md).
-The most recent device-login session no longer exists and gh auth status still reports
-unauthenticated. Do not reuse earlier device codes or claim GitHub publication.
-Next RTS work: queued waypoint orders, touch-accessible control-group UI, production
-queue cancellation, then broader tech progression and officer differentiation.
-
-Further progress: cancellable recruitment with full refunds and four touch-accessible
-control groups now implemented. New cancellation checks pass. Desktop preview
-recovered; keyboard groups, modal assignment, queue cancellation and rally pennant
-were tested through real UI. See latest QA section for remaining mobile checks.
-
-0.4.0 adds queued move/attack/gather/repair orders and visual routes. Tests and desktop
-UI verification pass; detailed evidence in QA.md. Next work remains mobile Groups/
-Queue layout verification, fuller production progression and detailed officer roles.
-GitHub publication is still pending authentication.
-
-Compact controls checked: readable Groups modal, two-row quick-command grid, portrait
-recall/Queue and landscape cancellation verified in real browser frames. See newest
-QA entry and screenshots. Next major work: research/tech progression and additional
-character-specific battlefield officer abilities, preserving family support roles.
-
-0.5 progression: two optional weapon research projects occupy production buildings,
-cost supplies and suffer isolation. Research rules and desktop progress/production
-blocking verified; see QA.md for exact coverage. Next: active character-specific
-battlefield commands and research-aware balance testing. Publication auth still pending.
-
-0.6 adds distinct active Babar/Rataxes battlefield commands with energy, cooldowns,
-area effects and visible rings. Automated effects and Babar's desktop activation
-verified; see QA.md for uncovered cases. Keep the full publication objective active:
-GitHub CLI authentication, remote push and Pages still have not been verified.
-
-0.7: worker-dependent construction, replacement builders through Repair, site
-cancellation/refunds and resumption of gathering. Full 70-check real browser suite
-passes; new rendered Story victory 02:44 saved. Engine balance wins at 155.05s.
-Review accumulated QA gaps before claiming full verification; publication still
-requires verified GitHub CLI authorization and remote/Pages operations.
-
-Audit follow-up: README now matches worker construction, queues, groups, research
-and commander abilities. Ten expansion browser checks pass, including Rataxes's
-cast and movement, artillery damage and builder replacement/cancellation. Current
-battle fixture measurement remains ~60Hz; see QA.md. GitHub CLI was rechecked and
-is still unauthenticated; the connector still exposes no repository-creation or
-Pages-configuration operation. No remote exists. Publication requires the user to
-complete a successful CLI authorization (not an old device code), followed by
-account/repository/visibility verification before creation or push.
+After publication, expand directional walk/fire animations and perform physical iPhone Safari and hands-on Commander balance testing. There is no campaign, multiplayer, save system, or eight-direction character animation.
