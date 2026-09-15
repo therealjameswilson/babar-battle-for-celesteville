@@ -66,3 +66,8 @@ Compact controls checked: readable Groups modal, two-row quick-command grid, por
 recall/Queue and landscape cancellation verified in real browser frames. See newest
 QA entry and screenshots. Next major work: research/tech progression and additional
 character-specific battlefield officer abilities, preserving family support roles.
+
+0.5 progression: two optional weapon research projects occupy production buildings,
+cost supplies and suffer isolation. Research rules and desktop progress/production
+blocking verified; see QA.md for exact coverage. Next: active character-specific
+battlefield commands and research-aware balance testing. Publication auth still pending.

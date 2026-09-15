@@ -102,3 +102,17 @@ These are responsive browser checks, not physical iPhone or touch-hardware tests
 The wrapper console again emitted unlocated MutationObserver errors during iframe
 navigation; no project code uses MutationObserver. Do not call this an error-free
 browser run; the control behavior and dimensions above were observed successfully.
+
+## Research progression 0.5
+
+Engine, tactical and balance commands pass. Numerical research checks verify payment,
+production exclusion, duplicate-project rejection, completion, 20% guard damage,
+team scoping, 25% isolated progress, exact 75% cancellation refund, duplicate-refund
+protection, destruction before completion and reset. The no-research Story bot still
+wins at 133.65s, proving research is optional for that strategy.
+Real desktop browser clicks selected Guard School, started coordinated volleys,
+attempted recruitment and received the occupied-building message, observed progress
+at 1% and 58%, then observed completion and successfully queued a guard. Live troop
+damage and artillery research have not separately been browser tested; infantry
+numerical effects are deterministic checks. Mobile research layout and balance with
+active research strategies remain to be checked.

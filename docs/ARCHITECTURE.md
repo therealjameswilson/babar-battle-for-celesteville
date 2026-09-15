@@ -65,3 +65,12 @@ when a follow-up exists; repair yields on completion or destruction. Lost/dead f
 fire targets release their order. Hold and retreat discard pending routes. Order
 paths are drawn on the map, and status reports pending count. Script URLs are
 versioned with the release to avoid mixed HTML/engine caches.
+
+Research progression (0.5): an idle Guard School researches Cornelius's coordinated
+volleys for 150 supplies over 25s, multiplying friendly guard/scout damage by 1.2.
+An idle Artillery Works researches calibrated shells for 180 supplies over 35s,
+multiplying friendly artillery damage by 1.25. Upgrades affect existing and future
+units, once per match. Research occupies its producer; other buildings can continue
+recruiting. Isolated research runs at 25%. Cancellation refunds 75%; destruction
+loses unfinished work without refund. Restart clears upgrades. These doctrines are
+invented gameplay, not canonical character claims.

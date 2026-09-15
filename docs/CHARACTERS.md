@@ -53,3 +53,7 @@ Two built-in image-generation requests created the transparent 1254×1254 atlase
 ## Siege version roles
 
 Only Babar and Rataxes are named battlefield units. All children remain civilian planners, messengers, scouts in the story, or family morale support; buying a card never deploys a child soldier. Cornelius and Celeste remain advisers/support leaders rather than recruitable frontline units. History tributes change doctrine statistics without reviving characters. The full card descriptions and cooldowns in `dist/cast.js` are authoritative for current game powers. See ARCHITECTURE.md for numerical rules and ASSETS.md for the revised military artwork.
+
+Cornelius also sponsors the invented coordinated-volley research at the Guard School:
+this adds a production and supply decision to his role as chief adviser. It is an
+optional game doctrine, separate from canonical relationships and his council power.

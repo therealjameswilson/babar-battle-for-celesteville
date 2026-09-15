@@ -169,6 +169,39 @@ function say(s) {
     logbook = logbook.slice(0, 12);
   }
 }
+const researchDefs = {
+  drill: { name: "Cornelius: coordinated volleys", building: 'forge', cost: 150, time: 25,
+    description: 'Guards and scouts deal 20% more damage. Applies to existing and future troops.' },
+  shells: { name: 'Calibrated field shells', building: 'factory', cost: 180, time: 35,
+    description: 'Field artillery deals 25% more damage. Applies to existing and future guns.' },
+};
+let technologies = new Set();
+function startResearch(id) {
+  if (!running || paused || ended) return;
+  const tech = researchDefs[id];
+  if (!tech || technologies.has(id)) return;
+  const b = selected.find(u => u.team === 0 && u.hp > 0 && u.type === tech.building && !u.construction);
+  if (!b || b.research || b.queue.length) return say('Research needs an idle production building.');
+  if (alive(0).some(u => u.research?.id === id)) return say('This research is already underway.');
+  if (ore < tech.cost) return say('Not enough supplies for research.');
+  ore -= tech.cost;
+  b.research = { id, progress: 0 };
+  say(tech.name + ' research started. Recruitment is suspended here.');
+  updateUI(true);
+}
+function cancelResearch(b) {
+  if (!running || paused || ended || b.team !== 0 || b.hp <= 0 || !b.research) return;
+  ore += researchDefs[b.research.id].cost * 0.75;
+  b.research = null;
+  say('Research cancelled. 75% of supplies recovered.');
+  updateUI(true);
+}
+function weaponMultiplier(u) {
+  if (u.team !== 0) return 1;
+  if (technologies.has('drill') && ['trooper', 'scout'].includes(u.type)) return 1.2;
+  if (technologies.has('shells') && u.type === 'walker') return 1.25;
+  return 1;
+}
 let controlGroups = {}, queueOrders = false;
 function issueOrder(u, order, append = false) {
   if (append && u.order && u.order.kind !== 'hold') {
@@ -201,6 +234,7 @@ function controlGroup(number, save = false, append = false) {
   updateUI(true);
 }
 function reset() {
+  technologies = new Set();
   controlGroups = {};
   queueOrders = false;
   $('queue-orders').setAttribute('aria-pressed', 'false');
@@ -304,7 +338,7 @@ function shoot(u, v) {
   u.angle = Math.atan2(v.y - u.y, v.x - u.x);
   u.firedAt = t;
   const damage =
-    d.damage *
+    d.damage * weaponMultiplier(u) *
     (u.team === 1 && easy ? 0.7 : 1) *
     (inCover(v) ? 0.65 : 1) *
     (u.type === 'walker' && !defs[v.type].speed ? 1.8 : 1);
@@ -352,7 +386,16 @@ function update(dt) {
       }
       continue;
     }
-    if (u.queue.length) {
+    if (u.research) {
+      u.research.progress += dt * (supplied(u) ? 1 : 0.25);
+      if (u.research.progress >= researchDefs[u.research.id].time) {
+        technologies.add(u.research.id);
+        say(researchDefs[u.research.id].name + ' ready. Army weapons upgraded.');
+        u.research = null;
+        updateUI(true);
+      }
+    }
+    if (u.queue.length && !u.research) {
       u.progress +=
         dt * (supplied(u) ? 1 : 0.25) * (u.team === 0 && benefits.has('troubadour') ? 1.25 : 1);
       const type = u.queue[0];
@@ -490,6 +533,7 @@ function train(type) {
       !u.construction
   );
   if (!b) return;
+  if (b.research) return say('This building is conducting research. Cancel it or use another producer.');
   if (ore < defs[type].cost) return say('Not enough supplies.');
   if (supply() >= cap()) return say('The town is full. Build a Village Home.');
   if (b.queue.length >= 5) return say('Production queue is full.');
@@ -626,6 +670,8 @@ function updateUI(force = false) {
       ? 'Use Attack to engage enemies along the way.'
       : u.construction
         ? 'Under construction · ' + Math.ceil(u.construction) + 's'
+        : u.research
+          ? researchDefs[u.research.id].name + ' · ' + Math.floor(100 * u.research.progress / researchDefs[u.research.id].time) + '% · recruitment suspended'
         : u.queue.length
           ? 'Training ' +
             defs[u.queue[0]].name +
@@ -641,9 +687,9 @@ function updateUI(force = false) {
               : u.type === 'core'
                 ? 'Invite gatherers and expand Celesteville.'
                 : u.type === 'forge'
-                  ? 'Trains Elephant Guards.'
+                  ? 'Trains guards and scouts. Volleys research: +20% infantry damage.'
                   : u.type === 'factory'
-                    ? 'Trains long-range field artillery. Screen guns with infantry.'
+                    ? 'Trains artillery. Shell research: +25% gun damage. Screen guns with infantry.'
                     : u.type === 'relay'
                       ? '+10 army supply.'
                       : defs[u.type].damage
@@ -661,7 +707,7 @@ function updateUI(force = false) {
       ? 'Morale ' +
         Math.ceil(u.morale) +
         ' / 100 · ' +
-        (u.order?.kind || 'ready') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
+        (u.order?.kind || 'ready') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
         (inCover(u) ? ' · IN COVER' : '')
       : supplied(u)
         ? 'Supply line operational'
@@ -673,7 +719,7 @@ function updateUI(force = false) {
     ' · Enemy reserves ' +
     Math.floor(enemyBudget);
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
-  const key = (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '');
+  const key = (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',');
   if (force || key !== actionKey) {
     actionKey = key;
     let a = [];
@@ -687,6 +733,13 @@ function updateUI(force = false) {
       if (u.type === 'core' || u.type === 'worker')
         for (const type of ['forge', 'relay', 'factory', 'turret'])
           a.push([defs[type].name, '● ' + buildingCost(type), () => build(type)]);
+    }
+    if (u && selected.length === 1 && !u.construction) {
+      for (const [id, tech] of Object.entries(researchDefs)) {
+        if (u.type !== tech.building) continue;
+        if (u.research?.id === id) a.push(['Cancel research', '75% refund', () => cancelResearch(u)]);
+        else if (!technologies.has(id)) a.push([tech.name, tech.cost + ' · ' + tech.time + 's', () => startResearch(id)]);
+      }
     }
     if (u?.queue.length && selected.length === 1) {
       u.queue.forEach((type, index) => a.push([`Cancel ${index + 1}: ${defs[type].name}`, `Refund ${defs[type].cost}`, () => cancelRecruit(u, index)]));
