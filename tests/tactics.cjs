@@ -300,3 +300,7 @@ console.log('PASS: repeating patrols, queues, active origins, combat resumption,
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'intelligence-checks.js'),'utf8'));
 run('intelligenceChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: fogged building memory, hidden-state isolation, scouted removal, expiry and faction symmetry.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'rapid-checks.js'),'utf8'));
+run('rapidChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: researched infantry burst, health, duration, cooldown, speed/fire effects and fair enemy activation.');

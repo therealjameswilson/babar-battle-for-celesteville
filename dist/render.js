@@ -91,6 +91,10 @@ function drawUnit(u) {
     ctx.lineWidth = 2;
     ctx.beginPath(); ctx.ellipse(u.x, u.y + 4, u.r + 9, (u.r + 9) * .5, 0, 0, Math.PI * 2); ctx.stroke();
   }
+  if(rapidActive(u)){
+    ctx.strokeStyle='#e6c06a';ctx.lineWidth=2;ctx.beginPath();
+    ctx.ellipse(u.x,u.y+5,u.r+8,(u.r+8)*.6,0,0,Math.PI*2);ctx.stroke();
+  }
   const d = defs[u.type],
     color = u.team ? RED : BLUE;
   ctx.save();

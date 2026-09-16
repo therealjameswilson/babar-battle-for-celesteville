@@ -175,6 +175,8 @@ function say(s) {
   }
 }
 const researchDefs = {
+  rapid: { name: 'Rapid advance doctrine', building:'forge', requires:'drill', cost:180, materials:60, time:35,
+    description:'Unlock V for guards, scouts and sappers: +30% speed, 30% shorter firing interval for 6s. Costs 20 health each; 24s cooldown.' },
   armor: { name: 'Field protection I', building: 'forge', cost: 140, materials: 40, time: 30,
     description: 'Guards, scouts and sappers absorb 2 damage per hit. Does not prevent suppression.' },
   armor2: { name: 'Field protection II', building: 'forge', cost: 220, materials: 80, time: 45,
@@ -389,7 +391,7 @@ function damageUnit(u, v, baseDamage, scale = 1) {
 function shoot(u, v) {
   if (u.hp <= 0 || v.hp <= 0 || u.artilleryTransition || !inWeaponArc(u, v) || !sees(u.team, v)) return false;
   const d = defs[u.type];
-  u.cool = (u.deployed ? SIEGE.rate : d.rate) * (u.morale < 45 ? 1.5 : 1);
+  u.cool = (u.deployed ? SIEGE.rate : d.rate) * (u.morale < 45 ? 1.5 : 1) * (rapidActive(u)?RAPID_ADVANCE.interval:1);
   u.angle = Math.atan2(v.y - u.y, v.x - u.x);
   u.firedAt = t;
   if (u.deployed) {
@@ -789,7 +791,7 @@ function updateUI(force = false) {
       ? 'Morale ' +
         Math.ceil(u.morale) +
         ' / 100 · ' +
-        (u.order?.kind || 'ready') + (u.type === 'hero' ? ` · Energy ${Math.floor(u.commandEnergy)}/100` : '') + ((u.disciplineUntil || 0) > t ? ' · PROTECTED' : '') + ((u.advanceUntil || 0) > t ? ' · ADVANCING' : '') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (infantryArmor(u) ? ` · ARMOR −${infantryArmor(u)}/hit` : '') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
+        (u.order?.kind || 'ready') + (u.type === 'hero' ? ` · Energy ${Math.floor(u.commandEnergy)}/100` : '') + ((u.disciplineUntil || 0) > t ? ' · PROTECTED' : '') + ((u.advanceUntil || 0) > t ? ' · ADVANCING' : '') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (infantryArmor(u) ? ` · ARMOR −${infantryArmor(u)}/hit` : '') + (rapidActive(u)?` · RAPID ${Math.ceil(u.rapidUntil-t)}s`:'') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
         (inCover(u) ? ' · IN COVER' : '')
       : supplied(u)
         ? 'Supply line operational'
@@ -801,9 +803,16 @@ function updateUI(force = false) {
     ' · Scout workers and production';
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
   const key = unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
-  if (force || key !== actionKey) {
-    actionKey = key;
+  const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
+  if (force || key + rapidKey !== actionKey) {
+    actionKey = key + rapidKey;
     let a = [];
+    const infantry=selected.filter(u=>u.team===0&&rapidInfantry(u));
+    if(infantry.length){
+      const ready=infantry.filter(rapidReady).length;
+      const cooldown=Math.ceil(Math.max(0,Math.min(...infantry.map(u=>(u.rapidReadyAt||0)-t))));
+      a.push(['Rapid advance',technologies.has('rapid')?`V · ${ready}/${infantry.length} ready · 20 health · 6s burst${cooldown?' · '+cooldown+'s cooldown':''}`:'Research Rapid advance doctrine at a Guard School',rapidAdvance,!ready]);
+    }
     if (u && !u.construction && selected.length === 1) {
       if (u.type === 'hero') a.push(['Babar: Stand together', Math.max(0, u.commandReadyAt - t) > 0 ? Math.ceil(u.commandReadyAt - t) + 's cooldown' : '50 energy · Q', () => commanderAbility(u)]);
       if (u.type === 'core') a.push(['Provisioner', '● 50', () => train('worker')]);
@@ -847,7 +856,7 @@ function updateUI(force = false) {
     for (const [name, cost, fn, disabled] of a) {
       const b = document.createElement('button');
       b.innerHTML = '<span>' + name + '</span><small>' + cost + '</small>';
-      if (Object.values(researchDefs).some(tech=>tech.name===name)) b.className='research-action';
+      if (name==='Rapid advance'||Object.values(researchDefs).some(tech=>tech.name===name)) b.className='research-action';
       b.onclick = fn;
       b.disabled = !!disabled;
       holder.appendChild(b);
@@ -1023,6 +1032,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'a') setMode('attack');
   if (e.key.toLowerCase() === 'm') setMode('move');
   if (e.key.toLowerCase() === 'p') setMode('patrol');
+  if (e.key.toLowerCase() === 'v') rapidAdvance();
   if (e.key.toLowerCase() === 'g') setMode('gather');
   if (e.key.toLowerCase() === 's') tacticalOrders('hold');
   if (e.key.toLowerCase() === 'r') tacticalOrders('retreat');

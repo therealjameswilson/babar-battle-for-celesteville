@@ -55,6 +55,13 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    rapidChecks(check);
+    qaReset();technologies.add('rapid');const burstGuard=alive(0).find(u=>u.type==='trooper');selected=[burstGuard];updateUI(true);
+    const burstHealth=burstGuard.hp;window.dispatchEvent(new KeyboardEvent('keydown',{key:'v',code:'KeyV'}));
+    check(burstGuard.hp===burstHealth-20&&rapidActive(burstGuard),'V keyboard command activates selected researched infantry');
+    const burstButton=[...$('actions').querySelectorAll('button')].find(b=>b.textContent.includes('Rapid advance'));
+    check(burstButton.disabled&&burstButton.textContent.includes('24s cooldown'),'Ability button shows disabled cooldown immediately after activation');
+    check($('tactical-status').textContent.includes('RAPID 6s'),'Unit status shows the remaining burst duration');
     intelligenceChecks(check);
     patrolChecks(check);
     armorChecks(check);
@@ -657,4 +664,10 @@ function browserWalking(){
   update(.05);
  },50);
  updateUI(true);draw();qaReport('Normal-speed infantry walking review: stride/passing frames and grounded feet during repeated east-west travel. Reduced motion keeps static artwork.');
+}
+
+function browserRapid(){
+ qaReset();nextWave=enemySpawn=9999;technologies.add('drill');technologies.add('rapid');
+ selected=alive(0).filter(u=>u.type==='trooper');cam.x=540;cam.y=820;cam.zoom=1.2;
+ updateUI(true);draw();qaReport('Rapid advance researched for this ability fixture. Use the real button or V: selected infantry spends 20 health for 6s of movement/fire boost, followed by cooldown.');
 }

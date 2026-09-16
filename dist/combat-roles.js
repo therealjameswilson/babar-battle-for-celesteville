@@ -48,6 +48,7 @@ function enemyResearchPlan(buildings) {
   const guns=alive(1).filter(u=>u.type==='walker').length;
   const priorities=guns>=2?['shells','drill']:['drill'];
   if(t>=180)priorities.push('armor','armor2');
+  if(t>=240)priorities.push('rapid');
   for (const id of priorities) {
     const tech=researchDefs[id];
     if (researchRequirement(id,1)||enemyTechnologies.has(id)||buildings.some(b=>b.research?.id===id)) continue;
@@ -59,4 +60,26 @@ function enemyResearchPlan(buildings) {
     purchaseResearch(b,id);
     break;
   }
+}
+
+const RAPID_ADVANCE={health:20,duration:6,cooldown:24,speed:1.3,interval:.7};
+function rapidInfantry(u){return ['trooper','scout','sapper'].includes(u.type);}
+function rapidActive(u){return (u.rapidUntil||0)>t;}
+function rapidReady(u){return rapidInfantry(u)&&u.hp>RAPID_ADVANCE.health&&u.morale>=35&&t>=(u.rapidReadyAt||0)&&factionResearch(u.team).has('rapid');}
+function activateRapid(u){
+ if(!running||paused||ended||!u||!rapidReady(u))return false;
+ u.hp-=RAPID_ADVANCE.health;u.hitAt=t;
+ u.rapidUntil=t+RAPID_ADVANCE.duration;u.rapidReadyAt=t+RAPID_ADVANCE.cooldown;
+ return true;
+}
+function rapidAdvance(){
+ if(!running||paused||ended)return;
+ const activated=selected.filter(u=>u.team===0&&activateRapid(u)).length;
+ say(activated?`Rapid advance: ${activated} troops. Six seconds of speed and rapid fire; 20 health spent each.`:'Rapid advance needs researched infantry, over 20 health, 35 morale and a ready cooldown.');
+ updateUI(true);
+}
+function enemyRapidAdvance(){
+ if(!enemyTechnologies.has('rapid'))return;
+ const threats=alive(0).filter(u=>defs[u.type].damage&&sees(1,u));
+ for(const u of alive(1))if(rapidReady(u)&&u.hp>u.max*.55&&u.morale>50&&u.order?.kind!=='retreat'&&threats.some(v=>dist(u,v)<weaponRange(u)+v.r+70))activateRapid(u);
 }

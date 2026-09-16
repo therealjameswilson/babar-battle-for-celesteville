@@ -376,3 +376,17 @@ This counter has no effect on collision, speed, attacks or economy. Infantry use
 the inspected walk atlas only while moving; old idle frames are retained, including
 the image-load fallback. Reduced-motion mode retains static directional artwork.
 Walk poses use a fixed foot baseline without the prior extra vertical bob.
+
+## Researched infantry burst (0.25.1)
+
+combat-roles.js owns RAPID_ADVANCE, eligibility, activation and enemy use. Paid
+research requires drill and uses the ordinary producer queue, isolation and refund
+rules. Activation changes health and absolute simulation timestamps, preserving
+orders. navigation.js applies one 1.3 speed multiplier shared with command advance;
+shoot applies a 0.7 reload multiplier. Pause freezes duration and cooldown.
+
+Eligibility requires infantry, researched doctrine, health >20, morale >=35 and an
+expired 24s cooldown. AI additionally requires health above 55%, morale >50, no
+retreat order and a visible armed target near weapon range. AI considers buying
+the doctrine after 240s through its normal paid research policy. The renderer adds
+a static brass ring; selected status and the button expose duration and cooldown.

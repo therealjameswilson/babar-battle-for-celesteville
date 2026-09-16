@@ -168,3 +168,15 @@ separately; neither the tests nor the findings claim every strategy should win.
 Infantry now uses a two-pose, four-direction walk animation driven by distance
 travelled. It returns to the existing idle pose when stopped; reduced-motion mode
 keeps static facing frames.
+
+## Rapid advance (0.25.1)
+
+Research coordinated volleys, then **Rapid advance doctrine** at a Guard School
+(180 Supplies, 60 Materials, 35 seconds). Select guards, scouts or sappers and use
+**V** or the Rapid advance button: each eligible troop spends 20 health for six
+seconds of 30% faster movement and 30% shorter firing intervals. The cooldown is
+24 seconds from activation. Troops need over 20 health and at least 35 morale.
+Current orders remain intact. Use the burst to close distance or withdraw, then
+recover at a supplied aid station; repeated use without recovery is costly.
+The rhinos can research and use the same ability against visible threats.
+This is an invented wartime game mechanic, not a canonical character power.

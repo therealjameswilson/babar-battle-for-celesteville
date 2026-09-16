@@ -194,6 +194,7 @@ function updateTactics(dt) {
 }
 function enemyThink() {
   enemyArtillery();
+  enemyRapidAdvance();
   for (const leader of alive(1).filter(u => u.type === 'hero' && u.order?.kind !== 'retreat')) {
     if (leader.commandEnergy >= 50 && t >= leader.commandReadyAt &&
         alive(0).some(v => sees(1, v) && dist(leader, v) < 300) &&

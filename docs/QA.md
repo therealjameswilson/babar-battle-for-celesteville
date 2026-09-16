@@ -574,3 +574,33 @@ A 66-unit sample completed 120 frames in 1998ms (~60Hz): drawing mean 0.51ms / p
 The new atlas is a two-pose stride/passing loop, not a full articulated cycle.
 Other unit families retain their earlier movement artwork. Physical phone testing
 and OS preference switching remain outside this verification.
+
+## 0.25.1 — researched rapid advance
+
+- `check`, `test`, `test:balance`, `test:compositions`, `test:commander`,
+  `test:raids` and `test:earned-raids` all passed locally. The 18 shared ability
+  checks cover paid prerequisite research, health cost, duration/cooldown, firing
+  and movement multipliers, non-stacking commander speed, selection, pause,
+  restart, and enemy visibility/health restrictions.
+- Real in-app browser: 435 checks passed, including V activation, the actual
+  disabled cooldown button and remaining-duration status. Actual button clicks
+  activated the five selected guards in desktop, 390×844 portrait and 844×390
+  landscape fixtures. Inspected gold rings, reduced health, wrapped readable
+  button text and reachable controls. These are browser viewport checks, not
+  physical iPhone/Safari verification. Ability fixture grants research solely to
+  isolate interaction; ordinary paid research is exercised by the shared tests.
+- Evidence: ignored `artifacts/rapid-browser-checks.txt`,
+  `rapid-desktop-active.png`, `rapid-portrait.png`, `rapid-landscape.png`.
+- Scripted Story siege/mixed wins: 187/282s. Commander siege loses at 199s;
+  mixed wins at 286s with 172.8 palace health; defensive wins at 275s.
+  Paid early sapper commitments still lose at 192–193s. Established main-army
+  commitment wins at 284s; the raid arm now wins at 309s (previous release 469s),
+  with four sappers alive and six enemy guns produced. This changed trajectory
+  is recorded, not evidence that raiding is generally stronger: concentrated
+  pressure still wins earlier under this policy. Broader human balance remains open.
+- Representative real-browser battle: 66 units, 120 frames over 1998ms;
+  draw mean/p95 0.534/0.700ms and simulation mean/p95 1.045/1.300ms.
+  No new rendering bottleneck appeared in this bounded sample.
+- Rendered accelerated Story playthrough reached victory at 03:04 with 21
+  casualties; this browser run uses its own random sequence, not the seeded CLI
+  comparison. Extended human matches and physical touch-device QA remain open.
