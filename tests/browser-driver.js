@@ -40,6 +40,7 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    intelligenceChecks(check);
     patrolChecks(check);
     armorChecks(check);
     waypointChecks(check);
@@ -272,8 +273,10 @@ async function browserSuite() {
     const patrolButton=document.querySelector('[data-mode="patrol"]');
     patrolButton.click();touch('pointerdown',{x:560,y:740});touch('pointerup',{x:560,y:740});
     check(leader.order.kind==='patrol','Touch patrol button and map tap issue a repeat route');
+    // Desktop sidebars intentionally scroll when controls exceed available height.
+    patrolButton.scrollIntoView({block:'nearest'});
     const patrolBounds=patrolButton.getBoundingClientRect();
-    check(patrolBounds.top>=0&&patrolBounds.bottom<=innerHeight&&patrolBounds.left>=0&&patrolBounds.right<=innerWidth,'Patrol control stays inside the game viewport');
+    check(patrolBounds.top>=0&&patrolBounds.bottom<=innerHeight&&patrolBounds.left>=0&&patrolBounds.right<=innerWidth,'Patrol control is reachable inside the game viewport');
     mode=null;window.dispatchEvent(new KeyboardEvent('keydown',{key:'p',code:'KeyP'}));
     check(mode==='patrol','P shortcut arms the patrol command');
     mode=null;
@@ -596,4 +599,13 @@ function browserPatrol(){
  const scout=add('scout',0,650,850);selected=[scout];cam.x=820;cam.y=850;cam.zoom=1.15;
  mode='patrol';command({x:1050,y:850});updateUI(true);draw();
  qaReport('Normal-speed patrol from 650,850 to 1050,850. Inspect return travel and use Hold or Patrol (P) to replace the order.');
+}
+
+function browserIntelligence(){
+ qaReset();nextWave=enemySpawn=9999;units=units.filter(u=>u.type==='core');
+ const scout=add('scout',0,1000,650);add('forge',1,1080,650);add('factory',1,1250,710);
+ t=10;sightAt=-1;refreshIntelligence(0);scout.x=400;scout.y=1000;t=45;sightAt=-1;
+ refreshIntelligence(0);cam.x=1130;cam.y=680;cam.zoom=1.15;selected=[scout];
+ updateUI(true);togglePause();draw();
+ qaReport('Last-seen structures: muted silhouettes and hollow minimap marks. No live health, queue or research is shown. Revisit to verify.');
 }

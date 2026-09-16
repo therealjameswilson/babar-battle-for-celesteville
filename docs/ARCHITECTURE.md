@@ -351,3 +351,18 @@ remain stationary until packed, as for all movement orders.
 P and the touch button select patrol mode. The renderer shows a dashed connection
 and rings at both endpoints; this indicates intent rather than a guaranteed straight
 path through obstacles. Compact layouts use three columns for all seven field orders.
+
+## Reconnaissance memory (0.23.1)
+
+Every 0.5s refreshIntelligence snapshots only observed enemy id, type, position and
+observation time for each faction. Mobile composition reports expire after 60s;
+building reports persist until the stored location is observed without that building.
+Hidden destruction therefore cannot erase a report. No health, research or queue
+reference is stored. Location visibility uses the same unit vision distances and
+player reveal power as live sight, without requiring the remembered object to exist.
+
+The renderer displays remembered buildings at their recorded coordinates, after fog,
+as faded atlas silhouettes with dashed footprints and LAST SEEN age. Hollow minimap
+marks differ from current solid sightings. Memories provide no targeting or vision;
+orders into that location still use the ordinary visible-enemy acquisition rule.
+A quarry memory uses its dashed footprint; no live machinery or production is shown.

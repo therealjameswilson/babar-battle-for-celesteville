@@ -152,3 +152,7 @@ Use **Patrol (P)**, then choose the far endpoint, to repeatedly guard a route.
 Units engage visible threats and resume the route afterward. Hold/retreat or a new
 order cancels patrol; a queued follow-up leaves at the next endpoint. Touch has the
 same Patrol button, and selected patrols show their two endpoints on the battlefield.
+
+Scouted enemy buildings remain as faded **LAST SEEN** silhouettes and hollow minimap
+markers after leaving vision. They carry no current health or production information.
+Return a scout to confirm whether the site still exists.

@@ -56,6 +56,16 @@ function atlas(image, col, row, x, y, w, h, building = false) {
   );
   return true;
 }
+function drawRememberedBuilding(k) {
+  const col=k.type==='core'?0:k.type==='forge'?1:k.type==='factory'?2:3;
+  const h=k.type==='core'?150:k.type==='factory'?126:k.type==='forge'?113:94;
+  ctx.save();ctx.translate(k.x,k.y);ctx.globalAlpha=.38;
+  if(k.type!=='quarry')atlas(buildingSheet,col,1,-h*.49,-h+29,h*.98,h,true);
+  ctx.globalAlpha=.7;ctx.strokeStyle='#b9a2a0';ctx.lineWidth=1.5;ctx.setLineDash([4,5]);
+  const r=defs[k.type].r;ctx.strokeRect(-r,-r,r*2,r*2);ctx.setLineDash([]);
+  ctx.fillStyle='#e0ccbb';ctx.font='10px monospace';ctx.textAlign='center';
+  ctx.fillText('LAST SEEN '+time(t-k.seen)+' AGO',0,46);ctx.restore();
+}
 function drawUnit(u) {
   if (u.type === 'walker' && selected.includes(u)) {
     ctx.save(); ctx.setLineDash([7, 7]); ctx.lineWidth = 1;
@@ -443,6 +453,7 @@ function draw() {
     ctx.drawImage(fog, 0, 0);
     ctx.restore();
   }
+  for (const k of rememberedBuildings()) drawRememberedBuilding(k);
   for (const u of units.filter((u) => visible(u)).sort((a, b) => a.y - b.y)) {
     ctx.save();
     if (u.team && !visible(u)) ctx.globalAlpha = 0.42;
@@ -568,6 +579,7 @@ function draw() {
     mc.fillStyle = '#e8b058';
     mc.fillRect((n.x / W) * 300 - 2, (n.y / H) * 210 - 2, 4, 4);
   }
+  for (const k of rememberedBuildings()) {mc.strokeStyle='#b9a2a0';mc.lineWidth=1;mc.strokeRect(k.x/W*300-3,k.y/H*210-3,6,6);}
   for (const u of units) {
     if (u.team && !visible(u)) continue;
     mc.fillStyle = u.team ? '#c95850' : '#e0f2b1';

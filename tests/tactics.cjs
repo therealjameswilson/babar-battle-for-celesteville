@@ -296,3 +296,7 @@ console.log('PASS: infantry protection prerequisites, payments, cancellation, co
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'patrol-checks.js'),'utf8'));
 run('patrolChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: repeating patrols, queues, active origins, combat resumption, fog, hold, obstacles and spacing.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'intelligence-checks.js'),'utf8'));
+run('intelligenceChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: fogged building memory, hidden-state isolation, scouted removal, expiry and faction symmetry.');

@@ -522,3 +522,17 @@ Normal-speed patrols were rendered and inspected at 844×390 and 390×844. Lands
 review caught the seventh command below the panel; a three-column compact layout
 keeps all commands visible. Screenshots and report: artifacts/patrol-*. Physical
 iPhone/Safari remains unverified.
+
+## 0.23.1 building reconnaissance (2026-09-16)
+
+392 real-browser checks pass. Shared checks verify both factions' scouted snapshots,
+no visible/remembered duplication, hidden damage/research/queue isolation, unseen
+destruction retention, sixty-second mobile report expiry, empty-site re-observation,
+replacement identity and reset. Desktop and 390×844 rendered evidence saved in
+artifacts/intelligence-*. Buildings show muted silhouettes, age and hollow minimap
+markers; no current health or production appears outside vision.
+
+Running the previous patrol bounds assertion at desktop height revealed that it
+ignored the intended scrollable sidebar. It now scrolls the actual button into view
+before testing viewport bounds, preserving the reachability requirement. This is not
+a claim that every desktop command fits simultaneously without scrolling.

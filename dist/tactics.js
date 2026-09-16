@@ -46,6 +46,26 @@ function sees(team, target) {
   }
   return sightSets[team].has(target.id);
 }
+// Location visibility works for remembered objects that no longer exist.
+function observesPosition(team,p) {
+  return (team===0&&t<revealUntil)||alive(team).some(u=>dist(u,p)<vision(u));
+}
+function refreshIntelligence(team) {
+  const observed=alive(1-team).filter(e=>sees(team,e));
+  for(const e of observed) {
+    const record=intel[team].find(k=>k.id===e.id);
+    const snapshot={id:e.id,type:e.type,x:e.x,y:e.y,seen:t};
+    if(record)Object.assign(record,snapshot);else intel[team].push(snapshot);
+  }
+  intel[team]=intel[team].filter(k=> {
+    if(defs[k.type].speed)return t-k.seen<=60;
+    // Never consult the current state of a hidden enemy to invalidate a report.
+    return !observesPosition(team,k)||observed.some(e=>e.id===k.id);
+  });
+}
+function rememberedBuildings(team=0) {
+  return intel[team].filter(k=>!defs[k.type].speed&&!observesPosition(team,k));
+}
 function inCover(u) {
   return !!defs[u.type].speed && covers.some((c) => dist(c, u) < c.r);
 }
@@ -133,15 +153,7 @@ function updateTactics(dt) {
     supplyClock = 0.5;
     rebuildNav();
     rebuildSupply();
-    for (let team = 0; team < 2; team++)
-      for (const e of alive(1 - team).filter((e) => sees(team, e))) {
-        const known = intel[team].find((k) => k.id === e.id);
-        if (known) {
-          known.x = e.x;
-          known.y = e.y;
-          known.seen = t;
-        } else intel[team].push({ id: e.id, type: e.type, x: e.x, y: e.y, seen: t });
-      }
+    for (let team = 0; team < 2; team++) refreshIntelligence(team);
   }
   const near = [0, 1].map(
     (team) =>
