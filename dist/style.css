@@ -1541,3 +1541,12 @@ dialog {
   .orders {grid-template-columns:repeat(3,minmax(0,1fr));}
   .orders button {min-width:0;white-space:normal;overflow-wrap:anywhere;}
 }
+
+#camera-views-panel {overscroll-behavior:contain;touch-action:pan-y;position:absolute;z-index:8;right:10px;bottom:54px;width:min(355px,calc(100% - 20px));max-height:calc(100% - 70px);overflow-y:auto;padding:12px;color:#f4e9c9;background:#1d2b24f5;border:1px solid #a4966b;box-shadow:0 5px 20px #0008;}
+#camera-views-panel[hidden] {display:none;}
+#camera-views-panel h2 {font-size:17px;margin:0;}
+#camera-views-panel p {font-size:12px;line-height:1.4;margin:8px 0;}
+.camera-view-row {display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;border-top:1px solid #6e7357;padding:7px 0;font-size:13px;}
+.camera-view-row small {display:block;font-size:10px;color:#c5c8b0;margin-top:4px;}
+.camera-view-row button {min-height:40px;min-width:44px;padding:6px 8px;}
+#camera-views-panel .production-heading {position:sticky;top:-12px;background:#1d2b24;padding:6px 0;z-index:1;}

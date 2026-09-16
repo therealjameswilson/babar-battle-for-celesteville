@@ -283,6 +283,7 @@ function reset() {
   fx = [];
   selected = [];
   resetSubgroups();
+  resetCameraViews();
   closeProduction();
   ore = 300;
   materials = 0; enemyMaterials = 60;
@@ -872,6 +873,7 @@ function time(v) {
   );
 }
 function finish(win) {
+  closeCameraViews();
   closeProduction();
   ended = true;
   running = false;
@@ -1010,6 +1012,7 @@ mini.addEventListener('pointerdown', (e) => {
 });
 window.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'SELECT') return;
+  if (cameraViewKey(e)) return;
   if ([' ', 'F2', 'F3', 'F4', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key))
     e.preventDefault();
   keys[e.key] = true;
@@ -1038,6 +1041,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'r') tacticalOrders('retreat');
   if (e.key.toLowerCase() === 'e') setMode('repair');
   if (e.key === 'Escape') {
+    closeCameraViews();
     closeProduction();
     mode = null;
     placing = null;

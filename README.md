@@ -188,3 +188,12 @@ health costs, damage gains and situations where the burst makes losses worse.
 `npm run test:doctrine` compares paid research against continued recruitment in
 eight full matches, including a paid second school. [Opening results](docs/DOCTRINE-OPENINGS.md) record the production
 delay and distinguish simulated comparisons from the rendered browser playthrough.
+
+## Saved camera views (0.26.1)
+
+Use **Shift+F5–F8** to save four positions and zoom levels, then **F5–F8** to return.
+The **Views** button beside the map controls offers Save/Replace and Go on touch.
+Jump between the base, quarry and front while keeping your army selected and its
+orders intact. The panel is live; pausing beforehand keeps it paused. Views reset
+when the mission restarts. Some keyboards require Fn for function keys; the
+on-screen controls provide the same actions.

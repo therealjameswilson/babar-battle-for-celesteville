@@ -304,3 +304,7 @@ console.log('PASS: fogged building memory, hidden-state isolation, scouted remov
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'rapid-checks.js'),'utf8'));
 run('rapidChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: researched infantry burst, health, duration, cooldown, speed/fire effects and fair enemy activation.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'camera-view-checks.js'),'utf8'));
+run('cameraViewChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: saved camera snapshots, selection/order isolation, zoom, pause, shortcuts, modal guards and mission lifecycle.');

@@ -55,6 +55,18 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    cameraViewChecks(check);
+    qaReset();cam.x=420;cam.y=830;cam.zoom=1.1;
+    window.dispatchEvent(new KeyboardEvent('keydown',{key:'F5',shiftKey:true,cancelable:true}));
+    cam.x=1100;
+    window.dispatchEvent(new KeyboardEvent('keydown',{key:'F5',cancelable:true}));
+    check(cam.x===420&&cam.zoom===1.1,'Actual F5 keyboard handler saves and recalls the camera');
+    $('camera-views-open').click();
+    check(!$('camera-views-panel').hidden,'Actual Views button opens the live panel');
+    const saveView=$('camera-view-rows').querySelector('[aria-label="Save camera view 2"]');
+    cam.x=600;saveView.click();cam.x=1200;
+    $('camera-view-rows').querySelector('[aria-label="Go to camera view 2"]').click();
+    check(cam.x===600&&$('camera-views-panel').hidden,'Actual Save and Go buttons restore a view and close the panel');
     rapidChecks(check);
     qaReset();technologies.add('rapid');const burstGuard=alive(0).find(u=>u.type==='trooper');selected=[burstGuard];updateUI(true);
     const burstHealth=burstGuard.hp;window.dispatchEvent(new KeyboardEvent('keydown',{key:'v',code:'KeyV'}));
@@ -705,4 +717,13 @@ function browserExactDoctrine(){
   if([1,10,30,60,120,180,240].includes(n+1))trace.push(doctrineSnapshot());
  }
  paused=true;updateUI(true);draw();qaReport(JSON.stringify({result:doctrineResult(),trace},null,2));
+}
+
+function browserCameraViews(){
+ qaReset();selected=alive(0).filter(u=>u.type==='trooper');
+ cam={x:380,y:870,zoom:1};saveCameraView(0);
+ cam={x:950,y:830,zoom:.7};saveCameraView(1);
+ cam={x:275,y:650,zoom:1.2};saveCameraView(2);
+ cam={x:380,y:870,zoom:1};toggleCameraViews();
+ qaReport('Use the actual Go buttons to visit base, central approach and quarry. Selection and orders remain intact; battle continues. View 4 is empty. Shift+F5–F8 saves; F5–F8 recalls.');
 }

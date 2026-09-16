@@ -1,6 +1,10 @@
 # Siege release handoff
 
-## Current result
+The client has since advanced through 0.26.1. Read README.md, STARCRAFT-GOAL.md,
+ARCHITECTURE.md and the latest QA.md entries for current behavior and evidence.
+The original imported baseline and publication history below are retained.
+
+## Initial siege handoff (historical 0.7)
 
 Version 0.7.0 continues the supplied prototype; baseline commit `4109fb621b93a626fdb5cfcb1c04d8497ce66c5a` is preserved. The client has worker construction, supplies and delivery, recruitment and research, control groups, rally points and queued orders, A* navigation, suppression, cover, disrupted supply, finite enemy reserves, active Babar/Rataxes abilities, and all 23 roster entries. See RELEASE-AUDIT.md and QA.md for evidence and limitations.
 

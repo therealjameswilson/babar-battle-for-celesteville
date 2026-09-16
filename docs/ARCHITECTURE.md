@@ -390,3 +390,17 @@ expired 24s cooldown. AI additionally requires health above 55%, morale >50, no
 retreat order and a visible armed target near weapon range. AI considers buying
 the doctrine after 240s through its normal paid research policy. The renderer adds
 a static brass ring; selected status and the button expose duration and cooldown.
+
+## Camera locations (0.26.1)
+
+camera-views.js owns four mission-local snapshots of x, y and zoom. Save clamps
+coordinates to map bounds and zoom to the existing 0.4–1.8 range. Recall changes
+only camera state and closes the panel, preserving selection, queued orders,
+pending command mode and pause. The module handles F5–F8 before normal command
+keys; Shift saves, repeated keydowns cannot replace a view, and Ctrl/Meta/Alt
+combinations remain available to the browser. Council/help/group dialogs block
+view actions. Reset clears slots; mission end closes and disables the panel.
+
+Views and production reports are mutually exclusive live overlays. The compact
+panel scrolls within the battlefield, keeps its close header visible and starts
+at the top whenever reopened. No simulation update or persistent storage is added.

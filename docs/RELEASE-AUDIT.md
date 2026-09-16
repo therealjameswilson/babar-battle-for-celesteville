@@ -1,6 +1,8 @@
-# Release audit
+# Historical release audit (0.7)
 
-This is the evidence map for the published skirmish release.
+This records the initial siege release, not the latest client. Current mechanics
+and evidence are tracked in [STARCRAFT-GOAL.md](STARCRAFT-GOAL.md),
+[QA.md](QA.md) and [ARCHITECTURE.md](ARCHITECTURE.md).
 
 | Requirement | Current evidence / status |
 | --- | --- |

@@ -643,3 +643,22 @@ trace found microscopic position differences from Node at t=1 that grew over the
 match. See DOCTRINE-OPENINGS.md; the earlier random-sequence explanation is withdrawn.
 No client rules or costs changed. Existing checks/tests pass. Evidence is stored
 under ignored `artifacts/parallel-doctrine-*` and `doctrine-*-trace.json`.
+
+## 0.26.1 — saved camera locations
+
+- Existing deterministic suite plus 22 camera checks passed. Coverage includes
+  snapshot copies, position/zoom bounds, empty/replaced slots, selection and order
+  preservation, pause, all three modal guards, shortcut repeat/modifier handling,
+  mutual exclusion with production, mission end and restart.
+- Real-browser suite: 460 checks passed, including the actual F5 key handler,
+  Views button and Save/Go controls. Direct inspection at desktop, 390×844 portrait
+  and 844×390 landscape verified the added toolbar control and scrollable panel.
+  Saved the fourth slot, recalled the second, reopened the panel and closed it;
+  the final compact header remains visible while scrolled. These are viewport and
+  browser interactions, not physical iPhone or hardware function-key verification.
+- Local evidence: `artifacts/camera-browser-checks.txt`, `camera-desktop.png`,
+  `camera-portrait.png`, `camera-landscape.png`. New UI has no animation or camera
+  easing and does not change simulation balance.
+- With the camera panel open, a 69-unit browser battle rendered 120 frames in
+  1996ms: draw mean/p95 0.637/0.900ms; simulation mean/p95 1.282/1.500ms.
+  This bounded sample showed no new frame-time bottleneck.

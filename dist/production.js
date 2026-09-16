@@ -23,6 +23,7 @@ function productionReport(b) {
 function closeProduction() {$('production-panel').hidden=true;$('production-open').setAttribute('aria-expanded','false');}
 function toggleProduction() {
   if(!running||ended||$('court-dialog').open||$('groups-dialog').open||$('help-dialog').open)return;
+  closeCameraViews();
   const panel=$('production-panel');panel.hidden=!panel.hidden;
   $('production-open').setAttribute('aria-expanded',String(!panel.hidden));
   renderProduction();
