@@ -1,0 +1,62 @@
+/* Executed unchanged by the VM and the real-browser fixture. */
+function siegeChecks(check) {
+  function freshSiege(team = 0) {
+    easy = false; reset(); running = true; nextWave = enemySpawn = 9999;
+    units = units.filter(u => !defs[u.type].speed);
+    return add('walker', team, 600, 740);
+  }
+  let gun = freshSiege();
+  const target = add('trooper', 1, 930, 740, { hp: 1000, max: 1000 });
+  check(setArtilleryMode(gun, true) && !setArtilleryMode(gun, true), 'Deployment starts once without restarting its timer');
+  check(!shoot(gun, target), 'Deploying gun cannot fire');
+  const originalX = gun.x;
+  move(gun, { x: 660, y: 740 }, .5); add('trooper', 0, 605, 740); separate();
+  check(gun.x === originalX, 'Deployment blocks movement and separation displacement');
+  t = 2.99; updateArtillery(gun);
+  check(!gun.deployed, 'Deployment does not finish early');
+  t = 3; updateArtillery(gun);
+  check(gun.deployed && !gun.artilleryTransition && weaponRange(gun) === 390, 'Deployment completes after three seconds');
+  check(!shoot(gun, target) && target.hp === 1000, 'Long-range gun cannot target through fog without a spotter');
+  const spotter = add('scout', 0, 745, 745);
+  const inner = add('trooper', 1, 945, 740, { hp: 1000, max: 1000 });
+  const middle = add('trooper', 1, 965, 740, { hp: 1000, max: 1000 });
+  const outer = add('trooper', 1, 987, 740, { hp: 1000, max: 1000 });
+  const beyond = add('trooper', 1, 1000, 740, { hp: 1000, max: 1000 });
+  const friendly = add('trooper', 0, 930, 750, { hp: 1000, max: 1000 });
+  check(shoot(gun, target) && target.hp === 928 && gun.cool === 3.6, 'Spotted siege shot deals 72 damage with a slower reload');
+  check(inner.hp === 928 && middle.hp === 964 && outer.hp === 982 && beyond.hp === 1000, 'Splash falls off across three bands and stops at 65m');
+  check(friendly.hp === 928, 'Friendly troops take the same splash damage');
+  const close = add('trooper', 1, 660, 740);
+  const distant = add('trooper', 1, 1040, 740);
+  check(!shoot(gun, close) && !shoot(gun, distant), 'Minimum and maximum firing range enforced');
+  technologies.add('shells');
+  const upgradedHP = target.hp; shoot(gun, target);
+  check(upgradedHP - target.hp === 90, 'Shell research multiplies siege damage too');
+  issueOrder(gun, { kind: 'move', x: 660, y: 740 }); updateArtillery(gun);
+  check(gun.artilleryTransition?.deploy === false, 'Move order begins packing');
+  t = 4.99; updateArtillery(gun); move(gun, { x: 660, y: 740 }, .2);
+  check(gun.x === originalX && !shoot(gun, close), 'Packing locks movement and firing for two seconds');
+  t = 5; updateArtillery(gun); move(gun, { x: 660, y: 740 }, .2);
+  check(!gun.deployed && gun.x > originalX && weaponRange(gun) === 270, 'Packed gun resumes its movement order');
+  gun = freshSiege(); setArtilleryMode(gun, true); t = 3; updateArtillery(gun);
+  orderRetreat(gun); updateArtillery(gun);
+  check(gun.artilleryTransition?.deploy === false && gun.order.kind === 'retreat', 'Retreat packs the gun without losing the retreat destination');
+  gun = freshSiege(); setArtilleryMode(gun, true); t = 3; updateArtillery(gun);
+  issueOrder(gun, { kind: 'attack', x: 1100, y: 740 }); updateArtillery(gun);
+  check(gun.artilleryTransition?.deploy === false, 'Attack-move repacks before relocating');
+  gun = freshSiege(1);
+  units = units.filter(u => u.team === 1);
+  const unseen = add('trooper', 0, 930, 740);
+  enemyArtillery();
+  check(!gun.artilleryTransition, 'Rhino artillery never deploys against unseen targets');
+  add('scout', 1, 745, 745); enemyArtillery();
+  check(gun.artilleryTransition?.deploy === true, 'Rhino scout enables deployment against a visible distant target');
+  t = 3; updateArtillery(gun); add('trooper', 0, 700, 740); enemyArtillery();
+  check(gun.artilleryTransition?.deploy === false, 'Rhino gun packs when a visible enemy closes inside its defensive screen');
+  gun = freshSiege(); setArtilleryMode(gun, true); t = 3; updateArtillery(gun);
+  const casualty = add('hero', 1, 820, 740, { hp: 1, name: 'Lord Rataxes' });
+  shoot(gun, casualty); shoot(gun, casualty);
+  check(heroRecovery.length === 1 && kills === 1, 'Splash casualties schedule commander recovery and kills once');
+  reset();
+  check(!units.some(u => u.deployed || u.artilleryTransition), 'Restart clears all deployment state');
+}

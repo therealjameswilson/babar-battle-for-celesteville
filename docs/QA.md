@@ -209,3 +209,33 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
 - The fixture tab again reported the pre-existing unlocated MutationObserver
   instrumentation errors, without failing game checks. No new artwork or
   animation was added in this roster update; cards retain monogram portraits.
+
+## Siege artillery — 2026-09-16, version 0.9.3
+
+- `npm run check`, `npm test`, and `npm run test:balance` pass. The deterministic
+  normal-order Story strategy wins at 162.70s. Existing 33-character rules remain.
+- **130 real-browser checks pass** in `tests/browser.html`: deployment timings,
+  no movement/separation while emplaced, no firing during transitions, spotting,
+  range/blind spot, three splash bands, friendly fire, upgrades, withdrawal,
+  attack-move relocation, same-rule AI, one-time casualty accounting and reset.
+  Actual UI button activation, disabled setup control, Pack and D shortcut pass.
+- An accelerated rendered Story playthrough won at 02:34 (14 casualties, 45
+  supplies); simulation/automation is disclosed, not described as manual play.
+- Direct rendered siege fixture inspected on desktop and 390×844 / 844×390
+  phone-sized frames. Activated deploy and pack; watched shell hits scatter the
+  enemy formation. Range rings, outriggers and countdowns render. Portrait footer
+  bottom is 844px; landscape order controls stay visible. The setup button was
+  shortened after a long label clipped in portrait. No physical iPhone claim.
+- Representative 60-combatant fixture with artillery deployed: 120 rendered
+  frames in 1999ms; mean draw .572ms (p95 .8), mean update .699ms (p95 .9), 64 total
+  entities at sample end. The fixture explicitly steps simulation during this
+  measurement even when UI focus pauses normal play. No bottleneck warranted
+  speculative optimization in this increment.
+- Evidence in ignored `artifacts/`: `siege-browser-checks.txt`,
+  `siege-mode-desktop.png`, `siege-mode-portrait.png`,
+  `siege-mode-landscape.png`, `siege-performance.json`.
+- Browser cache query versions were bumped with final assets. Fixture buttons
+  now wait for injected test scripts to finish loading. The existing unlocated
+  MutationObserver messages occurred in iframe tooling; game assertions passed.
+- New visuals use Canvas geometry and existing local atlases, not generated art.
+  StarCraft-style overall fidelity remains incomplete; see STARCRAFT-GOAL.md.

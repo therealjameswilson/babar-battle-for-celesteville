@@ -42,3 +42,11 @@ Ten book-adventure/history entries add eight tested civilian powers and two
 non-purchasable story archives. Book characters can be filtered and searched;
 Arthur’s book/TV relationships and the two Isabelles are distinguished. Sources
 and exact values are in CHARACTERS.md; browser evidence is in QA.md.
+
+## Active StarCraft-style goal, 0.9.3
+
+Do not treat the broad gameplay objective as completed. See STARCRAFT-GOAL.md for
+an evidence-based gap audit. This increment adds deployable field artillery and
+same-rule rhino behavior, described in ARCHITECTURE.md. The next major gap is
+macro economy/tech progression and a genuinely economic enemy base. All 33 roster
+entries remain intact. `artillery.js` must load after game.js and before navigation.

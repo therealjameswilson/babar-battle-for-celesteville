@@ -22,6 +22,17 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    siegeChecks(check);
+    qaReset(); nextWave = enemySpawn = 9999;
+    const uiGun = add('walker', 0, 650, 755); selected = [uiGun]; updateUI(true);
+    document.querySelector('#actions button').click();
+    check(uiGun.artilleryTransition?.deploy === true && document.querySelector('#actions button').disabled, 'Deploy button starts setup and disables during transition');
+    qaTicks(3.1);
+    check(uiGun.deployed && document.querySelector('#actions button').textContent.includes('Pack artillery'), 'Deployed gun exposes the Pack button');
+    document.querySelector('#actions button').click(); qaTicks(2.1);
+    check(!uiGun.deployed && !uiGun.artilleryTransition, 'Pack button returns gun to mobile mode');
+    window.dispatchEvent(new KeyboardEvent('keydown', {key:'d', code:'KeyD'}));
+    check(uiGun.artilleryTransition?.deploy === true, 'D shortcut deploys selected guns');
     bookChecks(check);
     qaReset();
     check(
@@ -347,4 +358,16 @@ async function browserExpansion() {
     qaReset(); paused = true; draw();
     qaReport(checks.join('\n')); parent.document.getElementById('status').textContent = checks.length + ' expansion checks passed';
   } catch (error) { qaReport(checks.join('\n') + '\nFAIL ' + error.message); throw error; }
+}
+
+function browserSiege() {
+  qaReset(); nextWave = enemySpawn = 9999; enemyScoutSent = true;
+  units = units.filter(u => !defs[u.type].speed);
+  const gun = add('walker', 0, 650, 755);
+  add('scout', 0, 760, 770, { order: { kind: 'hold' } });
+  for (let i = 0; i < 3; i++) add('trooper', 0, 705 + i * 30, 860, { order: { kind: 'hold' } });
+  for (let i = 0; i < 5; i++) add('trooper', 1, 980 + (i % 3) * 25, 750 + Math.floor(i / 3) * 30, { order: { kind: 'hold' } });
+  selected = [gun]; cam = { x: 800, y: 760, zoom: .85 };
+  updateUI(true); draw();
+  qaReport('Siege fixture: select Deploy artillery (D). Scout spots the rhino formation. Use Move to pack.');
 }

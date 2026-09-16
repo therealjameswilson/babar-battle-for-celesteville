@@ -149,6 +149,7 @@ function route(start, goal) {
   return [];
 }
 function move(u, target, dt, stop = 3) {
+  if (artilleryLocked(u)) return false;
   const distance = dist(u, target);
   if (distance <= stop + 1) return true;
   let goal = { x: target.x, y: target.y };
@@ -209,6 +210,7 @@ function separate() {
           [a, 1],
           [b, -1],
         ]) {
+          if (artilleryLocked(u)) continue;
           const x = u.x + Math.cos(angle) * push * sign,
             y = u.y + Math.sin(angle) * push * sign;
           if (!solidAt(x, y, u.r)) {

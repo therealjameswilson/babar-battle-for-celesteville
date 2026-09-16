@@ -334,42 +334,44 @@ function visible(u) {
 function nearest(u, list) {
   return list.reduce((best, a) => (!best || dist(u, a) < dist(u, best) ? a : best), null);
 }
-function shoot(u, v) {
-  const d = defs[u.type];
-  u.cool = d.rate * (u.morale < 45 ? 1.5 : 1);
-  u.angle = Math.atan2(v.y - u.y, v.x - u.x);
-  u.firedAt = t;
-  const damage =
-    d.damage * weaponMultiplier(u) *
-    (u.team === 1 && easy ? 0.7 : 1) *
-    (inCover(v) ? 0.65 : 1) *
+function damageUnit(u, v, baseDamage, scale = 1) {
+  if (v.hp <= 0) return;
+  const damage = baseDamage * scale * weaponMultiplier(u) *
+    (u.team === 1 && easy ? 0.7 : 1) * (inCover(v) ? 0.65 : 1) *
     ((v.disciplineUntil || 0) > t ? 0.75 : 1) *
     (u.type === 'walker' && !defs[v.type].speed ? 1.8 : 1);
   v.hp -= damage;
-  v.morale = Math.max(0, v.morale - (u.type === 'walker' ? 26 : 12) - ((u.advanceUntil || 0) > t ? 6 : 0));
+  v.morale = Math.max(0, v.morale - ((u.type === 'walker' ? 26 : 12) + ((u.advanceUntil || 0) > t ? 6 : 0)) * scale);
   v.hitAt = t;
-  fx.push({
-    x: u.x,
-    y: u.y,
-    tx: v.x,
-    ty: v.y,
-    life: 0.3,
-    max: 0.3,
-    team: u.team,
-    heavy: u.type === 'walker',
-  });
-  battleSound(u.type === 'walker' ? 'cannon' : 'shot');
   if (v.hp <= 0) {
-    if (v.team === 1) kills++;
-    if (v.type === 'hero')
-      heroRecovery.push({
-        team: v.team,
-        name: v.name,
-        at: t + (v.team === 0 && benefits.has('periwinkle') ? 25 : 45),
-      });
+    if (v.team === 1 && u.team === 0) kills++;
+    if (v.type === 'hero') heroRecovery.push({
+      team: v.team, name: v.name,
+      at: t + (v.team === 0 && benefits.has('periwinkle') ? 25 : 45),
+    });
     fx.push({ x: v.x, y: v.y, life: 1.5, max: 1.5, burst: true, r: v.r });
   }
 }
+function shoot(u, v) {
+  if (u.hp <= 0 || v.hp <= 0 || u.artilleryTransition || !inWeaponArc(u, v) || !sees(u.team, v)) return false;
+  const d = defs[u.type];
+  u.cool = (u.deployed ? SIEGE.rate : d.rate) * (u.morale < 45 ? 1.5 : 1);
+  u.angle = Math.atan2(v.y - u.y, v.x - u.x);
+  u.firedAt = t;
+  if (u.deployed) {
+    // Resolve the entire impact from one snapshot, including nearby friendly troops.
+    const victims = units.filter(a => a.hp > 0 && (a === v || dist(a, v) <= SIEGE.radius));
+    for (const a of victims) {
+      const distance = dist(a, v);
+      damageUnit(u, a, SIEGE.damage, a === v || distance <= 22 ? 1 : distance <= 43 ? .5 : .25);
+    }
+    fx.push({ x: v.x, y: v.y, life: .55, max: .55, shellImpact: true, r: SIEGE.radius });
+  } else damageUnit(u, v, d.damage);
+  fx.push({ x: u.x, y: u.y, tx: v.x, ty: v.y, life: .3, max: .3, team: u.team, heavy: u.type === 'walker' });
+  battleSound(u.type === 'walker' ? 'cannon' : 'shot');
+  return true;
+}
+
 function update(dt) {
   t += dt;
   updateTactics(dt);
@@ -379,6 +381,7 @@ function update(dt) {
     if (u.hp <= 0) continue;
     const d = defs[u.type];
     u.cool = Math.max(0, u.cool - dt);
+    if (updateArtillery(u)) continue;
     if (u.construction) {
       const builders = alive(u.team).filter(w => w.type === 'worker' && w.order?.kind === 'build' && w.order.target === u && dist(w, u) <= u.r + w.r + 12);
       if (!builders.length) continue;
@@ -493,19 +496,20 @@ function update(dt) {
     if (u.order?.target && (u.order.target.hp <= 0 || !sees(u.team, u.order.target))) completeOrder(u);
     if (d.damage && u.order?.kind !== 'move') {
       let target = null;
-      const enemies = alive(1 - u.team).filter((a) => sees(u.team, a));
-      if (u.order?.target?.hp > 0 && sees(u.team, u.order.target)) target = u.order.target;
+      const range = weaponRange(u);
+      const enemies = alive(1 - u.team).filter((a) => sees(u.team, a) && (!u.deployed || dist(u, a) >= SIEGE.minimum));
+      if (u.order?.target?.hp > 0 && sees(u.team, u.order.target) && (!u.deployed || dist(u, u.order.target) >= SIEGE.minimum)) target = u.order.target;
       else
         target = nearest(
           u,
-          enemies.filter((a) => dist(u, a) < d.range + a.r + (u.order?.kind === 'hold' ? 0 : 65))
+          enemies.filter((a) => dist(u, a) < range + a.r + (u.order?.kind === 'hold' || u.deployed ? 0 : 65))
         );
       if (target) {
         const distance = dist(u, target);
-        if (distance <= d.range + target.r) {
+        if (inWeaponArc(u, target)) {
           if (u.cool === 0) shoot(u, target);
-        } else if (d.speed && u.order?.kind !== 'hold')
-          move(u, target, dt, d.range * 0.9 + target.r);
+        } else if (d.speed && !artilleryLocked(u) && u.order?.kind !== 'hold')
+          move(u, target, dt, range * 0.9 + target.r);
         continue;
       }
       if (u.order?.target && !sees(u.team, u.order.target)) u.order = null;
@@ -707,6 +711,8 @@ function updateUI(force = false) {
             's · ' +
             u.queue.length +
             ' queued'
+          : u.type === 'walker'
+            ? (u.artilleryTransition ? (u.artilleryTransition.deploy ? 'Deploying' : 'Packing') + ' · ' + Math.ceil(u.artilleryTransition.until - t) + 's' : u.deployed ? 'Deployed: range 90–390m; splash hits allies. Move or Retreat packs the gun in 2s.' : 'Mobile gun. Deploy (D): 3s setup, 390m range and splash. Needs a scout and infantry screen.')
           : u.type === 'hero'
             ? 'Stand together: +20 morale and 25% less damage for nearby troops, for 8s.'
             : u.type === 'worker'
@@ -746,7 +752,7 @@ function updateUI(force = false) {
     ' · Enemy reserves ' +
     Math.floor(enemyBudget);
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
-  const key = (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
+  const key = (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   if (force || key !== actionKey) {
     actionKey = key;
     let a = [];
@@ -762,6 +768,11 @@ function updateUI(force = false) {
         for (const type of ['forge', 'relay', 'factory', 'turret'])
           a.push([defs[type].name, '● ' + buildingCost(type), () => build(type)]);
     }
+    const guns = selected.filter(a => a.team === 0 && a.type === 'walker');
+    if (guns.length) {
+      const transitioning = guns.every(a => a.artilleryTransition);
+      a.push([transitioning ? 'Setting gun' : guns.some(a => !a.deployed && !a.artilleryTransition) ? 'Deploy artillery' : 'Pack artillery', transitioning ? Math.ceil(Math.max(...guns.map(g => g.artilleryTransition.until)) - t) + 's remaining' : 'D · 3s deploy / 2s pack', toggleArtillery, transitioning]);
+    }
     if (u?.construction && selected.length === 1) a.push(['Cancel construction', '75% refund', () => cancelConstruction(u)]);
     if (u && selected.length === 1 && !u.construction) {
       for (const [id, tech] of Object.entries(researchDefs)) {
@@ -775,10 +786,11 @@ function updateUI(force = false) {
     }
     const holder = $('actions');
     holder.replaceChildren();
-    for (const [name, cost, fn] of a) {
+    for (const [name, cost, fn, disabled] of a) {
       const b = document.createElement('button');
       b.innerHTML = '<span>' + name + '</span><small>' + cost + '</small>';
       b.onclick = fn;
+      b.disabled = !!disabled;
       holder.appendChild(b);
     }
   }
@@ -941,6 +953,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === ' ') togglePause();
   if (e.key === 'F2') selectArmy();
   if (e.key.toLowerCase() === 'h') goHome();
+  if (e.key.toLowerCase() === 'd') toggleArtillery();
   if (e.key.toLowerCase() === 'q') commanderAbility(selected.find(u => u.type === 'hero'));
   if (e.key.toLowerCase() === 'a') setMode('attack');
   if (e.key.toLowerCase() === 'm') setMode('move');

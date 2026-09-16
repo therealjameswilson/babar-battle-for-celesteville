@@ -51,3 +51,12 @@ The council now includes 33 characters, with a searchable **Book characters** vi
 representative book titles and explicit continuity notes. Ten book-adventure and
 history entries add eight civilian support powers and two story archives. See
 [the roster and sources](docs/CHARACTERS.md).
+
+### Siege artillery (0.9.3)
+
+Select a field gun and press **D** or **Deploy artillery**. After 3 seconds it
+holds position and fires long-range shells with splash damage—including allies.
+Keep scouts ahead and infantry outside the impact area. Guns cannot hit enemies
+inside their 90m blind spot. Move, attack-move or Retreat packs the gun for 2s.
+Rhino artillery follows the same rules. The broader StarCraft-style gameplay
+work remains active; see [the current gap audit](docs/STARCRAFT-GOAL.md).

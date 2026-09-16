@@ -39,7 +39,7 @@
   </head>
   <body>
     <nav>
-      <button id="expansion">Expansion checks</button><button id="suite">Run browser checks</button
+      <button id="siege">Siege battle</button><button id="expansion">Expansion checks</button><button id="suite">Run browser checks</button
       ><button id="victory">Story playthrough ×20</button
       ><button id="loss">Loss playthrough ×20</button
       ><button id="battle">Representative battle</button
@@ -50,16 +50,21 @@
     <iframe id="play" src="../dist/index.html"></iframe>
     <script>
       const frame = document.getElementById('play');
-      frame.onload = () => {
-        for (const file of ['strategy.js', 'book-checks.js', 'browser-driver.js']) {
+      const sizes = new URLSearchParams(location.search);
+      if (sizes.has('width')) { frame.style.width = sizes.get('width') + 'px'; frame.style.height = sizes.get('height') + 'px'; }
+      document.querySelectorAll('nav button').forEach(b => b.disabled = true);
+      frame.onload = async () => {
+        for (const file of ['strategy.js', 'book-checks.js', 'siege-checks.js', 'browser-driver.js']) {
           const s = frame.contentDocument.createElement('script');
-          s.src = '../tests/' + file + '?v=0.8.0';
+          s.src = '../tests/' + file + '?v=0.9.3';
           s.async = false;
-          frame.contentDocument.body.append(s);
+          await new Promise((resolve, reject) => { s.onload = resolve; s.onerror = reject; frame.contentDocument.body.append(s); });
         }
         document.getElementById('status').textContent = 'Ready';
+        document.querySelectorAll('nav button').forEach(b => b.disabled = false);
       };
       for (const [id, fn] of [
+        ['siege', 'browserSiege'],
         ['suite', 'browserSuite'],
         ['expansion', 'browserExpansion'],
         ['victory', 'browserVictory'],

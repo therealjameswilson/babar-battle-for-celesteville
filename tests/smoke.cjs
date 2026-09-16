@@ -78,6 +78,7 @@ vm.createContext(sandbox);
 for (const file of [
   'cast.js',
   'game.js',
+  'artillery.js',
   'navigation.js',
   'tactics.js',
   'audio.js',
@@ -135,8 +136,9 @@ tick(280);
 assert.equal(run('ore'), 305);
 // Commander recovery and the enemy court's first upgrade.
 run(
-  "reset();running=true;const h3=alive(0).find(u=>u.type==='hero');h3.hp=1;shoot(alive(1).find(u=>u.type==='hero'),h3)"
+  "reset();running=true;const h3=alive(0).find(u=>u.type==='hero');h3.hp=1;const executioner=add('trooper',1,h3.x+60,h3.y);shoot(executioner,h3);executioner.hp=0"
 );
+assert.equal(run("heroRecovery.length"), 1, "A lethal, visible in-range hit schedules commander recovery.");
 tick(940);
 assert.equal(run("alive(0).filter(u=>u.type==='hero').length"), 1);
 run('t=nextWave;update(.05)');

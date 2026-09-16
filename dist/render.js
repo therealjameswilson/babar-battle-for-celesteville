@@ -43,6 +43,13 @@ function atlas(image, col, row, x, y, w, h, building = false) {
   return true;
 }
 function drawUnit(u) {
+  if (u.type === 'walker' && selected.includes(u)) {
+    ctx.save(); ctx.setLineDash([7, 7]); ctx.lineWidth = 1;
+    ctx.strokeStyle = '#d5c48c80'; ctx.beginPath();
+    ctx.arc(u.x, u.y, weaponRange(u), 0, Math.PI * 2); ctx.stroke();
+    if (u.deployed) { ctx.strokeStyle = '#d8796980'; ctx.beginPath(); ctx.arc(u.x, u.y, SIEGE.minimum, 0, Math.PI * 2); ctx.stroke(); }
+    ctx.restore();
+  }
   if ((u.disciplineUntil || 0) > t || (u.advanceUntil || 0) > t) {
     ctx.strokeStyle = (u.disciplineUntil || 0) > t ? '#dbc889' : '#d67d73';
     ctx.lineWidth = 2;
@@ -88,6 +95,11 @@ function drawUnit(u) {
     ctx.lineTo(u.r + 10, 0);
     ctx.stroke();
     if (u.type === 'walker') {
+      if (artilleryLocked(u)) {
+        ctx.strokeStyle = '#b7a783'; ctx.lineWidth = 5;
+        for (const sign of [-1, 1]) { ctx.beginPath(); ctx.moveTo(-6, sign * 7); ctx.lineTo(-25, sign * 26); ctx.stroke(); }
+        ctx.fillStyle = '#494638'; ctx.fillRect(-30, -30, 12, 8); ctx.fillRect(-30, 22, 12, 8);
+      }
       ctx.fillStyle = '#252c29';
       ctx.fillRect(-8, -9, 30, 18);
       ctx.fillStyle = '#736c51';
@@ -108,6 +120,12 @@ function drawUnit(u) {
       ctx.beginPath();
       ctx.ellipse(-Math.cos(u.angle) * 18, 8, 10, 4, 0, 0, Math.PI * 2);
       ctx.fill();
+    }
+    if (u.type === 'walker' && artilleryLocked(u)) {
+      ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillStyle = '#eee3bd'; ctx.strokeStyle = '#202b25'; ctx.lineWidth = 3;
+      const label = u.artilleryTransition ? (u.artilleryTransition.deploy ? 'DEPLOY ' : 'PACK ') + Math.ceil(u.artilleryTransition.until - t) + 's' : 'SIEGE';
+      ctx.strokeText(label, 0, -72); ctx.fillText(label, 0, -72); ctx.textAlign = 'left';
     }
     if (u.type === 'scout') {
       ctx.strokeStyle = '#dfd6ad';
@@ -425,7 +443,10 @@ function draw() {
   }
   for (const f of fx) {
     ctx.globalAlpha = f.life / f.max;
-    if (f.burst) {
+    if (f.shellImpact) {
+      ctx.fillStyle = '#99846540'; ctx.strokeStyle = '#d6b473'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (reducedMotion ? 1 : 1 - f.life / f.max * .6), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    } else if (f.burst) {
       ctx.fillStyle = '#252a24';
       ctx.beginPath();
       ctx.ellipse(f.x, f.y, f.r * (1.1 - (f.life / f.max) * 0.2), f.r * 0.55, 0, 0, Math.PI * 2);

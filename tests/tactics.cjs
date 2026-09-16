@@ -23,10 +23,10 @@ run('raider.hp=0;rebuildSupply()');
 assert(run('supplied(outpost)'), 'Clearing a route restores supply.');
 fresh();
 run(
-  "const gun=add('walker',0,1050,600),exposed=add('trooper',1,1100,600),protectedUnit=add('trooper',1,1090,875);const oldExposed=exposed.hp,oldProtected=protectedUnit.hp;shoot(gun,exposed);shoot(gun,protectedUnit)"
+  "const gun=add('walker',0,1050,600),exposed=add('trooper',1,1100,600),protectedUnit=add('trooper',1,1090,875);add('scout',0,1050,780);const oldExposed=exposed.hp,oldProtected=protectedUnit.hp;shoot(gun,exposed);shoot(gun,protectedUnit)"
 );
 assert(
-  run('oldExposed-exposed.hp>oldProtected-protectedUnit.hp'),
+  run('Math.abs((oldProtected-protectedUnit.hp)/(oldExposed-exposed.hp)-.65)<.0001'),
   'Cover reduces damage for enemy too.'
 );
 run('exposed.morale=20;updateTactics(.05)');
@@ -82,7 +82,7 @@ assert.equal(run("alive(0).filter(u=>u.type==='hero').length"), 1);
 // Direct focus fire can kill; suppression and retreat are tested separately.
 fresh();
 run(
-  "const attacker=alive(0).find(u=>u.type==='hero'),victim=alive(1).find(u=>u.type==='trooper');for(let i=0;i<10;i++)if(victim.hp>0)shoot(attacker,victim)"
+  "const attacker=alive(0).find(u=>u.type==='hero'),victim=add('trooper',1,attacker.x+60,attacker.y);for(let i=0;i<10;i++)if(victim.hp>0)shoot(attacker,victim)"
 );
 assert(run('kills>0'));
 console.log(
@@ -249,3 +249,6 @@ console.log('PASS: worker construction, travel, builder loss, replacement, cance
 run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'book-checks.js'), 'utf8'));
 run('bookChecks((ok, label) => { if (!ok) throw new Error(label); })');
 console.log('PASS: book roster preservation, eight numerical support effects, cooldowns, costs, archives and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'siege-checks.js'), 'utf8'));
+run('siegeChecks((ok, label) => { if (!ok) throw new Error(label); })');
+console.log('PASS: siege transitions, spotting, splash, friendly fire, range, movement, retreat, research, AI and casualties.');

@@ -104,3 +104,31 @@ the existing supply, health, morale, resource-node and reveal systems; numerical
 values are documented in CHARACTERS.md. `tests/book-checks.js` runs unchanged in
 the deterministic VM and the real-browser fixture, including effect exclusions,
 costs, cooldowns, restart and original-roster preservation.
+
+## Field artillery deployment (0.9.3)
+
+`artillery.js` owns deployment and weapon geometry. Mobile guns retain 270m range,
+48 damage / 2.8s. Deploy (D, or selection-panel button) takes 3s, clears the old
+route and holds position. Deployed guns use 90–390m range, 72 damage / 3.6s and a
+65m splash radius. Impacts do full damage within 22m, half within 43m and quarter
+within 65m, including allies. Cover, Babar's protection, research, difficulty and
+building vulnerability apply per victim. Only enemies visible to the shooter's
+faction may be the primary target, so long-range artillery needs forward scouts.
+Splash can incidentally hit concealed nearby units; it does not reveal them.
+
+Deploying, deployed and packing guns cannot be displaced by movement or unit
+separation. Setup/packing disables firing. Move, attack-move and Retreat pack
+automatically for 2s and preserve the issued destination. Focus-fire and Hold
+retain the emplacement; threats inside 90m require infantry defense or packing.
+The explicit Pack command takes the same 2s. Morale-driven retreat pays that cost.
+
+Rhino artillery uses the same transitions and ranges. It deploys for visible
+targets at 170m or farther, provided no visible attacker is inside 140m and morale
+is at least 45. It packs for close threats, retreat, or four seconds without a
+visible siege target, then resumes its earlier advance. Range rings, outriggers,
+setup countdowns and shell-impact circles are procedural Canvas additions.
+
+`shoot()` now validates visibility and range even when invoked directly. Tests
+that previously fired across the entire map now put the attacker in range and
+explicitly verify commander death before recovery; cover tests verify the .65
+ratio with a spotter. `tests/siege-checks.js` runs in the VM and real browser.
