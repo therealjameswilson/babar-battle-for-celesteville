@@ -164,3 +164,7 @@ the remaining gap between lost production and military capacity.
 `npm run test:earned-raids` adds paid full-match Commander comparisons with enemy
 assaults enabled. Early specialist investment and later commitments are measured
 separately; neither the tests nor the findings claim every strategy should win.
+
+Infantry now uses a two-pose, four-direction walk animation driven by distance
+travelled. It returns to the existing idle pose when stopped; reduced-motion mode
+keeps static facing frames.

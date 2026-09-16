@@ -558,3 +558,19 @@ arguments support the matched assembly/commitment experiment. The real browser
 established raid reached a rendered victory at 4:59 with the palace intact, all four
 sappers alive and the original quarry destroyed. Evidence is under artifacts/earned-raid-*.
 No new gameplay or visual change is claimed for this test increment.
+
+## 0.24.0 infantry gait (2026-09-16)
+
+414 real-browser checks pass. New checks inspect all sixteen crop alpha margins,
+loaded asset dimensions, stride/passing selection, actual navigation distance,
+stationary behavior and the reduced-motion selection rule. The rule is tested via
+its explicit parameter; the host OS reduced-motion preference was not toggled.
+Normal-speed east/west traversal was rendered and inspected, with two snapshots
+saved as walking-desktop-a/b.png. A representative phone portrait battle is saved
+as walking-battle-portrait.png. All evidence lives under artifacts/.
+
+A 66-unit sample completed 120 frames in 1998ms (~60Hz): drawing mean 0.51ms / p95
+0.70ms, simulation mean 1.13ms / p95 1.50ms. Raw sample: walking-performance.json.
+The new atlas is a two-pose stride/passing loop, not a full articulated cycle.
+Other unit families retain their earlier movement artwork. Physical phone testing
+and OS preference switching remain outside this verification.

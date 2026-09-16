@@ -200,6 +200,7 @@ function move(u, target, dt, stop = 3) {
   if (!solidAt(x, y, u.r)) {
     u.x = x;
     u.y = y;
+    u.walkDistance = (u.walkDistance || 0) + step;
     u.movingUntil = t + 0.12;
   } else {
     u.repathAt = 0;

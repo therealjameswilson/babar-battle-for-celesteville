@@ -29,6 +29,21 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    qaReset();const gaitScout=add('scout',0,600,1050);issueOrder(gaitScout,{kind:'move',x:750,y:1050});qaTicks(.5);
+    check(gaitScout.walkDistance>20,'Actual navigation advances the visual walk-distance counter');
+    const gaitDistance=gaitScout.walkDistance;issueOrder(gaitScout,{kind:'hold'});qaTicks(.3);
+    check(gaitScout.walkDistance===gaitDistance,'Holding position does not advance walking distance');
+    check(infantryWalkSheet.complete&&infantryWalkSheet.naturalWidth===1254,'Walk atlas loads at verified dimensions');
+    check(infantryWalkPhase({movingUntil:t+1,walkDistance:0},false)===0&&infantryWalkPhase({movingUntil:t+1,walkDistance:14},false)===1&&infantryWalkPhase({movingUntil:t+1,walkDistance:28},false)===0,'Walk phases advance with distance, wrapping after two poses');
+    check(infantryWalkPhase({movingUntil:t,walkDistance:14})===null,'Stationary infantry uses idle artwork');
+    check(infantryWalkPhase({movingUntil:t+1,walkDistance:14},true)===null,'Reduced-motion rule uses static facing artwork');
+    const walkCanvas=document.createElement('canvas');walkCanvas.width=1254;walkCanvas.height=1254;
+    const wc=walkCanvas.getContext('2d');wc.drawImage(infantryWalkSheet,0,0);
+    for(const [team,phases] of infantryWalkFrames.entries())for(const [phase,frames] of phases.entries())for(const [direction,[x,y,w,h]] of frames.entries()){
+      const data=wc.getImageData(x,y,w,h).data;let occupied=0,clipped=false;
+      for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(data[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
+      check(occupied>3000&&!clipped,`Walk faction ${team}, pose ${phase}, direction ${direction}: complete transparent crop`);
+    }
     check(infantrySheet.complete&&infantrySheet.naturalWidth===1254,'Directional infantry asset loads at its verified dimensions');
     check([0,Math.PI/2,Math.PI,-Math.PI/2].map(infantryDirection).join(',')==='0,1,2,3','Facing bearings select east, south, west and north frames');
     check(infantryDirection(-2*Math.PI)===0&&infantryDirection(2*Math.PI)===0,'Direction mapping wraps negative and full-circle angles');
@@ -628,4 +643,18 @@ function browserEarnedRaid(){
   qaReport(JSON.stringify(earnedRaidResult(),null,2));
   if(t>=900||ended){clearInterval(qaInterval);qaInterval=null;paused=true;updateUI(true);draw();}
  },50);
+}
+
+function browserWalking(){
+ qaReset();nextWave=enemySpawn=9999;units=units.filter(u=>u.type==='core');rebuildNav();
+ const walkers=[];for(let team=0;team<2;team++)for(let i=0;i<4;i++){
+  const u=add('scout',team,400+i*100,750+team*170);walkers.push(u);
+  issueOrder(u,{kind:'move',x:700-i*70,y:750+team*170});
+ }
+ revealUntil=9999;cam.x=560;cam.y=830;cam.zoom=1.6;selected=walkers.filter(u=>!u.team);
+ qaInterval=setInterval(()=>{
+  for(const u of walkers)if(!u.order)issueOrder(u,{kind:'move',x:u.x<550?750:400,y:u.y});
+  update(.05);
+ },50);
+ updateUI(true);draw();qaReport('Normal-speed infantry walking review: stride/passing frames and grounded feet during repeated east-west travel. Reduced motion keeps static artwork.');
 }

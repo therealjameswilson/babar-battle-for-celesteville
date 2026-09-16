@@ -366,3 +366,13 @@ as faded atlas silhouettes with dashed footprints and LAST SEEN age. Hollow mini
 marks differ from current solid sightings. Memories provide no targeting or vision;
 orders into that location still use the ordinary visible-enemy acquisition rule.
 A quarry memory uses its dashed footprint; no live machinery or production is shown.
+
+## Infantry gait (0.24.0)
+
+Successful navigation steps increment the visual walkDistance counter. The renderer
+selects stride/passing poses every 14 world units; faster units therefore animate
+faster, stationary units do not march in place, and pause freezes the pose naturally.
+This counter has no effect on collision, speed, attacks or economy. Infantry uses
+the inspected walk atlas only while moving; old idle frames are retained, including
+the image-load fallback. Reduced-motion mode retains static directional artwork.
+Walk poses use a fixed foot baseline without the prior extra vertical bob.

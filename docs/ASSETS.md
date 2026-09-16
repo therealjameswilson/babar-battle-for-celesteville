@@ -63,3 +63,23 @@ workers and artillery officers retain the previous mirrored artwork. Facing sele
 static frame; this release does not introduce a four/eight-direction walk cycle. Existing
 reduced-motion behavior is retained. Original supplied and earlier generated atlases
 remain tracked and unchanged.
+
+## Infantry movement atlas (0.24.0)
+
+`dist/assets/infantry-walk.png`: generated with the built-in image tool using the
+existing directional infantry as the character/style reference. Final output is an
+unmodified 1254×1254 RGBA PNG, 74.96% fully transparent. Original tool output remains
+under the local generated-images directory. Earlier candidates with edge crowding or
+insufficient pose differentiation were rejected and are not shipped.
+
+The final correction requested: preserve the two military-fable character designs,
+four direction columns (east/south/west/north), four rows (elephant stride/passing,
+rhino stride/passing), generous alpha gutters, full boots and helmet spikes; change
+the second/fourth rows to a closed passing pose with boots under the torso while
+keeping the first/third rows in open stride. No background, labels, grid or gore.
+
+Sixteen alpha bounds were inspected and given eight-pixel crop margins in render.js.
+No equal-cell assumption, pixel editing or replacement of the existing atlases was
+used. This is a deliberately simple stride/passing loop, not a fully articulated
+alternating-leg or eight-frame cycle. Commanders, workers and artillery officers
+still use the prior artwork.

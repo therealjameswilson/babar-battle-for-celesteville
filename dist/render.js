@@ -1,20 +1,32 @@
 'use strict';
 const spriteSheet = new Image(),
-  buildingSheet = new Image(), infantrySheet = new Image();
+  buildingSheet = new Image(), infantrySheet = new Image(), infantryWalkSheet = new Image();
 spriteSheet.src = 'assets/characters-siege.png';
 buildingSheet.src = 'assets/buildings-siege.png';
 infantrySheet.src = 'assets/infantry-directions.png';
+infantryWalkSheet.src = 'assets/infantry-walk.png';
 // Hand-inspected alpha bounds plus transparent margins: generated columns are irregular.
 const infantryFrames = [
   [[38,142,290,501],[339,142,302,498],[643,142,280,500],[935,138,293,503]],
   [[23,702,309,461],[336,701,298,461],[636,705,291,457],[938,701,299,461]]
 ];
+// Two inspected poses per direction: stride and passing, not a full eight-frame gait.
+const infantryWalkFrames = [
+ [ [[108,89,170,246],[409,89,173,245],[687,89,167,247],[981,90,170,245]],
+   [[114,389,173,251],[404,386,180,254],[677,390,172,250],[975,388,176,253]] ],
+ [ [[101,693,180,228],[402,692,186,230],[682,693,180,228],[975,692,187,231]],
+   [[108,962,179,232],[407,962,182,230],[680,962,179,232],[975,962,187,235]] ]
+];
+function infantryWalkPhase(u, minimizeMotion = reducedMotion) {
+  return minimizeMotion || !(u.movingUntil>t) ? null : Math.floor((u.walkDistance||0)/14)%2;
+}
 function infantryDirection(angle) {return ((Math.floor((angle+Math.PI/4)/(Math.PI/2))%4)+4)%4;}
 function drawDirectionalInfantry(u,bob) {
   if(!['trooper','scout','sapper'].includes(u.type)||!infantrySheet.complete||!infantrySheet.naturalWidth)return false;
-  const [x,y,w,h]=infantryFrames[u.team][infantryDirection(u.angle)];
+  const phase=infantryWalkPhase(u),walking=phase!==null&&infantryWalkSheet.complete&&infantryWalkSheet.naturalWidth;
+  const [x,y,w,h]=walking?infantryWalkFrames[u.team][phase][infantryDirection(u.angle)]:infantryFrames[u.team][infantryDirection(u.angle)];
   const height=52,width=height*w/h;
-  ctx.drawImage(infantrySheet,x,y,w,h,-width/2,15-height+bob,width,height);
+  ctx.drawImage(walking?infantryWalkSheet:infantrySheet,x,y,w,h,-width/2,15-height+(walking?0:bob),width,height);
   return true;
 }
 const fog = document.createElement('canvas'),
