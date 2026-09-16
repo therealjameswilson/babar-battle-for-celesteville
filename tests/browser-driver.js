@@ -1,10 +1,17 @@
 /* Local-only browser QA. Not included in dist or deployed. */
 let qaInterval = null;
+// Accelerated fixtures own simulation time. The normal RAF loop still renders,
+// but must not add a second simulation step between the fixture's fixed steps.
+const qaLiveLoop=loop;
+loop=function(timestamp){
+  if(qaInterval){last=timestamp;draw();requestAnimationFrame(loop);}
+  else qaLiveLoop(timestamp);
+};
 function qaReport(s) {
   parent.document.getElementById('report').textContent = s;
 }
 function qaReset() {
-  clearInterval(qaInterval);
+  clearInterval(qaInterval);qaInterval=null;
   easy = true;
   reset();
   running = true;
@@ -22,6 +29,14 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    alertChecks(check);
+    qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
+    const alertBase=alive(0).find(b=>b.type==='core'),alertSchool=alive(0).find(b=>b.type==='forge');
+    selected=[alertSchool];damageUnit(alive(1).find(u=>u.type==='trooper'),alertBase,12);
+    cam.x=1200;cam.y=100;$('attack-alert').click();
+    check(cam.x===alertBase.x&&selected[0]===alertSchool,'Actual attack-report button jumps while preserving production selection');
+    cam.x=1200;window.dispatchEvent(new KeyboardEvent('keydown',{key:'F3',code:'F3'}));
+    check(cam.x===alertBase.x,'F3 shortcut jumps to the reported attack');
     counterChecks(check);
     qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
     selected=[alive(0).find(b=>b.type==='forge')];updateUI(true);
@@ -250,7 +265,7 @@ function browserVictory(plan = 'siege') {
       cam.x = depot.team === 0 ? 1240 : 760;
       cam.y = depot.team === 0 ? 460 : 820;
     } else {
-      clearInterval(qaInterval);
+      clearInterval(qaInterval);qaInterval=null;
       qaReport(
         'Story result: ' +
           (alive(0).some((u) => u.type === 'core') ? 'VICTORY' : 'LOSS') +
@@ -270,7 +285,7 @@ function browserLoss() {
   qaInterval = setInterval(() => {
     if (!ended) qaTicks(1);
     else {
-      clearInterval(qaInterval);
+      clearInterval(qaInterval);qaInterval=null;
       qaReport(
         'Unattended Story result: ' +
           (alive(0).some((u) => u.type === 'core') ? 'VICTORY' : 'LOSS') +
@@ -426,4 +441,21 @@ function browserCounters() {
   issueOrder(gun,{kind:'hold'});selected=[a];cam={x:860,y:990,zoom:1.25};
   updateUI(true);draw();
   qaReport('Counter fixture: two light Field Sappers face an unsupported armored gun. Observe anti-armor hits, suppression and withdrawal. Original infantry atlas has a brass demolition-pack overlay.');
+}
+
+function browserAlerts(){
+  qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
+  const base=alive(0).find(u=>u.type==='core'),school=alive(0).find(u=>u.type==='forge');
+  selected=[school];cam={x:1200,y:450,zoom:.8};
+  damageUnit(alive(1).find(u=>u.type==='trooper'),base,50);
+  togglePause();updateUI(true);draw();
+  qaReport('Attack report fixture: remote damage is injected only to exercise notifications. Click the named attack banner or press F3. Camera returns to the palace, preserving the school selection and pause.');
+}
+function browserCommander(){
+  qaReset();easy=false;reset();running=true;$('overlay').classList.add('hidden');
+  qaReport('Defensive Commander playthrough: normal starting funds, earned income and player orders.');
+  qaInterval=setInterval(()=>{
+    if(!ended){defenseStep();qaTicks(1);cam.x=depot.team===0?1200:460;cam.y=depot.team===0?500:860;}
+    else{clearInterval(qaInterval);qaInterval=null;qaReport('Defensive Commander result: '+(alive(0).some(u=>u.type==='core')?'VICTORY':'LOSS')+' · '+time(t)+' · enemy casualties '+kills);}
+  },50);
 }

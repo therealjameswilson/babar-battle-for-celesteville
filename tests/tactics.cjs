@@ -264,3 +264,7 @@ console.log("PASS: physical enemy economy, queues, worker replacement, paid rebu
 run(require("node:fs").readFileSync(require("node:path").join(__dirname,"counter-checks.js"),"utf8"));
 run("counterChecks((ok,message)=>{if(!ok)throw Error(message)})");
 console.log("PASS: anti-armor roles, sapper tech/costs, scouted counters, faction research and simulated matchups.");
+
+run(require("node:fs").readFileSync(require("node:path").join(__dirname,"alert-checks.js"),"utf8"));
+run("alertChecks((ok,message)=>{if(!ok)throw Error(message)})");
+console.log("PASS: attack report grouping, expiry, camera cycling, order preservation, modal guards and reset.");

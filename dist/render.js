@@ -552,6 +552,7 @@ function draw() {
     const s = u.type === 'hero' ? 6 : defs[u.type].speed ? 3 : 7;
     mc.fillRect((u.x / W) * 300 - s / 2, (u.y / H) * 210 - s / 2, s, s);
   }
+  for(const a of activeAttacks()){mc.strokeStyle='#ffb58c';mc.lineWidth=2;mc.beginPath();mc.arc(a.x/W*300,a.y/H*210,7,0,Math.PI*2);mc.stroke();}
   mc.strokeStyle = '#fff1bc';
   mc.lineWidth = 1.5;
   mc.strokeRect(

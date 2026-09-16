@@ -78,6 +78,7 @@ vm.createContext(sandbox);
 for (const file of [
   'cast.js',
   'game.js',
+  'alerts.js',
   'combat-roles.js',
   'economy.js',
   'artillery.js',

@@ -36,3 +36,8 @@ No new external or generated raster asset was introduced in this increment.
 Reuses each faction's existing infantry atlas crop, with an original Canvas brass
 cross-braced demolition-pack overlay. No additional generated sprite sheet was
 created; this is a visible role variant rather than a unique full-body illustration.
+
+### Attack reports (0.13.4)
+Static Canvas minimap rings and a CSS dispatch button use existing faction colors.
+The original two-note triangle-wave tone is synthesized in audio.js; no audio
+sample, external asset or generated artwork is added.

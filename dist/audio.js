@@ -69,3 +69,14 @@ $('mute').onclick = () => {
   muteLabel();
 };
 muteLabel();
+// Short original two-note dispatch tone. Never creates/resumes audio on its own.
+function attackSound() {
+  if(!audioContext||muted||audioContext.state==='suspended')return;
+  const now=audioContext.currentTime;
+  for(let i=0;i<2;i++){
+    const o=audioContext.createOscillator(),g=audioContext.createGain();
+    o.type='triangle';o.frequency.value=i?440:330;
+    g.gain.setValueAtTime(.035,now+i*.13);g.gain.exponentialRampToValueAtTime(.001,now+i*.13+.12);
+    o.connect(g).connect(audioContext.destination);o.start(now+i*.13);o.stop(now+i*.13+.13);
+  }
+}

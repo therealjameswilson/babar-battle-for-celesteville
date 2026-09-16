@@ -1507,3 +1507,6 @@ dialog {
   .resources > span { min-width: 48px; }
   .resources em { font-size: 7px; }
 }
+
+#attack-alert {pointer-events:auto;display:block;margin-top:8px;padding:5px 9px;min-height:34px;max-width:100%;color:#fff0d2;background:#633b32;border-color:#c88566;font-size:12px;}
+#attack-alert[hidden] {display:none;}

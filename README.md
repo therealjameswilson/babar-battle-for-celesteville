@@ -7,7 +7,7 @@ A static, single-player Canvas RTS: a storybook kingdom caught in a border war. 
 Run `npm start`, then open http://localhost:8000. Or open `dist/index.html` directly. No install, build, backend, API key, or sign-in is needed to play. Requires Node 20+ for checks and Python 3 for the optional local server.
 
 - Click or drag to select; Shift adds units. Right-click a location to move or a visible enemy to focus fire.
-- **A** attack-move, **M** move, **G** gather, **E** repair, **S** hold, **R** retreat. **F2** selects the army, **H** returns to the palace, **I** selects idle provisioners, **Space** pauses. Arrow keys/minimap pan; wheel or +/− zoom.
+- **A** attack-move, **M** move, **G** gather, **E** repair, **S** hold, **R** retreat. **F2** selects the army, **F3** cycles recent attack reports, **H** returns to the palace, **I** selects idle provisioners, **Space** pauses. Arrow keys/minimap pan; wheel or +/− zoom.
 - Ctrl/Command + 0–9 saves a control group; the digit recalls it. Groups offers four touch slots. Shift-command or Queue appends waypoints. Production buildings accept rally points, including supply caches for provisioners. Recruitment can be cancelled with a full refund.
 - **Q** activates Babar’s Stand together: 50 energy, 35s cooldown, +20 morale and 25% damage reduction for nearby troops for 8s.
 - Touch uses explicit orders, then a map target. Toggle **Pan map** to drag the camera. No gesture on the battlefield scrolls the page.
@@ -66,8 +66,19 @@ progress bar. Basil recruits anti-armor troops after scouting your guns, and his
 reports expire after 60 seconds. Protect production and deny reconnaissance.
 
 `npm run test:compositions` compares siege and mixed openings in both difficulties.
-Current scripted openings win Story but lose Commander; this is evidence for
-further defense/balance work, not a claim that Commander is unwinnable.
+The siege and mixed rush openings win Story but lose Commander. A separate
+[defensive Commander opening](docs/COMMANDER-OPENING.md) wins with ordinary
+resources, fortification, a larger workforce and screened artillery. Run
+`npm run test:commander` to verify it. These are automated cases, not exhaustive
+human balance evidence.
+
+## Attack reports (0.13.4)
+
+Enemy hits on your forces create a named attack banner and static minimap ring.
+Tap it or press **F3** to cycle recent fronts without changing your selection,
+orders or pause state. Reports merge within 200m, expire after 15 seconds, and
+retain at most five fronts. A short original dispatch tone respects mute and
+starts only after audio has been enabled by user interaction. No camera shake.
 
 ## Development and verification
 

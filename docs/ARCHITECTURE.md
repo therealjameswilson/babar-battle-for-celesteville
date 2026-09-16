@@ -219,3 +219,28 @@ It aims for two sappers per scouted gun, at most six, subject to cost, tech,
 producer availability and population. It does not read hidden live unit counts.
 Composition study uses normal player orders and earned resources; checks assert
 scenario resolution and actual sapper fielding, not that each opening must win.
+
+
+## Attack reports — 0.13.4
+
+alerts.js loads after game.js. damageUnit records only hostile hits on team zero;
+it stores the victim position and a base/army label, never hidden attacker data.
+Reports merge within 200m, live 15 seconds, and are capped at five. Nearby building
+hits take label/position priority over mobile units. Audio is throttled to eight
+seconds per front and three seconds globally, honors mute and suspended audio,
+and never creates an AudioContext. Two original triangle-wave notes are synthesized
+by audio.js. Alert text updates only when changed to avoid repeated live-region
+announcements. Minimap rings remain static under reduced motion.
+
+F3/touch cycles report coordinates. Selection, existing orders, camera zoom and
+pause are retained. Council, group and help modals block the shortcut. Restart
+clears all reports; the actionable banner is hidden on defeat/victory.
+
+The defensive Commander policy exists only in tests/defense-strategy.js. It
+uses public player actions and earned resources, with no difficulty/stat changes.
+test:commander requires actual fortification, artillery deployment and victory.
+
+Restart also resets the unit ID allocator: formation and repath tie-breaks no
+longer depend on how many previous games ran. Accelerated browser fixtures now
+own simulation time; RAF renders but does not add a second physics step while an
+automated interval is active. Ending/resetting a fixture restores the normal loop.

@@ -1,6 +1,6 @@
 {
   "name": "babar-battle-for-celesteville",
-  "version": "0.12.2",
+  "version": "0.13.4",
   "private": true,
   "description": "A Babar-themed single-player real-time strategy fan game with a 33-character family and council roster.",
   "scripts": {
@@ -8,7 +8,8 @@
     "check": "node tests/check.cjs",
     "start": "python3 -m http.server 8000 --directory dist",
     "test:balance": "node tests/balance.cjs",
-    "test:compositions": "node tests/compositions.cjs"
+    "test:compositions": "node tests/compositions.cjs",
+    "test:commander": "node tests/commander.cjs"
   },
   "engines": {
     "node": ">=20"

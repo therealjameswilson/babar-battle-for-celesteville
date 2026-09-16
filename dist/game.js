@@ -241,6 +241,7 @@ function controlGroup(number, save = false, append = false) {
 }
 function reset() {
   technologies = new Set(); enemyTechnologies = new Set();
+  attackReports=[];attackCursor=0;attackToneAt=-100;
   controlGroups = {};
   queueOrders = false;
   $('queue-orders').setAttribute('aria-pressed', 'false');
@@ -257,6 +258,7 @@ function reset() {
   supplyClock = 0;
   logbook = [];
   navStats = { searches: 0, expanded: 0 };
+  uid = 0;
   units = [];
   nodes = [];
   fx = [];
@@ -317,6 +319,7 @@ function reset() {
   selected = [units[0]];
   $('pan').setAttribute('aria-pressed', 'false');
   $('pause').textContent = 'Pause';
+  updateAttackAlert();
   updateUI(true);
 }
 function screen(p) {
@@ -350,6 +353,7 @@ function damageUnit(u, v, baseDamage, scale = 1) {
     ((v.disciplineUntil || 0) > t ? 0.75 : 1) *
     (u.type === 'walker' && !defs[v.type].speed ? 1.8 : 1);
   v.hp -= damage;
+  if(damage>0)recordAttack(u,v);
   v.morale = Math.max(0, v.morale - ((u.type === 'walker' ? 26 : 12) + ((u.advanceUntil || 0) > t ? 6 : 0)) * scale);
   v.hitAt = t;
   if (v.hp <= 0) {
@@ -384,6 +388,7 @@ function shoot(u, v) {
 function update(dt) {
   t += dt;
   updateTactics(dt);
+  updateAttackAlert();
   selected = selected.filter((u) => u.hp > 0);
   if (t > toastUntil) $('toast').textContent = '';
   for (const u of [...units]) {
@@ -836,6 +841,7 @@ function time(v) {
 function finish(win) {
   ended = true;
   running = false;
+  updateAttackAlert();
   const box = $('overlay');
   box.classList.remove('hidden');
   box.innerHTML =
@@ -970,7 +976,7 @@ mini.addEventListener('pointerdown', (e) => {
 });
 window.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'SELECT') return;
-  if ([' ', 'F2', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key))
+  if ([' ', 'F2', 'F3', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key))
     e.preventDefault();
   keys[e.key] = true;
   if (e.repeat) return;
@@ -982,6 +988,7 @@ window.addEventListener('keydown', (e) => {
   }
   if (e.key === ' ') togglePause();
   if (e.key === 'F2') selectArmy();
+  if (e.key === 'F3') jumpToAttack();
   if (e.key.toLowerCase() === 'h') goHome();
   if (e.key.toLowerCase() === 'i') selectIdleWorkers();
   if (e.key.toLowerCase() === 'd') toggleArtillery();

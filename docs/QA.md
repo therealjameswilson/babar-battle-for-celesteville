@@ -341,3 +341,32 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
   formation tie-breaks. The table above is the final isolated local comparison;
   runner/platform match timings may differ. Initial rendered mixed victory used
   the previous opening policy, while validating the same deployed game rules.
+
+## Defensive command and attack reports — 2026-09-16, version 0.13.4
+
+- Syntax and engine checks pass. Story balance still wins (182.20s after making
+  restart unit IDs reproducible). New `npm run test:commander` wins at 728s with
+  the palace intact, actual player-built fortification and deployed artillery.
+  It uses ordinary actions and income; no starting-resource/stat/difficulty bonus.
+- **238 real-browser checks pass**, including report grouping/expiry/bounds,
+  camera cycling, retained selection/orders/pause, modal guards, end-state/reset,
+  actual F3 and button input, two-note sound generation, mute and audio-start gates.
+  Enemy positions are never disclosed by notifications: they record friendly damage.
+- An initial rendered Commander run lost at 04:21. Investigation found persistent
+  unit IDs affecting movement tie-breaks and accelerated fixtures adding both RAF
+  and interval physics steps. Restart now resets IDs; accelerated fixtures own
+  simulation time while RAF renders. The loss artifact is retained.
+- Corrected rendered Commander run won at **15:24**, 157 enemy casualties. This
+  is accelerated automated play, not a human balance guarantee. Node and browser
+  still differ in long-match outcomes/timing; cross-runtime bitwise determinism is
+  not claimed. The defensive opening is described in COMMANDER-OPENING.md.
+- Manually clicked the attack banner while Guard School remained selected, both
+  on desktop and 390×844 / 844×390 frames. Camera returns to the damaged palace;
+  pause and selection remain. Banner width/scrollWidth both 183px in portrait.
+  Landscape construction/production and order controls remain visible. No physical
+  iPhone claim. Reports use static minimap rings and no camera shake.
+- Artifacts: defense-browser-checks.txt, commander-defense-local.txt,
+  commander-browser-initial-loss.txt, commander-browser-victory.txt/.png,
+  attack-report-desktop.png, attack-report-portrait.png, attack-report-landscape.png.
+- Remaining goal work: mixed-army selection subgroups, adaptive expansion locations,
+  wider human opening/recovery balance and more directional artwork.

@@ -83,3 +83,15 @@ now research through paid producer queues. tests/counter-checks.js is shared wit
 the browser; test:compositions compares four earned-resource opening scenarios and
 runs in Actions. Both tested Commander openings lose: investigate defenses and
 longer-match behavior next, without weakening tests or calling this complete.
+
+
+## Defensive command, 0.13.4
+
+Attack banners, static minimap rings, muted/user-gesture-safe dispatch tones and
+F3/touch camera cycling improve response while managing production. alerts.js is
+shared by damage and UI; tests/alert-checks.js runs in VM and browser.
+A normal-resource defensive Commander policy now supplies a winning regression;
+see COMMANDER-OPENING.md. Earlier rush-opening defeats are retained as comparison
+evidence. This does not prove every human opening is balanced. Remaining gameplay
+work includes selection subgroups, adaptive expansion choices and broader human
+balance; do not mark the overall goal complete from this result alone.
