@@ -160,3 +160,7 @@ Return a scout to confirm whether the site still exists.
 `npm run test:raids` runs matched quarry-harassment comparisons. See
 [the raid findings](docs/RAID-COMPARISON.md) for measured economic disruption and
 the remaining gap between lost production and military capacity.
+
+`npm run test:earned-raids` adds paid full-match Commander comparisons with enemy
+assaults enabled. Early specialist investment and later commitments are measured
+separately; neither the tests nor the findings claim every strategy should win.

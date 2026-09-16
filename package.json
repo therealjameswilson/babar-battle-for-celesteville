@@ -10,7 +10,8 @@
     "test:balance": "node tests/balance.cjs",
     "test:compositions": "node tests/compositions.cjs",
     "test:commander": "node tests/commander.cjs",
-    "test:raids": "node tests/raids.cjs"
+    "test:raids": "node tests/raids.cjs",
+    "test:earned-raids": "node tests/earned-raids.cjs"
   },
   "engines": {
     "node": ">=20"

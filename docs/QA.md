@@ -547,3 +547,14 @@ raid-browser-finish.png. This fixture deploys a predetermined force and disables
 assault waves; it does not claim an earned-resource opening or whole-match balance.
 See RAID-COMPARISON.md for all four results and the absence of a demonstrated
 military-production advantage. test:raids now runs in the Pages check job.
+
+## Paid full-match raid comparisons (2026-09-16)
+
+Added test:earned-raids with four ordinary-resource Commander matches, early and
+established sapper commitments, active assault waves and shared 180/270/360-second
+snapshots where reached. See RAID-COMPARISON.md for all outcomes and limitations.
+The default defense policy is unchanged; optional excluded-unit and hold-advance
+arguments support the matched assembly/commitment experiment. The real browser
+established raid reached a rendered victory at 4:59 with the palace intact, all four
+sappers alive and the original quarry destroyed. Evidence is under artifacts/earned-raid-*.
+No new gameplay or visual change is claimed for this test increment.

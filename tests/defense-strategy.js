@@ -1,6 +1,6 @@
 // Earned-resource defensive opening. Uses only player orders and visible threats.
 let defenseCommitted=false;
-function defenseStep() {
+function defenseStep(excludedIds = [], allowAdvance = true) {
   if(t<1)defenseCommitted=false;
   if(ended)return;
   const base=alive(0).find(u=>u.type==='core');if(!base)return;
@@ -37,10 +37,10 @@ function defenseStep() {
   const hero=own.find(u=>u.type==='hero');
   const threats=alive(1).filter(u=>sees(0,u)&&defs[u.type].damage&&dist(u,base)<650);
   if(hero&&threats.length)commanderAbility(hero);
-  const army=own.filter(u=>defs[u.type].damage&&defs[u.type].speed&&u.order?.kind!=='retreat');
+  const army=own.filter(u=>!excludedIds.includes(u.id)&&defs[u.type].damage&&defs[u.type].speed&&u.order?.kind!=='retreat');
   if(army.length>=28&&guns.length>=5)defenseCommitted=true;
   if(army.length<12||guns.length<2)defenseCommitted=false;
-  const advance=defenseCommitted;
+  const advance=allowAdvance&&defenseCommitted;
   if(Math.floor(t)%5===0){
     if(advance){selected=army;mode='attack';command(depot.team===0?{x:1400,y:360}:{x:950,y:830});}
     else {

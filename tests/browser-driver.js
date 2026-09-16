@@ -619,3 +619,13 @@ function browserRaid(){
   if(t>=180||ended){clearInterval(qaInterval);qaInterval=null;paused=true;updateUI(true);draw();}
  },50);
 }
+
+function browserEarnedRaid(){
+ clearInterval(qaInterval);qaInterval=null;earnedRaidSetup();paused=false;$('overlay').classList.add('hidden');
+ cam.x=930;cam.y=780;cam.zoom=.7;
+ qaInterval=setInterval(()=>{
+  earnedRaidStep('raid');for(let k=0;k<20&&!ended;k++){update(.05);earnedRaidObserve();}
+  qaReport(JSON.stringify(earnedRaidResult(),null,2));
+  if(t>=900||ended){clearInterval(qaInterval);qaInterval=null;paused=true;updateUI(true);draw();}
+ },50);
+}
