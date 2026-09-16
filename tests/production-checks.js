@@ -1,0 +1,33 @@
+function productionChecks(check) {
+  easy=true;reset();running=true;nextWave=enemySpawn=9999;
+  const school=alive(0).find(b=>b.type==='forge');
+  check(productionSites().length===2,'Production overview includes own palace and school only');
+  check(productionReport(school).text==='Idle','Idle production is identified');
+  school.queue=['trooper','scout'];school.progress=2;
+  check(productionReport(school).text.includes('5s · 2/5 queued'),'Recruitment report gives remaining time and queue depth');
+  linked.delete(school.id);
+  check(productionReport(school).text.includes('20s')&&productionReport(school).text.includes('ISOLATED'),'Isolation quadruples reported recruitment time');
+  benefits.add('troubadour');
+  check(productionReport(school).text.includes('16s'),'Mobilization bonus applies to recruitment ETA');
+  school.research={id:'drill',progress:0};
+  check(productionReport(school).text.includes(Math.ceil(researchDefs.drill.time*4)+'s'),'Research ETA uses isolation but not recruitment mobilization');
+  check(productionReport(school).text.includes('2 recruits waiting'),'Research report explains queued recruits are waiting');
+  school.research=null;school.queue=[];school.construction=6;school.buildDuration=12;
+  check(productionReport(school).fraction===.5 && productionReport(school).text.includes('halted'),'Unstaffed construction reports a halted half-built site');
+  const worker=alive(0).find(u=>u.type==='worker');issueOrder(worker,{kind:'build',target:school});
+  check(productionReport(school).text.includes('on-site work'),'Assigned builder reports remaining construction labor');
+  school.construction=0;selected=[worker];const before=worker.order;
+  toggleProduction();
+  check(!$('production-panel').hidden&&!paused&&selected[0]===worker,'Opening production report neither pauses nor changes selection');
+  check(productionRows.size===2,'Live report creates one row per production site');
+  school.hp=0;renderProduction();check(productionRows.size===1,'Destroyed producers disappear from the report');
+  selectProduction([alive(0).find(b=>b.type==='core')]);
+  check($('production-panel').hidden&&selected[0].type==='core'&&worker.order===before,'Site selection closes report and preserves worker orders');
+  paused=true;toggleProduction();selectProduction(productionSites());
+  check(paused,'Production selection preserves an existing pause');
+  paused=false;toggleProduction();finish(false);
+  check($('production-panel').hidden,'Mission end closes the report immediately');
+  reset();running=true;toggleProduction();
+  check(productionRows.size===2,'Restart replaces stale report rows even when unit IDs are reused');
+  closeProduction();
+}

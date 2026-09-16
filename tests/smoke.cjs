@@ -34,6 +34,7 @@ function element() {
     insertBefore(child) {
       this.appendChild(child);
     },
+    remove() { if(this.parentElement)this.parentElement.children=this.parentElement.children.filter(c=>c!==this); },
     replaceChildren() {
       this.children = [];
     },
@@ -82,6 +83,7 @@ for (const file of [
   'selection.js',
   'combat-roles.js',
   'economy.js',
+  'production.js',
   'artillery.js',
   'navigation.js',
   'tactics.js',

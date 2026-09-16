@@ -266,6 +266,7 @@ function reset() {
   fx = [];
   selected = [];
   resetSubgroups();
+  closeProduction();
   ore = 300;
   materials = 0; enemyMaterials = 60;
   t = 0;
@@ -413,7 +414,7 @@ function update(dt) {
       continue;
     }
     if (u.research) {
-      u.research.progress += dt * (supplied(u) ? 1 : 0.25);
+      u.research.progress += dt * productionRate(u,true);
       if (u.research.progress >= researchDefs[u.research.id].time) {
         factionResearch(u.team).add(u.research.id);
         if (u.team===0) say(researchDefs[u.research.id].name + ' ready. Army weapons upgraded.');
@@ -424,7 +425,7 @@ function update(dt) {
     }
     if (u.queue.length && !u.research) {
       u.progress +=
-        dt * (supplied(u) ? 1 : 0.25) * (u.team === 0 && benefits.has('troubadour') || u.team === 1 && wave >= 2 ? 1.25 : 1);
+        dt * productionRate(u);
       const type = u.queue[0];
       if (u.progress >= defs[type].time) {
         let q = { x: u.x + u.r + 38, y: u.y + 45 };
@@ -700,6 +701,7 @@ function command(p, append = queueOrders) {
 let actionKey = '';
 function updateUI(force = false) {
   renderSubgroups();
+  renderProduction();
   $('ore').textContent = Math.floor(ore);
   $('materials').textContent = Math.floor(materials);
   $('idle-workers').textContent = 'Idle ' + idleWorkers().length;
@@ -839,6 +841,7 @@ function time(v) {
   );
 }
 function finish(win) {
+  closeProduction();
   ended = true;
   running = false;
   updateAttackAlert();
@@ -976,7 +979,7 @@ mini.addEventListener('pointerdown', (e) => {
 });
 window.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'SELECT') return;
-  if ([' ', 'F2', 'F3', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key))
+  if ([' ', 'F2', 'F3', 'F4', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key))
     e.preventDefault();
   keys[e.key] = true;
   if (e.repeat) return;
@@ -989,6 +992,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === ' ') togglePause();
   if (e.key === 'F2') selectArmy();
   if (e.key === 'F3') jumpToAttack();
+  if (e.key === 'F4') toggleProduction();
   if (e.key.toLowerCase() === 'h') goHome();
   if (e.key.toLowerCase() === 'i') selectIdleWorkers();
   if (e.key.toLowerCase() === 't') cycleSubgroup(e.shiftKey);
@@ -1001,6 +1005,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'r') tacticalOrders('retreat');
   if (e.key.toLowerCase() === 'e') setMode('repair');
   if (e.key === 'Escape') {
+    closeProduction();
     mode = null;
     placing = null;
     updateUI(true);

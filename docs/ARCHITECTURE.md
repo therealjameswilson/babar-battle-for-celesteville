@@ -274,3 +274,16 @@ The player must scout and issue a Gather order to restart work. Map labels use `
 unscouted and `~` for last-seen quantities. Depleted markers disappear only when their
 emptiness is known. Reset starts fresh memories from initial friendly vision.
 Broad long-match AI fairness still needs auditing beyond these covered economic paths.
+
+### Live production report (0.17.0)
+`production.js` presents completed and unfinished player production sites. F4 or the
+mission's Production button toggles a nonmodal live panel; it never changes pause state.
+Rows retain their DOM nodes while progress updates, avoiding focus loss. Selecting a
+row closes the report, selects that site and centers the camera; the all-producers
+button selects all completed sites, including those currently researching. Existing
+recruit/research/cancel/rally controls then apply. Destroyed sites are removed; object
+identity distinguishes reset sites that reuse IDs. Mission end and reset close the panel.
+
+`productionRate` in economy.js is shared by simulation and report estimates. Recruitment
+includes the mobilization bonus, research does not; isolation multiplies both by .25.
+Construction reports labor remaining rather than inventing a travel-time prediction.

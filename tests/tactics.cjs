@@ -276,3 +276,7 @@ console.log('PASS: selection subgroups, command isolation, cycling, casualty fal
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'resource-memory-checks.js'),'utf8'));
 run('resourceMemoryChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: both factions use scouted stock memory, revisit depleted caches, avoid unknown stocks and deliver final cargo.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'production-checks.js'),'utf8'));
+run('productionChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: production rates, queue reports, isolation, research, construction, site selection and report lifecycle.');

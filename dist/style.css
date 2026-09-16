@@ -1517,3 +1517,15 @@ dialog {
 #selection-groups button[aria-pressed="true"] { background: #c4ad70; color: #17231d; border-color: #e1cf9a; }
 /* Scroll the subgroup strip within its grid cell instead of squeezing abilities. */
 .selection { min-width: 0; }
+
+#production-open { pointer-events: auto; display: block; min-height: 30px; padding: 4px 8px; margin: 5px 0; font-size: 11px; }
+#production-panel { position: absolute; z-index: 12; top: 8px; right: 8px; width: min(360px,calc(100% - 16px)); max-height: calc(100% - 16px); overflow-y: auto; background: #1f3028; color: #f1e7ca; border: 1px solid #a39367; box-shadow: 0 8px 24px #0008; padding: 12px; box-sizing: border-box; }
+#production-panel[hidden] { display: none; }
+.production-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.production-heading h2 { font-size: 20px; margin: 0; }
+#production-close { min-width: 40px; min-height: 40px; }
+#production-panel p { font-size: 12px; line-height: 1.4; margin: 8px 0; }
+#production-all, #production-rows button { width: 100%; min-height: 40px; margin: 4px 0; text-align: left; }
+#production-rows strong, #production-rows span, #production-rows progress { display: block; width: 100%; }
+#production-rows span { font: 11px/1.5 monospace; margin: 4px 0; }
+#production-rows progress { height: 7px; accent-color: #c8b171; }

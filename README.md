@@ -128,3 +128,7 @@ after denying a road; the enemy still pays for buildings and sends workers to co
 Resource gathering respects scouting for both sides. **?** means unscouted; **~** marks
 last-seen stock. When known supplies run out, use **Idle (I)**, scout another cache,
 and give a Gather order. Workers deliver their final load before seeking another stock.
+
+**Production (F4)** opens a live report of idle buildings, recruiting queues, research,
+and interrupted supply. Select a site to manage it, or select all completed producers.
+The report leaves the battle running and preserves an existing pause.

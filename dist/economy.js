@@ -67,3 +67,7 @@ function readyProducers(type) {
     .sort((a,b) => a.queue.reduce((sum, item) => sum + defs[item].time, defs[type].time-a.progress) / (supplied(a) ? 1 : .25) -
       b.queue.reduce((sum, item) => sum + defs[item].time, defs[type].time-b.progress) / (supplied(b) ? 1 : .25) || a.id - b.id);
 }
+
+function productionRate(b, research=false) {
+  return (supplied(b)?1:.25) * (!research && (b.team===0?benefits.has('troubadour'):wave>=2)?1.25:1);
+}

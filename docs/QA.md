@@ -423,3 +423,15 @@ resource-memory-desktop.png and resource-memory-performance.json.
 Representative rendered battle: 120 frames in 1997ms, 66 entities; draw mean .54ms/p95
 .80ms, simulation update mean 1.17ms/p95 1.70ms. No measured observation bottleneck in
 this scenario. No new layout or combat-balance claim is inferred from these timings.
+
+## 0.17.0 production report (2026-09-16)
+
+308 browser checks pass, including actual report button, F4, all-producer selection and
+site-row selection. Shared rule checks cover current queue ETA, fourfold isolation
+delay, mobilization, research's separate rate, queued recruits waiting for research,
+missing construction labor, unchanged orders/pause, destruction, reset and mission end.
+Rendered 390×844 portrait and 844×390 landscape panels fit the battlefield with scroll
+access to lower sites. Selecting the remote school's row exposes its existing isolation
+explanation and recruitment controls. This remains browser viewport testing, not physical
+iPhone testing. Evidence is in artifacts/production-browser-checks.txt and production
+screenshots, separate from deployed files.

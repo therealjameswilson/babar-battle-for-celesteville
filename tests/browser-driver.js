@@ -29,6 +29,16 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    productionChecks(check);
+    qaReset();
+    $('production-open').click();
+    check(!$('production-panel').hidden&&!paused,'Actual Production button opens a live report');
+    $('production-all').click();
+    check(selected.length===2&&selected.every(b=>!defs[b.type].speed),'Actual all-producers button selects completed sites');
+    window.dispatchEvent(new KeyboardEvent('keydown',{key:'F4',code:'F4'}));
+    check(!$('production-panel').hidden,'F4 opens production report');
+    $('production-rows').lastElementChild.click();
+    check(selected.length===1&&selected[0].type==='forge','Actual production row selects its school');
     resourceMemoryChecks(check);
     selectionChecks(check);
     qaReset();
@@ -497,4 +507,13 @@ function browserResourceMemory() {
   qaTicks(.1);scout.x=300;scout.y=900;stock.amount=0;qaTicks(.05);
   cam={x:980,y:850,zoom:1};selected=[scout];updateUI(true);togglePause();draw();
   qaReport('Scouting fixture: central Supplies were observed at 1800, then depleted outside vision. The remembered label remains '+resourceLabel(stock)+'. Move the scout back to discover the empty cache; unknown deposits remain ?.');
+}
+
+function browserProduction() {
+  qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
+  const school=alive(0).find(b=>b.type==='forge');school.queue=['trooper','scout'];school.progress=2;
+  const remote=add('forge',0,675,900);remote.queue=['trooper'];remote.progress=2;
+  add('trooper',1,570,900);rebuildSupply();
+  updateUI(true);togglePause();toggleProduction();draw();
+  qaReport('Production fixture: local training, an isolated remote school and idle palace. Report preserves pause; resume to watch progress. Select a row to manage its queue.');
 }

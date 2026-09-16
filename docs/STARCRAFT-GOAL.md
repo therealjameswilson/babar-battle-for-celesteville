@@ -1,8 +1,6 @@
 # Active gameplay goal: as close as possible to StarCraft
 
-The goal remains active. The earlier public-visibility response only verified
-account state; it did not advance gameplay. The current turn re-inspected the
-worktree and implemented the first gap below. Passing a small skirmish's tests
+The goal remains active. The gameplay and evidence below are maintained against the current source. Passing a small skirmish's tests
 is not evidence of overall StarCraft-like fidelity.
 
 The original constraints still apply: one polished static single-player Babar
@@ -16,7 +14,7 @@ crossover, no accounts/backend/multiplayer requirement, and GitHub Pages deliver
 | Army composition | Guards, scouts, artillery, commanders; research and abilities | Sappers counter armored guns/structures and guards counter sappers; four composition scenarios recorded. Rush openings lose Commander; an earned-resource fortified opening wins. Broader opening and human balance comparisons remain |
 | Positional combat | artillery.js now implements timed siege deployment, spotting, friendly splash and blind spot | Siege-specific long-game and Commander strategy comparisons remain; broader tactical content remains open |
 | Enemy macro | enemy-economy.js runs physical Supplies/Materials gathering, paid queues, worker replacement, rebuilding and connected expansion | Paid enemy tech research and scouted counter recruitment implemented; adaptive scouted expansion choices implemented; sustained raiding/Commander balance remains |
-| Commands and readability | A*, formations, order queue, hold/retreat, group and rally UI; browser checks | Idle-worker shortcut and selected-production overview implemented; attack reports with F3/touch and minimap rings implemented; selection subgroups implemented with isolated orders and retained All selection |
+| Commands and readability | A*, formations, order queue, hold/retreat, group and rally UI; browser checks | Idle-worker shortcut and live global production report implemented; attack reports with F3/touch and minimap rings implemented; selection subgroups implemented with isolated orders and retained All selection |
 | Fair scouting | sees() gates targeting; siege checks require forward spotting | Long-match reconnaissance and AI economic decision fairness need scenario-level verification |
 | Presentation and controls | Local Babar art, audio, command UI, desktop/mobile QA | Only two-way sprite facing; physical Safari/touch and extended human balance remain unverified |
 | Publication | Public GitHub and Pages; every release runs checks | Verify the current commit, terminal workflow result and public assets after each release |
@@ -26,8 +24,7 @@ Reference for this combat increment: Blizzard's
 describes screened, spaced artillery positions and friendly splash risk. The
 mechanical design here uses original Babar assets, names and balance values.
 
-Next substantive work: production/army feedback and long-match reconnaissance scenarios.
+Next substantive work: audit remaining combat, presentation and long-match reconnaissance gaps against the original scope.
 Fog-aware depleted-stock worker fallback, recruitment and resource rally handling are implemented.
-Selection subgroups now avoid reselecting a mixed army for specialist orders. Adaptive expansion
-locations and wider human balance remain open. Do not mark the broad goal complete
+Selection subgroups now avoid reselecting a mixed army for specialist orders. Adaptive expansion locations are implemented; wider human balance remains open. Do not mark the broad goal complete
 on the strength of the artillery release alone.
