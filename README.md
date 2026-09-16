@@ -139,3 +139,6 @@ home or free population to resume; research continues, and returning commanders 
 
 Queued movement now resolves clicks inside buildings or forest to nearby clear ground,
 then continues the route. New construction blocking a destination triggers re-resolution.
+
+Infantry, scouts and sappers now show front, back, left and right facing artwork for
+both factions, following their movement and firing bearing.

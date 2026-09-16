@@ -307,3 +307,10 @@ that free cell before arrival checks. The resolution is cached per order and nav
 version and invalidated when foundations change the grid. Replacing/completing orders
 clears it. This applies to move/attack-move/retreat coordinate destinations; combat,
 construction, gathering and repair target-distance checks keep their existing semantics.
+
+### Directional infantry rendering
+`infantryDirection` quantizes the movement/firing bearing to east, south, west or north.
+`drawDirectionalInfantry` uses per-frame crop rectangles with proportional scaling.
+It falls back to the existing atlas until the new sheet is loaded, and only affects
+infantry/scout/sapper rendering. No simulation state, firing arc, collision radius or
+movement rule changes. Reduced motion continues to suppress bobbing and dust.

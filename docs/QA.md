@@ -470,3 +470,21 @@ Updated local balance after movement correction: Story siege wins at 187s, Story
 at 375s; Commander siege loses at 199s, Commander mixed wins at 461s (palace 605 HP).
 The defensive Commander opening wins at 742s with the palace intact. These scripted
 outcomes changed through movement behavior, with no damage/cost/difficulty adjustment.
+
+## 0.20.0 directional infantry (2026-09-16)
+
+New generated atlas inspected for eight distinct faction/facing combinations and true
+alpha. 348 real-browser checks pass, including image loading, cardinal angle mapping,
+angle wraparound and pixel inspection of all eight crop margins. The rendered review
+shows elephant and rhino front/back/left/right views using the actual runtime draws.
+Original atlases remain intact; no equal-cell assumption or pixel editing was used.
+Evidence: artifacts/directional-browser-checks.txt and directional-infantry-desktop.png.
+Remaining art limits: static facing frames rather than walk cycles, and two-way artwork
+for commanders, workers and artillery officers. No broader animation claim is made.
+
+Reviewed the representative battle at 390×844 portrait and 844×390 landscape in the
+real browser; screenshots are directional-battle-portrait.png and
+directional-battle-landscape.png under artifacts/. This is responsive browser evidence,
+not physical iPhone/Safari testing. The 66-unit performance sample completed 120 frames
+in 1998ms: draw mean 0.57ms / p95 0.80ms; update mean 1.24ms / p95 1.60ms.
+Raw measurements: artifacts/directional-battle-performance.json.

@@ -41,3 +41,25 @@ created; this is a visible role variant rather than a unique full-body illustrat
 Static Canvas minimap rings and a CSS dispatch button use existing faction colors.
 The original two-note triangle-wave tone is synthesized in audio.js; no audio
 sample, external asset or generated artwork is added.
+
+### Directional infantry (0.20.0)
+`dist/assets/infantry-directions.png` is a new built-in image-generation output, copied
+without pixel edits. The existing military atlas served as a style/character reference.
+It contains elephant infantry in green and rhino infantry in burgundy, with east, south,
+west and north views. Generated dimensions are 1254×1254 RGBA (not the requested 1024);
+60.05% of pixels have zero alpha. The renderer uses eight individually inspected crop
+rectangles in `infantryFrames`; it does not assume equal cells. Browser pixel checks
+require transparent margins around every frame and substantial visible artwork.
+
+Prompt: “Create a production-ready directional infantry atlas for the Babar military-fable
+RTS, using the reference's elephant and rhino infantry. Four columns: east/right profile,
+south/front, west/left profile, north/back; elephant row above rhino row. Same uniforms,
+brass helmets and rifles, grounded neutral ready poses, full bodies, consistent scale,
+true transparent RGBA background and generous gutters. Muted ink/gouache silhouettes
+readable at 55px. No crowns, children, scene, text, grid, checkerboard or clipping.”
+
+Guards, scouts and sappers use these views; existing role overlays remain. Commanders,
+workers and artillery officers retain the previous mirrored artwork. Facing selects a
+static frame; this release does not introduce a four/eight-direction walk cycle. Existing
+reduced-motion behavior is retained. Original supplied and earlier generated atlases
+remain tracked and unchanged.

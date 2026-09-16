@@ -1,8 +1,22 @@
 'use strict';
 const spriteSheet = new Image(),
-  buildingSheet = new Image();
+  buildingSheet = new Image(), infantrySheet = new Image();
 spriteSheet.src = 'assets/characters-siege.png';
 buildingSheet.src = 'assets/buildings-siege.png';
+infantrySheet.src = 'assets/infantry-directions.png';
+// Hand-inspected alpha bounds plus transparent margins: generated columns are irregular.
+const infantryFrames = [
+  [[38,142,290,501],[339,142,302,498],[643,142,280,500],[935,138,293,503]],
+  [[23,702,309,461],[336,701,298,461],[636,705,291,457],[938,701,299,461]]
+];
+function infantryDirection(angle) {return ((Math.floor((angle+Math.PI/4)/(Math.PI/2))%4)+4)%4;}
+function drawDirectionalInfantry(u,bob) {
+  if(!['trooper','scout','sapper'].includes(u.type)||!infantrySheet.complete||!infantrySheet.naturalWidth)return false;
+  const [x,y,w,h]=infantryFrames[u.team][infantryDirection(u.angle)];
+  const height=52,width=height*w/h;
+  ctx.drawImage(infantrySheet,x,y,w,h,-width/2,15-height+bob,width,height);
+  return true;
+}
 const fog = document.createElement('canvas'),
   fc = fog.getContext('2d');
 const terrain = [];
@@ -78,11 +92,14 @@ function drawUnit(u) {
       width = height * 0.61;
     const bob = !reducedMotion && u.movingUntil > t ? Math.sin(t * 9 + u.id) * 1.1 : 0;
     ctx.save();
-    if (Math.cos(u.angle) < 0) ctx.scale(-1, 1);
-    const col = { hero: 0, worker: 1, trooper: 2, walker: 3, scout: 2, sapper: 2 }[u.type];
-    if (!atlas(spriteSheet, col, u.team, -width / 2, -height + 15 + bob, width, height)) {
-      ctx.fillStyle = color;
-      ctx.fillRect(-10, -30, 20, 32);
+    const directional=drawDirectionalInfantry(u,bob);
+    if (!directional) {
+      if (Math.cos(u.angle) < 0) ctx.scale(-1, 1);
+      const col = { hero: 0, worker: 1, trooper: 2, walker: 3, scout: 2, sapper: 2 }[u.type];
+      if (!atlas(spriteSheet, col, u.team, -width / 2, -height + 15 + bob, width, height)) {
+        ctx.fillStyle = color;
+        ctx.fillRect(-10, -30,20,32);
+      }
     }
     if (u.type === 'sapper') {
       // Reuse the faction infantry atlas, adding a distinct brass demolition pack.

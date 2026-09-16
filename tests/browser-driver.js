@@ -29,6 +29,17 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    check(infantrySheet.complete&&infantrySheet.naturalWidth===1254,'Directional infantry asset loads at its verified dimensions');
+    check([0,Math.PI/2,Math.PI,-Math.PI/2].map(infantryDirection).join(',')==='0,1,2,3','Facing bearings select east, south, west and north frames');
+    check(infantryDirection(-2*Math.PI)===0&&infantryDirection(2*Math.PI)===0,'Direction mapping wraps negative and full-circle angles');
+    const alphaCanvas=document.createElement('canvas');alphaCanvas.width=1254;alphaCanvas.height=1254;
+    const alphaContext=alphaCanvas.getContext('2d');alphaContext.drawImage(infantrySheet,0,0);
+    for(const [team,frames] of infantryFrames.entries())for(const [direction,[x,y,w,h]] of frames.entries()) {
+      const pixels=alphaContext.getImageData(x,y,w,h).data;
+      let clipped=false,occupied=0;
+      for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
+      check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
+    }
     waypointChecks(check);
     populationChecks(check);
     qaReset();
@@ -552,4 +563,13 @@ function browserWaypoints() {
     update(.05);
     if(!scout.order){clearInterval(qaInterval);qaInterval=null;togglePause();updateUI(true);draw();qaReport('Waypoint route completed at '+Math.round(scout.x)+','+Math.round(scout.y)+' with '+scout.orders.length+' queued orders remaining.');}
   },50);
+}
+
+function browserDirections() {
+  qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;units=units.filter(u=>u.type==='core');rebuildNav();
+  const figures=[];
+  for(let team=0;team<2;team++)for(let i=0;i<4;i++)figures.push(add('trooper',team,400+i*110,760+team*150,{angle:i*Math.PI/2,order:{kind:'hold'}}));
+  revealUntil=100;cam={x:565,y:805,zoom:1.6};selected=figures.filter(u=>u.team===0);
+  updateUI(true);togglePause();draw();
+  qaReport('Four-direction infantry review: elephant row above, rhino row below. Left to right: east, south, west, north. Actual loaded atlas, paused at 1.6× zoom. No walk-cycle animation is claimed.');
 }

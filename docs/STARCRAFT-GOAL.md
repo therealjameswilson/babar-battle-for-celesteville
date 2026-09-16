@@ -16,7 +16,7 @@ crossover, no accounts/backend/multiplayer requirement, and GitHub Pages deliver
 | Enemy macro | enemy-economy.js runs physical Supplies/Materials gathering, paid queues, worker replacement, rebuilding and connected expansion | Paid enemy tech research and scouted counter recruitment implemented; adaptive scouted expansion choices implemented; sustained raiding/Commander balance remains |
 | Commands and readability | A*, formations, blocked-waypoint completion, 24-unit queued route, hold/retreat, group and rally UI; browser checks | Idle-worker shortcut and live global production report implemented; attack reports with F3/touch and minimap rings implemented; selection subgroups implemented with isolated orders and retained All selection |
 | Fair scouting | sees() gates targeting; siege checks require forward spotting | Long-match reconnaissance and AI economic decision fairness need scenario-level verification |
-| Presentation and controls | Local Babar art, audio, command UI, desktop/mobile QA | Only two-way sprite facing; physical Safari/touch and extended human balance remain unverified |
+| Presentation and controls | Local Babar art, audio, command UI, desktop/mobile QA | Four-way infantry facing implemented; commanders/workers/artillery officers retain two-way art. Walk cycles, physical Safari/touch and extended human balance remain unverified |
 | Publication | Public GitHub and Pages; every release runs checks | Verify the current commit, terminal workflow result and public assets after each release |
 
 Reference for this combat increment: Blizzard's
