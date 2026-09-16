@@ -50,3 +50,14 @@ an evidence-based gap audit. This increment adds deployable field artillery and
 same-rule rhino behavior, described in ARCHITECTURE.md. The next major gap is
 macro economy/tech progression and a genuinely economic enemy base. All 33 roster
 entries remain intact. `artillery.js` must load after game.js and before navigation.
+
+
+## Materials economy, 0.10.1
+
+Finite Materials deposits, supplied worker-operated quarries, extraction slots,
+advanced production costs/prerequisites, idle-worker controls and multi-producer
+recruitment are implemented. See ARCHITECTURE.md for values and QA.md for evidence.
+Load economy.js after game.js. Both tests/tactics.cjs and the real browser suite
+load tests/economy-checks.js. Enemy Materials are physically gathered, but enemy
+Supplies remain scheduled. Next substantive work is enemy economic base behavior;
+the broad StarCraft-style goal remains active.

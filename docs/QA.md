@@ -239,3 +239,32 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
   MutationObserver messages occurred in iframe tooling; game assertions passed.
 - New visuals use Canvas geometry and existing local atlases, not generated art.
   StarCraft-style overall fidelity remains incomplete; see STARCRAFT-GOAL.md.
+
+
+## Materials economy — 2026-09-16, version 0.10.1
+
+- Final `npm run check`, `npm test`, `npm run test:balance` pass. The normal-order
+  Story bot builds/staffs a quarry with starting funds, recruits three guns from
+  earned Materials and wins at 161.20s. This is automated balance evidence.
+- Real browser suite: **164 checks passed**, including 30 shared Materials rules
+  and four actual UI tests for Idle/I, production groups and stock display. Ten
+  expansion checks also pass. Tests cover finite partial extraction, physical
+  delivery, saturation, raids/restoration, destruction, prerequisite enforcement,
+  both-resource costs/refunds, enemy Materials, fog inventory and reset.
+- Manually used construction and Gather controls to build/staff a quarry; observed
+  physical deliveries raise Materials to 120. Accelerated rendered normal-order
+  Story victory: 02:41, 19 casualties, 23 Supplies. Unattended loss: 03:11. Clicking
+  Deploy again returned to the start dialog with 300 Supplies, 0 Materials and
+  00:00 clock. These are not claims of a full manual human playthrough.
+- Inspected desktop and 390×844 portrait / 844×390 landscape layouts. Materials
+  and six quick commands fit; landscape building and order controls remain visible.
+  Portrait header scrollWidth equals clientWidth (390px). No physical iPhone test.
+- Representative battle: 120 frames in 1999ms; mean draw .517ms (p95 .7), mean
+  simulation .894ms (p95 1.1), 65 entities at sample end. No measured bottleneck
+  justified speculative optimization. Measurement steps simulation during sampling.
+- Evidence: artifacts/economy-browser-checks.txt, economy-story-result.txt,
+  materials-quarry-desktop.png and materials-landscape.png. Artifacts remain
+  ignored and excluded from deployment. Earlier fixture instrumentation produced
+  unlocated MutationObserver messages; game assertions passed.
+- Remaining scope: full enemy Supplies economy, expansion/rebuild behavior,
+  longer Commander balance/composition comparisons and physical touch-device QA.

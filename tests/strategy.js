@@ -4,8 +4,20 @@ function strategyStep() {
   if (ended) return;
   const base = alive(0).find((u) => u.type === 'core');
   if (!base) return;
+  let quarry = alive(0).find(u=>u.type==='quarry');
+  const metal = nodes.find(n=>n.kind==='materials'&&n.x===275);
+  if (!quarry && ore >= 100) { selected=[base]; build('quarry'); command(metal); quarry=alive(0).find(u=>u.type==='quarry'); }
+  const workers = alive(0).filter(u=>u.type==='worker');
+  if (workers.length + base.queue.length < 7 && ore >= 50) { selected=[base]; train('worker'); }
+  if (quarry && !quarry.construction) {
+    let assigned = workers.filter(w=>w.order?.node===metal).length;
+    for (const worker of workers.filter(w=>w.order?.kind!=='build'&&w.order?.node!==metal)) {
+      if (assigned >= 2) break;
+      issueOrder(worker,{kind:'gather',node:metal}); assigned++;
+    }
+  }
   const factory = alive(0).find((u) => u.type === 'factory');
-  if (!factory && ore >= buildingCost('factory')) {
+  if (!factory && materials >= materialCost('factory') && ore >= buildingCost('factory')) {
     selected = [base];
     build('factory');
     command({ x: 480, y: 1080 });
@@ -42,7 +54,8 @@ function strategyStep() {
     !school.construction &&
     school.queue.length < 2 &&
     alive(0).filter((u) => u.type === 'trooper').length < 28 &&
-    ore > 60
+    (guns >= 3 || !factory || factory.construction || materials < 25) &&
+    ore > (!factory && materials >= 50 ? 300 : 60)
   ) {
     selected = [school];
     train('trooper');

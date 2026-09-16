@@ -198,7 +198,7 @@ run("const researchGuard=add('trooper',0,600,1050),researchRhino=add('trooper',1
 assert(Math.abs(run('rhinoBefore-researchRhino.hp')-14.4)<.001, 'Upgraded guard damage is 20% greater.');
 assert.equal(run('weaponMultiplier(researchRhino)'),1,'Enemy does not inherit player upgrade.');
 fresh();
-run("const isolatedLab=add('factory',0,1000,1100);selected=[isolatedLab];ore=500;startResearch('shells');update(1)");
+run("const isolatedLab=add('factory',0,1000,1100);selected=[isolatedLab];ore=500;materials=60;startResearch('shells');update(1)");
 assert.equal(run('isolatedLab.research.progress'),.25,'Isolated research progresses at 25%.');
 run('cancelResearch(isolatedLab)');
 assert.equal(run('ore'),455,'Cancellation refunds 75% of 180 supplies.');
@@ -252,3 +252,6 @@ console.log('PASS: book roster preservation, eight numerical support effects, co
 run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'siege-checks.js'), 'utf8'));
 run('siegeChecks((ok, label) => { if (!ok) throw new Error(label); })');
 console.log('PASS: siege transitions, spotting, splash, friendly fire, range, movement, retreat, research, AI and casualties.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'economy-checks.js'), 'utf8'));
+run('economyChecks((ok, label) => { if (!ok) throw new Error(label); })');
+console.log('PASS: material extraction, delivery, saturation, raids, prerequisites, dual-resource costs/refunds, multi-production, idle workers and enemy material limits.');

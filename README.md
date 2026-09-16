@@ -7,7 +7,7 @@ A static, single-player Canvas RTS: a storybook kingdom caught in a border war. 
 Run `npm start`, then open http://localhost:8000. Or open `dist/index.html` directly. No install, build, backend, API key, or sign-in is needed to play. Requires Node 20+ for checks and Python 3 for the optional local server.
 
 - Click or drag to select; Shift adds units. Right-click a location to move or a visible enemy to focus fire.
-- **A** attack-move, **M** move, **G** gather, **E** repair, **S** hold, **R** retreat. **F2** selects the army, **H** returns to the palace, **Space** pauses. Arrow keys/minimap pan; wheel or +/− zoom.
+- **A** attack-move, **M** move, **G** gather, **E** repair, **S** hold, **R** retreat. **F2** selects the army, **H** returns to the palace, **I** selects idle provisioners, **Space** pauses. Arrow keys/minimap pan; wheel or +/− zoom.
 - Ctrl/Command + 0–9 saves a control group; the digit recalls it. Groups offers four touch slots. Shift-command or Queue appends waypoints. Production buildings accept rally points, including supply caches for provisioners. Recruitment can be cancelled with a full refund.
 - **Q** activates Babar’s Stand together: 50 energy, 35s cooldown, +20 morale and 25% damage reduction for nearby troops for 8s.
 - Touch uses explicit orders, then a map target. Toggle **Pan map** to drag the camera. No gesture on the battlefield scrolls the page.
@@ -21,7 +21,25 @@ Buildings link within 360m; hostile soldiers within 85m of a link interrupt it. 
 
 Guards screen long-range guns; scouts are fast and see farther. Sandbags reduce incoming damage by 35% for both sides. Fire suppresses units; low morale causes withdrawal. Commanders and supplied aid stations recover morale, and aid stations heal wounds after five seconds without fire. Commander returns require time and 100 supplies. Losses therefore consume both time and logistics.
 
-Idle Guard Schools can research Cornelius’s coordinated volleys (+20% infantry damage); Artillery Works can calibrate shells (+25% gun damage). Research costs supplies and occupies the producer. Isolation slows it to 25%; cancellation refunds 75%. These upgrades affect existing and future units.
+Idle Guard Schools can research Cornelius’s coordinated volleys (+20% infantry damage); Artillery Works can calibrate shells (+25% gun damage). Research costs supplies and occupies the producer; shell calibration also costs 60 Materials. Isolation slows it to 25%; cancellation refunds 75%. These upgrades affect existing and future units.
+
+## Materials and production (0.10.1)
+
+Build a **Materials Quarry (100 Supplies)** on a blue-gray deposit, keep its supply
+line connected, and assign provisioners with Gather. They carry Materials back to
+a connected palace or home. Each finite deposit starts with 1,600 Materials and
+has three extraction slots; supply caches have two. Additional workers help cover
+travel time, but cannot multiply extraction without limit. The Idle button or
+**I** finds unemployed provisioners, including those waiting at an interrupted quarry.
+
+Artillery Works requires a completed Guard School and **240 Supplies + 50
+Materials**. Each field gun costs **160 Supplies + 25 Materials**. Choosing when to
+redirect workers from Supplies to Materials now affects infantry strength and
+artillery timing. Building/research cancellation returns 75% of both paid resources;
+recruit cancellation returns all of both. Select multiple production buildings to
+distribute recruitment to the eligible site that can finish the next unit soonest.
+Enemy quarry workers use the same extraction/delivery rules and their guns consume
+Materials. Their Supplies still use the existing disruptible reserve schedule.
 
 ## Development and verification
 

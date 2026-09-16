@@ -191,12 +191,13 @@ function enemyThink() {
   }
   if (t >= enemySpawn && alive(1).some((b) => b.type === 'forge')) {
     enemySpawn = t + (easy ? 18 : 12) * (wave >= 2 ? 0.8 : 1);
-    let type = wave > 1 && wave % 2 === 0 ? 'walker' : 'trooper';
+    let type = wave > 1 && wave % 2 === 0 && enemyMaterials >= materialCost('walker') && alive(1).some(b => b.type === 'factory' && !b.construction) ? 'walker' : 'trooper';
     if (
       alive(1).filter((u) => defs[u.type].speed).length < (easy ? 20 : 28) &&
       enemyBudget >= defs[type].cost
     ) {
       enemyBudget -= defs[type].cost;
+      enemyMaterials -= materialCost(type);
       enemySpent += defs[type].cost;
       add(type, 1, 1380, 380);
     }

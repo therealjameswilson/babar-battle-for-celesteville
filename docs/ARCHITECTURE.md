@@ -132,3 +132,29 @@ setup countdowns and shell-impact circles are procedural Canvas additions.
 that previously fired across the entire map now put the attacker in range and
 explicitly verify commander death before recovery; cover tests verify the .65
 ratio with a spotter. `tests/siege-checks.js` runs in the VM and real browser.
+
+
+## Materials economy — 0.10.1
+
+`economy.js` loads after game.js and before artillery/navigation. It owns Materials
+stocks, quarry lookup and supply gating, per-tick extraction reservations,
+idle-worker selection and producer allocation. Rules stay independent of render.js.
+Three finite deposits at (275,650), (1070,770), (1260,610) each hold 1,600 Materials.
+Quarries cost 100 Supplies, take 12s of on-site construction, have 600 HP and snap
+to an unoccupied deposit. Extraction requires a completed, supplied quarry.
+Provisioners use the existing physical 10-unit cargo and delivery loop; cargo kind
+separates the two stockpiles. Three concurrent slots limit Materials extraction,
+two limit each Supplies cache. Partial final cargo is conserved. Resource inventory
+is shown only under current friendly vision/reveal, including enemy mining changes.
+
+Factory: completed Guard School prerequisite, 240 S / 50 M. Gun: 160 S / 25 M.
+Shell calibration: 180 S / 60 M. Cancel construction/research refunds 75% of both;
+recruitment cancellation refunds both in full. Ready producers exclude hostile,
+dead, unfinished, researching or full-queue buildings and rank expected next-unit
+completion time with remaining progress and isolation included.
+
+Rhinos start with 60 Materials and three quarry workers. Their physical deliveries
+fund artillery and depletion prevents new guns; existing Supplies budget income
+has not yet been replaced by a full enemy economy. The normal-order balance bot
+now builds/staffs a quarry using starting funds and must produce at least one gun
+from earned resources before its victory counts as passing balance evidence.

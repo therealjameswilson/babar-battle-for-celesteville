@@ -24,3 +24,9 @@ No API keys, external asset URLs, fonts, or runtime services. Unsuccessful check
 These images are original generated fan-game assets; the underlying character names and setting remain the property of their respective rights holders.
 
 **Final building alpha correction:** “Remove the background. Isolate these eight buildings on a transparent background. Keep the exact image dimensions, building positions and all empty padding. Deliver a PNG with transparency, with no backdrop of any color or pattern. Remove all gray and white checkerboard pixels outside the buildings. Preserve the buildings.”
+
+
+### Materials economy visuals (0.10.1)
+Quarry platform, braced derrick, bucket, faction stripe, mineral outcrops and cargo
+crates are original Canvas geometry in render.js. Existing damage overlays apply.
+No new external or generated raster asset was introduced in this increment.

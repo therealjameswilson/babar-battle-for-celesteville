@@ -11,12 +11,12 @@ crossover, no accounts/backend/multiplayer requirement, and GitHub Pages deliver
 
 | Dimension | Current authoritative evidence | Remaining work / proof needed |
 | --- | --- | --- |
-| Physical worker economy | game.js gather/deliver loop; regression checks | Worker saturation, idle-worker management, meaningful expansion pressure and advanced-resource specialization are absent |
-| Construction and production | Worker-built structures, paid queues, cancellation, rally, control groups | Production prerequisites and tech progression are shallow; multi-producer selection does not distribute recruitment |
+| Physical worker economy | game.js gather/deliver loop; regression checks | Extraction slots, idle-worker selection and finite Materials quarries now implemented/tested; meaningful expansion pressure and long-game opening comparisons still need work |
+| Construction and production | Worker-built structures, paid queues, cancellation, rally, control groups | Guard School gates Artillery Works; dual-resource costs and multi-producer allocation implemented; deeper tech progression remains |
 | Army composition | Guards, scouts, artillery, commanders; research and abilities | More explicit unit counters, armor roles, and viable composition comparisons need implementation and balance evidence |
 | Positional combat | artillery.js now implements timed siege deployment, spotting, friendly splash and blind spot | Siege-specific long-game and Commander strategy comparisons remain; broader tactical content remains open |
-| Enemy macro | tactics.js spends a finite budget and follows scouting/assault/flank/retreat phases | Enemy reserves are scheduled income; the AI does not run a comparable worker economy, build expansions or rebuild production |
-| Commands and readability | A*, formations, order queue, hold/retreat, group and rally UI; browser checks | Idle-worker shortcut, production overview, selection subgroups and stronger attack alerts remain candidates for macro parity |
+| Enemy macro | tactics.js spends a finite budget and follows scouting/assault/flank/retreat phases | Enemy Materials come from quarry workers; Supplies remain scheduled income. AI still needs a comparable Supplies economy, expansions and rebuilding |
+| Commands and readability | A*, formations, order queue, hold/retreat, group and rally UI; browser checks | Idle-worker shortcut and selected-production overview implemented; selection subgroups and stronger attack alerts remain |
 | Fair scouting | sees() gates targeting; siege checks require forward spotting | Long-match reconnaissance and AI economic decision fairness need scenario-level verification |
 | Presentation and controls | Local Babar art, audio, command UI, desktop/mobile QA | Only two-way sprite facing; physical Safari/touch and extended human balance remain unverified |
 | Publication | Public GitHub and Pages; every release runs checks | Verify the current commit, terminal workflow result and public assets after each release |
@@ -26,7 +26,7 @@ Reference for this combat increment: Blizzard's
 describes screened, spaced artillery positions and friendly splash risk. The
 mechanical design here uses original Babar assets, names and balance values.
 
-Next substantive work: make the economy support different opening choices,
-advanced production and expansion decisions; then replace scheduled enemy income
-with a visible, disruptible economic base. Do not mark the broad goal complete
+Next substantive work: replace scheduled enemy Supplies income with a visible,
+disruptible economic base, including worker replacement, construction and expansion.
+Then compare opening/composition choices in longer Story and Commander matches. Do not mark the broad goal complete
 on the strength of the artillery release alone.

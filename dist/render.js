@@ -136,7 +136,7 @@ function drawUnit(u) {
       ctx.stroke();
     }
     if (u.type === 'worker' && u.carrying) {
-      ctx.fillStyle = '#ac9062';
+      ctx.fillStyle = u.cargoKind === 'materials' ? '#97b4bb' : '#ac9062';
       ctx.fillRect(12, -27, 10, 8);
       ctx.strokeStyle = '#332f25';
       ctx.strokeRect(12, -27, 10, 8);
@@ -165,7 +165,15 @@ function drawUnit(u) {
     const row = u.type === 'turret' ? 1 : u.team;
     const height =
       u.type === 'core' ? 150 : u.type === 'factory' ? 126 : u.type === 'forge' ? 113 : 94;
-    if (
+    if (u.type === 'quarry') {
+      // Local procedural extraction machinery, distinct from supply homes.
+      ctx.fillStyle = '#697b7d'; ctx.fillRect(-29, -9, 58, 25);
+      ctx.strokeStyle = '#c3b795'; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(-21, 8); ctx.lineTo(-5, -67); ctx.lineTo(21, 8); ctx.stroke();
+      ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-5,-67); ctx.lineTo(26,-52); ctx.lineTo(26,-18); ctx.stroke();
+      ctx.fillStyle = '#9caeb2'; ctx.fillRect(17,-18,18,15);
+      ctx.fillStyle = color; ctx.fillRect(-24, 11, 48, 4);
+    } else if (
       !atlas(buildingSheet, col, row, -height * 0.49, -height + 29, height * 0.98, height, true)
     ) {
       ctx.fillStyle = color;
@@ -326,7 +334,16 @@ function draw() {
   ctx.fillText('Southern road', 610, 1150);
   ctx.textAlign = 'left';
   for (const n of nodes) {
-    if (n.amount <= 0) continue;
+    const observed = resourceObserved(n);
+    if (n.amount <= 0 && observed) continue;
+    if (n.kind === 'materials') {
+      poly([[n.x-25,n.y+12],[n.x-20,n.y-12],[n.x,n.y-23],[n.x+25,n.y+4],[n.x+15,n.y+19]], '#789499', '#344c52');
+      ctx.fillStyle='#dae6db'; ctx.font='10px monospace';
+      ctx.fillText('MATERIALS' + (observed ? ' ' + Math.ceil(n.amount) : ''),n.x-44,n.y+34);
+      const assigned = alive(0).filter(w=>w.type==='worker'&&w.order?.node===n).length;
+      ctx.fillText(assigned + ' workers · 3 slots',n.x-32,n.y+47);
+      continue;
+    }
     ctx.fillStyle = '#333c2c';
     ctx.fillRect(n.x - 22, n.y - 14, 44, 30);
     for (let i = 0; i < 3; i++) {
@@ -337,7 +354,7 @@ function draw() {
     }
     ctx.fillStyle = '#e5d6a8';
     ctx.font = '9px monospace';
-    ctx.fillText(Math.ceil(n.amount), n.x - 12, n.y + 26);
+    ctx.fillText(observed ? Math.ceil(n.amount) : '?', n.x - 12, n.y + 26);
   }
   ctx.fillStyle = '#373e30';
   ctx.fillRect(depot.x - 43, depot.y - 32, 86, 64);

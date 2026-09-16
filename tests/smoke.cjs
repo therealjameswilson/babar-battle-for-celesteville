@@ -78,6 +78,7 @@ vm.createContext(sandbox);
 for (const file of [
   'cast.js',
   'game.js',
+  'economy.js',
   'artillery.js',
   'navigation.js',
   'tactics.js',
@@ -116,7 +117,7 @@ for (const id of run('COURT.filter(c=>c.team===0&&!c.cooldown&&!c.storyOnly).map
 }
 assert.equal(run('buildingCost("forge")'), 128);
 assert.equal(run('cap()'), 45);
-assert.equal(run('nodes.length'), 12);
+assert.equal(run("nodes.filter(n=>n.kind!=='materials').length"), 12);
 assert.equal(run('nextWave'), 110);
 assert(run('vision(alive(0)[0])') > 300);
 assert.equal(run("add('worker',0,250,750).max"), 135);

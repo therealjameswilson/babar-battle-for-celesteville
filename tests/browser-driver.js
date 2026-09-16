@@ -22,6 +22,20 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    economyChecks(check);
+    qaReset();
+    const uiWorker = alive(0).find(u=>u.type==='worker'); uiWorker.order={kind:'hold'};
+    $('idle-workers').click();
+    check(selected.length===1 && selected[0]===uiWorker, 'Idle button selects waiting provisioners');
+    selected=[]; window.dispatchEvent(new KeyboardEvent('keydown',{key:'i',code:'KeyI'}));
+    check(selected[0]===uiWorker, 'I shortcut selects idle provisioners');
+    const uiSchool=alive(0).find(u=>u.type==='forge'), secondSchool=add('forge',0,560,1020);
+    rebuildSupply(); selected=[uiSchool,secondSchool]; updateUI(true);
+    const recruitButton=[...document.querySelectorAll('#actions button')].find(b=>b.textContent.includes('Elephant Guard'));
+    recruitButton.click();
+    [...document.querySelectorAll('#actions button')].find(b=>b.textContent.includes('Elephant Guard')).click();
+    check(uiSchool.queue.length===1 && secondSchool.queue.length===1 && $('selected-name').textContent==='Production group', 'Multi-production UI distributes recruitment across both schools');
+    check($('materials').textContent==='0', 'Materials stockpile is visible in the command header');
     siegeChecks(check);
     qaReset(); nextWave = enemySpawn = 9999;
     const uiGun = add('walker', 0, 650, 755); selected = [uiGun]; updateUI(true);
@@ -70,7 +84,7 @@ async function browserSuite() {
     }
     check(cap() === 45, 'Madame and Celeste’s mother population');
     check(buildingCost('forge') === 128, 'Cornelius discount');
-    check(nodes.length === 12, 'Badou and Colin discover separate supplies');
+    check(nodes.filter(n=>n.kind!=='materials').length === 12, 'Badou and Colin discover separate supplies');
     check(vision(alive(0)[0]) === 375, 'Flora vision');
     const worker = add('worker', 0, 260, 720);
     check(worker.max === 135, 'Isabelle and Babar’s mother affect new recruits');
@@ -329,7 +343,7 @@ async function browserExpansion() {
     qaTicks(26);
     check(technologies.has('drill'), 'Infantry research completes in the browser');
     const gunLab = add('factory', 0, 500, 1080);
-    selected = [gunLab]; startResearch('shells'); qaTicks(36);
+    selected = [gunLab]; materials = 60; startResearch('shells'); qaTicks(36);
     check(technologies.has('shells'), 'Artillery research completes in the browser');
     const gun = add('walker', 0, 600, 1100), target = add('trooper', 1, 650, 1100);
     const oldHP = target.hp; shoot(gun, target);
@@ -370,4 +384,13 @@ function browserSiege() {
   selected = [gun]; cam = { x: 800, y: 760, zoom: .85 };
   updateUI(true); draw();
   qaReport('Siege fixture: select Deploy artillery (D). Scout spots the rhino formation. Use Move to pack.');
+}
+
+
+function browserEconomy() {
+  qaReset(); nextWave = enemySpawn = 9999; enemyScoutSent=true;
+  cam={x:350,y:760,zoom:.9};
+  selected=[alive(0).find(u=>u.type==='worker')];
+  updateUI(true); draw();
+  qaReport('Economy fixture uses starting resources. Build a Materials Quarry on the blue deposit northwest of the palace. Assign provisioners with Gather.');
 }
