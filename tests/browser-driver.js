@@ -685,12 +685,24 @@ function browserBurstComparisons(){
  }catch(error){paused=true;qaReport('FAIL '+error.message);throw error;}
 }
 
-function browserDoctrine(){
+function browserDoctrine(policy='rapid'){
  qaReset();doctrineSetup(false);$('overlay').classList.add('hidden');
  cam.x=850;cam.y=740;cam.zoom=.65;
  qaInterval=setInterval(()=>{
-  doctrineStep('rapid');for(let k=0;k<20&&!ended;k++)update(.05);
+  doctrineStep(policy);for(let k=0;k<20&&!ended;k++)update(.05);
   qaReport(JSON.stringify(doctrineResult(),null,2));
   if(t>=900||ended){clearInterval(qaInterval);qaInterval=null;paused=true;updateUI(true);draw();}
  },50);
+}
+
+function browserParallelDoctrine(){browserDoctrine('rapid-parallel');}
+
+function browserExactDoctrine(){
+ qaReset();doctrineSetup(false);$('overlay').classList.add('hidden');
+ const trace=[];
+ for(let n=0;n<900&&!ended;n++){
+  doctrineStep('rapid-parallel');for(let k=0;k<20&&!ended;k++)update(.05);
+  if([1,10,30,60,120,180,240].includes(n+1))trace.push(doctrineSnapshot());
+ }
+ paused=true;updateUI(true);draw();qaReport(JSON.stringify({result:doctrineResult(),trace},null,2));
 }

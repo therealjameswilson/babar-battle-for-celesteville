@@ -142,7 +142,7 @@ orders, mute and controls. Its coverage is defined in tests/browser-driver.js an
 must not be read as covering every newly added feature.
 The updated normal-order/earned-resource strategy reached rendered Story VICTORY at
 02:44 with 15 enemy casualties. Evidence: artifacts/story-victory-v07.png and .txt.
-Deterministic run reaches victory at 155.05s; differing frame/random timing means
+Deterministic run reaches victory at 155.05s; the different browser execution means
 these are separate results, not claims of identical runs. Real browser builder-loss
 and cancellation cases remain covered only by deterministic tests so far.
 
@@ -324,7 +324,7 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
   scenario resolution and actual composition, not a forced victory assertion.
   Commander defensive viability remains unproven and is the next balance task.
 - Rendered accelerated mixed-army Story victory: 03:32, 35 enemy casualties,
-  37 Supplies. Browser randomness differs from seeded Node evidence; this is
+  37 Supplies. Browser results differ from the Node harness; this is
   automated play, not an extended human playtest.
 - Reviewed new sapper pack and role panel in desktop, 390×844 portrait and
   844×390 landscape. Compact role text now fits landscape at 26px client/scroll
@@ -602,7 +602,7 @@ and OS preference switching remain outside this verification.
   draw mean/p95 0.534/0.700ms and simulation mean/p95 1.045/1.300ms.
   No new rendering bottleneck appeared in this bounded sample.
 - Rendered accelerated Story playthrough reached victory at 03:04 with 21
-  casualties; this browser run uses its own random sequence, not the seeded CLI
+  casualties; this is a separate browser run, not a numerical reproduction of the CLI
   comparison. Extended human matches and physical touch-device QA remain open.
 
 ## Infantry burst tactical comparisons — after 0.25.1
@@ -623,6 +623,23 @@ state, exact research debits, no duplicate purchases and actual doctrine activat
 All six reached victory; research delayed the rapid-policy attack by roughly
 50 seconds. See DOCTRINE-OPENINGS.md for full results and policy constraints.
 Real-browser Commander doctrine playthrough rendered a victory at 335s, with
-19 activations and undamaged palace; its random sequence differs from CLI seed 8.
+19 activations and undamaged palace; its result differs from the CLI harness. Later cross-runtime traces below identify numerical movement divergence.
 No client rules or balance changed. The shared defensive test policy only adds an
 optional school-reservation argument; its default behavior remains unchanged.
+
+
+## Concurrent production and doctrine — after 0.25.1
+
+`test:doctrine` now runs eight matches: the prior six plus paid second-school
+research on both difficulties. Gates verify the extra 150-Supplies debit, a real
+unfinished foundation, later completion and measurable simultaneous recruitment
+and research. All eight passed. Story two-school won at 260s; Commander at 569s;
+all prior six results remained unchanged. CLI seeds 9 and 10 repeated the two
+Commander results exactly and therefore add no independent balance samples.
+
+The real-browser two-school match and synchronous fixed-step diagnostic both won
+at 288s, with 24 activations and 47 measured overlap seconds. The synchronous
+trace found microscopic position differences from Node at t=1 that grew over the
+match. See DOCTRINE-OPENINGS.md; the earlier random-sequence explanation is withdrawn.
+No client rules or costs changed. Existing checks/tests pass. Evidence is stored
+under ignored `artifacts/parallel-doctrine-*` and `doctrine-*-trace.json`.
