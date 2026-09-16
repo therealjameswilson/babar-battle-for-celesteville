@@ -684,3 +684,13 @@ function browserBurstComparisons(){
   paused=true;updateUI(true);draw();qaReport(checks.join('\n')+'\n'+JSON.stringify(results,null,2));
  }catch(error){paused=true;qaReport('FAIL '+error.message);throw error;}
 }
+
+function browserDoctrine(){
+ qaReset();doctrineSetup(false);$('overlay').classList.add('hidden');
+ cam.x=850;cam.y=740;cam.zoom=.65;
+ qaInterval=setInterval(()=>{
+  doctrineStep('rapid');for(let k=0;k<20&&!ended;k++)update(.05);
+  qaReport(JSON.stringify(doctrineResult(),null,2));
+  if(t>=900||ended){clearInterval(qaInterval);qaInterval=null;paused=true;updateUI(true);draw();}
+ },50);
+}

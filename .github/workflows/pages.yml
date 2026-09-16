@@ -25,6 +25,7 @@ jobs:
       - run: npm run test:raids
       - run: npm run test:earned-raids
       - run: npm run test:burst
+      - run: npm run test:doctrine
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: check

@@ -614,3 +614,15 @@ BURST-COMPARISON.md for setup, results, discarded invalid placement and limits.
 The normal-speed browser battle used the actual activation button and rendered
 shots, health loss and the active ring. No game balance values changed in this
 increment. JavaScript checks and the existing deterministic suite also passed.
+
+## Paid doctrine opening comparison — after 0.25.1
+
+Six complete seed-8 matches now compare continued troops, paid coordinated volleys,
+and paid rapid doctrine on both difficulties. Tests verify identical pre-choice
+state, exact research debits, no duplicate purchases and actual doctrine activation.
+All six reached victory; research delayed the rapid-policy attack by roughly
+50 seconds. See DOCTRINE-OPENINGS.md for full results and policy constraints.
+Real-browser Commander doctrine playthrough rendered a victory at 335s, with
+19 activations and undamaged palace; its random sequence differs from CLI seed 8.
+No client rules or balance changed. The shared defensive test policy only adds an
+optional school-reservation argument; its default behavior remains unchanged.

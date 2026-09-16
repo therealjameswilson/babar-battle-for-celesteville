@@ -184,3 +184,7 @@ This is an invented wartime game mechanic, not a canonical character power.
 `npm run test:burst` compares activation versus normal orders in eight controlled
 infantry fights and withdrawals. See [the results](docs/BURST-COMPARISON.md) for
 health costs, damage gains and situations where the burst makes losses worse.
+
+`npm run test:doctrine` compares paid research against continued recruitment in
+six full matches. [Opening results](docs/DOCTRINE-OPENINGS.md) record the production
+delay and distinguish simulated comparisons from the rendered browser playthrough.

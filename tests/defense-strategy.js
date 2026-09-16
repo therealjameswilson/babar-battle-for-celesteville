@@ -1,6 +1,6 @@
 // Earned-resource defensive opening. Uses only player orders and visible threats.
 let defenseCommitted=false;
-function defenseStep(excludedIds = [], allowAdvance = true) {
+function defenseStep(excludedIds = [], allowAdvance = true, reserveSchool = false) {
   if(t<1)defenseCommitted=false;
   if(ended)return;
   const base=alive(0).find(u=>u.type==='core');if(!base)return;
@@ -27,11 +27,11 @@ function defenseStep(excludedIds = [], allowAdvance = true) {
   if(!factory)construct('factory',{x:480,y:1080});
   if(supply()>cap()-5 && cap()<70){for(const p of [{x:570,y:1070},{x:620,y:970},{x:625,y:1130},{x:675,y:1060},{x:680,y:920},{x:540,y:1170}])if(validBuild(p,'relay')){construct('relay',p);break;}}
   const school=own.find(u=>u.type==='forge');
-  if(school&&!school.construction&&!own.some(u=>u.type==='scout')&&!school.queue.includes('scout')&&ore>=55){selected=[school];train('scout');}
+  if(!reserveSchool&&school&&!school.construction&&!own.some(u=>u.type==='scout')&&!school.queue.includes('scout')&&ore>=55){selected=[school];train('scout');}
   const guns=own.filter(u=>u.type==='walker');
   const infantry=own.filter(u=>u.type==='trooper');
   if(factory&&!factory.construction&&factory.queue.length<2&&guns.length<10){selected=[factory];train('walker');}
-  if(school&&!school.construction&&school.queue.length<2&&infantry.length<24&&ore>(!factory&&materials>=50?300:factory&&!factory.construction&&guns.length<3?220:60)){selected=[school];train('trooper');}
+  if(!reserveSchool&&school&&!school.construction&&school.queue.length<2&&infantry.length<24&&ore>(!factory&&materials>=50?300:factory&&!factory.construction&&guns.length<3?220:60)){selected=[school];train('trooper');}
   if(!benefits.has('celeste')&&ore>200)usePower('celeste');
   if(!benefits.has('pompadour')&&ore>250)usePower('pompadour');
   const hero=own.find(u=>u.type==='hero');
