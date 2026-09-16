@@ -93,3 +93,14 @@ the same navigation rules as other units. Repair can assign a replacement builde
 The original gather order resumes after completion when no queued follow-up exists.
 Site cancellation refunds 75% once and releases builders. Destroyed sites refund
 nothing. Construction adds health progressively; completion does not erase damage.
+
+## Book roster (0.8)
+
+`cast.js` preserves all 23 crossover IDs and adds ten book entries. `book` is a
+representative title; `storyOnly` prevents charges, power use and battlefield
+spawns for historical/story cards. `court.js` filters by faction or book membership
+and searches names, relationships and book titles. Eight new civilian effects use
+the existing supply, health, morale, resource-node and reveal systems; numerical
+values are documented in CHARACTERS.md. `tests/book-checks.js` runs unchanged in
+the deterministic VM and the real-browser fixture, including effect exclusions,
+costs, cooldowns, restart and original-roster preservation.

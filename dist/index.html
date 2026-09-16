@@ -9,7 +9,7 @@
       content="Lead Babar, his elephant kingdom, family and royal council against Lord Rataxes in a storybook real-time strategy game."
     />
     <title>Babar — The Siege of Celesteville</title>
-    <link rel="stylesheet" href="style.css?v=0.7.3" />
+    <link rel="stylesheet" href="style.css?v=0.8.0" />
   </head>
   <body>
     <header>
@@ -134,13 +134,16 @@
       </p>
       <div class="court-tabs" role="group" aria-label="Choose a kingdom">
         <button id="tab-elephants" aria-pressed="true">Celesteville</button
-        ><button id="tab-rhinos" aria-pressed="false">Rhinoland</button>
+        ><button id="tab-rhinos" aria-pressed="false">Rhinoland</button><button id="tab-books" aria-pressed="false">Book characters</button>
       </div>
+      <label class="court-search-label" for="court-search">Find a character or book</label>
+      <input id="court-search" type="search" placeholder="Name, relationship or book title" />
       <p id="court-funds"></p>
       <div id="court-roster"></div>
       <p class="court-note">
-        This storybook crossover brings together the classic family, the Badou generation, and
-        family-history tributes. Powers are invented for this game.
+        33 characters: the central book family, friends and adventure guests, alongside the original television,
+        Badou and film roster. Book labels identify representative appearances. Powers and wartime roles
+        are invented. Children provide civilian support; archive characters do not enter combat.
       </p>
     </dialog>
     <dialog id="help-dialog" aria-labelledby="help-title">
@@ -198,12 +201,12 @@
       <div id="group-actions"></div>
       <button id="groups-close">Return to command</button>
     </dialog>
-    <script src="cast.js?v=0.7.2"></script>
-    <script src="game.js?v=0.7.2"></script>
-    <script src="navigation.js?v=0.7.2"></script>
-    <script src="tactics.js?v=0.7.2"></script>
-    <script src="audio.js?v=0.7.2"></script>
-    <script src="court.js?v=0.7.2"></script>
-    <script src="render.js?v=0.7.2"></script>
+    <script src="cast.js?v=0.8.0"></script>
+    <script src="game.js?v=0.8.0"></script>
+    <script src="navigation.js?v=0.8.0"></script>
+    <script src="tactics.js?v=0.8.0"></script>
+    <script src="audio.js?v=0.8.0"></script>
+    <script src="court.js?v=0.8.0"></script>
+    <script src="render.js?v=0.8.0"></script>
   </body>
 </html>

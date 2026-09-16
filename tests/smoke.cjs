@@ -89,8 +89,8 @@ for (const file of [
   });
 const run = (s) => vm.runInContext(s, sandbox);
 const tick = (n) => run(`for(let i=0;i<${n}&&!ended;i++)update(.05)`);
-assert.equal(run('COURT.length'), 23);
-assert.equal(run('new Set(COURT.map(c=>c.id)).size'), 23);
+assert.equal(run('COURT.length'), 33);
+assert.equal(run('new Set(COURT.map(c=>c.id)).size'), 33);
 assert.equal(run('supply()'), 10);
 assert.equal(run('cap()'), 30);
 run('running=true');
@@ -107,7 +107,7 @@ tick(500); // Worker travel to the site plus nine seconds of construction.
 assert.equal(run('cap()'), 40);
 // Every purchasable character power activates; one-time powers cannot charge twice.
 run('reset();running=true;ore=10000');
-for (const id of run('COURT.filter(c=>c.team===0&&!c.cooldown).map(c=>c.id)')) {
+for (const id of run('COURT.filter(c=>c.team===0&&!c.cooldown&&!c.storyOnly).map(c=>c.id)')) {
   assert(run(`usePower('${id}')`), `${id} activates.`);
   const funds = run('ore');
   assert.equal(run(`usePower('${id}')`), false);
@@ -115,7 +115,7 @@ for (const id of run('COURT.filter(c=>c.team===0&&!c.cooldown).map(c=>c.id)')) {
 }
 assert.equal(run('buildingCost("forge")'), 128);
 assert.equal(run('cap()'), 45);
-assert.equal(run('nodes.length'), 11);
+assert.equal(run('nodes.length'), 12);
 assert.equal(run('nextWave'), 110);
 assert(run('vision(alive(0)[0])') > 300);
 assert.equal(run("add('worker',0,250,750).max"), 135);
@@ -168,7 +168,7 @@ for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g))
 for (const file of ['characters.png', 'buildings.png'])
   assert(fs.statSync(path.join(root, 'dist/assets', file)).size > 1000);
 console.log(
-  'PASS: 23-character roster, fruit, production, supply, placement, every family power, cooldowns, commander recovery, enemy court, combat, dialog pause, victory/defeat, static assets.'
+  'PASS: 33-character roster, fruit, production, supply, placement, every family power, cooldowns, commander recovery, enemy court, combat, dialog pause, victory/defeat, static assets.'
 );
 
 module.exports = { run, tick };

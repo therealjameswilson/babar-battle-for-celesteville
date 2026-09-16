@@ -184,3 +184,28 @@ rendered artwork. Browser warning/error log was empty. All 13 public client file
 returned HTTP 200 and matched local bytes (four atlases, HTML, CSS and seven scripts).
 The .nojekyll configuration marker returns 404, is not referenced by the client and
 is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pages-live.png.
+
+## Book roster expansion — 2026-09-16, version 0.8
+
+- Baseline syntax and simulation checks passed before changes. Updated `npm run
+  check`, `npm test`, and `npm run test:balance` pass. The normal-order Story bot
+  wins at simulation time 155.05s; this is automated balance evidence.
+- Real in-app browser: **105 checks passed** in `tests/browser.html`, including
+  the shared book-effect checks, preservation of all original 23 entries, all
+  eight new powers, costs/cooldowns/reset, completed-building exclusions,
+  no archive spawning, and actual gathering/delivery from Colin’s cache.
+- Browser UI checks verify the 22-entry book filter, both Isabelles, book-title
+  and relationship search, no-results feedback, archive disabled controls,
+  faction tabs and pause/resume. Existing browser RTS checks also passed.
+- Visually reviewed the council at desktop 1280×720 and iframe viewport sizes
+  390×844 portrait / 844×390 landscape. Names and book titles wrap; tabs wrap;
+  search, scrolling and close work. Portrait dialog content width equals its
+  348px client width (no horizontal overflow). Activated the monkey princess:
+  supplies changed 300→235 and the button showed a 70s cooldown.
+- Screenshots: `artifacts/book-roster-desktop.png`,
+  `artifacts/book-roster-portrait.png`, `artifacts/book-roster-landscape.png`;
+  text evidence: `artifacts/book-browser-checks.txt`. Artifacts are ignored and
+  excluded from Pages. These phone-sized checks are not physical-iPhone tests.
+- The fixture tab again reported the pre-existing unlocated MutationObserver
+  instrumentation errors, without failing game checks. No new artwork or
+  animation was added in this roster update; cards retain monogram portraits.

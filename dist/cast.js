@@ -1,4 +1,4 @@
-/* Family relationships follow the animated series, with the later Badou generation.
+/* Book characters and the existing television crossover share this roster.
  * All gameplay roles, prices and powers below are original game design.
  * The storybook roster deliberately combines generations. See docs/CHARACTERS.md.
  */
@@ -73,7 +73,7 @@ const COURT = [
   {
     id: 'arthur',
     name: 'Arthur',
-    relation: 'Celeste’s brother; Babar’s brother-in-law',
+    relation: 'Babar’s cousin in the books; Celeste’s brother in television',
     group: 'Royal family',
     team: 0,
     initials: 'A',
@@ -128,7 +128,7 @@ const COURT = [
   },
   {
     id: 'madame',
-    name: 'Madame',
+    name: 'The Old Lady (Madame)',
     relation: 'The Old Lady who raised Babar',
     group: 'Royal council',
     team: 0,
@@ -260,3 +260,147 @@ const COURT = [
     cost: 0,
   },
 ];
+
+// Book-adventure support roles are invented for this skirmish; relationships are sourced.
+COURT.push(
+  {
+    "id": "grifaton",
+    "name": "Professor Grifaton",
+    "relation": "The Old Lady’s brother; Colin and Nadine’s father",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "G",
+    "title": "Civilian engineers",
+    "text": "Restore 120 health to every completed friendly building.",
+    "cost": 100,
+    "cooldown": 80,
+    "book": "Babar and the Professor"
+  },
+  {
+    "id": "colin",
+    "name": "Colin",
+    "relation": "Professor Grifaton’s son; Nadine’s brother",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "C",
+    "title": "Provision survey",
+    "text": "Mark an 800-supply cache near the palace. Provisioners must gather and deliver it.",
+    "cost": 60,
+    "book": "Babar and the Professor"
+  },
+  {
+    "id": "nadine",
+    "name": "Nadine",
+    "relation": "Professor Grifaton’s daughter; Colin’s sister",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "N",
+    "title": "Cave survey",
+    "text": "Reveal the map for 18 seconds. Civilian reconnaissance only.",
+    "cost": 45,
+    "cooldown": 60,
+    "book": "Babar and the Professor"
+  },
+  {
+    "id": "princess-isabelle",
+    "name": "Princess Isabelle (monkey)",
+    "relation": "The monkey princess rescued by Zephir; not Babar’s daughter",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "PI",
+    "title": "Letters of solidarity",
+    "text": "Restore 30 morale to every friendly mobile unit.",
+    "cost": 65,
+    "cooldown": 70,
+    "book": "Babar and Zephir"
+  },
+  {
+    "id": "eleonore",
+    "name": "Eleonore",
+    "relation": "The young mermaid who helps Zephir",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "E",
+    "title": "River rescue",
+    "text": "Restore 80 health to friendly provisioners.",
+    "cost": 55,
+    "cooldown": 65,
+    "book": "Babar and Zephir"
+  },
+  {
+    "id": "crustadele",
+    "name": "Crustadele",
+    "relation": "The elderly mermaid aunt in Zephir’s adventure",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "Cr",
+    "title": "Shelter relief",
+    "text": "Restore 200 health to completed friendly Village Homes.",
+    "cost": 70,
+    "cooldown": 80,
+    "book": "Babar and Zephir"
+  },
+  {
+    "id": "father-christmas",
+    "name": "Father Christmas",
+    "relation": "Babar’s guest from the world of people",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "FC",
+    "title": "Winter provisions",
+    "text": "Receive 200 supplies from civilian donations. Once per mission.",
+    "cost": 0,
+    "book": "Babar and Father Christmas"
+  },
+  {
+    "id": "duck",
+    "name": "Duck",
+    "relation": "The dog who helps Babar find Father Christmas",
+    "group": "Book adventures",
+    "team": 0,
+    "initials": "D",
+    "title": "Find the missing scouts",
+    "text": "Friendly scouts recover 60 health and 20 morale.",
+    "cost": 40,
+    "cooldown": 55,
+    "book": "Babar and Father Christmas"
+  },
+  {
+    "id": "old-king",
+    "name": "The Old Elephant King",
+    "relation": "Babar’s predecessor, remembered after his death",
+    "group": "Book archives",
+    "team": 0,
+    "initials": "OK",
+    "title": "A kingdom’s responsibility",
+    "text": "Historical recollection: the old king’s death precedes Babar’s election. Cornelius keeps this account in the council archive. No battlefield unit or purchasable effect.",
+    "cost": 0,
+    "book": "The Story of Babar",
+    "storyOnly": true
+  },
+  {
+    "id": "polomoche",
+    "name": "Polomoche",
+    "relation": "The monster opposing Zephir in the books",
+    "group": "Book archives",
+    "team": 0,
+    "initials": "P",
+    "title": "Zephir’s account",
+    "text": "Archive dispatch: Zephir recalls rescuing the monkey princess from Polomoche. This book antagonist is not part of Rataxes’s army and does not spawn on the skirmish map.",
+    "cost": 0,
+    "book": "Babar and Zephir",
+    "storyOnly": true
+  }
+);
+
+// Representative book appearances, not an exhaustive bibliography.
+const BOOK_APPEARANCES = {
+  babar: 'The Story of Babar', celeste: 'The Story of Babar',
+  arthur: 'The Story of Babar / Babar’s Cousin: That Rascal Arthur',
+  cornelius: 'The Story of Babar', madame: 'The Story of Babar',
+  'babar-mother': 'The Story of Babar',
+  pom: 'Babar and His Children', flora: 'Babar and His Children',
+  alexander: 'Babar and His Children', isabelle: 'Babar’s Little Girl',
+  zephir: 'Babar and Zephir', rataxes: 'The Travels of Babar',
+};
+for (const member of COURT) member.book ||= BOOK_APPEARANCES[member.id];

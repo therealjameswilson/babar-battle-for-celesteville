@@ -34,3 +34,11 @@ Run `npm run check`, `npm test`, `npm run test:balance`, `npm start`. No install
 ## Recommended next development work
 
 After publication, expand directional walk/fire animations and perform physical iPhone Safari and hands-on Commander balance testing. There is no campaign, multiplayer, save system, or eight-direction character animation.
+
+## Book expansion, 0.8
+
+The original 23 crossover characters are preserved within a 33-entry roster.
+Ten book-adventure/history entries add eight tested civilian powers and two
+non-purchasable story archives. Book characters can be filtered and searched;
+Arthur’s book/TV relationships and the two Isabelles are distinguished. Sources
+and exact values are in CHARACTERS.md; browser evidence is in QA.md.

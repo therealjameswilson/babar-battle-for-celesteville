@@ -1,6 +1,6 @@
 # Babar: The Siege of Celesteville
 
-A static, single-player Canvas RTS: a storybook kingdom caught in a border war. Protect the palace, keep supplies moving, capture the contested depot, and break Rataxes’s fortress. One skirmish map, two approaches, Story and Commander difficulties, and the original 23-character family/council crossover.
+A static, single-player Canvas RTS: a storybook kingdom caught in a border war. Protect the palace, keep supplies moving, capture the contested depot, and break Rataxes’s fortress. One skirmish map, two approaches, Story and Commander difficulties, and the original 33-character family/council crossover.
 
 ## Play locally
 
@@ -44,3 +44,10 @@ See [architecture and balance](docs/ARCHITECTURE.md), [character continuity](doc
 The workflow checks pull requests and publishes **only `dist/`** from `main`. Enable **Settings → Pages → GitHub Actions** after the repository exists. It preserves branch and environment protection rules. Current account/deployment status is recorded in the handoff; a workflow file by itself is not proof of a successful deployment.
 
 This is an unofficial fan game. Names and setting belong to their respective rights holders. The game’s wartime roles, powers, dialogue and numerical rules are original inventions, not franchise canon. The crossover is not an exhaustive family tree.
+
+### Book characters (0.8)
+
+The council now includes 33 characters, with a searchable **Book characters** view,
+representative book titles and explicit continuity notes. Ten book-adventure and
+history entries add eight civilian support powers and two story archives. See
+[the roster and sources](docs/CHARACTERS.md).

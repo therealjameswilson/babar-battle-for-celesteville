@@ -10,7 +10,7 @@ function powerReady(member) {
 }
 function usePower(id) {
   const member = COURT.find((c) => c.id === id);
-  if (!member || member.team !== 0 || !running || ended) return false;
+  if (!member || member.team !== 0 || member.storyOnly || !running || ended) return false;
   if (powerReady(member) > 0) return false;
   if (ore < member.cost) {
     say('You need more supplies for ' + member.name + '’s help.');
@@ -30,9 +30,24 @@ function usePower(id) {
       u.hp = Math.min(u.max, u.hp + 80);
       u.morale = Math.min(100, u.morale + 35);
     }
+  // Civilian book allies never create combat units or revive historical characters.
+  const restore = (filter, hp, morale = 0) => {
+    for (const u of alive(0).filter(filter)) {
+      u.hp = Math.min(u.max, u.hp + hp);
+      if (defs[u.type].speed) u.morale = Math.min(100, u.morale + morale);
+    }
+  };
+  if (id === 'grifaton') restore(u => !defs[u.type].speed && !u.construction, 120);
+  if (id === 'colin') nodes.push({ x: 470, y: 1080, r: 20, amount: 800 });
+  if (id === 'nadine') revealUntil = Math.max(revealUntil, t + 18);
+  if (id === 'princess-isabelle') restore(u => defs[u.type].speed, 0, 30);
+  if (id === 'eleonore') restore(u => u.type === 'worker', 80);
+  if (id === 'crustadele') restore(u => u.type === 'relay' && !u.construction, 200);
+  if (id === 'father-christmas') ore += 200;
+  if (id === 'duck') restore(u => u.type === 'scout', 60, 20);
   if (id === 'alexander') nextWave += 25;
   if (id === 'zephir') {
-    revealUntil = t + 25;
+    revealUntil = Math.max(revealUntil, t + 25);
     sightAt = -1;
   }
   if (id === 'truffles')
@@ -59,13 +74,18 @@ function usePower(id) {
 }
 function renderCourt() {
   $('court-funds').textContent =
-    'Supplies available: ' + Math.floor(ore) + (running ? '' : ' · Begin an mission to use powers');
+    'Supplies available: ' + Math.floor(ore) + (running ? '' : ' · Begin a mission to use powers');
   $('tab-elephants').setAttribute('aria-pressed', String(courtTeam === 0));
   $('tab-rhinos').setAttribute('aria-pressed', String(courtTeam === 1));
+  $('tab-books').setAttribute('aria-pressed', String(courtTeam === 'books'));
   const holder = $('court-roster');
   holder.replaceChildren();
+  const query = ($('court-search').value || '').trim().toLocaleLowerCase();
   let group = '';
-  for (const member of COURT.filter((c) => c.team === courtTeam)) {
+  let count = 0;
+  for (const member of COURT.filter((c) => courtTeam === 'books' ? c.book : c.team === courtTeam)) {
+    if (query && ![member.name, member.relation, member.book || ''].join(' ').toLocaleLowerCase().includes(query)) continue;
+    count++;
     if (member.group !== group) {
       group = member.group;
       const h = document.createElement('h3');
@@ -82,7 +102,7 @@ function renderCourt() {
         ? 'Ready in ' + Math.ceil(ready) + 's'
         : member.cost
           ? 'Invite · ' + member.cost + ' supplies'
-          : 'Use royal rally';
+          : 'Use · ' + member.title;
     if (member.id === 'babar' && !alive(0).some((u) => u.type === 'hero')) {
       const r = heroRecovery.find((r) => r.team === 0);
       label = r
@@ -105,25 +125,30 @@ function renderCourt() {
       member.name +
       '</h4><p>' +
       member.relation +
-      '</p></div></div><strong>' +
+      '</p></div></div><small class="book-origin">' +
+      (member.book ? 'Book: ' + member.book : 'Television / film crossover') +
+      '</small><strong>' +
       member.title +
       '</strong><p>' +
       member.text +
       '</p><small class="power-meta">' +
-      (member.team
+      (member.storyOnly
+        ? 'Story archive · No cost or combat effect'
+        : member.team
         ? 'Enemy doctrine'
         : member.cost +
           ' supplies · ' +
           (member.cooldown ? member.cooldown + 's cooldown' : 'Once per mission')) +
       '</small>';
     const button = document.createElement('button');
-    button.textContent = label;
+    button.textContent = member.storyOnly ? 'Archive · Read above' : label;
     button.disabled =
-      !!member.team || !running || ended || active || ready > 0 || ore < member.cost;
+      !!member.team || !!member.storyOnly || !running || ended || active || ready > 0 || ore < member.cost;
     button.onclick = () => usePower(member.id);
     card.appendChild(button);
     holder.appendChild(card);
   }
+  if (!count) { const empty = document.createElement('p'); empty.textContent = 'No matching characters in this section. Try another name or tab.'; holder.appendChild(empty); }
 }
 function openCourt() {
   courtWasPaused = paused;
@@ -147,3 +172,7 @@ $('tab-rhinos').onclick = () => {
   courtTeam = 1;
   renderCourt();
 };
+
+$('tab-books').onclick = () => { courtTeam = 'books'; renderCourt(); };
+
+$('court-search').oninput = renderCourt;

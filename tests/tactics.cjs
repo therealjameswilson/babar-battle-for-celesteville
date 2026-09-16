@@ -245,3 +245,7 @@ fresh();
 run("for(const w of alive(0).filter(w=>w.type==='worker'))w.hp=0;ore=1000;selected=[alive(0).find(u=>u.type==='core')];const beforeNoBuilder=units.length;build('relay');command({x:600,y:1030})");
 assert(run('ore===1000 && units.length===beforeNoBuilder'),'No worker means no charge and no unattended site.');
 console.log('PASS: worker construction, travel, builder loss, replacement, cancellation and no-worker validation.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'book-checks.js'), 'utf8'));
+run('bookChecks((ok, label) => { if (!ok) throw new Error(label); })');
+console.log('PASS: book roster preservation, eight numerical support effects, cooldowns, costs, archives and reset.');

@@ -22,6 +22,7 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    bookChecks(check);
     qaReset();
     check(
       spriteSheet.complete && spriteSheet.naturalWidth === 1254 && buildingSheet.complete,
@@ -36,17 +37,29 @@ async function browserSuite() {
     check(!paused, 'Resume button');
     $('court-open').click();
     check(paused && $('court-dialog').open, 'Council pauses and opens modal');
+    $('tab-books').click();
+    check(document.querySelectorAll('#court-roster .court-card').length === 22, 'Book filter contains 22 sourced book characters');
+    $('court-search').value = 'Isabelle'; $('court-search').dispatchEvent(new Event('input'));
+    check(document.querySelectorAll('#court-roster h4').length === 2, 'Search distinguishes both Isabelles');
+    $('court-search').value = 'Professor'; $('court-search').dispatchEvent(new Event('input'));
+    check(document.querySelectorAll('#court-roster h4').length === 3, 'Search finds book title and relatives');
+    $('court-search').value = 'unmatched-example'; $('court-search').dispatchEvent(new Event('input'));
+    check($('court-roster').textContent.includes('No matching characters'), 'Empty search gives useful feedback');
+    $('court-search').value = 'Polomoche'; $('court-search').dispatchEvent(new Event('input'));
+    check(document.querySelector('#court-roster button').disabled, 'Story archive has no purchasable power');
+    $('court-search').value = ''; $('tab-elephants').click();
+    check(document.querySelectorAll('#court-roster .court-card').length === 28, 'Faction tab retains original and new civilian characters');
     $('court-close').click();
     await new Promise(requestAnimationFrame);
     check(!paused && !$('court-dialog').open, 'Council closes and resumes');
     ore = 10000;
-    for (const c of COURT.filter((c) => c.team === 0)) {
+    for (const c of COURT.filter((c) => c.team === 0 && !c.storyOnly)) {
       check(usePower(c.id), c.name + ' power activates');
       if (!c.cooldown) check(!usePower(c.id), c.name + ' cannot charge twice');
     }
     check(cap() === 45, 'Madame and Celeste’s mother population');
     check(buildingCost('forge') === 128, 'Cornelius discount');
-    check(nodes.length === 11, 'Badou discovers supplies');
+    check(nodes.length === 12, 'Badou and Colin discover separate supplies');
     check(vision(alive(0)[0]) === 375, 'Flora vision');
     const worker = add('worker', 0, 260, 720);
     check(worker.max === 135, 'Isabelle and Babar’s mother affect new recruits');

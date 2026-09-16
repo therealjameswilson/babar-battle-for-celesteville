@@ -1490,3 +1490,10 @@ dialog {
 #groups-dialog button {color:#f4e9c9;background:#344237;border-color:#8f805b;}
 
 @media (max-width:580px), (max-height:500px) and (min-width:581px) {#selected-info {max-height:42px;overflow:hidden;}}
+
+/* Book provenance remains readable in the council at narrow phone widths. */
+.book-origin { display: block; color: #65522b; line-height: 1.45; margin: 8px 0; }
+.court-tabs { flex-wrap: wrap; }
+
+.court-search-label { display: block; font-size: 13px; margin-bottom: 5px; }
+#court-search { width: 100%; min-height: 42px; padding: 9px; font: inherit; color: #253c30; background: #f5efdb; border: 1px solid #978a67; }
