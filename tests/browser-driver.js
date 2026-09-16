@@ -40,6 +40,7 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    armorChecks(check);
     waypointChecks(check);
     populationChecks(check);
     qaReset();
@@ -572,4 +573,11 @@ function browserDirections() {
   revealUntil=100;cam={x:565,y:805,zoom:1.6};selected=figures.filter(u=>u.team===0);
   updateUI(true);togglePause();draw();
   qaReport('Four-direction infantry review: elephant row above, rhino row below. Left to right: east, south, west, north. Actual loaded atlas, paused at 1.6× zoom. No walk-cycle animation is claimed.');
+}
+
+function browserTechnology(){
+  qaReset();nextWave=enemySpawn=9999;ore=800;materials=200;
+  selected=[alive(0).find(b=>b.type==='forge')];cam.x=selected[0].x;cam.y=selected[0].y;
+  updateUI(true);draw();
+  qaReport('Research review: 800 Supplies / 200 Materials. Protection II locked behind tier I and Artillery Works. Use the real research buttons; research occupies recruitment and takes 30 seconds.');
 }

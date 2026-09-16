@@ -142,3 +142,8 @@ then continues the route. New construction blocking a destination triggers re-re
 
 Infantry, scouts and sappers now show front, back, left and right facing artwork for
 both factions, following their movement and firing bearing.
+
+Guard Schools now offer two tiers of **Field protection** alongside weapon research.
+Spend Materials and production time to protect infantry against repeated light fire;
+tier II also needs a completed Artillery Works. Artillery and suppression remain
+dangerous, and Basil pays for the same upgrades.

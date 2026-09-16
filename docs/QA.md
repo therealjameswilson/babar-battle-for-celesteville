@@ -488,3 +488,22 @@ directional-battle-landscape.png under artifacts/. This is responsive browser ev
 not physical iPhone/Safari testing. The 66-unit performance sample completed 120 frames
 in 1998ms: draw mean 0.57ms / p95 0.80ms; update mean 1.24ms / p95 1.60ms.
 Raw measurements: artifacts/directional-battle-performance.json.
+
+## 0.21.2 protection technology (2026-09-16)
+
+Shared VM/browser checks cover tier prerequisites, incomplete buildings, payments,
+cancellation, normal production completion, tier replacement, faction isolation,
+new recruits, suppression, fractional-hit floor, repeated-volley survival and paid
+enemy research. 366 real-browser checks pass. Real desktop and portrait research
+buttons start research and show progress; descriptions wrap rather than overflowing.
+Browser artifacts: technology-browser-checks.txt and technology-* screenshots.
+
+Local earned-resource scenarios: Story siege win 187s; Story mixed win 282s;
+Commander siege loss 199s; Commander mixed win 286s with palace 172.8 HP; defensive
+Commander win 275s with palace intact. Enemy armor research appears in longer mixed
+matches. These are scripted comparisons, not proof of general human balance.
+
+Normal-speed portrait research completed, changing the disabled tier II card from
+requiring tier I to requiring Artillery Works. Landscape review found overlapping
+long card text; explicit content-sized grid rows fixed it. Cards scroll within the
+command panel while retreat/hold remain accessible.

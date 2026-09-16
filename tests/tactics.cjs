@@ -288,3 +288,7 @@ console.log('PASS: housing raids block both armies, queues retain progress, rebu
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'waypoint-checks.js'),'utf8'));
 run('waypointChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: blocked forest/building waypoints, new foundations and a 24-unit queued round trip.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'armor-checks.js'),'utf8'));
+run('armorChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: infantry protection prerequisites, payments, cancellation, completion, damage outcomes and enemy research.');

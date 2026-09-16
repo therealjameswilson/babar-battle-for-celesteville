@@ -314,3 +314,23 @@ construction, gathering and repair target-distance checks keep their existing se
 It falls back to the existing atlas until the new sheet is loaded, and only affects
 infantry/scout/sapper rendering. No simulation state, firing arc, collision radius or
 movement rule changes. Reduced motion continues to suppress bobbing and dust.
+
+## Infantry protection progression (0.21.2)
+
+Guard Schools offer Field protection I (140 Supplies, 40 Materials, 30s) and II
+(220 Supplies, 80 Materials, 45s). Tier II requires completed tier I and a completed
+Artillery Works at purchase time. Both compete with recruitment and weapon research
+at that producer, follow supply slowdown, and refund 75% on cancellation. Completed
+research persists if its prerequisite building is later destroyed. Existing and future
+guards/scouts/sappers absorb 2 or 4 damage per incoming hit, after cover and command
+reductions. Tiers replace rather than stack. Hits retain at least 1 damage, or their
+original amount if below 1; suppression remains unchanged. Workers, commanders, guns
+and buildings receive no infantry armor. Protection therefore helps more against
+repeated small arms than heavy shells, without erasing composition counters.
+
+Both factions use researchRequirement(), purchaseResearch() and infantryArmor().
+Basil considers armor after 180s and earlier weapon priorities, only with six mobile
+combatants and reserves for replacement troops; no free upgrades or hidden-player
+information is used. The normal queue must drain before research can start.
+Research cards show effects and missing prerequisites, and wrap inside scrollable
+command panels. Damage protection appears in selected infantry status.

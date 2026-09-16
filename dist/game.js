@@ -175,6 +175,11 @@ function say(s) {
   }
 }
 const researchDefs = {
+  armor: { name: 'Field protection I', building: 'forge', cost: 140, materials: 40, time: 30,
+    description: 'Guards, scouts and sappers absorb 2 damage per hit. Does not prevent suppression.' },
+  armor2: { name: 'Field protection II', building: 'forge', cost: 220, materials: 80, time: 45,
+    requires: 'armor', requiresBuilding: 'factory',
+    description: 'Requires Field protection I and completed Artillery Works. Infantry absorbs 4 damage per hit in total.' },
   drill: { name: "Cornelius: coordinated volleys", building: 'forge', cost: 150, time: 25,
     description: 'Guards, scouts and sappers deal 20% more damage. Applies to existing and future troops.' },
   shells: { name: 'Calibrated field shells', building: 'factory', cost: 180, materials: 60, time: 35,
@@ -185,6 +190,8 @@ function startResearch(id) {
   if (!running || paused || ended) return;
   const tech = researchDefs[id];
   if (!tech || technologies.has(id)) return;
+  const missing = researchRequirement(id,0);
+  if (missing) return say(missing);
   const b = selected.find(u => u.team === 0 && u.hp > 0 && u.type === tech.building && !u.construction);
   if (!b || b.research || b.queue.length) return say('Research needs an idle production building.');
   if (alive(0).some(u => u.research?.id === id)) return say('This research is already underway.');
@@ -355,10 +362,11 @@ function nearest(u, list) {
 }
 function damageUnit(u, v, baseDamage, scale = 1) {
   if (v.hp <= 0) return;
-  const damage = (baseDamage + counterBonus(u,v)) * scale * weaponMultiplier(u) *
+  const rawDamage = (baseDamage + counterBonus(u,v)) * scale * weaponMultiplier(u) *
     (u.team === 1 && easy ? 0.7 : 1) * (inCover(v) ? 0.65 : 1) *
     ((v.disciplineUntil || 0) > t ? 0.75 : 1) *
     (u.type === 'walker' && !defs[v.type].speed ? 1.8 : 1);
+  const damage = Math.max(Math.min(rawDamage, 1), rawDamage - infantryArmor(v));
   v.hp -= damage;
   if(damage>0)recordAttack(u,v);
   v.morale = Math.max(0, v.morale - ((u.type === 'walker' ? 26 : 12) + ((u.advanceUntil || 0) > t ? 6 : 0)) * scale);
@@ -419,8 +427,8 @@ function update(dt) {
       u.research.progress += dt * productionRate(u,true);
       if (u.research.progress >= researchDefs[u.research.id].time) {
         factionResearch(u.team).add(u.research.id);
-        if (u.team===0) say(researchDefs[u.research.id].name + ' ready. Army weapons upgraded.');
-        else if (visible(u)) say('Rhino weapon research completed at this production site.');
+        if (u.team===0) say(researchDefs[u.research.id].name + ' ready. ' + researchDefs[u.research.id].description);
+        else if (visible(u)) say('Rhino research completed at this production site.');
         u.research = null;
         updateUI(true);
       }
@@ -750,7 +758,7 @@ function updateUI(force = false) {
               : u.type === 'core'
                 ? 'Invite gatherers and expand Celesteville.'
                 : u.type === 'forge'
-                  ? 'Trains guards and scouts. Volleys research: +20% infantry damage.'
+                  ? 'Trains infantry. Choose weapons or field protection research; research suspends recruitment at this school.'
                   : u.type === 'factory'
                     ? 'Trains artillery. Shell research: +25% gun damage. Screen guns with infantry.'
                     : u.type === 'quarry'
@@ -774,7 +782,7 @@ function updateUI(force = false) {
       ? 'Morale ' +
         Math.ceil(u.morale) +
         ' / 100 · ' +
-        (u.order?.kind || 'ready') + (u.type === 'hero' ? ` · Energy ${Math.floor(u.commandEnergy)}/100` : '') + ((u.disciplineUntil || 0) > t ? ' · PROTECTED' : '') + ((u.advanceUntil || 0) > t ? ' · ADVANCING' : '') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
+        (u.order?.kind || 'ready') + (u.type === 'hero' ? ` · Energy ${Math.floor(u.commandEnergy)}/100` : '') + ((u.disciplineUntil || 0) > t ? ' · PROTECTED' : '') + ((u.advanceUntil || 0) > t ? ' · ADVANCING' : '') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (infantryArmor(u) ? ` · ARMOR −${infantryArmor(u)}/hit` : '') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
         (inCover(u) ? ' · IN COVER' : '')
       : supplied(u)
         ? 'Supply line operational'
@@ -818,7 +826,10 @@ function updateUI(force = false) {
       for (const [id, tech] of Object.entries(researchDefs)) {
         if (u.type !== tech.building) continue;
         if (u.research?.id === id) a.push(['Cancel research', '75% refund', () => cancelResearch(u)]);
-        else if (!technologies.has(id)) a.push([tech.name, tech.cost + ' S' + (tech.materials ? ' · ' + tech.materials + ' M' : '') + ' · ' + tech.time + 's', () => startResearch(id)]);
+        else if (!technologies.has(id)) {
+          const missing=researchRequirement(id,0);
+          a.push([tech.name, missing || tech.cost + ' S' + (tech.materials ? ' · ' + tech.materials + ' M' : '') + ' · ' + tech.time + 's · ' + tech.description, () => startResearch(id), !!missing]);
+        }
       }
     }
     if (u?.queue.length && selected.length === 1) {
@@ -829,6 +840,7 @@ function updateUI(force = false) {
     for (const [name, cost, fn, disabled] of a) {
       const b = document.createElement('button');
       b.innerHTML = '<span>' + name + '</span><small>' + cost + '</small>';
+      if (Object.values(researchDefs).some(tech=>tech.name===name)) b.className='research-action';
       b.onclick = fn;
       b.disabled = !!disabled;
       holder.appendChild(b);

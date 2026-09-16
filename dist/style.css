@@ -1529,3 +1529,10 @@ dialog {
 #production-rows strong, #production-rows span, #production-rows progress { display: block; width: 100%; }
 #production-rows span { font: 11px/1.5 monospace; margin: 4px 0; }
 #production-rows progress { height: 7px; accent-color: #c8b171; }
+
+/* Research choices must explain their effect and prerequisite on touch as well. */
+#actions .research-action {display:block;min-width:0;white-space:normal;}
+#actions .research-action span {display:block;overflow-wrap:anywhere;}
+#actions .research-action small {display:block;float:none;white-space:normal;line-height:1.35;margin-top:4px;}
+#actions {grid-auto-rows:max-content;}
+#actions .research-action {height:auto;min-height:max-content;}

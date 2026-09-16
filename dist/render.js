@@ -260,7 +260,7 @@ function drawUnit(u) {
       4
     );
   }
-  if (u.research) {ctx.fillStyle='#e4cf91';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('WEAPON RESEARCH',0,57);}
+  if (u.research) {ctx.fillStyle='#e4cf91';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('RESEARCH',0,57);}
   ctx.restore();
 }
 function draw() {

@@ -12,9 +12,21 @@ function combatRole(u) {
   return '';
 }
 function factionResearch(team) { return team ? enemyTechnologies : technologies; }
+function researchRequirement(id,team) {
+  const tech=researchDefs[id];
+  if (!tech) return 'Unknown research.';
+  if (tech.requires && !factionResearch(team).has(tech.requires)) return 'Requires ' + researchDefs[tech.requires].name + '.';
+  if (tech.requiresBuilding && !alive(team).some(b=>b.type===tech.requiresBuilding&&!b.construction)) return 'Requires completed ' + defs[tech.requiresBuilding].name + '.';
+  return '';
+}
+function infantryArmor(u) {
+  if (!['trooper','scout','sapper'].includes(u.type)) return 0;
+  const upgrades=factionResearch(u.team);
+  return upgrades.has('armor2') ? 4 : upgrades.has('armor') ? 2 : 0;
+}
 function purchaseResearch(b, id) {
   const tech=researchDefs[id];
-  if (!tech || !b || b.hp<=0 || b.type!==tech.building || b.construction || b.research || b.queue.length ||
+  if (!tech || !b || researchRequirement(id,b.team) || b.hp<=0 || b.type!==tech.building || b.construction || b.research || b.queue.length ||
       factionResearch(b.team).has(id) || alive(b.team).some(a=>a.research?.id===id)) return false;
   if ((b.team?enemyBudget:ore)<tech.cost || (b.team?enemyMaterials:materials)<(tech.materials||0)) return false;
   if (b.team) {enemyBudget-=tech.cost;enemyMaterials-=tech.materials||0;enemySpent+=tech.cost;}
@@ -34,9 +46,11 @@ function enemyResearchPlan(buildings) {
   for (const b of buildings) b.plannedResearch=null;
   if (t<100 || alive(1).filter(u=>defs[u.type].damage&&defs[u.type].speed).length<6) return;
   const guns=alive(1).filter(u=>u.type==='walker').length;
-  for (const id of (guns>=2?['shells','drill']:['drill'])) {
+  const priorities=guns>=2?['shells','drill']:['drill'];
+  if(t>=180)priorities.push('armor','armor2');
+  for (const id of priorities) {
     const tech=researchDefs[id];
-    if (enemyTechnologies.has(id)||buildings.some(b=>b.research?.id===id)) continue;
+    if (researchRequirement(id,1)||enemyTechnologies.has(id)||buildings.some(b=>b.research?.id===id)) continue;
     const b=buildings.find(b=>b.type===tech.building&&!b.construction&&!b.research);
     if (!b) continue;
     if (enemyBudget<tech.cost+120 || enemyMaterials<(tech.materials||0)+25) {b.plannedResearch=null;continue;}
