@@ -314,10 +314,10 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
 
   | Difficulty | Opening | Outcome | Seconds |
   | --- | --- | --- | --- |
-  | Story | Siege | Victory | 221 |
-  | Story | Mixed, including sappers | Victory | 181 |
-  | Commander | Siege | Defeat | 169 |
-  | Commander | Mixed, including sappers | Defeat | 340 |
+  | Story | Siege | Victory | 182 |
+  | Story | Mixed, including sappers | Victory | 265 |
+  | Commander | Siege | Defeat | 265 |
+  | Commander | Mixed, including sappers | Defeat | 321 |
 
   Both enemy weapon technologies completed in all four runs. Mixed openings
   actually fielded sappers. This comparison is also in Actions; it checks valid
@@ -333,3 +333,11 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
   counter-mixed-story.txt, counter-landscape.png and counter-portrait.png.
 - Rendered unattended loss occurred at 02:38; Deploy again returned to the start
   screen. All phone role text and evidence artifacts use the final compact copy.
+
+- Initial CI composition gate correctly failed: the old mixed opening sometimes
+  lost before producing a sapper. Fixed its normal build order to prioritize the
+  first three sappers once tech is ready; retained the fielding assertion. Each
+  scenario now resets RNG and unit IDs, preventing prior runs from affecting
+  formation tie-breaks. The table above is the final isolated local comparison;
+  runner/platform match timings may differ. Initial rendered mixed victory used
+  the previous opening policy, while validating the same deployed game rules.

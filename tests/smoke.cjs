@@ -176,4 +176,4 @@ console.log(
   'PASS: 33-character roster, fruit, production, supply, placement, every family power, cooldowns, commander recovery, enemy court, combat, dialog pause, victory/defeat, static assets.'
 );
 
-module.exports = { run, tick };
+module.exports = { run, tick, resetSeed: (seed = 8) => { randomSeed = seed; } };

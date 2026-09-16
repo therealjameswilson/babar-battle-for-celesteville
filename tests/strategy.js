@@ -43,6 +43,14 @@ function strategyStep(plan = 'siege') {
   if (!benefits.has('pompadour') && ore > 400) usePower('pompadour');
   if (!benefits.has('old-tusk') && ore > 400) usePower('old-tusk');
   if (t % 45 < 2) usePower('babar');
+  // A mixed opening must actually field its counter units before saving for guns.
+  // Include queued units so a stalled producer cannot reserve the whole economy.
+  const mixedSchool = alive(0).find(b=>b.type==='forge'&&!b.construction);
+  const earlySappers = alive(0).filter(u=>u.type==='sapper').length +
+    alive(0).reduce((n,b)=>n+b.queue.filter(q=>q==='sapper').length,0);
+  if (plan==='mixed' && unitUnlocked('sapper') && earlySappers<3 && mixedSchool?.queue.length<2 && ore>=90 && materials>=20) {
+    selected=[mixedSchool];train('sapper');
+  }
   const guns = alive(0).filter((u) => u.type === 'walker').length;
   if (factory && !factory.construction && factory.queue.length < 2 && guns < 12) {
     selected = [factory];

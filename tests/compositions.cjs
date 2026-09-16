@@ -1,9 +1,10 @@
 // Comparative balance evidence, not a claim that every opening should win.
 const fs=require('node:fs');
-const {run}=require('./smoke.cjs');
+const {run,resetSeed}=require('./smoke.cjs');
 run(fs.readFileSync('tests/strategy.js','utf8'));
 for(const difficulty of ['Story','Commander']) for(const plan of ['siege','mixed']) {
-  run(`easy=${difficulty==='Story'};reset();running=true;`);
+  resetSeed();
+  run(`uid=0;easy=${difficulty==='Story'};reset();running=true;`);
   let fieldedSappers=false;
   for(let n=0;n<900&&!run('ended');n++) {
     run(`strategyStep('${plan}');for(let k=0;k<20&&!ended;k++)update(.05)`);
