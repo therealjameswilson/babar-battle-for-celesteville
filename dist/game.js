@@ -262,6 +262,7 @@ function reset() {
   uid = 0;
   units = [];
   nodes = [];
+  resourceMemory=[new Map(),new Map()];
   fx = [];
   selected = [];
   resetSubgroups();
@@ -318,6 +319,7 @@ function reset() {
   for (let i = 0; i < (easy ? 4 : 6); i++) add('trooper', 1, 1330 + i * 30, 390);
   rebuildNav();
   rebuildSupply();
+  observeResources();
   selected = [units[0]];
   $('pan').setAttribute('aria-pressed', 'false');
   $('pause').textContent = 'Pause';
@@ -389,6 +391,7 @@ function shoot(u, v) {
 
 function update(dt) {
   t += dt;
+  observeResources();
   updateTactics(dt);
   updateAttackAlert();
   selected = selected.filter((u) => u.hp > 0);
@@ -430,13 +433,10 @@ function update(dt) {
         if (type === 'worker')
           n.order = {
             kind: 'gather',
-            node: nearest(
-              n,
-              nodes.filter((a) => a.amount > 0 && a.kind !== 'materials')
-            ),
+            node: nextKnownResource(n),
           };
         if (u.rally) {
-          n.order = type === 'worker' && u.rally.node?.amount > 0
+          n.order = type === 'worker' && u.rally.node && knownResourceAmount(u.rally.node,u.team)!==0
             ? { kind: 'gather', node: u.rally.node }
             : { kind: 'move', x: u.rally.x, y: u.rally.y };
         }
@@ -474,11 +474,8 @@ function update(dt) {
     }
     if (u.type === 'worker' && u.order?.kind === 'gather') {
       let n = u.order.node;
-      if ((!n || n.amount <= 0) && u.carrying === 0) {
-        n = nearest(
-          u,
-          nodes.filter((a) => a.amount > 0 && (a.kind || 'supplies') === (n?.kind || 'supplies'))
-        );
+      if ((!n || knownResourceAmount(n,u.team) === 0) && u.carrying === 0) {
+        n = nextKnownResource(u,n?.kind||'supplies');
         u.order.node = n;
         if (!n) {
           u.order = null;
@@ -664,7 +661,7 @@ function command(p, append = queueOrders) {
   let enemy = nearest(p, alive(1).filter(visible)),
     node = nearest(
       p,
-      nodes.filter((n) => n.amount > 0)
+      nodes.filter((n) => knownResourceAmount(n,0)>0)
     );
   if (enemy && dist(p, enemy) > enemy.r + 22) enemy = null;
   if (node && dist(p, node) > 40) node = null;

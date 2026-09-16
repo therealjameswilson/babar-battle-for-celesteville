@@ -341,12 +341,11 @@ function draw() {
   ctx.fillText('Southern road', 610, 1150);
   ctx.textAlign = 'left';
   for (const n of nodes) {
-    const observed = resourceObserved(n);
-    if (n.amount <= 0 && observed) continue;
+    if (knownResourceAmount(n,0) === 0) continue;
     if (n.kind === 'materials') {
       poly([[n.x-25,n.y+12],[n.x-20,n.y-12],[n.x,n.y-23],[n.x+25,n.y+4],[n.x+15,n.y+19]], '#789499', '#344c52');
       ctx.fillStyle='#dae6db'; ctx.font='10px monospace';
-      ctx.fillText('MATERIALS' + (observed ? ' ' + Math.ceil(n.amount) : ''),n.x-44,n.y+34);
+      ctx.fillText('MATERIALS ' + resourceLabel(n),n.x-44,n.y+34);
       const assigned = units.filter(w=>w.hp>0&&w.type==='worker'&&w.order?.node===n&&(w.team===0||visible(w))).length;
       ctx.fillText(assigned + ' workers · 3 slots',n.x-32,n.y+47);
       continue;
@@ -361,7 +360,7 @@ function draw() {
     }
     ctx.fillStyle = '#e5d6a8';
     ctx.font = '9px monospace';
-    ctx.fillText(observed ? Math.ceil(n.amount) : '?', n.x - 12, n.y + 26);
+    ctx.fillText(resourceLabel(n), n.x - 12, n.y + 26);
   }
   ctx.fillStyle = '#373e30';
   ctx.fillRect(depot.x - 43, depot.y - 32, 86, 64);
@@ -542,7 +541,7 @@ function draw() {
   mc.fillStyle = depot.team === 0 ? BLUE : depot.team === 1 ? RED : '#c9b780';
   mc.fillRect((depot.x / W) * 300 - 4, (depot.y / H) * 210 - 4, 8, 8);
   for (const n of nodes) {
-    if (n.amount <= 0) continue;
+    if (knownResourceAmount(n,0) === 0) continue;
     mc.fillStyle = '#e8b058';
     mc.fillRect((n.x / W) * 300 - 2, (n.y / H) * 210 - 2, 4, 4);
   }

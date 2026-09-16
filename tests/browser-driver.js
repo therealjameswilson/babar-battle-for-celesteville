@@ -29,6 +29,7 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    resourceMemoryChecks(check);
     selectionChecks(check);
     qaReset();
     selected=[alive(0).find(u=>u.type==='hero'),alive(0).find(u=>u.type==='trooper'),add('walker',0,500,900)];updateUI(true);
@@ -488,4 +489,12 @@ function browserAdaptiveExpansion() {
   revealUntil=t+100;cam={x:1200,y:730,zoom:1};selected=[raider];
   updateUI(true);togglePause();draw();
   qaReport(`Actual AI expansion decision: clear road ${preferred?.x},${preferred?.y}; observed raider redirects to ${alternate?.x},${alternate?.y}. Foundation paid: ${building?.paid}. A real worker has the build order. Fixture is paused for review.`);
+}
+
+function browserResourceMemory() {
+  qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
+  const stock=nodes.find(n=>n.x===970),scout=add('scout',0,970,840);
+  qaTicks(.1);scout.x=300;scout.y=900;stock.amount=0;qaTicks(.05);
+  cam={x:980,y:850,zoom:1};selected=[scout];updateUI(true);togglePause();draw();
+  qaReport('Scouting fixture: central Supplies were observed at 1800, then depleted outside vision. The remembered label remains '+resourceLabel(stock)+'. Move the scout back to discover the empty cache; unknown deposits remain ?.');
 }

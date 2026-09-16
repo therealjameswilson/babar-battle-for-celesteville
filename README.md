@@ -124,3 +124,7 @@ orders, then choose **All** to restore the surviving army. **T / Shift+T** cycle
 Enemy forward bases now respond to scouting: recent threats redirect construction,
 and observed empty stocks can cancel an expansion. Watch the alternative approaches
 after denying a road; the enemy still pays for buildings and sends workers to construct them.
+
+Resource gathering respects scouting for both sides. **?** means unscouted; **~** marks
+last-seen stock. When known supplies run out, use **Idle (I)**, scout another cache,
+and give a Gather order. Workers deliver their final load before seeking another stock.

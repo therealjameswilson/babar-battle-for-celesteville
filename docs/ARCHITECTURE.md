@@ -262,7 +262,15 @@ bonus. Construction requires current sight, a legal connected footprint, normal 
 and a real worker. At most two surviving marked forward homes can be built. A recent
 hostile report within 270m excludes a site; hidden movement never updates its location.
 
-Remaining fairness audit: the shared gather loop's automatic depleted-stock fallback
-still searches the global node list. Expansion decisions are now sight-based, but this
-older worker fallback needs its own fog-memory treatment before broad AI fairness can
-be considered verified.
+### Resource memory (0.16.0)
+`economy.js` stores each faction's last-seen quantities by resource node. Simulation
+updates record stocks in friendly vision; current sightings supersede memory. Queries
+and rendering do not modify that memory. Both factions' depleted-stock fallback and
+new-worker assignments choose only known nonempty stocks of the same resource type;
+automatic Materials reassignment also requires a completed, supplied quarry. An explicit
+rally to a remembered stock persists until observation confirms it is empty. Final
+cargo is delivered before a new stock is sought. With no known stock, the worker idles.
+The player must scout and issue a Gather order to restart work. Map labels use `?` for
+unscouted and `~` for last-seen quantities. Depleted markers disappear only when their
+emptiness is known. Reset starts fresh memories from initial friendly vision.
+Broad long-match AI fairness still needs auditing beyond these covered economic paths.

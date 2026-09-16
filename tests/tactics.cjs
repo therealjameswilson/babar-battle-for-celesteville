@@ -272,3 +272,7 @@ console.log("PASS: attack report grouping, expiry, camera cycling, order preserv
 run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'selection-checks.js'), 'utf8'));
 run('selectionChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: selection subgroups, command isolation, cycling, casualty fallback, control groups and reset.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'resource-memory-checks.js'),'utf8'));
+run('resourceMemoryChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: both factions use scouted stock memory, revisit depleted caches, avoid unknown stocks and deliver final cargo.');

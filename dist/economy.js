@@ -1,5 +1,30 @@
 'use strict';
 let materials = 0, enemyMaterials = 60;
+let resourceMemory = [new Map(), new Map()];
+function observesResource(team, n) {
+  return (team===0 && t<revealUntil) || alive(team).some(u=>dist(u,n)<vision(u));
+}
+function observeResources() {
+  const observers=[alive(0),alive(1)];
+  for(let team=0;team<2;team++) for(const n of nodes)
+    if((team===0&&t<revealUntil)||observers[team].some(u=>dist(u,n)<vision(u)))
+      resourceMemory[team].set(n,n.amount);
+}
+function knownResourceAmount(n, team) {
+  if(!n)return undefined;
+  // A current sighting supersedes memory, including extraction earlier this tick.
+  if(observesResource(team,n)) return n.amount;
+  return resourceMemory[team].get(n);
+}
+function resourceLabel(n) {
+  const amount=knownResourceAmount(n,0);
+  return amount===undefined?'?':(resourceObserved(n)?'':'~')+Math.ceil(amount);
+}
+function nextKnownResource(u, kind='supplies') {
+  return nearest(u,nodes.filter(n=>(n.kind||'supplies')===kind && knownResourceAmount(n,u.team)>0 &&
+    (kind!=='materials'||quarryFor(n,u.team))));
+}
+
 function materialCost(type) { return defs[type].materials || 0; }
 function prerequisite(type, team = 0) {
   return type !== 'factory' || alive(team).some(b => b.type === 'forge' && !b.construction);
@@ -8,7 +33,7 @@ function materialSite(p) { return nodes.find(n => n.kind === 'materials' && n.am
 function quarryFor(n, team) {
   return alive(team).find(b => b.type === 'quarry' && !b.construction && dist(b, n) < 8 && supplied(b));
 }
-function resourceObserved(n) { return t < revealUntil || alive(0).some(u => dist(u,n) < vision(u)); }
+function resourceObserved(n) { return observesResource(0,n); }
 function harvestDistance(n) { return n.kind === 'materials' ? 53 : 30; }
 function canHarvest(u, n) {
   if (n.kind === 'materials' && !quarryFor(n, u.team)) return false;
@@ -26,7 +51,7 @@ function canHarvest(u, n) {
 }
 function idleWorkers() {
   return alive(0).filter(u => u.type === 'worker' && (!u.order || u.order.kind === 'hold' ||
-    (u.order.kind === 'gather' && !u.carrying && (!u.order.node || !u.order.node.amount ||
+    (u.order.kind === 'gather' && !u.carrying && (!u.order.node || knownResourceAmount(u.order.node,0)===0 ||
       (u.order.node.kind === 'materials' && !quarryFor(u.order.node, 0))))));
 }
 function selectIdleWorkers() {

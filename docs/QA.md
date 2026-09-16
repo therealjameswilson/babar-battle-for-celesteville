@@ -409,3 +409,17 @@ policy wins locally at 6:53 with the palace intact. An accelerated, actually ren
 Commander run wins at 14:31 with 110 enemy casualties. Evidence:
 artifacts/adaptive-commander-browser.txt and adaptive-commander-victory.png. These outcomes
 support viability of this opening, not general human balance or cross-runtime determinism.
+
+## 0.16.0 resource memory (2026-09-16)
+
+Shared VM/browser scenarios cover both factions: unknown-stock exclusion, remembered
+quantities, hidden depletion, revisiting an exhausted cache, idle fallback, final cargo
+delivery, new-worker assignment, rally memory, quarry requirements and restart.
+Local syntax/rule tests, Story balance, composition scenarios and defensive Commander
+victory pass (Commander 6:53, palace intact). Real browser regression and rendered stock
+fixture verify last-seen labels. Artifacts: resource-memory-browser-checks.txt,
+resource-memory-desktop.png and resource-memory-performance.json.
+
+Representative rendered battle: 120 frames in 1997ms, 66 entities; draw mean .54ms/p95
+.80ms, simulation update mean 1.17ms/p95 1.70ms. No measured observation bottleneck in
+this scenario. No new layout or combat-balance claim is inferred from these timings.

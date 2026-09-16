@@ -26,7 +26,8 @@ Reference for this combat increment: Blizzard's
 describes screened, spaced artillery positions and friendly splash risk. The
 mechanical design here uses original Babar assets, names and balance values.
 
-Next substantive work: fog-aware depleted-stock worker fallback and long-match reconnaissance scenarios.
+Next substantive work: production/army feedback and long-match reconnaissance scenarios.
+Fog-aware depleted-stock worker fallback, recruitment and resource rally handling are implemented.
 Selection subgroups now avoid reselecting a mixed army for specialist orders. Adaptive expansion
 locations and wider human balance remain open. Do not mark the broad goal complete
 on the strength of the artillery release alone.
