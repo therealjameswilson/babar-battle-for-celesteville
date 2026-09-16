@@ -22,6 +22,15 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    counterChecks(check);
+    qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
+    selected=[alive(0).find(b=>b.type==='forge')];updateUI(true);
+    check([...$('actions').querySelectorAll('button')].find(b=>b.textContent.includes('Field Sapper'))?.disabled,'Sapper UI is locked before Artillery Works');
+    add('factory',0,500,1080);ore=90;materials=20;updateUI(true);
+    [...$('actions').querySelectorAll('button')].find(b=>b.textContent.includes('Field Sapper')).click();
+    check(selected[0].queue.includes('sapper')&&ore===0&&materials===0,'Actual Sapper button pays both costs into production');
+    qaTicks(10.1);selected=alive(0).filter(u=>u.type==='sapper');updateUI(true);
+    check($('selected-info').textContent.includes('+20 vs armored'),'Selected sapper explains its armor counter in the command panel');
     enemyEconomyChecks(check);
     economyChecks(check);
     qaReset();
@@ -227,7 +236,8 @@ async function browserSuite() {
     throw e;
   }
 }
-function browserVictory() {
+function browserMixedVictory() {browserVictory('mixed');}
+function browserVictory(plan = 'siege') {
   qaReset();
   startAudio();
   qaReport(
@@ -235,7 +245,7 @@ function browserVictory() {
   );
   qaInterval = setInterval(() => {
     if (!ended) {
-      strategyStep();
+      strategyStep(plan);
       qaTicks(1);
       cam.x = depot.team === 0 ? 1240 : 760;
       cam.y = depot.team === 0 ? 460 : 820;
@@ -405,4 +415,15 @@ function browserEnemyEconomy() {
   cam.x=1280;cam.y=550;cam.zoom=.8;selected=[];togglePause();
   updateUI(true);draw();
   qaReport('Economic AI inspection after 180 simulated seconds. Starting funds only; full-map reveal is a QA aid. Barracks destroyed by fixture: inspect the paid replacement and forward homes, then Resume to watch workers rebuild.');
+}
+
+function browserCounters() {
+  qaReset();easy=false;nextWave=enemySpawn=9999;enemyScoutSent=true;
+  units=units.filter(u=>u.type==='core');
+  const a=add('sapper',0,780,990),b=add('sapper',0,780,1030);
+  const gun=add('walker',1,950,1010);
+  issueOrder(a,{kind:'attack',target:gun});issueOrder(b,{kind:'attack',target:gun});
+  issueOrder(gun,{kind:'hold'});selected=[a];cam={x:860,y:990,zoom:1.25};
+  updateUI(true);draw();
+  qaReport('Counter fixture: two light Field Sappers face an unsupported armored gun. Observe anti-armor hits, suppression and withdrawal. Original infantry atlas has a brass demolition-pack overlay.');
 }

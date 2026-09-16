@@ -48,6 +48,7 @@ const defs = {
     damage: 48,
     rate: 2.8,
   },
+  sapper: { name: 'Field Sapper', hp: 105, r: 14, cost: 90, materials: 20, time: 10, speed: 83, range: 170, damage: 10, rate: 1.2 },
   scout: {
     name: 'Forest Scout',
     hp: 75,
@@ -175,11 +176,11 @@ function say(s) {
 }
 const researchDefs = {
   drill: { name: "Cornelius: coordinated volleys", building: 'forge', cost: 150, time: 25,
-    description: 'Guards and scouts deal 20% more damage. Applies to existing and future troops.' },
+    description: 'Guards, scouts and sappers deal 20% more damage. Applies to existing and future troops.' },
   shells: { name: 'Calibrated field shells', building: 'factory', cost: 180, materials: 60, time: 35,
     description: 'Field artillery deals 25% more damage. Applies to existing and future guns.' },
 };
-let technologies = new Set();
+let technologies = new Set(), enemyTechnologies = new Set();
 function startResearch(id) {
   if (!running || paused || ended) return;
   const tech = researchDefs[id];
@@ -189,9 +190,7 @@ function startResearch(id) {
   if (alive(0).some(u => u.research?.id === id)) return say('This research is already underway.');
   if (materials < (tech.materials || 0)) return say('Not enough Materials. Staff a supplied quarry.');
   if (ore < tech.cost) return say('Not enough supplies for research.');
-  ore -= tech.cost;
-  materials -= tech.materials || 0;
-  b.research = { id, progress: 0 };
+  if (!purchaseResearch(b,id)) return;
   say(tech.name + ' research started. Recruitment is suspended here.');
   updateUI(true);
 }
@@ -204,9 +203,9 @@ function cancelResearch(b) {
   updateUI(true);
 }
 function weaponMultiplier(u) {
-  if (u.team !== 0) return 1;
-  if (technologies.has('drill') && ['trooper', 'scout'].includes(u.type)) return 1.2;
-  if (technologies.has('shells') && u.type === 'walker') return 1.25;
+  const upgrades=factionResearch(u.team);
+  if (upgrades.has('drill') && ['trooper', 'scout', 'sapper'].includes(u.type)) return 1.2;
+  if (upgrades.has('shells') && u.type === 'walker') return 1.25;
   return 1;
 }
 let controlGroups = {}, queueOrders = false;
@@ -241,7 +240,7 @@ function controlGroup(number, save = false, append = false) {
   updateUI(true);
 }
 function reset() {
-  technologies = new Set();
+  technologies = new Set(); enemyTechnologies = new Set();
   controlGroups = {};
   queueOrders = false;
   $('queue-orders').setAttribute('aria-pressed', 'false');
@@ -346,7 +345,7 @@ function nearest(u, list) {
 }
 function damageUnit(u, v, baseDamage, scale = 1) {
   if (v.hp <= 0) return;
-  const damage = baseDamage * scale * weaponMultiplier(u) *
+  const damage = (baseDamage + counterBonus(u,v)) * scale * weaponMultiplier(u) *
     (u.team === 1 && easy ? 0.7 : 1) * (inCover(v) ? 0.65 : 1) *
     ((v.disciplineUntil || 0) > t ? 0.75 : 1) *
     (u.type === 'walker' && !defs[v.type].speed ? 1.8 : 1);
@@ -406,8 +405,9 @@ function update(dt) {
     if (u.research) {
       u.research.progress += dt * (supplied(u) ? 1 : 0.25);
       if (u.research.progress >= researchDefs[u.research.id].time) {
-        technologies.add(u.research.id);
-        say(researchDefs[u.research.id].name + ' ready. Army weapons upgraded.');
+        factionResearch(u.team).add(u.research.id);
+        if (u.team===0) say(researchDefs[u.research.id].name + ' ready. Army weapons upgraded.');
+        else if (visible(u)) say('Rhino weapon research completed at this production site.');
         u.research = null;
         updateUI(true);
       }
@@ -557,7 +557,8 @@ function update(dt) {
 }
 function train(type) {
   if (!running || paused || ended) return;
-  if (!defs[type] || !['worker','trooper','scout','walker'].includes(type)) return;
+  if (!defs[type] || !['worker','trooper','scout','sapper','walker'].includes(type)) return;
+  if (!unitUnlocked(type)) return say('Complete Artillery Works to equip Field Sappers.');
   const b = readyProducers(type)[0];
   if (!b) return say('Select a ready production building. Research or full queues block recruitment.');
   if (ore < defs[type].cost) return say('Not enough supplies.');
@@ -757,6 +758,7 @@ function updateUI(force = false) {
                           ' strength'
                         : 'Ready for orders.'
     : 'Tap a friendly unit or building.';
+  if (u && selected.length===1 && combatRole(u)) $('selected-info').textContent = combatRole(u);
   $('tactical-status').textContent = productionGroup ? selected.filter(supplied).length + '/' + selected.length + ' supplied sites · isolated production runs at 25%' : u
     ? defs[u.type].speed
       ? 'Morale ' +
@@ -773,7 +775,7 @@ function updateUI(force = false) {
     (depot.team === 0 ? 'OURS · +2/s' : depot.team === 1 ? 'RHINOS' : 'CONTESTED') +
     ' · Scout workers and production';
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
-  const key = prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
+  const key = unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   if (force || key !== actionKey) {
     actionKey = key;
     let a = [];
@@ -783,6 +785,7 @@ function updateUI(force = false) {
       if (u.type === 'forge') {
         a.push(['Elephant Guard', '60', () => train('trooper')]);
         a.push(['Forest Scout', '55', () => train('scout')]);
+        a.push(['Field Sapper', unitUnlocked('sapper') ? '90 S · 20 M' : 'Needs Artillery Works', () => train('sapper'), !unitUnlocked('sapper')]);
       }
       if (u.type === 'factory') a.push(['Field Artillery', '160 S · 25 M', () => train('walker')]);
       if (u.type === 'core' || u.type === 'worker')
@@ -790,9 +793,9 @@ function updateUI(force = false) {
           a.push([defs[type].name, buildingCost(type) + ' S' + (materialCost(type) ? ' · ' + materialCost(type) + ' M' : ''), () => build(type), !prerequisite(type)]);
     }
     if (selected.length > 1) {
-      for (const type of ['worker','trooper','scout','walker']) {
+      for (const type of ['worker','trooper','scout','sapper','walker']) {
         const producers = selected.filter(b => b.team === 0 && b.type === producerFor(type) && !b.construction);
-        if (producers.length) a.push([defs[type].name, defs[type].cost + ' S' + (materialCost(type) ? ' · ' + materialCost(type) + ' M' : '') + ' · ' + producers.length + ' sites', () => train(type)]);
+        if (producers.length) a.push([defs[type].name, defs[type].cost + ' S' + (materialCost(type) ? ' · ' + materialCost(type) + ' M' : '') + ' · ' + producers.length + ' sites', () => train(type), !unitUnlocked(type)]);
       }
     }
     const guns = selected.filter(a => a.team === 0 && a.type === 'walker');

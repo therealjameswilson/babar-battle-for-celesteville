@@ -260,3 +260,7 @@ console.log('PASS: material extraction, delivery, saturation, raids, prerequisit
 run(require("node:fs").readFileSync(require("node:path").join(__dirname,"enemy-economy-checks.js"),"utf8"));
 run("enemyEconomyChecks((ok,message)=>{if(!ok)throw Error(message)})");
 console.log("PASS: physical enemy economy, queues, worker replacement, paid rebuilding, population, depot, repair and fair expansion decisions.");
+
+run(require("node:fs").readFileSync(require("node:path").join(__dirname,"counter-checks.js"),"utf8"));
+run("counterChecks((ok,message)=>{if(!ok)throw Error(message)})");
+console.log("PASS: anti-armor roles, sapper tech/costs, scouted counters, faction research and simulated matchups.");

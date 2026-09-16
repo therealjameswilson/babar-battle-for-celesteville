@@ -6,7 +6,8 @@ function enemySafe(p) {
   return !alive(0).some(u => defs[u.type].damage && sees(1,u) && dist(u,p) < 240);
 }
 function enemyQueue(type) {
-  const producer = alive(1).filter(b => b.type === producerFor(type) && !b.construction && !b.research && b.queue.length < 2)
+  if (!unitUnlocked(type,1)) return false;
+  const producer = alive(1).filter(b => b.type === producerFor(type) && !b.construction && !b.research && !b.plannedResearch && b.queue.length < 2)
     .sort((a,b) => a.queue.length-b.queue.length || a.id-b.id)[0];
   if (!producer || supply(1) >= cap(1) || enemyBudget < defs[type].cost || enemyMaterials < materialCost(type)) return false;
   enemyBudget -= defs[type].cost; enemyMaterials -= materialCost(type);
@@ -89,11 +90,11 @@ function enemyMacro() {
     const w=nearest(damaged,workers.filter(w=>!w.carrying&&w.order?.kind==='gather'));
     if (w) issueOrder(w,{kind:'repair',target:damaged});
   }
+  enemyResearchPlan(buildings);
   if (t>=22 && !enemyScoutSent && !buildings.some(b=>b.queue.includes('scout'))) enemyQueue('scout');
   const troops=alive(1).filter(u=>defs[u.type].damage&&defs[u.type].speed).length;
   if (troops<(easy?16:24)) {
-    const guns=alive(1).filter(u=>u.type==='walker').length+buildings.reduce((n,b)=>n+b.queue.filter(q=>q==='walker').length,0);
-    const type=t>65 && guns<Math.floor(troops/4) && enemyMaterials>=25 ? 'walker':'trooper';
-    if (!enemyQueue(type) && type==='walker') enemyQueue('trooper');
+    const type=enemyCounterChoice(troops,buildings);
+    if (!enemyQueue(type) && type!=='trooper') enemyQueue('trooper');
   }
 }

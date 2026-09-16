@@ -79,10 +79,16 @@ function drawUnit(u) {
     const bob = !reducedMotion && u.movingUntil > t ? Math.sin(t * 9 + u.id) * 1.1 : 0;
     ctx.save();
     if (Math.cos(u.angle) < 0) ctx.scale(-1, 1);
-    const col = { hero: 0, worker: 1, trooper: 2, walker: 3, scout: 2 }[u.type];
+    const col = { hero: 0, worker: 1, trooper: 2, walker: 3, scout: 2, sapper: 2 }[u.type];
     if (!atlas(spriteSheet, col, u.team, -width / 2, -height + 15 + bob, width, height)) {
       ctx.fillStyle = color;
       ctx.fillRect(-10, -30, 20, 32);
+    }
+    if (u.type === 'sapper') {
+      // Reuse the faction infantry atlas, adding a distinct brass demolition pack.
+      ctx.fillStyle='#333a36';ctx.fillRect(-17,-23,12,16);
+      ctx.strokeStyle='#ddbc71';ctx.lineWidth=2;ctx.strokeRect(-17,-23,12,16);
+      ctx.beginPath();ctx.moveTo(-15,-20);ctx.lineTo(-7,-10);ctx.moveTo(-7,-20);ctx.lineTo(-15,-10);ctx.stroke();
     }
     ctx.restore();
     // Direction indicator and physical field gun rotate with the firing bearing.
@@ -222,7 +228,7 @@ function drawUnit(u) {
     ctx.fillStyle = u.hp / u.max < 0.3 ? '#e78872' : color;
     ctx.fillRect(-u.r, y, u.r * 2 * Math.max(0, u.hp / u.max), 5);
   }
-  if (u.queue.length || u.construction) {
+  if (u.queue.length || u.construction || u.research) {
     ctx.fillStyle = '#394331';
     ctx.fillRect(-u.r, 41, u.r * 2, 4);
     ctx.fillStyle = '#efca6c';
@@ -233,10 +239,11 @@ function drawUnit(u) {
         2 *
         (u.construction
           ? 1 - u.construction / (u.buildDuration || d.build)
-          : u.progress / defs[u.queue[0]].time),
+          : u.research ? u.research.progress / researchDefs[u.research.id].time : u.progress / defs[u.queue[0]].time),
       4
     );
   }
+  if (u.research) {ctx.fillStyle='#e4cf91';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('WEAPON RESEARCH',0,57);}
   ctx.restore();
 }
 function draw() {

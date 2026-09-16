@@ -299,3 +299,37 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
 - Combat performance fixture: 120 frames in 1998ms, mean draw .548ms (p95 .7),
   mean update 1.015ms (p95 1.3), 65 entities. This fixture measures combat with
   macro decisions disabled; extended economic AI profiling remains separate.
+
+## Combined arms — 2026-09-16, version 0.12.2
+
+- Syntax and engine suites pass. **218 real-browser checks pass**, adding 24
+  counter/research rules and three actual sapper UI checks. Coverage includes
+  armor bonus, cover/research scaling, completed-tech prerequisite, both costs,
+  refund, timed production, actual scouting and intel expiry, faction research
+  separation, queue exclusion, destruction, planned-research cancellation and reset.
+- Simulated matchups retain suppression and recovery: a guard survives and drives
+  a sapper from contested ground; two sappers force an unsupported gun to retreat.
+  These are ground-control outcomes, not claims that every loser is killed.
+- `npm run test:compositions` uses earned resources and normal orders. Results:
+
+  | Difficulty | Opening | Outcome | Seconds |
+  | --- | --- | --- | --- |
+  | Story | Siege | Victory | 221 |
+  | Story | Mixed, including sappers | Victory | 181 |
+  | Commander | Siege | Defeat | 169 |
+  | Commander | Mixed, including sappers | Defeat | 340 |
+
+  Both enemy weapon technologies completed in all four runs. Mixed openings
+  actually fielded sappers. This comparison is also in Actions; it checks valid
+  scenario resolution and actual composition, not a forced victory assertion.
+  Commander defensive viability remains unproven and is the next balance task.
+- Rendered accelerated mixed-army Story victory: 03:32, 35 enemy casualties,
+  37 Supplies. Browser randomness differs from seeded Node evidence; this is
+  automated play, not an extended human playtest.
+- Reviewed new sapper pack and role panel in desktop, 390×844 portrait and
+  844×390 landscape. Compact role text now fits landscape at 26px client/scroll
+  height and names its weakness. No new generated art or physical device test.
+- Evidence: artifacts/counter-browser-checks.txt, counter-compositions.txt,
+  counter-mixed-story.txt, counter-landscape.png and counter-portrait.png.
+- Rendered unattended loss occurred at 02:38; Deploy again returned to the start
+  screen. All phone role text and evidence artifacts use the final compact copy.

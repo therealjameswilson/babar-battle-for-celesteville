@@ -51,6 +51,24 @@ the central stocks. Enemy repairs consume enemy Supplies. After wave two, Basilâ
 command reduces production time by 20%; isolation still slows it to one quarter.
 Scouting reveals workers and buildings; exact enemy funds are no longer exposed.
 
+## Combined arms (0.12.1)
+
+**Field Sappers** train at Guard Schools after a completed Artillery Works: 90
+Supplies, 20 Materials, 10 seconds. They have 105 HP, speed 83, range 170 and a
+1.2-second weapon interval. Hits deal 10 damage to light troops, plus 20 against
+armored guns/buildings. Guards win the direct infantry matchup; artillery wins
+through range, spotting and splash. Sappers make an unprotected gun vulnerable.
+Their brass demolition pack distinguishes them from ordinary guards.
+
+Corneliusâ€™s infantry research also upgrades sappers. Rhinos pay the same research
+costs and times using their own economy; visible researching buildings show a
+progress bar. Basil recruits anti-armor troops after scouting your guns, and his
+reports expire after 60 seconds. Protect production and deny reconnaissance.
+
+`npm run test:compositions` compares siege and mixed openings in both difficulties.
+Current scripted openings win Story but lose Commander; this is evidence for
+further defense/balance work, not a claim that Commander is unwinnable.
+
 ## Development and verification
 
 ```

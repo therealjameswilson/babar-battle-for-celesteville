@@ -188,3 +188,34 @@ rules still prevent overlapping unseen entities, as they do for player placement
 Limitations: fixed expansion corridor, no economic research decisions yet, and
 broad army composition remains rule-based. Capturing the depot removes its income
 from the other side; it no longer magically stops physical worker deliveries.
+
+
+## Combined arms and faction research — 0.12.1
+
+`combat-roles.js` loads after game.js, before economy.js. It defines armor classes,
+anti-armor bonus, sapper tech prerequisite, role descriptions, shared research
+purchase validation, enemy counter choice and research planning. Existing damage
+scales (cover, discipline, Story enemy modifier, splash) remain multiplicative.
+The sapper's 20 armored bonus is added before research and damage scaling. Guns
+and all structures are armored; mobile infantry and commanders are light. This
+classification adds no flat damage reduction to existing units.
+
+Sapper: 90 S / 20 M, 105 HP, 14 radius, 83 speed, 170 range, 10 base damage,
+20 bonus against armor, 1.2s reload, 10s recruitment, one population. Produced at
+Guard Schools after a completed Artillery Works. Recruit cancellation returns both
+resources. Infantry research upgrades the full anti-armor hit by 20%. Gun research
+continues to affect artillery only.
+
+Research ownership is separate: technologies / enemyTechnologies. Both use
+purchaseResearch validation, actual producer progress, supply isolation and loss
+on destruction. Enemy planning begins after 100s with six combat units, selects
+shells when it fields two guns (otherwise infantry), and retains 120 S / 25 M
+beyond research cost before reserving a building. Paid existing queues finish;
+new recruits stop appending at the reserved site. Falling below the army/funds
+threshold clears that reservation. Research completion is faction-specific.
+
+Enemy counter recruitment consults only intel[1] gun sightings younger than 60s.
+It aims for two sappers per scouted gun, at most six, subject to cost, tech,
+producer availability and population. It does not read hidden live unit counts.
+Composition study uses normal player orders and earned resources; checks assert
+scenario resolution and actual sapper fielding, not that each opening must win.

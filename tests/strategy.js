@@ -1,6 +1,6 @@
 // Reproducible balance opponent: only normal player actions and earned supplies.
 // Shared by Node and the real-browser accelerated Story playthrough.
-function strategyStep() {
+function strategyStep(plan = 'siege') {
   if (ended) return;
   const base = alive(0).find((u) => u.type === 'core');
   if (!base) return;
@@ -58,7 +58,8 @@ function strategyStep() {
     ore > (!factory && materials >= 50 ? 300 : 60)
   ) {
     selected = [school];
-    train('trooper');
+    const sapperCount=alive(0).filter(u=>u.type==='sapper').length;
+    train(plan==='mixed' && unitUnlocked('sapper') && materials>=20 && ore>=90 && sapperCount<6 && guns>=2 ? 'sapper' : 'trooper');
   }
   const army = alive(0).filter(
     (u) => defs[u.type].damage && defs[u.type].speed && u.order?.kind !== 'retreat'

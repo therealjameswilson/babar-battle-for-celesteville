@@ -73,3 +73,13 @@ checks include resource conservation over autonomous expansion. Historical QA
 entries describe old versions; use the latest entry and STARCRAFT-GOAL.md for scope.
 The broad goal stays active: unit-counter depth, research/expansion adaptation and
 longer Commander balance still need work.
+
+
+## Combined arms, 0.12.1
+
+Field Sappers and scouted anti-armor recruitment add composition decisions.
+combat-roles.js supplies shared faction research and role/bonus rules. Both armies
+now research through paid producer queues. tests/counter-checks.js is shared with
+the browser; test:compositions compares four earned-resource opening scenarios and
+runs in Actions. Both tested Commander openings lose: investigate defenses and
+longer-match behavior next, without weakening tests or calling this complete.

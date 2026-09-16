@@ -30,3 +30,9 @@ These images are original generated fan-game assets; the underlying character na
 Quarry platform, braced derrick, bucket, faction stripe, mineral outcrops and cargo
 crates are original Canvas geometry in render.js. Existing damage overlays apply.
 No new external or generated raster asset was introduced in this increment.
+
+
+### Field Sapper (0.12.1)
+Reuses each faction's existing infantry atlas crop, with an original Canvas brass
+cross-braced demolition-pack overlay. No additional generated sprite sheet was
+created; this is a visible role variant rather than a unique full-body illustration.
