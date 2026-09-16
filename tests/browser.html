@@ -56,7 +56,7 @@
       frame.onload = async () => {
         for (const file of ['strategy.js', 'defense-strategy.js', 'alert-checks.js', 'book-checks.js', 'siege-checks.js', 'economy-checks.js', 'enemy-economy-checks.js', 'counter-checks.js', 'browser-driver.js']) {
           const s = frame.contentDocument.createElement('script');
-          s.src = '../tests/' + file + '?v=0.13.4';
+          s.src = '../tests/' + file + '?v=0.13.4-defense2';
           s.async = false;
           await new Promise((resolve, reject) => { s.onload = resolve; s.onerror = reject; frame.contentDocument.body.append(s); });
         }

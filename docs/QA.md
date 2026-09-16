@@ -370,3 +370,11 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
   attack-report-desktop.png, attack-report-portrait.png, attack-report-landscape.png.
 - Remaining goal work: mixed-army selection subgroups, adaptive expansion locations,
   wider human opening/recovery balance and more directional artwork.
+
+- Initial CI defense timed out alive at 1200s: regrouping after every moderate
+  loss required rebuilding to 28 combatants after local Supplies ran out. The
+  corrected policy commits an attack until severe losses, fields/replaces a
+  scout for artillery sight, and places its tower on clear ground after the early
+  economy is established. Victory assertions and the 1200s limit are unchanged;
+  the test additionally requires reconnaissance. Final local policy wins at 583s
+  with the palace intact. Earlier results above describe the initial policy.
