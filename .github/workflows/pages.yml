@@ -22,6 +22,7 @@ jobs:
       - run: npm run test:balance
       - run: npm run test:compositions
       - run: npm run test:commander
+      - run: npm run test:raids
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: check

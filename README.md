@@ -156,3 +156,7 @@ same Patrol button, and selected patrols show their two endpoints on the battlef
 Scouted enemy buildings remain as faded **LAST SEEN** silhouettes and hollow minimap
 markers after leaving vision. They carry no current health or production information.
 Return a scout to confirm whether the site still exists.
+
+`npm run test:raids` runs matched quarry-harassment comparisons. See
+[the raid findings](docs/RAID-COMPARISON.md) for measured economic disruption and
+the remaining gap between lost production and military capacity.

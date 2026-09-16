@@ -609,3 +609,13 @@ function browserIntelligence(){
  updateUI(true);togglePause();draw();
  qaReport('Last-seen structures: muted silhouettes and hollow minimap marks. No live health, queue or research is shown. Revisit to verify.');
 }
+
+function browserRaid(){
+ clearInterval(qaInterval);qaInterval=null;raidSetup('sappers');paused=false;$('overlay').classList.add('hidden');
+ cam.x=1250;cam.y=630;cam.zoom=.9;
+ qaInterval=setInterval(()=>{
+  raidStep('raid');for(let k=0;k<20&&!ended;k++){update(.05);raidObserve();}
+  qaReport(JSON.stringify(raidResult(),null,2));
+  if(t>=180||ended){clearInterval(qaInterval);qaInterval=null;paused=true;updateUI(true);draw();}
+ },50);
+}

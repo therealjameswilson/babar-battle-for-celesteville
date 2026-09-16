@@ -536,3 +536,14 @@ Running the previous patrol bounds assertion at desktop height revealed that it
 ignored the intended scrollable sidebar. It now scrolls the actual button into view
 before testing viewport bounds, preserving the reachability requirement. This is not
 a claim that every desktop command fits simultaneously without scrolling.
+
+## Quarry raid comparison (2026-09-16)
+
+Added four deterministic three-minute arms and a real-browser accelerated sapper
+raid. The browser run matched the local sapper result exactly: 380 Materials
+extracted, 285 banked, original quarry destroyed and rebuilt, two raiders survived,
+and three enemy guns produced. Evidence: artifacts/raid-browser-result.json and
+raid-browser-finish.png. This fixture deploys a predetermined force and disables
+assault waves; it does not claim an earned-resource opening or whole-match balance.
+See RAID-COMPARISON.md for all four results and the absence of a demonstrated
+military-production advantage. test:raids now runs in the Pages check job.

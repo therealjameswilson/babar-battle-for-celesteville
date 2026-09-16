@@ -9,7 +9,8 @@
     "start": "python3 -m http.server 8000 --directory dist",
     "test:balance": "node tests/balance.cjs",
     "test:compositions": "node tests/compositions.cjs",
-    "test:commander": "node tests/commander.cjs"
+    "test:commander": "node tests/commander.cjs",
+    "test:raids": "node tests/raids.cjs"
   },
   "engines": {
     "node": ">=20"
