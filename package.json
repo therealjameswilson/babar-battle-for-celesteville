@@ -11,6 +11,7 @@
     "test:compositions": "node tests/compositions.cjs",
     "test:commander": "node tests/commander.cjs",
     "test:raids": "node tests/raids.cjs",
+    "test:burst": "node tests/burst-comparison.cjs",
     "test:earned-raids": "node tests/earned-raids.cjs"
   },
   "engines": {

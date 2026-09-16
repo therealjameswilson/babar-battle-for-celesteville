@@ -671,3 +671,16 @@ function browserRapid(){
  selected=alive(0).filter(u=>u.type==='trooper');cam.x=540;cam.y=820;cam.zoom=1.2;
  updateUI(true);draw();qaReport('Rapid advance researched for this ability fixture. Use the real button or V: selected infantry spends 20 health for 6s of movement/fire boost, followed by cooldown.');
 }
+
+function browserBurstBattle(){
+ qaReset();burstSetup('engage','normal');selected=alive(0).filter(u=>burstIds.includes(u.id));
+ cam.x=760;cam.y=780;cam.zoom=1.8;updateUI(true);draw();
+ qaReport('Normal-speed matched infantry engagement. Doctrine is granted for the fixture. Use the actual Rapid advance button or V to trade health for tempo; orders stay intact.');
+}
+function browserBurstComparisons(){
+ qaReset();const checks=[];
+ try{
+  const results=burstComparisons((ok,label)=>{if(!ok)throw Error(label);checks.push('PASS '+label);});
+  paused=true;updateUI(true);draw();qaReport(checks.join('\n')+'\n'+JSON.stringify(results,null,2));
+ }catch(error){paused=true;qaReport('FAIL '+error.message);throw error;}
+}

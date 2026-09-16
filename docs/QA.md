@@ -604,3 +604,13 @@ and OS preference switching remain outside this verification.
 - Rendered accelerated Story playthrough reached victory at 03:04 with 21
   casualties; this browser run uses its own random sequence, not the seeded CLI
   comparison. Extended human matches and physical touch-device QA remain open.
+
+## Infantry burst tactical comparisons — after 0.25.1
+
+Added `test:burst` and a required CI step. Eight matched scenarios compare healthy
+and wounded engagements plus distant/close withdrawals. All 21 checks passed in
+CLI and the real browser; final numerical results agreed. See
+BURST-COMPARISON.md for setup, results, discarded invalid placement and limits.
+The normal-speed browser battle used the actual activation button and rendered
+shots, health loss and the active ring. No game balance values changed in this
+increment. JavaScript checks and the existing deterministic suite also passed.

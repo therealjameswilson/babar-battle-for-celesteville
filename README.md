@@ -180,3 +180,7 @@ Current orders remain intact. Use the burst to close distance or withdraw, then
 recover at a supplied aid station; repeated use without recovery is costly.
 The rhinos can research and use the same ability against visible threats.
 This is an invented wartime game mechanic, not a canonical character power.
+
+`npm run test:burst` compares activation versus normal orders in eight controlled
+infantry fights and withdrawals. See [the results](docs/BURST-COMPARISON.md) for
+health costs, damage gains and situations where the burst makes losses worse.
