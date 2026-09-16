@@ -17,7 +17,7 @@ Run `npm start`, then open http://localhost:8000. Or open `dist/index.html` dire
 
 Provisioners physically collect supply caches and deliver to connected palaces or homes. Recruit guards and scouts at the Guard School, artillery at Artillery Works, and provisioners at the palace. Homes raise population and extend supply. Construction needs an assigned provisioner on site. The nearest free worker is assigned automatically, preferring selected workers. If the builder falls or leaves, use Repair with another provisioner to resume. Unfinished construction can be cancelled for a 75% refund.
 
-Buildings link within 360m; hostile soldiers within 85m of a link interrupt it. Isolated recruitment operates at 25%. Clear raiders or add connecting buildings. Selecting a building shows visible supply links. The depot requires eight uncontested seconds with soldiers: ownership grants 2 supplies/s and cuts enemy reserve shipments. Destroy Basil’s barracks to stop his recruitment.
+Buildings link within 360m; hostile soldiers within 85m of a link interrupt it. Isolated recruitment operates at 25%. Clear raiders or add connecting buildings. Selecting a building shows visible supply links. The depot requires eight uncontested seconds with soldiers: ownership grants 2 Supplies/s to either faction. Enemy workers gather the rest. Raid gatherers, cut their routes, and destroy production; Basil can pay workers to rebuild, so scout his recovery.
 
 Guards screen long-range guns; scouts are fast and see farther. Sandbags reduce incoming damage by 35% for both sides. Fire suppresses units; low morale causes withdrawal. Commanders and supplied aid stations recover morale, and aid stations heal wounds after five seconds without fire. Commander returns require time and 100 supplies. Losses therefore consume both time and logistics.
 
@@ -39,7 +39,17 @@ artillery timing. Building/research cancellation returns 75% of both paid resour
 recruit cancellation returns all of both. Select multiple production buildings to
 distribute recruitment to the eligible site that can finish the next unit soonest.
 Enemy quarry workers use the same extraction/delivery rules and their guns consume
-Materials. Their Supplies still use the existing disruptible reserve schedule.
+Materials. Their Supplies now come from physical gatherers and an owned depot, with no scheduled income.
+
+## Enemy base economy (0.11.0)
+
+Basil trains units in real building queues, obeys population limits, replaces lost
+workers and rebuilds destroyed barracks using paid construction and worker labor.
+Killing an engineer stops a foundation until another worker arrives. A bankrupt
+rhino base gets no free replacements. Expansion homes connect the eastern road to
+the central stocks. Enemy repairs consume enemy Supplies. After wave two, Basil’s
+command reduces production time by 20%; isolation still slows it to one quarter.
+Scouting reveals workers and buildings; exact enemy funds are no longer exposed.
 
 ## Development and verification
 

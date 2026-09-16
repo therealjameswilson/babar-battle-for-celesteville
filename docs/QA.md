@@ -268,3 +268,34 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
   unlocated MutationObserver messages; game assertions passed.
 - Remaining scope: full enemy Supplies economy, expansion/rebuild behavior,
   longer Commander balance/composition comparisons and physical touch-device QA.
+
+## Enemy economic base — 2026-09-16, version 0.11.2
+
+- `npm run check`, `npm test`, `npm run test:balance` pass. Story normal-order
+  balance bot wins at 230.70s with the new economic opponent. It uses earned
+  Supplies/Materials; this remains automated evidence, not manual human balance.
+- **191 real-browser checks pass**: 27 new checks cover physical enemy Supplies,
+  removal of passive income, symmetric depot income, paid timed queues, worker
+  replacement, bankruptcy, paid rebuilding, builder loss/reassignment, paid enemy
+  repairs, population and Materials limits, visible threat decisions, expansion
+  completion and resource conservation across 220s of autonomous economic growth.
+- Rendered accelerated Story victory: 05:10, 34 casualties, 26 Supplies. Rendered
+  unattended loss: 02:41. Deploy again returned to the Take command start screen.
+  Browser and seeded Node results differ; neither proves balanced human openings.
+- Inspected the 180s enemy-economy fixture: built forward homes and replacement
+  barracks foundation are visible. The fixture reveals the map and destroys the
+  barracks explicitly for review; it does not grant extra economic funds.
+- Desktop review exposed six quick commands clipping in their old flex row.
+  They now use a three-column/two-row grid: desktop scrollWidth/clientWidth both
+  270px. Portrait (390×844) grid both 181px; 844×390 landscape controls also fit.
+  Saved desktop, portrait and landscape screenshots under artifacts/enemy-economy-*.
+  These are browser viewport checks, not physical iPhone/Safari validation.
+- Existing 33 roster entries, powers and command checks pass. Basil now reduces
+  actual queue training time by 20%, rather than accelerating instant unit spawns.
+  Exact enemy funds are hidden; quarry worker labels include visible enemy miners.
+- Remaining: adaptive expansion locations, enemy research, explicit unit-counter
+  depth and sustained Commander/opening comparisons. The full gameplay goal is
+  still active; this economic release is an increment, not completion.
+- Combat performance fixture: 120 frames in 1998ms, mean draw .548ms (p95 .7),
+  mean update 1.015ms (p95 1.3), 65 entities. This fixture measures combat with
+  macro decisions disabled; extended economic AI profiling remains separate.

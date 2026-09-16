@@ -139,17 +139,17 @@ function add(type, team, x, y, extra = {}) {
 function alive(team) {
   return units.filter((u) => u.team === team && u.hp > 0);
 }
-function supply() {
+function supply(team = 0) {
   return (
-    alive(0).filter((u) => defs[u.type].speed).length +
-    alive(0).reduce((a, u) => a + u.queue.length, 0)
+    alive(team).filter((u) => defs[u.type].speed).length +
+    alive(team).reduce((a, u) => a + u.queue.length, 0)
   );
 }
-function cap() {
+function cap(team = 0) {
   return Math.min(
     100,
-    (benefits.has('madame') ? 10 : 0) +
-      alive(0).reduce(
+    (team === 0 && benefits.has('madame') ? 10 : 0) +
+      alive(team).reduce(
         (a, u) =>
           a +
           (u.construction
@@ -157,7 +157,7 @@ function cap() {
             : u.type === 'core'
               ? 20
               : u.type === 'relay'
-                ? benefits.has('celeste-mother')
+                ? team === 0 && benefits.has('celeste-mother')
                   ? 15
                   : 10
                 : 0),
@@ -310,6 +310,7 @@ function reset() {
   add('turret', 1, 1270, 450);
   add('turret', 1, 1520, 500);
   add('quarry', 1, 1260, 610);
+  for (let i=0;i<6;i++) add('worker',1,1530+i*14,330,{order:{kind:'gather',node:nodes[7+i%3]}});
   for (let i=0; i<3; i++) add('worker', 1, 1210-i*18, 640, {order:{kind:'gather',node:nodes.find(n=>n.kind==='materials'&&n.x===1260)}});
   for (let i = 0; i < (easy ? 4 : 6); i++) add('trooper', 1, 1330 + i * 30, 390);
   rebuildNav();
@@ -398,7 +399,7 @@ function update(dt) {
       u.construction = Math.max(0, u.construction - dt);
       u.hp = Math.min(u.max, u.hp + (u.max * spent) / (u.buildDuration || d.build));
       if (!u.construction) {
-        say(d.name + ' ready.');
+        if (u.team === 0 || visible(u)) say(d.name + ' ready.');
       }
       continue;
     }
@@ -413,7 +414,7 @@ function update(dt) {
     }
     if (u.queue.length && !u.research) {
       u.progress +=
-        dt * (supplied(u) ? 1 : 0.25) * (u.team === 0 && benefits.has('troubadour') ? 1.25 : 1);
+        dt * (supplied(u) ? 1 : 0.25) * (u.team === 0 && benefits.has('troubadour') || u.team === 1 && wave >= 2 ? 1.25 : 1);
       const type = u.queue[0];
       if (u.progress >= defs[type].time) {
         let q = { x: u.x + u.r + 38, y: u.y + 45 };
@@ -432,9 +433,10 @@ function update(dt) {
             ? { kind: 'gather', node: u.rally.node }
             : { kind: 'move', x: u.rally.x, y: u.rally.y };
         }
+        if (u.team === 1 && type === 'scout' && !enemyScoutSent) { enemyScoutSent = true; issueOrder(n,{kind:'move',x:650,y:880}); }
         u.queue.shift();
         u.progress = 0;
-        say(defs[type].name + ' ready.');
+        if (u.team === 0) say(defs[type].name + ' ready.');
       }
     }
     if (u.type === 'worker' && u.order?.kind === 'build') {
@@ -457,9 +459,9 @@ function update(dt) {
         continue;
       }
       if (move(u, b, dt, b.r + u.r + 7)) {
-        const amount = Math.min(18 * dt, b.max - b.hp, ore / 0.3);
+        const amount = Math.min(18 * dt, b.max - b.hp, (u.team ? enemyBudget : ore) / 0.3);
         b.hp += amount;
-        ore -= amount * 0.3;
+        if (u.team) enemyBudget -= amount * 0.3; else ore -= amount * 0.3;
       }
       continue;
     }
@@ -598,14 +600,14 @@ function build(type) {
   say(type === 'quarry' ? 'Tap a marked Materials deposit near your supply line. Then assign provisioners with Gather.' : 'Tap open ground near your base to place ' + defs[type].name + '.');
   updateUI(true);
 }
-function validBuild(p, type) {
+function validBuild(p, type, team = 0) {
   return (
-    prerequisite(type) && (type !== 'quarry' || !!materialSite(p)) &&
+    prerequisite(type, team) && (type !== 'quarry' || !!materialSite(p)) &&
     p.x > 60 &&
     p.y > 60 &&
     p.x < W - 60 &&
     p.y < H - 60 &&
-    alive(0).some((u) => !defs[u.type].speed && dist(u, p) < 310) &&
+    alive(team).some((u) => !defs[u.type].speed && !u.construction && dist(u, p) < 310) &&
     !solidAt(p.x, p.y, defs[type].r + 24) &&
     units.every((u) => u.hp <= 0 || dist(u, p) > u.r + defs[type].r + 12) &&
     nodes.every((n) => (type === 'quarry' && n === materialSite(p)) || dist(n, p) > defs[type].r + 35)
@@ -769,8 +771,7 @@ function updateUI(force = false) {
   $('depot-status').textContent =
     'DEPOT ' +
     (depot.team === 0 ? 'OURS · +2/s' : depot.team === 1 ? 'RHINOS' : 'CONTESTED') +
-    ' · Enemy reserves ' +
-    Math.floor(enemyBudget);
+    ' · Scout workers and production';
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
   const key = prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   if (force || key !== actionKey) {

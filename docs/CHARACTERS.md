@@ -31,7 +31,7 @@ This game intentionally combines generations. The roster now includes 22 book ch
 | --- | --- | --- |
 | Lord Rataxes | Ruler | Recovering field commander; joins from wave two |
 | Lady Rataxes / Louise | Wife | Fortress strength after wave one |
-| Basil | Chief adviser | Faster reinforcements after wave two; destroy his barracks to stop recruitment |
+| Basil | Chief adviser | 20% shorter training after wave two; paid worker replacement, production rebuilding and expansion; raids disrupt his economy |
 | Victor | Son | Friendship with elephant children delays the next wave after wave three |
 | Rhudi | Grandson | Faster rhinos after wave four |
 

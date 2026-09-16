@@ -22,6 +22,7 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    enemyEconomyChecks(check);
     economyChecks(check);
     qaReset();
     const uiWorker = alive(0).find(u=>u.type==='worker'); uiWorker.order={kind:'hold'};
@@ -159,7 +160,7 @@ async function browserSuite() {
     check(depot.team === 0, 'Depot capture');
     const reserves = enemyBudget;
     qaTicks(3);
-    check(enemyBudget === reserves, 'Captured depot stops reserve income');
+    check(enemyBudget === reserves, 'No enemy passive income without workers or owned depot');
     const old = cam.zoom;
     $('zoom-in').click();
     check(cam.zoom > old, 'Zoom controls');
@@ -393,4 +394,15 @@ function browserEconomy() {
   selected=[alive(0).find(u=>u.type==='worker')];
   updateUI(true); draw();
   qaReport('Economy fixture uses starting resources. Build a Materials Quarry on the blue deposit northwest of the palace. Assign provisioners with Gather.');
+}
+
+function browserEnemyEconomy() {
+  qaReset(); nextWave=9999; revealUntil=9999; enemyScoutSent=true;
+  qaTicks(180);
+  const barracks=alive(1).find(b=>b.type==='forge');
+  if (barracks) barracks.hp=0;
+  rebuildNav(); enemySpawn=0; enemyMacro();
+  cam.x=1280;cam.y=550;cam.zoom=.8;selected=[];togglePause();
+  updateUI(true);draw();
+  qaReport('Economic AI inspection after 180 simulated seconds. Starting funds only; full-map reveal is a QA aid. Barracks destroyed by fixture: inspect the paid replacement and forward homes, then Resume to watch workers rebuild.');
 }

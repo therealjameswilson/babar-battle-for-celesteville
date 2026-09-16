@@ -234,7 +234,7 @@ const COURT = [
     team: 1,
     initials: 'Bs',
     title: 'Efficient reinforcements',
-    text: 'After wave two, rhino training is 20% faster. Destroy his barracks to stop recruitment. Capture the depot to cut shipments.',
+    text: 'After wave two, rhino training is 20% faster. Raid his workers and barracks to interrupt recruitment. Engineers rebuild using gathered resources; the depot funds its owner.',
     cost: 0,
   },
   {

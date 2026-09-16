@@ -340,7 +340,7 @@ function draw() {
       poly([[n.x-25,n.y+12],[n.x-20,n.y-12],[n.x,n.y-23],[n.x+25,n.y+4],[n.x+15,n.y+19]], '#789499', '#344c52');
       ctx.fillStyle='#dae6db'; ctx.font='10px monospace';
       ctx.fillText('MATERIALS' + (observed ? ' ' + Math.ceil(n.amount) : ''),n.x-44,n.y+34);
-      const assigned = alive(0).filter(w=>w.type==='worker'&&w.order?.node===n).length;
+      const assigned = units.filter(w=>w.hp>0&&w.type==='worker'&&w.order?.node===n&&(w.team===0||visible(w))).length;
       ctx.fillText(assigned + ' workers · 3 slots',n.x-32,n.y+47);
       continue;
     }

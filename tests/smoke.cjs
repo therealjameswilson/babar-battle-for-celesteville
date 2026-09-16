@@ -82,6 +82,7 @@ for (const file of [
   'artillery.js',
   'navigation.js',
   'tactics.js',
+  'enemy-economy.js',
   'audio.js',
   'court.js',
   'render.js',

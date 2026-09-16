@@ -1,0 +1,66 @@
+/* Shared VM/browser checks of economic AI, using real update and order paths. */
+function enemyEconomyChecks(check) {
+  function freshEnemy() { easy=true;reset();running=true;nextWave=enemySpawn=9999;enemyScoutSent=true; }
+  function steps(seconds) {for(let i=0;i<seconds*20&&!ended;i++) update(.05);}
+  freshEnemy();
+  check(alive(1).filter(u=>u.type==='worker').length===9,'Rhinos start with six Supplies gatherers and three quarry workers');
+  const start=enemyBudget; steps(30);
+  check(enemyBudget>start && nodes.filter(n=>n.x>1500&&!n.kind).some(n=>n.amount<1800),'Rhino Supplies income comes from physical gathering and deliveries');
+  freshEnemy(); alive(1).filter(u=>u.type==='worker').forEach(w=>w.hp=0);
+  const noWorkers=enemyBudget; steps(20);
+  check(enemyBudget===noWorkers,'No scheduled enemy Supplies income remains');
+  depot.team=1; const beforeDepot=enemyBudget; updateTactics(2);
+  check(enemyBudget===beforeDepot+4,'Rhino-owned depot earns the same two Supplies per second');
+  depot.team=0; const afterDepot=enemyBudget; updateTactics(2);
+  check(enemyBudget===afterDepot,'Player captures depot to remove enemy depot income');
+  freshEnemy();
+  const school=alive(1).find(b=>b.type==='forge'); const count=alive(1).length, funds=enemyBudget;
+  check(enemyQueue('trooper') && school.queue[0]==='trooper' && enemyBudget===funds-60 && alive(1).length===count,'Enemy recruitment pays into a real queue without instant units');
+  steps(6); check(alive(1).length===count,'Rhino infantry cannot appear before its seven-second training completes');
+  steps(1.1); check(alive(1).length===count+1 && school.queue.length===0,'Completed rhino recruit emerges from its producer');
+  freshEnemy(); const base=alive(1).find(b=>b.type==='core');
+  alive(1).filter(u=>u.type==='worker').forEach(w=>w.hp=0); enemyBudget=50; enemySpawn=0; enemyMacro();
+  check(base.queue[0]==='worker' && enemyBudget===0 && !alive(1).some(u=>u.type==='worker'),'Basil pays to replace dead workers through the palace queue');
+  enemySpawn=9999; steps(6.1);
+  check(alive(1).some(u=>u.type==='worker'&&u.order?.kind==='gather'),'Replacement worker takes a gathering order after training');
+  freshEnemy(); enemyBudget=0; alive(1).filter(u=>u.type==='worker').forEach(w=>w.hp=0); enemySpawn=0; enemyMacro();
+  check(!alive(1).some(b=>b.queue.length) && enemyBudget===0,'No free emergency worker or recruitment when the economy is bankrupt');
+  freshEnemy(); const lost=alive(1).find(b=>b.type==='forge'); lost.hp=0; rebuildNav(); enemySpawn=0; enemyMacro();
+  const replacement=alive(1).find(b=>b.type==='forge');
+  check(replacement && replacement.construction===12 && replacement.hp===1 && replacement.paid===150,'Destroyed barracks is replaced by a paid unfinished foundation');
+  check(!enemyQueue('trooper'),'An unfinished replacement cannot train infantry');
+  let builder=alive(1).find(w=>w.order?.target===replacement); builder.hp=0;
+  const remaining=replacement.construction; enemySpawn=9999; steps(2);
+  check(replacement.construction===remaining,'Rhino construction pauses when its builder is killed');
+  const paidBefore=enemySpent; enemySpawn=0; enemyMacro();
+  check(alive(1).some(w=>w.order?.kind==='build'&&w.order.target===replacement)&&replacement.paid===150,'Basil reassigns a living worker to the same foundation');
+  check(enemySpent-paidBefore<150,'Replacing a builder does not pay for another barracks');
+  enemySpawn=9999; steps(40);
+  check(!replacement.construction && replacement.hp>1,'Replacement barracks completes through worker travel and labor');
+  freshEnemy(); const home=alive(1).find(b=>b.type==='core');home.hp-=100;
+  const repairer=alive(1).find(w=>w.type==='worker');repairer.x=home.x+62;repairer.y=home.y;
+  issueOrder(repairer,{kind:'repair',target:home}); enemyBudget=20;
+  const playerFunds=ore; update(.05);
+  check(home.hp>1700 && enemyBudget<20 && ore===playerFunds,'Rhino repairs charge enemy funds and leave player funds untouched');
+  freshEnemy(); units=units.filter(u=>u.team===0||!defs[u.type].speed); enemyBudget=1000;
+  while(supply(1)<cap(1)) add('trooper',1,1400,400);
+  check(!enemyQueue('trooper'),'Enemy population cap reserves both troops and queued recruits');
+  freshEnemy(); enemyBudget=1000; t=160; enemySpawn=0; enemyMacro();
+  const expansion=alive(1).find(b=>b.type==='relay'&&b.construction);
+  check(expansion && expansion.paid===100 && expansion.x===1120 && expansion.y===620,'Basil starts a paid forward expansion along the eastern approach');
+  enemySpawn=9999; steps(40); rebuildSupply();
+  check(!expansion.construction && supplied(expansion),'Expansion needs worker travel and a completed connection before it works');
+  freshEnemy(); const hidden=add('trooper',0,500,500), seen=add('trooper',0,1320,600);
+  check(!sees(1,hidden) && enemySafe(hidden),'Enemy economy does not avoid unseen troops using omniscient threat checks');
+  check(sees(1,seen) && !enemySafe(seen),'Visible hostile troops prevent unsafe enemy construction');
+  freshEnemy(); const enemyGunCount=alive(1).filter(u=>u.type==='walker').length;
+  enemyMaterials=0; check(!enemyQueue('walker')&&alive(1).filter(u=>u.type==='walker').length===enemyGunCount,'Enemy artillery queues require earned Materials');
+  freshEnemy(); units=units.filter(u=>u.team===1||!defs[u.type].speed); enemyScoutSent=true;
+  const initialFunds=enemyBudget, initialSupplies=nodes.filter(n=>n.kind!=='materials').reduce((n,p)=>n+p.amount,0);
+  enemySpawn=0; steps(220);
+  const delivered=initialSupplies-nodes.filter(n=>n.kind!=='materials').reduce((n,p)=>n+p.amount,0);
+  const cargo=alive(1).filter(w=>w.cargoKind==='supplies').reduce((n,w)=>n+w.carrying,0);
+  check(Math.abs(enemyBudget+enemySpent+cargo-initialFunds-delivered)<.001,'Autonomous base spending and inventory conserve physically extracted Supplies');
+  check(alive(1).some(b=>b.type==='relay'&&b.x===1100&&!b.construction),'Enemy funds a complete central expansion from starting funds and real gathering');
+  reset(); check(enemySpent===0 && enemyBudget===(easy?480:650),'Restart resets enemy economic spending and starting resources');
+}

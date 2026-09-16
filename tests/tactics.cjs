@@ -51,7 +51,7 @@ tick(170);
 assert.equal(run('depot.team'), 0, 'Depot captured by holding ground.');
 run('const depotBudget=enemyBudget');
 tick(100);
-assert.equal(run('enemyBudget'), run('depotBudget'), 'Captured depot cuts reserve income.');
+assert.equal(run('enemyBudget'), run('depotBudget'), 'No passive reserves accrue when enemy workers and depot income are absent.');
 run(
   "units.filter(u=>u.team===1&&u.type==='forge').forEach(u=>u.hp=0);enemySpawn=0;const enemyCount=alive(1).length"
 );
@@ -59,7 +59,7 @@ tick(100);
 assert.equal(
   run('alive(1).length'),
   run('enemyCount'),
-  'Destroying Basil’s barracks stops recruitment.'
+  'Destroyed barracks cannot produce infantry during rebuilding.'
 );
 fresh();
 run(
@@ -127,8 +127,9 @@ fresh();
 run('t=50;nextWave=50;wave=2;enemyThink()');
 assert.equal(run('nextWave'), 170, 'Victor buys 20 extra seconds after wave three.');
 fresh();
-run('wave=2;enemySpawn=0;enemyThink()');
-assert.equal(run('enemySpawn'), 14.4, 'Basil accelerates recruitment by 20%.');
+run("wave=2;const basilSchool=alive(1).find(b=>b.type==='forge');basilSchool.queue=['trooper'];rebuildSupply();");
+tick(20);
+assert(Math.abs(run('basilSchool.progress')-1.25)<.0001, 'Basil reduces actual production time by 20% after wave two.');
 fresh();
 run(
   "const rhino=add('scout',1,1000,650);const startX=rhino.x;wave=0;move(rhino,{x:1150,y:650},.1);const ordinary=rhino.x-startX;rhino.x=startX;wave=4;move(rhino,{x:1150,y:650},.1)"
@@ -255,3 +256,7 @@ console.log('PASS: siege transitions, spotting, splash, friendly fire, range, mo
 run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'economy-checks.js'), 'utf8'));
 run('economyChecks((ok, label) => { if (!ok) throw new Error(label); })');
 console.log('PASS: material extraction, delivery, saturation, raids, prerequisites, dual-resource costs/refunds, multi-production, idle workers and enemy material limits.');
+
+run(require("node:fs").readFileSync(require("node:path").join(__dirname,"enemy-economy-checks.js"),"utf8"));
+run("enemyEconomyChecks((ok,message)=>{if(!ok)throw Error(message)})");
+console.log("PASS: physical enemy economy, queues, worker replacement, paid rebuilding, population, depot, repair and fair expansion decisions.");

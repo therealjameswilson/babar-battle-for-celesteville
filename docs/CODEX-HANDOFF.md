@@ -61,3 +61,15 @@ Load economy.js after game.js. Both tests/tactics.cjs and the real browser suite
 load tests/economy-checks.js. Enemy Materials are physically gathered, but enemy
 Supplies remain scheduled. Next substantive work is enemy economic base behavior;
 the broad StarCraft-style goal remains active.
+
+
+## Enemy economic base, 0.11.0
+
+Scheduled enemy Supplies and instant reinforcements are removed. Both factions
+now gather physical resources and use paid building queues. New enemy-economy.js
+handles worker replacement, paid rebuilding, supply homes, repairs and expansion.
+Enemy exact funds are hidden; depot income goes only to its owner. Shared VM/browser
+checks include resource conservation over autonomous expansion. Historical QA
+entries describe old versions; use the latest entry and STARCRAFT-GOAL.md for scope.
+The broad goal stays active: unit-counter depth, research/expansion adaptation and
+longer Commander balance still need work.

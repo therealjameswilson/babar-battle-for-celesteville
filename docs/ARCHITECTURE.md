@@ -15,7 +15,7 @@ Classic scripts share one simulation state, preserving the prototype’s depende
 
 World: 1800 × 1260. Navigation: 60 × 42 cells, 30m each. Forest blocks north/south edges and a middle segment, leaving northern and southern roads. A* uses eight neighbors with diagonal corner checks and a binary heap. Static buildings have clearance; approach points stop at a target’s perimeter. Routes refresh when the destination moves, buildings change, or a two-second timer elapses. Mobile separation checks static collision before displacement. Construction cannot overlap units or terrain. Crowds can briefly queue at a narrow passage; this is local separation, not reservation-based multi-agent planning.
 
-Visibility is sampled once each simulation step, symmetric for both armies. Hidden enemies cannot be acquired or tracked as focus-fire targets. Terrain and cache locations are strategic map knowledge. Both armies know the starting capital coordinates; AI chooses individual combat targets only within current sight. Reconnaissance updates its capital memory. Public enemy reserve totals represent intercepted convoy reports.
+Visibility is sampled once each simulation step, symmetric for both armies. Hidden enemies cannot be acquired or tracked as focus-fire targets. Terrain and cache locations are strategic map knowledge. Both armies know the starting capital coordinates; AI chooses individual combat targets only within current sight. Reconnaissance updates its capital memory. Exact enemy funds are hidden. Economy planning reads resource quantities only in friendly sight and responds to visible threats.
 
 | Unit | Cost | HP | Speed | Range | Damage / interval | Role |
 |---|---:|---:|---:|---:|---:|---|
@@ -29,7 +29,10 @@ Palace/Guard School/Artillery Works/home/tower costs: 400/150/240/100/160; start
 
 Supply graph: completed buildings within 360m; a hostile combatant within 85m of a segment cuts that edge. Disconnected queues run at 0.25 speed; resources are not refunded or lost. Only connected homes/palaces receive deliveries and heal troops. Workers divert deliveries to another linked receiver. Repair: 18 health/s, 0.3 supplies per health, stops when funds run out.
 
-Depot: one side must hold within 90m for 8 uncontested seconds. Capture progress moves toward the capturing side; opposing pressure reverses it. Player ownership grants 2 supplies/s and stops enemy income. Enemy reserves start at 480 Story / 650 Commander. While the depot is not player-held and barracks survive, income is 0.8 / 1.3 per second, capped at 900. Recruitment spends normal costs, every 18 / 12 seconds, with army caps 20 / 28. Barracks destruction stops recruitment. Basil accelerates the interval by 20% from wave two.
+Depot: one side must hold within 90m for 8 uncontested seconds. Ownership grants
+2 Supplies/s to either faction. All other rhino Supplies are physical worker
+deliveries. Starting funds are 480 Story / 650 Commander. Recruitment now uses
+real paid building queues and shared population limits (see enemy economy below).
 
 Story: enemy damage ×0.7, first assault 120s, later interval 100s. Commander: full damage, first assault 85s, later interval 72s. Enemy scouts start at 22s, main assaults alternate with a northern flank every third wave. Wounded enemies retreat below 27% health and regroup at aid stations; fit units rejoin on a subsequent assault. Rataxes joins from wave two. Louise fortifies the fortress after wave one; Victor adds 20s after wave three; Rhudi boosts speed from wave four.
 
@@ -154,7 +157,34 @@ dead, unfinished, researching or full-queue buildings and rank expected next-uni
 completion time with remaining progress and isolation included.
 
 Rhinos start with 60 Materials and three quarry workers. Their physical deliveries
-fund artillery and depletion prevents new guns; existing Supplies budget income
-has not yet been replaced by a full enemy economy. The normal-order balance bot
+fund artillery and depletion prevents new guns; Supplies economy was subsequently replaced in 0.11.0 (below). The normal-order balance bot
 now builds/staffs a quarry using starting funds and must produce at least one gun
 from earned resources before its victory counts as passing balance evidence.
+
+
+## Enemy economic base — 0.11.0
+
+`enemy-economy.js` loads after tactics.js. `enemySpawn` now schedules macro decisions
+every three seconds, not instant recruitment. Six initial Supplies workers and
+three Materials workers use the shared extraction/delivery loop. Worker targets
+are 9 Story / 12 Commander. Recruitment pays normal costs into completed producer
+queues (up to two waiting units), reserves population, and emerges at that building.
+Both teams use supply(team)/cap(team), with commander/council benefits player-only.
+Basil accelerates real queue progress by 1.25 from wave two (20% less training time).
+
+AI priorities: resume unfinished construction, allocate workers, replace losses,
+rebuild missing barracks, provide population homes, replace quarry/factory, expand,
+repair safe damaged buildings, scout and recruit infantry/artillery. Builder loss
+pauses work; reassignment keeps the same paid foundation. Repairs deduct 0.3 enemy
+Supplies per HP. No worker, unit or building is granted free when funds run out.
+Story/Commander army targets are 16/24 combat units with queued overflow limited by
+population. Homes are added up to 40/60 population, and two forward sites at
+(1120,620), (1100,890) become candidates after 150/100 seconds with sufficient funds.
+Workers use visible stocks within 520m of supplied delivery buildings, avoiding
+currently observed hostile troops. Strategic site coordinates are known map data;
+hidden hostile positions do not enter threat decisions. Shared placement collision
+rules still prevent overlapping unseen entities, as they do for player placement.
+
+Limitations: fixed expansion corridor, no economic research decisions yet, and
+broad army composition remains rule-based. Capturing the depot removes its income
+from the other side; it no longer magically stops physical worker deliveries.

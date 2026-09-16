@@ -157,15 +157,14 @@ function updateTactics(dt) {
         depot.progress = 0;
         say(
           side === 0
-            ? 'Central depot secured. Basil’s reserve shipments are cut off.'
-            : 'Basil has retaken the depot. Enemy shipments restored.'
+            ? 'Central depot secured. Supplies are reaching our command.'
+            : 'Basil has taken the depot. Rhino command receives its Supplies.'
         );
       }
     } else depot.progress = 0;
   }
   if (depot.team === 0) ore += 2 * dt;
-  else if (alive(1).some((b) => b.type === 'forge'))
-    enemyBudget = Math.min(900, enemyBudget + (easy ? 0.8 : 1.3) * dt);
+  else if (depot.team === 1) enemyBudget += 2 * dt;
   const friendlyTeams = [alive(0), alive(1)];
   for (const u of units.filter((u) => u.hp > 0 && defs[u.type].speed)) {
     if (u.type === 'hero') u.commandEnergy = Math.min(100, u.commandEnergy + dt * 1.25);
@@ -189,25 +188,7 @@ function enemyThink() {
         alive(1).filter(v => defs[v.type].speed && dist(leader, v) <= 180).length >= 2)
       commanderAbility(leader);
   }
-  if (t >= enemySpawn && alive(1).some((b) => b.type === 'forge')) {
-    enemySpawn = t + (easy ? 18 : 12) * (wave >= 2 ? 0.8 : 1);
-    let type = wave > 1 && wave % 2 === 0 && enemyMaterials >= materialCost('walker') && alive(1).some(b => b.type === 'factory' && !b.construction) ? 'walker' : 'trooper';
-    if (
-      alive(1).filter((u) => defs[u.type].speed).length < (easy ? 20 : 28) &&
-      enemyBudget >= defs[type].cost
-    ) {
-      enemyBudget -= defs[type].cost;
-      enemyMaterials -= materialCost(type);
-      enemySpent += defs[type].cost;
-      add(type, 1, 1380, 380);
-    }
-  }
-  // Scouting is a move order along a known road; target acquisition still requires vision.
-  if (t > 22 && !enemyScoutSent && wave === 0 && enemyBudget >= defs.scout.cost) {
-    enemyScoutSent = true;
-    enemyBudget -= defs.scout.cost;
-    add('scout', 1, 1250, 570, { order: { kind: 'move', x: 650, y: 880 } });
-  }
+  enemyMacro();
   if (t < nextWave) return;
   wave++;
   nextWave = t + (easy ? 100 : 72);

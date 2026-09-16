@@ -1499,7 +1499,8 @@ dialog {
 #court-search { width: 100%; min-height: 42px; padding: 9px; font: inherit; color: #253c30; background: #f5efdb; border: 1px solid #978a67; }
 
 /* Economy: three resource reports and a sixth macro command. */
-.quick { grid-template-columns: repeat(6,minmax(0,1fr)); }
+.quick { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); }
+.quick button { min-width: 0; overflow-wrap: anywhere; }
 @media(max-width:580px), (max-height:500px) and (min-width:581px) {
   .quick { grid-template-columns: repeat(3,minmax(0,1fr)); }
   .resources { gap: 5px; }
