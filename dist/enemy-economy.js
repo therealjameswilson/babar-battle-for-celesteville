@@ -1,6 +1,46 @@
 'use strict';
 // Enemy macro uses the same worker, construction, supply and production simulation.
 // Strategic sites are map knowledge; enemy threats and resource quantities require sight.
+// Reports hold snapshots, never references to hidden units or their current positions.
+let enemyResourceReports = new Map(), enemyThreatReports = new Map();
+const ENEMY_REPORT_LIFETIME = 60;
+function observeEnemyEconomy() {
+  for (const n of nodes) if (enemySeesPoint(n))
+    enemyResourceReports.set(n, {x:n.x,y:n.y,amount:n.amount,kind:n.kind,at:t});
+  for (const u of alive(0)) if (defs[u.type].damage && sees(1,u))
+    enemyThreatReports.set(u.id,{x:u.x,y:u.y,at:t});
+  for (const [id, report] of enemyThreatReports)
+    if (t-report.at>ENEMY_REPORT_LIFETIME) enemyThreatReports.delete(id);
+}
+function enemyExpansionSite() {
+  const buildings=alive(1).filter(b=>!defs[b.type].speed && !b.construction && supplied(b));
+  const homes=alive(1).filter(b=>b.type==='relay' && b.expansion);
+  if (homes.length>=2) return null;
+  // Map routes are common knowledge; their economic value comes from scouting.
+  const candidates=[{x:1120,y:620},{x:1100,y:890},{x:1320,y:740},
+    {x:1380,y:740},{x:1180,y:850},{x:1320,y:850}];
+  const drops=buildings.filter(b=>b.type==='core'||b.type==='relay');
+  const reports=[...enemyResourceReports.values()].filter(r=>r.amount>0 && t-r.at<=120);
+  const ranked=[];
+  for (const p of candidates) {
+    if (!enemySeesPoint(p) || !validBuild(p,'relay',1) || !enemySafe(p) ||
+      !buildings.some(b=>dist(b,p)<310) ||
+      [...enemyThreatReports.values()].some(r=>dist(r,p)<270)) continue;
+    let benefit=0;
+    for (const r of reports) {
+      const oldDistance=Math.min(...drops.map(b=>dist(b,r)));
+      const improvement=Math.max(0,oldDistance-dist(p,r));
+      benefit+=improvement*Math.min(1,r.amount/800)*(r.kind==='materials'?.45:1);
+    }
+    // Prefer the central road when current observations cannot distinguish stocks.
+    // Its bridge reveals the depot approaches without reading hidden resources.
+    const scouting=[...enemyResourceReports.values()].some(r=>r.kind!=='materials' && r.x<1200)?0:Math.max(0,1400-p.x)*.35;
+    const score=benefit+scouting;
+    if (score>30) ranked.push({p,score});
+  }
+  ranked.sort((a,b)=>b.score-a.score);
+  return ranked[0]?.p || null;
+}
 function enemySeesPoint(p) { return alive(1).some(u => dist(u,p) < vision(u)); }
 function enemySafe(p) {
   return !alive(0).some(u => defs[u.type].damage && sees(1,u) && dist(u,p) < 240);
@@ -57,6 +97,7 @@ function enemyAssignWorkers() {
 function enemyMacro() {
   if (t < enemySpawn) return;
   enemySpawn=t+3;
+  observeEnemyEconomy();
   const buildings=alive(1).filter(b=>!defs[b.type].speed), workers=alive(1).filter(w=>w.type==='worker');
   const core=buildings.find(b=>b.type==='core');
   if (!core) return;
@@ -71,18 +112,19 @@ function enemyMacro() {
   if (workers.length+queuedWorkers<(easy?9:12)) enemyQueue('worker');
   const construction=buildings.some(b=>b.construction);
   if (!construction) {
-    let type=null,site=null;
+    let type=null,site=null,isExpansion=false;
     if (!buildings.some(b=>b.type==='forge')) { type='forge'; site=enemyFindSite(type,core); }
     else if (supply(1)>=cap(1)-3 && cap(1)<(easy?40:60)) { type='relay'; site=enemyFindSite(type,core); }
     else if (!buildings.some(b=>b.type==='quarry')) { type='quarry'; site=nodes.find(n=>n.kind==='materials'&&enemySeesPoint(n)&&n.amount>0&&validBuild(n,type,1)); }
     else if (!buildings.some(b=>b.type==='factory') && t>90) { type='factory'; site=enemyFindSite(type,core); }
-    // Two connected forward homes shorten deliveries and reveal the central stocks.
+    // Up to two scouted expansions shorten deliveries; raids can change the route.
     else if (t>(easy?150:100) && enemyBudget>=160) {
-      for (const p of [{x:1120,y:620},{x:1100,y:890}]) {
-        if (!buildings.some(b=>b.type==='relay'&&dist(b,p)<90) && validBuild(p,'relay',1) && enemySafe(p)) {type='relay';site=p;break;}
-      }
+      site=enemyExpansionSite(); if (site) {type='relay';isExpansion=true;}
     }
-    if (site) enemyBuild(type,site);
+    if (site) {
+      const building=enemyBuild(type,site);
+      if (building && isExpansion) building.expansion=true;
+    }
   }
   // Reserve limited labor for paid repairs, outside observed hostile fire.
   const damaged=buildings.find(b=>!b.construction&&b.hp<b.max*.65&&enemySafe(b));

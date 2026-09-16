@@ -251,3 +251,18 @@ is the actual `selected` command target; All restores surviving members. A chang
 selection or control-group recall invalidates the retained pool. Death removes members;
 loss of the last active member restores the surviving pool. T/Shift+T cycles without
 intercepting Tab, which remains available for keyboard focus. Reset clears all state.
+
+### Adaptive enemy expansion (0.15.0)
+`enemy-economy.js` snapshots visible resource quantities and hostile positions every
+three seconds. Threat reports expire after 60s; resource values contribute to scoring
+for 120s. Six map-known sites compete on delivery-distance savings, weighted by observed
+remaining stock (Materials weight .45). Unscouted central stocks get no invented quantity;
+a central-road scouting bonus can justify a bridge. Observed empty stocks remove that
+bonus. Construction requires current sight, a legal connected footprint, normal funds
+and a real worker. At most two surviving marked forward homes can be built. A recent
+hostile report within 270m excludes a site; hidden movement never updates its location.
+
+Remaining fairness audit: the shared gather loop's automatic depleted-stock fallback
+still searches the global node list. Expansion decisions are now sight-based, but this
+older worker fallback needs its own fog-memory treatment before broad AI fairness can
+be considered verified.

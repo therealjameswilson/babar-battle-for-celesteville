@@ -252,6 +252,7 @@ function reset() {
   depot = { x: 950, y: 830, r: 65, team: -1, progress: 0 };
   enemyBudget = easy ? 480 : 650;
   enemySpent = 0;
+  enemyResourceReports = new Map(); enemyThreatReports = new Map();
   linked = new Set();
   intel = [[], []];
   navStamp = '';

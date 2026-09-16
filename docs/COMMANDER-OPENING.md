@@ -32,3 +32,7 @@ Run `npm run test:commander` for the repeatable simulation. The local browser QA
 page has **Defensive Commander ×20** for an accelerated rendered run. This is not
 a substitute for human playtesting or a promise that one opening handles every
 future balance change.
+
+The reference policy now reassigns quarry workers toward visible, safe Supplies stocks
+when Materials reach 150, instead of indefinitely stockpiling Materials while Supplies
+income collapses. This is ordinary gathering-order management, not a resource grant.

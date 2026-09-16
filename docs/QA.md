@@ -392,3 +392,20 @@ at 93b4e77 passed the CI Commander victory gate, but its rendered browser run lo
 07:06 with 49 enemy casualties (artifacts/commander-browser-final-policy.txt). The earlier
 rendered 15:24 victory used the earlier policy. Cross-runtime strategy robustness and
 extended human balance remain unresolved; no enemy stats or win assertions were weakened.
+
+## 0.15.0 adaptive expansion (2026-09-16)
+
+266 real-browser checks pass, including alternative sites under observed threat,
+60-second threat-memory expiry, hidden-position/stock invariance, observed depletion,
+two-expansion cap and reset. The rendered fixture changes the construction site from
+1120,620 to 1320,850 after a visible raider appears; the 100-Supplies foundation is paid
+and assigned to a real worker. Saved artifacts/adaptive-expansion-desktop.png and
+adaptive-expansion-browser-checks.txt. This is a controlled scenario, not a human match.
+
+Local syntax/rule checks and Story/composition simulations pass. The unchanged defensive
+policy first stalled at 20 minutes with two workers and excess Materials. Its revised
+ordinary gathering orders rebalance workers when Materials reach 150. The corrected
+policy wins locally at 6:53 with the palace intact. An accelerated, actually rendered
+Commander run wins at 14:31 with 110 enemy casualties. Evidence:
+artifacts/adaptive-commander-browser.txt and adaptive-commander-victory.png. These outcomes
+support viability of this opening, not general human balance or cross-runtime determinism.

@@ -476,3 +476,16 @@ function browserSubgroups() {
   updateUI(true);togglePause();draw();
   qaReport('Subgroup fixture: select Field Artillery, Babar, then All. Orders apply only to highlighted units. T cycles; Shift+T reverses.');
 }
+
+function browserAdaptiveExpansion() {
+  qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;t=160;
+  observeEnemyEconomy();const preferred=enemyExpansionSite();
+  const raider=add('trooper',0,1090,640);issueOrder(raider,{kind:'hold'});
+  t+=.05;observeEnemyEconomy();const alternate=enemyExpansionSite();
+  const building=alternate&&enemyBuild('relay',alternate);
+  if(building)building.expansion=true;
+  // Reveal only for reviewing this fixture; enemy planning already used real sight.
+  revealUntil=t+100;cam={x:1200,y:730,zoom:1};selected=[raider];
+  updateUI(true);togglePause();draw();
+  qaReport(`Actual AI expansion decision: clear road ${preferred?.x},${preferred?.y}; observed raider redirects to ${alternate?.x},${alternate?.y}. Foundation paid: ${building?.paid}. A real worker has the build order. Fixture is paused for review.`);
+}

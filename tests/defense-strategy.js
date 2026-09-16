@@ -11,9 +11,16 @@ function defenseStep() {
   if(!quarry)construct('quarry',metal);
   if(workers.length+base.queue.length<11 && ore>=50){selected=[base];train('worker');}
   if(quarry&&!quarry.construction){
+    const desiredMiners=materials<150?2:0;
     let miners=workers.filter(w=>w.order?.node===metal).length;
+    for(const w of workers.filter(w=>!w.carrying&&w.order?.node===metal)) {
+      if(miners<=desiredMiners)break;
+      const stock=nearest(w,nodes.filter(n=>n.kind!=='materials'&&n.amount>0&&own.some(u=>dist(u,n)<vision(u))&&
+        !alive(1).some(e=>sees(0,e)&&defs[e.type].damage&&dist(e,n)<260)));
+      if(stock){issueOrder(w,{kind:'gather',node:stock});miners--;}
+    }
     for(const w of workers.filter(w=>!w.carrying&&w.order?.kind==='gather'&&w.order.node!==metal)){
-      if(miners>=2)break;issueOrder(w,{kind:'gather',node:metal});miners++;
+      if(miners>=desiredMiners)break;issueOrder(w,{kind:'gather',node:metal});miners++;
     }
   }
   const factory=own.find(u=>u.type==='factory');

@@ -120,3 +120,7 @@ work remains active; see [the current gap audit](docs/STARCRAFT-GOAL.md).
 
 Mixed armies now have unit-type buttons: isolate artillery or Babar for specialist
 orders, then choose **All** to restore the surviving army. **T / Shift+T** cycles types.
+
+Enemy forward bases now respond to scouting: recent threats redirect construction,
+and observed empty stocks can cancel an expansion. Watch the alternative approaches
+after denying a road; the enemy still pays for buildings and sends workers to construct them.
