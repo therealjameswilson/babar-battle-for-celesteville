@@ -231,6 +231,12 @@ function issueOrder(u, order, append = false) {
 }
 function completeOrder(u) {
   u.resolvedDestination = null;
+  if (u.order?.kind === 'patrol' && !u.orders?.length && u.order.returnPoint) {
+    const leg=u.order;
+    u.order={kind:'patrol',x:leg.returnPoint.x,y:leg.returnPoint.y,returnPoint:{x:leg.x,y:leg.y}};
+    u.path=null;
+    return;
+  }
   u.order = u.orders?.shift() || u.followup || null;
   u.followup = null;
   u.path = null;
@@ -521,6 +527,7 @@ function update(dt) {
       }
       continue;
     }
+    if (u.order?.kind==='patrol'&&!u.order.returnPoint) u.order.returnPoint={x:u.x,y:u.y};
     if (u.order?.target && (u.order.target.hp <= 0 || !sees(u.team, u.order.target))) completeOrder(u);
     if (d.damage && u.order?.kind !== 'move') {
       let target = null;
@@ -634,7 +641,7 @@ function setMode(m) {
   placing = null;
   mode = m;
   say(
-    m === 'gather'
+    m === 'patrol' ? 'Tap the far end of a repeating patrol. Engage visible enemies, then resume. Queued orders exit at the next endpoint.' : m === 'gather'
       ? 'Select provisioners, then tap a Supplies cache or Materials quarry.'
       : m === 'repair'
         ? 'Select provisioners, then tap a damaged building.'
@@ -676,20 +683,20 @@ function command(p, append = queueOrders) {
     );
   if (enemy && dist(p, enemy) > enemy.r + 22) enemy = null;
   if (node && dist(p, node) > 40) node = null;
-  const producers = selected.filter(u => ['core', 'forge', 'factory'].includes(u.type));
+  const producers = selected.filter(u => mode !== 'patrol' && ['core', 'forge', 'factory'].includes(u.type));
   for (const b of producers) b.rally = { x: clamp(p.x, 25, W - 25), y: clamp(p.y, 25, H - 25), node };
   if (producers.length) say('Production rally point set. Provisioners gather when rallied to supplies.');
   let movers = selected.filter((u) => defs[u.type].speed);
   movers.forEach((u, i) => {
-    if (u.type === 'worker' && node) issueOrder(u, { kind: 'gather', node }, append);
+    if (mode !== 'patrol' && u.type === 'worker' && node) issueOrder(u, { kind: 'gather', node }, append);
     else if (mode === 'gather') return;
-    else if (enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy }, append);
+    else if (mode !== 'patrol' && enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy }, append);
     else {
       let cols = Math.ceil(Math.sqrt(movers.length)),
         ox = ((i % cols) - (cols - 1) / 2) * 40,
         oy = (Math.floor(i / cols) - (Math.ceil(movers.length / cols) - 1) / 2) * 40;
       issueOrder(u, {
-        kind: mode === 'attack' ? 'attack' : 'move',
+        kind: mode === 'patrol' ? 'patrol' : mode === 'attack' ? 'attack' : 'move',
         x: clamp(p.x + ox, 25, W - 25),
         y: clamp(p.y + oy, 25, H - 25),
       }, append);
@@ -698,7 +705,7 @@ function command(p, append = queueOrders) {
   if (movers.length) {
     fx.push({ x: p.x, y: p.y, life: 0.7, max: 0.7, ring: true });
     say(
-      node
+      mode === 'patrol' ? 'Patrol established. Units engage visible threats and return to their route.' : node
         ? (node.kind === 'materials' ? 'Materials gathering started. Keep the quarry supplied.' : 'Supplies gathering started.')
         : enemy
           ? 'Concentrate fire on the marked target.'
@@ -1015,6 +1022,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'q') commanderAbility(selected.find(u => u.type === 'hero'));
   if (e.key.toLowerCase() === 'a') setMode('attack');
   if (e.key.toLowerCase() === 'm') setMode('move');
+  if (e.key.toLowerCase() === 'p') setMode('patrol');
   if (e.key.toLowerCase() === 'g') setMode('gather');
   if (e.key.toLowerCase() === 's') tacticalOrders('hold');
   if (e.key.toLowerCase() === 'r') tacticalOrders('retreat');

@@ -147,3 +147,8 @@ Guard Schools now offer two tiers of **Field protection** alongside weapon resea
 Spend Materials and production time to protect infantry against repeated light fire;
 tier II also needs a completed Artillery Works. Artillery and suppression remain
 dangerous, and Basil pays for the same upgrades.
+
+Use **Patrol (P)**, then choose the far endpoint, to repeatedly guard a route.
+Units engage visible threats and resume the route afterward. Hold/retreat or a new
+order cancels patrol; a queued follow-up leaves at the next endpoint. Touch has the
+same Patrol button, and selected patrols show their two endpoints on the battlefield.

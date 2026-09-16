@@ -334,3 +334,20 @@ combatants and reserves for replacement troops; no free upgrades or hidden-playe
 information is used. The normal queue must drain before research can start.
 Research cards show effects and missing prerequisites, and wrap inside scrollable
 command panels. Damage protection appears in selected infantry status.
+
+## Patrol orders (0.22.3)
+
+`patrol` is a coordinate order using normal pathfinding, combat acquisition and fog.
+Its returnPoint is captured when the order becomes active, so a patrol queued behind
+a move starts from the new position. Reaching an endpoint swaps the two legs without
+accumulating an unbounded order queue. A queued follow-up takes priority at the next
+endpoint. Hold, retreat and direct replacement orders clear the patrol as normal.
+Automatic combat does not replace the route; units resume it when no visible target
+is in acquisition range. Each selected unit has an independent origin and spaced
+destination. Explicit patrol clicks ignore resource/focus-fire/rally contextual orders.
+Blocked endpoints reuse the existing free-cell navigation resolution. Deployed guns
+remain stationary until packed, as for all movement orders.
+
+P and the touch button select patrol mode. The renderer shows a dashed connection
+and rings at both endpoints; this indicates intent rather than a guaranteed straight
+path through obstacles. Compact layouts use three columns for all seven field orders.

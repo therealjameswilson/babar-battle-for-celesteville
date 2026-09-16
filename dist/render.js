@@ -458,6 +458,12 @@ function draw() {
       ctx.stroke(); ctx.setLineDash([]);
       for (const q of route) { ctx.beginPath(); ctx.arc(q.x, q.y, 5, 0, Math.PI * 2); ctx.stroke(); }
     }
+    if (u.order?.kind==='patrol' && u.order.returnPoint) {
+      const a=u.order,b=u.order.returnPoint;
+      ctx.strokeStyle='#9cc6aeaa';ctx.lineWidth=1.5;ctx.setLineDash([8,5]);
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();ctx.setLineDash([]);
+      for(const p of [a,b]){ctx.beginPath();ctx.arc(p.x,p.y,8,0,Math.PI*2);ctx.stroke();}
+    }
     if (u.rally) {
       ctx.strokeStyle = '#d7ba79';
       ctx.lineWidth = 2;

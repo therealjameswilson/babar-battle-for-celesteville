@@ -39,7 +39,7 @@
   </head>
   <body>
     <nav>
-      <button id="technology">Technology choices</button><button id="directions">Infantry directions</button><button id="waypoints">Blocked waypoints</button><button id="population">Housing raid</button><button id="production">Production report</button><button id="stocks">Scouted stocks</button><button id="adaptive">Adaptive expansion</button><button id="subgroups">Selection subgroups</button><button id="commander">Defensive Commander ×20</button><button id="alerts">Attack reports</button><button id="mixed">Mixed Story ×20</button><button id="counters">Counter battle</button><button id="enemy-economy">Enemy economy</button><button id="economy">Economy opening</button><button id="siege">Siege battle</button><button id="expansion">Expansion checks</button><button id="suite">Run browser checks</button
+      <button id="patrol">Patrol route</button><button id="technology">Technology choices</button><button id="directions">Infantry directions</button><button id="waypoints">Blocked waypoints</button><button id="population">Housing raid</button><button id="production">Production report</button><button id="stocks">Scouted stocks</button><button id="adaptive">Adaptive expansion</button><button id="subgroups">Selection subgroups</button><button id="commander">Defensive Commander ×20</button><button id="alerts">Attack reports</button><button id="mixed">Mixed Story ×20</button><button id="counters">Counter battle</button><button id="enemy-economy">Enemy economy</button><button id="economy">Economy opening</button><button id="siege">Siege battle</button><button id="expansion">Expansion checks</button><button id="suite">Run browser checks</button
       ><button id="victory">Story playthrough ×20</button
       ><button id="loss">Loss playthrough ×20</button
       ><button id="battle">Representative battle</button
@@ -47,16 +47,16 @@
       ><span id="status">Loading game</span>
     </nav>
     <pre id="report"></pre>
-    <iframe id="play" src="../dist/index.html?v=0.21.2"></iframe>
+    <iframe id="play" src="../dist/index.html?v=0.22.3"></iframe>
     <script>
       const frame = document.getElementById('play');
       const sizes = new URLSearchParams(location.search);
       if (sizes.has('width')) { frame.style.width = sizes.get('width') + 'px'; frame.style.height = sizes.get('height') + 'px'; }
       document.querySelectorAll('nav button').forEach(b => b.disabled = true);
       frame.onload = async () => {
-        for (const file of ['strategy.js', 'defense-strategy.js', 'alert-checks.js', 'selection-checks.js', 'resource-memory-checks.js', 'production-checks.js', 'population-checks.js', 'waypoint-checks.js', 'armor-checks.js', 'book-checks.js', 'siege-checks.js', 'economy-checks.js', 'enemy-economy-checks.js', 'counter-checks.js', 'browser-driver.js']) {
+        for (const file of ['strategy.js', 'defense-strategy.js', 'alert-checks.js', 'selection-checks.js', 'resource-memory-checks.js', 'production-checks.js', 'population-checks.js', 'waypoint-checks.js', 'armor-checks.js', 'patrol-checks.js', 'book-checks.js', 'siege-checks.js', 'economy-checks.js', 'enemy-economy-checks.js', 'counter-checks.js', 'browser-driver.js']) {
           const s = frame.contentDocument.createElement('script');
-          s.src = '../tests/' + file + '?v=0.21.2';
+          s.src = '../tests/' + file + '?v=0.22.3';
           s.async = false;
           await new Promise((resolve, reject) => { s.onload = resolve; s.onerror = reject; frame.contentDocument.body.append(s); });
         }
@@ -64,6 +64,7 @@
         document.querySelectorAll('nav button').forEach(b => b.disabled = false);
       };
       for (const [id, fn] of [
+        ['patrol', 'browserPatrol'],
         ['technology', 'browserTechnology'],
         ['directions', 'browserDirections'],
         ['waypoints', 'browserWaypoints'],

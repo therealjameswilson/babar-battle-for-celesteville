@@ -507,3 +507,18 @@ Normal-speed portrait research completed, changing the disabled tier II card fro
 requiring tier I to requiring Artillery Works. Landscape review found overlapping
 long card text; explicit content-sized grid rows fixed it. Cards scroll within the
 command panel while retreat/hold remain accessible.
+
+## 0.22.3 repeat patrols (2026-09-16)
+
+Shared simulation checks cover at least four endpoint reversals, exit into a queued
+move, queued patrol activation position, combat and resumption, unseen enemies, Hold,
+forest endpoints, explicit resource-click handling and formation spacing. The combat
+resume test samples maximum progress over time, because a patrol can already be on
+its return leg when inspected.
+
+380 real-browser checks pass at 390×844, including the actual touch Patrol button,
+map pointer events, P keyboard event and an in-viewport control bounds assertion.
+Normal-speed patrols were rendered and inspected at 844×390 and 390×844. Landscape
+review caught the seventh command below the panel; a three-column compact layout
+keeps all commands visible. Screenshots and report: artifacts/patrol-*. Physical
+iPhone/Safari remains unverified.

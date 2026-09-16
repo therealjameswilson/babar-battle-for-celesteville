@@ -292,3 +292,7 @@ console.log('PASS: blocked forest/building waypoints, new foundations and a 24-u
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'armor-checks.js'),'utf8'));
 run('armorChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: infantry protection prerequisites, payments, cancellation, completion, damage outcomes and enemy research.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'patrol-checks.js'),'utf8'));
+run('patrolChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: repeating patrols, queues, active origins, combat resumption, fog, hold, obstacles and spacing.');

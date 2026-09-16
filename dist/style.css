@@ -1536,3 +1536,8 @@ dialog {
 #actions .research-action small {display:block;float:none;white-space:normal;line-height:1.35;margin-top:4px;}
 #actions {grid-auto-rows:max-content;}
 #actions .research-action {height:auto;min-height:max-content;}
+/* Seven field orders remain visible alongside production on phone screens. */
+@media(max-width:580px), (max-height:500px) and (min-width:581px) {
+  .orders {grid-template-columns:repeat(3,minmax(0,1fr));}
+  .orders button {min-width:0;white-space:normal;overflow-wrap:anywhere;}
+}
