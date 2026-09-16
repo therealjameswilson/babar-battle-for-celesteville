@@ -74,3 +74,37 @@ function productionRate(b, research=false) {
 
 function livingPopulation(team=0) {return alive(team).filter(u=>defs[u.type].speed).length;}
 function populationBlocked(team=0) {return livingPopulation(team)>=cap(team);}
+
+// Read-only economy feedback. Never allocate extraction claims from the UI.
+function resourceWorkReport(n, team=0) {
+  const slots=n.kind==='materials'?3:2;
+  const workers=alive(team).filter(w=>w.type==='worker'&&w.order?.kind==='gather'&&w.order.node===n);
+  const nearby=workers.filter(w=>!w.carrying&&dist(w,n)<=harvestDistance(n)+2);
+  const hauling=workers.filter(w=>w.carrying>0).length;
+  const amount=knownResourceAmount(n,team);
+  let state='working',reason='';
+  if(amount===undefined){state='unknown';reason='Scout this site to confirm its stock.';}
+  else if(amount===0){state='depleted';reason='Depleted. Assign another resource site.';}
+  else if(n.kind==='materials'){
+    const quarry=alive(team).find(b=>b.type==='quarry'&&dist(b,n)<8);
+    if(!quarry){state='missing';reason='Build a Materials Quarry on this deposit.';}
+    else if(quarry.construction){state='construction';reason='Finish the quarry with a provisioner.';}
+    else if(!supplied(quarry)){state='isolated';reason='QUARRY ISOLATED. Clear raiders or restore its building link.';}
+  }
+  if(state==='working'&&!alive(team).some(b=>['core','relay'].includes(b.type)&&!b.construction&&supplied(b))){state='delivery';reason='No linked delivery base. Restore a palace or home connection.';}
+  const extractionOpen=state==='working'||state==='delivery';
+  const extracting=extractionOpen&&n.claimAt===t?nearby.filter(w=>n.claims?.includes(w.id)).length:0;
+  const waiting=nearby.length-extracting;
+  const approaching=workers.length-nearby.length-hauling;
+  return {slots,assigned:workers.length,extracting,hauling,waiting,approaching,state,reason};
+}
+function selectionResource() {
+  const first=selected[0];
+  if(!first)return null;
+  if(selected.length===1&&first.type==='quarry')return nodes.find(n=>n.kind==='materials'&&dist(n,first)<8)||null;
+  if(selected.every(w=>w.type==='worker'&&w.order?.kind==='gather'&&w.order.node===first.order?.node))return first.order?.node||null;
+  return null;
+}
+function resourceWorkSummary(n, report=resourceWorkReport(n)) {
+  return `${n.kind==='materials'?'Materials':'Supplies'} · ${report.assigned} assigned · ${report.extracting}/${report.slots} extracting`;
+}

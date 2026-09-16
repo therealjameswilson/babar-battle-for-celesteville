@@ -404,3 +404,23 @@ view actions. Reset clears slots; mission end closes and disables the panel.
 Views and production reports are mutually exclusive live overlays. The compact
 panel scrolls within the battlefield, keeps its close header visible and starts
 at the top whenever reopened. No simulation update or persistent storage is added.
+
+## Workforce reporting and grouped builders (0.27.2)
+
+resourceWorkReport in economy.js reads own gathering orders, cargo and proximity.
+Extraction occupancy comes from current-tick canHarvest claims; displaying the
+report never allocates a slot or changes gathering. Claims are filtered to living
+nearby workers of the reporting faction, excluding those already carrying cargo.
+The report separates assigned, extracting, hauling, approaching and waiting counts.
+It reads inventory through knownResourceAmount, preserving fog-memory semantics.
+Own quarry construction/supply and available delivery buildings provide actionable
+blocker messages. No harvest rates or assignment rules are changed.
+
+selectionResource identifies a selected quarry's deposit or a common gathering
+assignment across selected provisioners. These selections use economic status
+instead of generic army instructions. Canvas workload labels appear only for
+currently observed sites while workers/quarries are selected. Grouped workers
+receive the same building buttons as a single worker. The existing construction
+command chooses one available selected builder and preserves other workers' orders.
+Action-cache identity now includes every selected ID, so changing group membership
+without changing its size cannot leave stale construction buttons.

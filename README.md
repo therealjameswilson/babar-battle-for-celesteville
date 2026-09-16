@@ -197,3 +197,16 @@ Jump between the base, quarry and front while keeping your army selected and its
 orders intact. The panel is live; pausing beforehand keeps it paused. Views reset
 when the mission restarts. Some keyboards require Fn for function keys; the
 on-screen controls provide the same actions.
+
+## Workforce feedback (0.27.2)
+
+Select a gathering provisioner, several provisioners assigned to the same site,
+or a quarry to see assigned workers, occupied extraction slots, hauling, approach
+and nearby waiting. Visible resource sites show your workforce counts while workers
+or quarries are selected. A cache has two extraction slots; a quarry has three.
+Assigned workers include carriers, so more workers than slots can still help on a
+long delivery route. Persistent waiting is a reason to consider another site.
+
+The report explains missing/unfinished quarries, cut supply links and depleted
+stocks without exposing unseen depletion. You can also construct from a selected
+provisioner group: one available worker builds while the others keep their orders.

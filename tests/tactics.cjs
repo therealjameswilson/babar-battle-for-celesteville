@@ -308,3 +308,7 @@ console.log('PASS: researched infantry burst, health, duration, cooldown, speed/
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'camera-view-checks.js'),'utf8'));
 run('cameraViewChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: saved camera snapshots, selection/order isolation, zoom, pause, shortcuts, modal guards and mission lifecycle.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'workforce-checks.js'),'utf8'));
+run('workforceChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: read-only workforce assignment, extraction, hauling, waiting, fog knowledge, quarry supply and delivery feedback.');

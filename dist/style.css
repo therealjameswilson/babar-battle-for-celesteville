@@ -1550,3 +1550,5 @@ dialog {
 .camera-view-row small {display:block;font-size:10px;color:#c5c8b0;margin-top:4px;}
 .camera-view-row button {min-height:40px;min-width:44px;padding:6px 8px;}
 #camera-views-panel .production-heading {position:sticky;top:-12px;background:#1d2b24;padding:6px 0;z-index:1;}
+
+.selection #selected-info.economy-info {max-height:none;overflow:visible;}

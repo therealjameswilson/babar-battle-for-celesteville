@@ -662,3 +662,22 @@ under ignored `artifacts/parallel-doctrine-*` and `doctrine-*-trace.json`.
 - With the camera panel open, a 69-unit browser battle rendered 120 frames in
   1996ms: draw mean/p95 0.637/0.900ms; simulation mean/p95 1.282/1.500ms.
   This bounded sample showed no new frame-time bottleneck.
+
+## 0.27.2 — workforce reporting and group construction
+
+- Syntax and deterministic suites passed, including 21 workforce checks for
+  assigned/extracting/cargo/approach/waiting counts, read-only behavior, hidden
+  depletion, quarry requirements, supply restoration, missing delivery routes,
+  group-building costs, one-builder assignment and preserved gathering orders.
+- Real-browser suite: 488 checks passed. UI assertions cover report fields,
+  isolated/restored quarry text, actual group construction and equal-size mixed
+  selection invalidation. Inspected desktop, 390×844 portrait and 844×390 landscape
+  reports and construction buttons. Physical phone testing remains unverified.
+- A 66-unit rendered battle with worker labels active produced 120 frames in
+  1997ms; drawing mean/p95 0.505/0.700ms and simulation mean/p95 1.075/1.500ms.
+  No measured frame bottleneck warranted a speculative optimization.
+- Evidence: ignored `artifacts/workforce-browser-checks.txt`,
+  `workforce-desktop.png`, `workforce-portrait.png`, `workforce-landscape.png`,
+  `workforce-performance.txt`. Occupancy is a current-tick snapshot and changes
+  naturally as provisioners leave to deliver; assignment count is not an optimal
+  staffing recommendation. No extraction rates, income or unit balance changed.

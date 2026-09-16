@@ -1,0 +1,48 @@
+function workforceChecks(check){
+ function fresh(){reset();running=true;nextWave=enemySpawn=9999;enemyScoutSent=true;}
+ fresh();const n=nodes[0];
+ const workers=alive(0).filter(w=>w.type==='worker');
+ workers.forEach((w,i)=>{issueOrder(w,{kind:'gather',node:n});w.x=n.x+(i===3?150:20);w.y=n.y;w.carrying=i===2?10:0;});
+ canHarvest(workers[0],n);
+ let report=resourceWorkReport(n);
+ check(report.assigned===4&&report.extracting===2&&report.hauling===1&&report.approaching===1,'Report separates assigned workers, extraction claims, cargo and approach');
+ const extra=add('worker',0,n.x+22,n.y,{order:{kind:'gather',node:n}});
+ t+=.05;canHarvest(workers[0],n);report=resourceWorkReport(n);
+ check(report.assigned===5&&report.extracting===2&&report.waiting===1,'Extra workers wait rather than inflating the two-slot extraction count');
+ const before=JSON.stringify({amount:n.amount,claims:n.claims,at:n.claimAt,ore,materials,units:units.map(w=>[w.id,w.hp,w.harvest,w.carrying,w.order?.kind])});
+ resourceWorkReport(n);resourceWorkSummary(n);selected=[extra];selectionResource();
+ check(before===JSON.stringify({amount:n.amount,claims:n.claims,at:n.claimAt,ore,materials,units:units.map(w=>[w.id,w.hp,w.harvest,w.carrying,w.order?.kind])}),'Report reads cannot change claims, resources, worker state or orders');
+ add('worker',1,n.x+20,n.y,{order:{kind:'gather',node:n}});
+ check(resourceWorkReport(n).assigned===5,'Enemy workers do not inflate the player assignment count');
+ n.amount=0;check(resourceWorkReport(n).state==='depleted','Observed exhausted sites explain reassignment');
+ fresh();const hidden=nodes.find(n=>n.x===1560);
+ check(resourceWorkReport(hidden).state==='unknown','Unscouted stock is unknown rather than exposing its current amount');
+ resourceMemory[0].set(hidden,100);hidden.amount=0;
+ check(resourceWorkReport(hidden).state!=='depleted','Hidden depletion cannot leak through workforce feedback');
+ fresh();const deposit=nodes.find(n=>n.kind==='materials'&&n.x===275);
+ check(resourceWorkReport(deposit).state==='missing','Unbuilt deposit explains its quarry requirement');
+ const quarry=add('quarry',0,deposit.x,deposit.y,{construction:12});rebuildSupply();
+ check(resourceWorkReport(deposit).state==='construction','Foundation reports incomplete construction');
+ quarry.construction=0;rebuildSupply();
+ check(resourceWorkReport(deposit).slots===3&&resourceWorkReport(deposit).state==='working','Completed supplied quarry exposes three extraction slots');
+ const raider=add('trooper',1,300,775);rebuildSupply();
+ check(resourceWorkReport(deposit).state==='isolated'&&resourceWorkReport(deposit).extracting===0,'Supply cut explains the halted quarry');
+ raider.hp=0;rebuildSupply();check(resourceWorkReport(deposit).state==='working','Clearing the raider restores the workforce report');
+ selected=[quarry];check(selectionResource()===deposit,'Selecting a quarry inspects its physical deposit');
+ const w=alive(0).find(u=>u.type==='worker');selected=[w];issueOrder(w,{kind:'gather',node:deposit});
+ check(selectionResource()===deposit,'Selecting a gathering worker inspects its assigned site');
+ selected.push(alive(0).find(u=>u.type==='hero'));check(selectionResource()===null,'Mixed armies do not masquerade as a single gathering assignment');
+ fresh();const cache=nodes[0];units.filter(u=>u.team===0&&['core','relay'].includes(u.type)).forEach(u=>u.hp=0);rebuildSupply();
+ check(resourceWorkReport(cache).state==='delivery','Missing delivery network identifies a separate logistics problem');
+ fresh();const builders=alive(0).filter(u=>u.type==='worker');selected=builders;updateUI(true);
+ const homeButton=[...$('actions').children].find(b=>b.innerHTML.includes('Village Home'));
+ check(!!homeButton,'A provisioner group exposes construction commands');
+ const priorWork=new Map(builders.map(w=>[w.id,w.order])),priorFunds=ore;
+ homeButton.onclick();command({x:570,y:1070});
+ const chosen=builders.filter(w=>w.order?.kind==='build');
+ check(chosen.length===1&&ore===priorFunds-100,'Group build creates one paid foundation with one assigned worker');
+ check(builders.filter(w=>!chosen.includes(w)).every(w=>w.order===priorWork.get(w.id)),'Other group members retain gathering orders');
+ selected=[...builders.slice(0,-1),alive(0).find(u=>u.type==='hero')];updateUI();
+ check(![...$('actions').children].some(b=>b.innerHTML.includes('Village Home')),'Action cache follows equal-size changes in group membership');
+ reset();check(nodes.every(n=>resourceWorkReport(n).extracting===0),'Restart cannot retain old extraction claims in its reports');
+}

@@ -798,12 +798,27 @@ function updateUI(force = false) {
         ? 'Supply line operational'
         : 'ISOLATED · training at 25%. Link buildings within 360m; clear raiders.'
     : 'Hold a supply route and scout both approaches.';
+  if(selected.length>1&&selected.every(w=>w.type==='worker')){
+    $('selected-type').textContent=`SUPPLY DETAIL · ${selected.length} PROVISIONERS`;
+    $('selected-name').textContent='Provisioners';
+  }
+  const workNode=selectionResource();
+  $('selected-info').classList.toggle('economy-info',!!workNode);
+  if(workNode){
+    const report=resourceWorkReport(workNode);
+    $('selected-info').textContent=resourceWorkSummary(workNode,report)+(report.reason?' · '+report.reason:'');
+    $('tactical-status').textContent=`${report.hauling} hauling · ${report.approaching} approaching · ${report.waiting} waiting nearby`+
+      (u.type==='worker'?` · Morale ${Math.ceil(u.morale)}`:'')+
+      (report.state==='working'&&report.waiting?' · Extra workers may help delivery travel; spread waiting workers to another site.':'');
+  }else if(selected.length&&selected.every(w=>w.type==='worker')){
+    $('selected-info').textContent='Provisioners gather, deliver, construct and repair. Assign Gather to a Supplies cache or Materials Quarry.';
+  }
   $('depot-status').textContent =
     'DEPOT ' +
     (depot.team === 0 ? 'OURS · +2/s' : depot.team === 1 ? 'RHINOS' : 'CONTESTED') +
     ' · Scout workers and production';
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
-  const key = unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
+  const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   if (force || key + rapidKey !== actionKey) {
     actionKey = key + rapidKey;
@@ -823,10 +838,10 @@ function updateUI(force = false) {
         a.push(['Field Sapper', unitUnlocked('sapper') ? '90 S · 20 M' : 'Needs Artillery Works', () => train('sapper'), !unitUnlocked('sapper')]);
       }
       if (u.type === 'factory') a.push(['Field Artillery', '160 S · 25 M', () => train('walker')]);
-      if (u.type === 'core' || u.type === 'worker')
-        for (const type of ['forge', 'relay', 'quarry', 'factory', 'turret'])
-          a.push([defs[type].name, buildingCost(type) + ' S' + (materialCost(type) ? ' · ' + materialCost(type) + ' M' : ''), () => build(type), !prerequisite(type)]);
     }
+    if(u&&!u.construction&&((selected.length===1&&u.type==='core')||selected.every(w=>w.team===0&&w.type==='worker')))
+      for(const type of ['forge','relay','quarry','factory','turret'])
+        a.push([defs[type].name,buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
     if (selected.length > 1) {
       for (const type of ['worker','trooper','scout','sapper','walker']) {
         const producers = selected.filter(b => b.team === 0 && b.type === producerFor(type) && !b.construction);

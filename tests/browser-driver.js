@@ -55,6 +55,23 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    workforceChecks(check);
+    qaReset();const reportingWorker=alive(0).find(u=>u.type==='worker');selected=[reportingWorker];qaTicks(2);updateUI(true);
+    check($('selected-info').textContent.includes('assigned')&&$('selected-info').textContent.includes('extracting'),'Selected worker displays assignment and extraction counts');
+    check($('tactical-status').textContent.includes('hauling')&&$('tactical-status').textContent.includes('approaching'),'Selected worker distinguishes delivery and approach');
+    qaReset();const reportDeposit=nodes.find(n=>n.kind==='materials'&&n.x===275);
+    const reportQuarry=add('quarry',0,reportDeposit.x,reportDeposit.y);const reportRaider=add('trooper',1,300,775);rebuildSupply();selected=[reportQuarry];updateUI(true);
+    check($('selected-info').textContent.includes('QUARRY ISOLATED'),'Quarry selection displays the supply-cut cause and remedy');
+    reportRaider.hp=0;rebuildSupply();updateUI(true);
+    check(!$('selected-info').textContent.includes('QUARRY ISOLATED'),'Quarry status clears when its route is restored');
+    qaReset();const buildWorkers=alive(0).filter(u=>u.type==='worker');selected=buildWorkers;updateUI(true);
+    const preservedWork=new Map(buildWorkers.map(w=>[w.id,w.order]));const beforeBuildFunds=ore;
+    [...$('actions').querySelectorAll('button')].find(b=>b.textContent.startsWith('Village Home')).click();command({x:570,y:1070});
+    const assignedBuilders=buildWorkers.filter(w=>w.order?.kind==='build');
+    check(assignedBuilders.length===1&&ore===beforeBuildFunds-100,'Worker-group construction pays once and assigns one provisioner');
+    check(buildWorkers.filter(w=>!assignedBuilders.includes(w)).every(w=>w.order===preservedWork.get(w.id)),'Worker-group construction preserves other gatherers’ orders');
+    selected=buildWorkers;updateUI(true);selected=[...buildWorkers.slice(0,-1),alive(0).find(u=>u.type==='hero')];updateUI();
+    check(!$('actions').textContent.includes('Village Home'),'Equal-size mixed selection removes worker-group build commands');
     cameraViewChecks(check);
     qaReset();cam.x=420;cam.y=830;cam.zoom=1.1;
     window.dispatchEvent(new KeyboardEvent('keydown',{key:'F5',shiftKey:true,cancelable:true}));
@@ -726,4 +743,18 @@ function browserCameraViews(){
  cam={x:275,y:650,zoom:1.2};saveCameraView(2);
  cam={x:380,y:870,zoom:1};toggleCameraViews();
  qaReport('Use the actual Go buttons to visit base, central approach and quarry. Selection and orders remain intact; battle continues. View 4 is empty. Shift+F5–F8 saves; F5–F8 recalls.');
+}
+
+function browserWorkforce(){
+ qaReset();nextWave=enemySpawn=9999;
+ const cache=nodes[0],workers=alive(0).filter(w=>w.type==='worker');
+ workers.forEach(w=>issueOrder(w,{kind:'gather',node:cache}));selected=workers;
+ cam={x:230,y:820,zoom:1.2};updateUI(true);draw();
+ say('Four provisioners assigned to this Supplies cache.');
+ qaReport('All four starting provisioners share one Supplies cache. Observe assigned/extracting counts and the hauling cycle; use Gather to spread them to other caches.');
+}
+
+function browserWorkerBattle(){
+ browserBattle();selected=alive(0).filter(u=>u.type==='worker');updateUI(true);
+ qaReport('Representative battle with provisioners selected and visible resource workload labels.');
 }

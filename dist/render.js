@@ -383,14 +383,14 @@ function draw() {
   ctx.fillText('Northern approach', 600, 365);
   ctx.fillText('Southern road', 610, 1150);
   ctx.textAlign = 'left';
+  const showWork=selected.some(u=>u.type==='worker'||u.type==='quarry');
   for (const n of nodes) {
     if (knownResourceAmount(n,0) === 0) continue;
     if (n.kind === 'materials') {
       poly([[n.x-25,n.y+12],[n.x-20,n.y-12],[n.x,n.y-23],[n.x+25,n.y+4],[n.x+15,n.y+19]], '#789499', '#344c52');
       ctx.fillStyle='#dae6db'; ctx.font='10px monospace';
       ctx.fillText('MATERIALS ' + resourceLabel(n),n.x-44,n.y+34);
-      const assigned = units.filter(w=>w.hp>0&&w.type==='worker'&&w.order?.node===n&&(w.team===0||visible(w))).length;
-      ctx.fillText(assigned + ' workers · 3 slots',n.x-32,n.y+47);
+      if(showWork&&resourceObserved(n))drawResourceWork(n,n.y+47);
       continue;
     }
     ctx.fillStyle = '#333c2c';
@@ -404,6 +404,7 @@ function draw() {
     ctx.fillStyle = '#e5d6a8';
     ctx.font = '9px monospace';
     ctx.fillText(resourceLabel(n), n.x - 12, n.y + 26);
+    if(showWork&&resourceObserved(n))drawResourceWork(n,n.y+40);
   }
   ctx.fillStyle = '#373e30';
   ctx.fillRect(depot.x - 43, depot.y - 32, 86, 64);
@@ -643,3 +644,10 @@ window.addEventListener('resize', positionMinimap);
 positionMinimap();
 reset();
 requestAnimationFrame(loop);
+
+function drawResourceWork(n,y){
+ const r=resourceWorkReport(n);
+ ctx.font='9px monospace';ctx.fillStyle=r.state==='working'?'#e1ca82':'#e4b3a0';
+ ctx.fillText(`${r.extracting}/${r.slots} extracting · ${r.assigned} assigned`,n.x-58,y);
+ if(r.state!=='working')ctx.fillText(r.state==='isolated'?'SUPPLY CUT':r.state==='construction'?'BUILDING':r.state==='missing'?'QUARRY NEEDED':r.state.toUpperCase(),n.x-40,y+12);
+}
