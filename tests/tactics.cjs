@@ -280,3 +280,7 @@ console.log('PASS: both factions use scouted stock memory, revisit depleted cach
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'production-checks.js'),'utf8'));
 run('productionChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: production rates, queue reports, isolation, research, construction, site selection and report lifecycle.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'population-checks.js'),'utf8'));
+run('populationChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: housing raids block both armies, queues retain progress, rebuilds resume, commanders wait and cancellations refund.');

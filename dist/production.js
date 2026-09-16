@@ -15,6 +15,7 @@ function productionReport(b) {
   }
   if(b.queue.length) {
     const first=b.queue[0],remaining=Math.max(0,defs[first].time-b.progress);
+    if(populationBlocked(b.team))return {fraction:b.progress/defs[first].time,text:'POPULATION BLOCKED · Build a Village Home · '+b.queue.length+' paid recruits waiting'+isolation};
     return {fraction:b.progress/defs[first].time,text:defs[first].name+' · '+Math.ceil(remaining/productionRate(b))+'s · '+b.queue.length+'/5 queued'+isolation};
   }
   return {fraction:0,text:'Idle'+isolation};
@@ -35,10 +36,12 @@ function selectProduction(sites) {
 function renderProduction() {
   const sites=productionSites();
   const idle=sites.filter(b=>!b.construction&&!b.research&&!b.queue.length).length;
-  const label='Production · '+idle+' idle · F4';
+  const blocked=sites.filter(b=>!b.construction&&!b.research&&b.queue.length&&populationBlocked()).length;
+  const label='Production · '+(blocked?blocked+' blocked':idle+' idle')+' · F4';
   if($('production-open').textContent!==label)$('production-open').textContent=label;
   if(ended)closeProduction();
   if($('production-panel').hidden)return;
+  $('production-capacity').textContent=livingPopulation()+' deployed + '+(supply()-livingPopulation())+' queued / '+cap()+' population capacity';
   const holder=$('production-rows');
   for(const [id,row] of productionRows) if(!sites.some(b=>b.id===id&&row.site===b)){row.button.remove();productionRows.delete(id);}
   for(const b of sites) {

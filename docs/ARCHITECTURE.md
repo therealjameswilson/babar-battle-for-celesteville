@@ -287,3 +287,15 @@ identity distinguishes reset sites that reuse IDs. Mission end and reset close t
 `productionRate` in economy.js is shared by simulation and report estimates. Recruitment
 includes the mobilization bonus, research does not; isolation multiplies both by .25.
 Construction reports labor remaining rather than inventing a travel-time prediction.
+
+### Housing raids and population (0.18.0)
+`livingPopulation` counts living mobile units; `supply` retains its existing living-plus-
+queued reservations for admitting new queue entries. `populationBlocked` compares living
+units to completed capacity. Every producer checks it before advancing training, so a
+freed slot can release only one unit even when several queues are ready in the same tick.
+Blocked queues retain progress/payment and cancellation still refunds normally. An
+unfinished home supplies no population; completion permits automatic resumption. Existing
+units are not removed if homes are destroyed. Research proceeds independently.
+Commander recovery checks capacity before charging 100 Supplies and spawning. The court
+explains a ready commander's wait. Production report and selected-site text explain blocks;
+the report separately lists deployed units and queued reservations.

@@ -423,7 +423,7 @@ function update(dt) {
         updateUI(true);
       }
     }
-    if (u.queue.length && !u.research) {
+    if (u.queue.length && !u.research && !populationBlocked(u.team)) {
       u.progress +=
         dt * productionRate(u);
       const type = u.queue[0];
@@ -540,7 +540,7 @@ function update(dt) {
   for (const r of heroRecovery.filter((r) => r.at <= t)) {
     const base = alive(r.team).find((u) => u.type === 'core'),
       funds = r.team ? enemyBudget : ore;
-    if (base && funds >= 100) {
+    if (base && funds >= 100 && !populationBlocked(r.team)) {
       if (r.team) enemyBudget -= 100;
       else ore -= 100;
       add('hero', r.team, base.x - 80, base.y + 75, { name: r.name });
@@ -765,6 +765,7 @@ function updateUI(force = false) {
                           ' strength'
                         : 'Ready for orders.'
     : 'Tap a friendly unit or building.';
+  if(u && selected.length===1 && u.queue.length && !u.research && !u.construction && populationBlocked(u.team)) $('selected-info').textContent='POPULATION BLOCKED · Build a Village Home. Paid queue and training progress are retained.';
   if (u && selected.length===1 && combatRole(u)) $('selected-info').textContent = combatRole(u);
   $('tactical-status').textContent = productionGroup ? selected.filter(supplied).length + '/' + selected.length + ' supplied sites · isolated production runs at 25%' : u
     ? defs[u.type].speed

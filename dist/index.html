@@ -9,7 +9,7 @@
       content="Lead Babar, his elephant kingdom, family and royal council against Lord Rataxes in a storybook real-time strategy game."
     />
     <title>Babar — The Siege of Celesteville</title>
-    <link rel="stylesheet" href="style.css?v=0.17.0" />
+    <link rel="stylesheet" href="style.css?v=0.18.0" />
   </head>
   <body>
     <header>
@@ -41,6 +41,7 @@
         </div>
         <section id="production-panel" aria-labelledby="production-title" hidden>
           <div class="production-heading"><h2 id="production-title">Production report</h2><button id="production-close" aria-label="Close production report">×</button></div>
+          <p id="production-capacity"></p>
           <p>Live report. Select a site to recruit, research, cancel orders or set its rally.</p>
           <button id="production-all">Select all completed producers</button>
           <div id="production-rows"></div>
@@ -196,6 +197,9 @@
         Below 45, movement and firing slow. Retreat moves 20% faster and avoids engagement.
       </p>
       <p>
+        <b>Population:</b> Queued recruits reserve population. Losing homes can put the army over capacity: recruitment pauses when living units fill the cap. Paid queues and progress remain. Build a Village Home or free population to resume; returning commanders also need room. Research continues.
+      </p>
+      <p>
         <b>Recovery:</b> linked homes and palaces heal nearby units by 2/s after 5 seconds without
         fire; Celeste raises this to 6/s. Commanders recover for 45 seconds, then return when 100
         supplies are available. Periwinkle reduces the wait to 25 seconds.
@@ -217,19 +221,19 @@
       <div id="group-actions"></div>
       <button id="groups-close">Return to command</button>
     </dialog>
-    <script src="cast.js?v=0.17.0"></script>
-    <script src="game.js?v=0.17.0"></script>
-    <script src="selection.js?v=0.17.0"></script>
-    <script src="alerts.js?v=0.17.0"></script>
-    <script src="combat-roles.js?v=0.17.0"></script>
-    <script src="economy.js?v=0.17.0"></script>
-    <script src="production.js?v=0.17.0"></script>
-    <script src="artillery.js?v=0.17.0"></script>
-    <script src="navigation.js?v=0.17.0"></script>
-    <script src="tactics.js?v=0.17.0"></script>
-    <script src="enemy-economy.js?v=0.17.0"></script>
-    <script src="audio.js?v=0.17.0"></script>
-    <script src="court.js?v=0.17.0"></script>
-    <script src="render.js?v=0.17.0"></script>
+    <script src="cast.js?v=0.18.0"></script>
+    <script src="game.js?v=0.18.0"></script>
+    <script src="selection.js?v=0.18.0"></script>
+    <script src="alerts.js?v=0.18.0"></script>
+    <script src="combat-roles.js?v=0.18.0"></script>
+    <script src="economy.js?v=0.18.0"></script>
+    <script src="production.js?v=0.18.0"></script>
+    <script src="artillery.js?v=0.18.0"></script>
+    <script src="navigation.js?v=0.18.0"></script>
+    <script src="tactics.js?v=0.18.0"></script>
+    <script src="enemy-economy.js?v=0.18.0"></script>
+    <script src="audio.js?v=0.18.0"></script>
+    <script src="court.js?v=0.18.0"></script>
+    <script src="render.js?v=0.18.0"></script>
   </body>
 </html>

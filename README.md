@@ -132,3 +132,7 @@ and give a Gather order. Workers deliver their final load before seeking another
 **Production (F4)** opens a live report of idle buildings, recruiting queues, research,
 and interrupted supply. Select a site to manage it, or select all completed producers.
 The report leaves the battle running and preserves an existing pause.
+
+Destroying homes can now interrupt recruitment: queues pause when living units fill
+the remaining population cap. Payments and progress are retained. Complete a replacement
+home or free population to resume; research continues, and returning commanders wait for room.

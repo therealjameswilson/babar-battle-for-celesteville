@@ -29,6 +29,18 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    populationChecks(check);
+    qaReset();
+    while(livingPopulation()<20)add('trooper',0,540,1050);
+    const blockedBase=alive(0).find(b=>b.type==='core');
+    selected=[blockedBase];ore=500;train('worker');blockedBase.progress=3;
+    alive(0).filter(b=>b.type==='relay').forEach(b=>b.hp=0);updateUI(true);$('production-open').click();
+    check($('production-capacity').textContent==='20 deployed + 1 queued / 20 population capacity','Live report distinguishes deployed population from paid reservations');
+    check($('selected-info').textContent.includes('POPULATION BLOCKED'),'Selected producer explains its population block');
+    $('production-close').click();
+    const refundBefore=ore;
+    [...$('actions').children].find(b=>b.textContent.includes('Cancel 1:')).click();
+    check(ore===refundBefore+50&&!blockedBase.queue.length,'Actual cancellation control refunds a blocked recruit');
     productionChecks(check);
     qaReset();
     $('production-open').click();
@@ -516,4 +528,14 @@ function browserProduction() {
   add('trooper',1,570,900);rebuildSupply();
   updateUI(true);togglePause();toggleProduction();draw();
   qaReport('Production fixture: local training, an isolated remote school and idle palace. Report preserves pause; resume to watch progress. Select a row to manage its queue.');
+}
+
+function browserPopulation() {
+  qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
+  const base=alive(0).find(b=>b.type==='core');
+  while(livingPopulation()<20)add('trooper',0,540,1050);
+  base.queue=['worker'];base.progress=3;
+  alive(0).filter(b=>b.type==='relay').forEach(b=>b.hp=0);rebuildSupply();
+  selected=[base];updateUI(true);togglePause();toggleProduction();draw();
+  qaReport('Housing raid fixture: 20 living units / 20 capacity, one paid worker retains 3s progress. Build a Village Home to resume. Cancel still refunds 50 Supplies.');
 }

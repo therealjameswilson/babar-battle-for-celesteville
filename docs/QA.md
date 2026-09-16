@@ -435,3 +435,18 @@ access to lower sites. Selecting the remote school's row exposes its existing is
 explanation and recruitment controls. This remains browser viewport testing, not physical
 iPhone testing. Evidence is in artifacts/production-browser-checks.txt and production
 screenshots, separate from deployed files.
+
+## 0.18.0 housing raids (2026-09-16)
+
+Reproduced the previous defect: destroying housing allowed a queued worker to finish,
+producing 21 living units with capacity 20. The fix is covered for both factions: all
+producers block at capacity; exact progress/payment survives; research continues; one
+casualty permits exactly one recruit; unfinished homes do not help; completed homes
+resume training. Recovery commanders wait without payment and return once when a slot
+opens. Blocked cancellation retains its full refund.
+
+Local syntax/rule checks, Story balance, both composition difficulties and the defensive
+Commander victory pass (6:53, palace intact). Real browser checks and an actually rendered
+housing-raid fixture exercise the new feedback. Manually selected the blocked palace,
+resumed play and cancelled its recruit using the real button; refund dispatch appeared.
+Evidence: artifacts/population-browser-checks.txt and population-block screenshots.

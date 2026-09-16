@@ -71,3 +71,6 @@ function readyProducers(type) {
 function productionRate(b, research=false) {
   return (supplied(b)?1:.25) * (!research && (b.team===0?benefits.has('troubadour'):wave>=2)?1.25:1);
 }
+
+function livingPopulation(team=0) {return alive(team).filter(u=>defs[u.type].speed).length;}
+function populationBlocked(team=0) {return livingPopulation(team)>=cap(team);}

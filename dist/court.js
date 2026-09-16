@@ -106,7 +106,7 @@ function renderCourt() {
     if (member.id === 'babar' && !alive(0).some((u) => u.type === 'hero')) {
       const r = heroRecovery.find((r) => r.team === 0);
       label = r
-        ? 'Recovering · ' + Math.max(0, Math.ceil(r.at - t)) + 's · 100 supplies'
+        ? (r.at<=t&&populationBlocked()?'Awaiting population room · build a home':'Recovering · ' + Math.max(0, Math.ceil(r.at - t)) + 's') + ' · 100 supplies'
         : 'Not deployed';
     }
     if (member.team) {
