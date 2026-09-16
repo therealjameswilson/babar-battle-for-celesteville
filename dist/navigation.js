@@ -150,6 +150,19 @@ function route(start, goal) {
 }
 function move(u, target, dt, stop = 3) {
   if (artilleryLocked(u)) return false;
+  // Coordinate orders must finish at a traversable destination. A* already
+  // routes to a free cell, but comparing arrival against the original blocked
+  // click left these orders alive forever and trapped subsequent waypoints.
+  if(target===u.order && Number.isFinite(target.x) && stop<=8 && solidAt(target.x,target.y,u.r+2)) {
+    rebuildNav();
+    const old=u.resolvedDestination;
+    if(!old || old.order!==target || old.version!==navVersion || old.x!==target.x || old.y!==target.y) {
+      const free=freeCell(target);
+      u.resolvedDestination={order:target,version:navVersion,x:target.x,y:target.y,point:free<0?null:point(free)};
+    }
+    if(!u.resolvedDestination.point)return false;
+    target=u.resolvedDestination.point;
+  }
   const distance = dist(u, target);
   if (distance <= stop + 1) return true;
   let goal = { x: target.x, y: target.y };

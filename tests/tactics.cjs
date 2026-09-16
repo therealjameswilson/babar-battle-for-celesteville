@@ -9,9 +9,9 @@ tick(300);
 assert(run('navUnit.x>1000'), 'Scout routes around impassable forest.');
 assert(run('!solidAt(navUnit.x,navUnit.y,navUnit.r)'), 'Path ends outside obstacles.');
 fresh();
-run("const navUnit2=add('trooper',0,200,900);navUnit2.order={kind:'move',x:440,y:900}");
+run("const navUnit2=add('trooper',0,200,900);navUnit2.order={kind:'move',x:440,y:850}");
 tick(200);
-assert(run('navUnit2.x>400'), 'Unit routes around the palace footprint.');
+assert(run('navUnit2.x>400 && !navUnit2.order && dist(navUnit2,{x:440,y:850})<12'), 'Unit routes around the palace footprint and completes a clear destination.');
 fresh();
 run("const outpost=add('forge',0,675,900);rebuildSupply();");
 assert(run('supplied(outpost)'));
@@ -284,3 +284,7 @@ console.log('PASS: production rates, queue reports, isolation, research, constru
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'population-checks.js'),'utf8'));
 run('populationChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: housing raids block both armies, queues retain progress, rebuilds resume, commanders wait and cancellations refund.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'waypoint-checks.js'),'utf8'));
+run('waypointChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: blocked forest/building waypoints, new foundations and a 24-unit queued round trip.');

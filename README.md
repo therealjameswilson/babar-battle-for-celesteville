@@ -136,3 +136,6 @@ The report leaves the battle running and preserves an existing pause.
 Destroying homes can now interrupt recruitment: queues pause when living units fill
 the remaining population cap. Payments and progress are retained. Complete a replacement
 home or free population to resume; research continues, and returning commanders wait for room.
+
+Queued movement now resolves clicks inside buildings or forest to nearby clear ground,
+then continues the route. New construction blocking a destination triggers re-resolution.

@@ -29,6 +29,7 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    waypointChecks(check);
     populationChecks(check);
     qaReset();
     while(livingPopulation()<20)add('trooper',0,540,1050);
@@ -538,4 +539,17 @@ function browserPopulation() {
   alive(0).filter(b=>b.type==='relay').forEach(b=>b.hp=0);rebuildSupply();
   selected=[base];updateUI(true);togglePause();toggleProduction();draw();
   qaReport('Housing raid fixture: 20 living units / 20 capacity, one paid worker retains 3s progress. Build a Village Home to resume. Cancel still refunds 50 Supplies.');
+}
+
+function browserWaypoints() {
+  qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
+  units=units.filter(u=>u.team===0||u.type==='core');rebuildNav();
+  const scout=add('scout',0,650,600);
+  issueOrder(scout,{kind:'move',x:840,y:620});issueOrder(scout,{kind:'move',x:1050,y:850},true);
+  selected=[scout];cam={x:840,y:720,zoom:1};updateUI(true);
+  qaReport('Live waypoint fixture: scout first approaches a blocked forest waypoint, then must continue to 1050,850. No accelerated simulation.');
+  qaInterval=setInterval(()=>{
+    update(.05);
+    if(!scout.order){clearInterval(qaInterval);qaInterval=null;togglePause();updateUI(true);draw();qaReport('Waypoint route completed at '+Math.round(scout.x)+','+Math.round(scout.y)+' with '+scout.orders.length+' queued orders remaining.');}
+  },50);
 }

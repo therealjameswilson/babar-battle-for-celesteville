@@ -216,12 +216,14 @@ function issueOrder(u, order, append = false) {
     u.orders.push(order);
   } else {
     u.order = order;
+    u.resolvedDestination = null;
     u.orders = [];
     u.followup = null;
     u.path = null;
   }
 }
 function completeOrder(u) {
+  u.resolvedDestination = null;
   u.order = u.orders?.shift() || u.followup || null;
   u.followup = null;
   u.path = null;

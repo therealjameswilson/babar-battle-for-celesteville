@@ -450,3 +450,23 @@ Commander victory pass (6:53, palace intact). Real browser checks and an actuall
 housing-raid fixture exercise the new feedback. Manually selected the blocked palace,
 resumed play and cancelled its recruit using the real button; refund dispatch appeared.
 Evidence: artifacts/population-browser-checks.txt and population-block screenshots.
+
+## 0.19.0 blocked waypoints (2026-09-16)
+
+Reproduced a scout stuck indefinitely at approximately 734,615: its first waypoint was
+inside the forest at 840,620 and a valid second waypoint stayed queued. Resolution now
+completes at a free cell before advancing to the next order. Shared tests cover forest,
+friendly-building attack-move, a new foundation occupying a previously clear destination,
+and 24 units completing a queued round trip through the southern approach without
+ending inside solids. The old palace-route test actually targeted the Guard School's
+footprint and asserted only x>400; it now targets clear ground and requires arrival and
+order completion. Blocked destinations have their own stronger regression cases.
+
+337 real-browser checks pass. A normal-speed rendered scout fixture completes at 1043,847
+with zero queued orders remaining. Evidence: artifacts/waypoint-browser-checks.txt and
+waypoint-completed.png. This is navigation scenario evidence, not general human balance.
+
+Updated local balance after movement correction: Story siege wins at 187s, Story mixed
+at 375s; Commander siege loses at 199s, Commander mixed wins at 461s (palace 605 HP).
+The defensive Commander opening wins at 742s with the palace intact. These scripted
+outcomes changed through movement behavior, with no damage/cost/difficulty adjustment.

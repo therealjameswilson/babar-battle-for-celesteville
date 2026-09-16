@@ -299,3 +299,11 @@ units are not removed if homes are destroyed. Research proceeds independently.
 Commander recovery checks capacity before charging 100 Supplies and spawning. The court
 explains a ready commander's wait. Production report and selected-site text explain blocks;
 the report separately lists deployed units and queued reservations.
+
+### Blocked coordinate destinations (0.19.0)
+A* already redirected blocked goals to a free navigation cell, but arrival previously
+compared against the original blocked click. `move` now resolves coordinate orders to
+that free cell before arrival checks. The resolution is cached per order and navigation
+version and invalidated when foundations change the grid. Replacing/completing orders
+clears it. This applies to move/attack-move/retreat coordinate destinations; combat,
+construction, gathering and repair target-distance checks keep their existing semantics.
