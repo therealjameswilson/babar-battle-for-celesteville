@@ -378,3 +378,17 @@ is unnecessary for Actions artifact deployment. Screenshot: artifacts/github-pag
   economy is established. Victory assertions and the 1200s limit are unchanged;
   the test additionally requires reconnaissance. Final local policy wins at 583s
   with the palace intact. Earlier results above describe the initial policy.
+
+## 0.14.0 selection subgroups (2026-09-16)
+
+Added shared checks for isolated orders, cycling, casualty fallback, fresh selections,
+control-group recall and restart. Real Chromium browser suite passes including actual
+subgroup/All buttons, T shortcut and commander ability visibility. Manually exercised
+390×844 and 844×390 iframe layouts; these are browser viewport checks, not physical iPhone QA.
+Evidence: artifacts/subgroups-browser-checks.txt and subgroups-{portrait,landscape}.png.
+
+Correction/qualification to the Commander opening evidence: the revised scouting policy
+at 93b4e77 passed the CI Commander victory gate, but its rendered browser run lost at
+07:06 with 49 enemy casualties (artifacts/commander-browser-final-policy.txt). The earlier
+rendered 15:24 victory used the earlier policy. Cross-runtime strategy robustness and
+extended human balance remain unresolved; no enemy stats or win assertions were weakened.

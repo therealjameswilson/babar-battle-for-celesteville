@@ -263,6 +263,7 @@ function reset() {
   nodes = [];
   fx = [];
   selected = [];
+  resetSubgroups();
   ore = 300;
   materials = 0; enemyMaterials = 60;
   t = 0;
@@ -700,6 +701,7 @@ function command(p, append = queueOrders) {
 }
 let actionKey = '';
 function updateUI(force = false) {
+  renderSubgroups();
   $('ore').textContent = Math.floor(ore);
   $('materials').textContent = Math.floor(materials);
   $('idle-workers').textContent = 'Idle ' + idleWorkers().length;
@@ -991,6 +993,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'F3') jumpToAttack();
   if (e.key.toLowerCase() === 'h') goHome();
   if (e.key.toLowerCase() === 'i') selectIdleWorkers();
+  if (e.key.toLowerCase() === 't') cycleSubgroup(e.shiftKey);
   if (e.key.toLowerCase() === 'd') toggleArtillery();
   if (e.key.toLowerCase() === 'q') commanderAbility(selected.find(u => u.type === 'hero'));
   if (e.key.toLowerCase() === 'a') setMode('attack');

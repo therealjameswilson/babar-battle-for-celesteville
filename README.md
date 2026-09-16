@@ -117,3 +117,6 @@ Keep scouts ahead and infantry outside the impact area. Guns cannot hit enemies
 inside their 90m blind spot. Move, attack-move or Retreat packs the gun for 2s.
 Rhino artillery follows the same rules. The broader StarCraft-style gameplay
 work remains active; see [the current gap audit](docs/STARCRAFT-GOAL.md).
+
+Mixed armies now have unit-type buttons: isolate artillery or Babar for specialist
+orders, then choose **All** to restore the surviving army. **T / Shift+T** cycles types.

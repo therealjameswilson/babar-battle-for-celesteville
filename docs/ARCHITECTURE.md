@@ -244,3 +244,10 @@ Restart also resets the unit ID allocator: formation and repath tie-breaks no
 longer depend on how many previous games ran. Accelerated browser fixtures now
 own simulation time; RAF renders but does not add a second physics step while an
 automated interval is active. Ending/resetting a fixture restores the normal loop.
+
+### Selection subgroups
+`selection.js` retains object references for a mixed selection. The selected subgroup
+is the actual `selected` command target; All restores surviving members. A changed map
+selection or control-group recall invalidates the retained pool. Death removes members;
+loss of the last active member restores the surviving pool. T/Shift+T cycles without
+intercepting Tab, which remains available for keyboard focus. Reset clears all state.

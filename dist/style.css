@@ -1510,3 +1510,10 @@ dialog {
 
 #attack-alert {pointer-events:auto;display:block;margin-top:8px;padding:5px 9px;min-height:34px;max-width:100%;color:#fff0d2;background:#633b32;border-color:#c88566;font-size:12px;}
 #attack-alert[hidden] {display:none;}
+
+#selection-groups { display: flex; gap: 5px; overflow-x: auto; padding: 5px 0; max-width: 100%; }
+#selection-groups[hidden] { display: none; }
+#selection-groups button { flex: 0 0 auto; min-height: 40px; padding: 6px 9px; font-size: 12px; }
+#selection-groups button[aria-pressed="true"] { background: #c4ad70; color: #17231d; border-color: #e1cf9a; }
+/* Scroll the subgroup strip within its grid cell instead of squeezing abilities. */
+.selection { min-width: 0; }

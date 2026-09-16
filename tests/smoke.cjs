@@ -79,6 +79,7 @@ for (const file of [
   'cast.js',
   'game.js',
   'alerts.js',
+  'selection.js',
   'combat-roles.js',
   'economy.js',
   'artillery.js',

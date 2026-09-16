@@ -29,6 +29,16 @@ async function browserSuite() {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
     };
+    selectionChecks(check);
+    qaReset();
+    selected=[alive(0).find(u=>u.type==='hero'),alive(0).find(u=>u.type==='trooper'),add('walker',0,500,900)];updateUI(true);
+    $('selection-groups').lastElementChild.click();
+    check(selected.length===1 && selected[0].type==='walker','Actual artillery subgroup button isolates guns');
+    $('selection-groups').firstElementChild.click();
+    check(selected.length===3,'Actual All button restores mixed army');
+    window.dispatchEvent(new KeyboardEvent('keydown',{key:'t',code:'KeyT'}));
+    check(selected.length===1 && selected[0].type==='hero','T shortcut selects commander subgroup');
+    check($('actions').textContent.includes('Stand together'),'Commander subgroup exposes ability button');
     alertChecks(check);
     qaReset();nextWave=enemySpawn=9999;enemyScoutSent=true;
     const alertBase=alive(0).find(b=>b.type==='core'),alertSchool=alive(0).find(b=>b.type==='forge');
@@ -458,4 +468,11 @@ function browserCommander(){
     if(!ended){defenseStep();qaTicks(1);cam.x=depot.team===0?1200:460;cam.y=depot.team===0?500:860;}
     else{clearInterval(qaInterval);qaInterval=null;qaReport('Defensive Commander result: '+(alive(0).some(u=>u.type==='core')?'VICTORY':'LOSS')+' · '+time(t)+' · enemy casualties '+kills);}
   },50);
+}
+
+function browserSubgroups() {
+  qaReset(); nextWave=enemySpawn=9999;enemyScoutSent=true;
+  selected=[alive(0).find(u=>u.type==='hero'),alive(0).find(u=>u.type==='trooper'),add('walker',0,500,900)];
+  updateUI(true);togglePause();draw();
+  qaReport('Subgroup fixture: select Field Artillery, Babar, then All. Orders apply only to highlighted units. T cycles; Shift+T reverses.');
 }

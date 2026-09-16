@@ -268,3 +268,7 @@ console.log("PASS: anti-armor roles, sapper tech/costs, scouted counters, factio
 run(require("node:fs").readFileSync(require("node:path").join(__dirname,"alert-checks.js"),"utf8"));
 run("alertChecks((ok,message)=>{if(!ok)throw Error(message)})");
 console.log("PASS: attack report grouping, expiry, camera cycling, order preservation, modal guards and reset.");
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'selection-checks.js'), 'utf8'));
+run('selectionChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: selection subgroups, command isolation, cycling, casualty fallback, control groups and reset.');
