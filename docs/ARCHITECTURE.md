@@ -566,3 +566,10 @@ Movement and separation normalize vectors directly; direction tables stabilize
 navigation/construction candidates. Angles serve presentation only. Browser
 performance fixtures suspend the normal loop's updates while measuring the clock
 and rendering, so there is only one simulation owner.
+
+## Motion preferences — 0.35.1
+
+The field manual exposes System/Reduced/Full motion. audio.js owns the stored
+preference (babar-motion) and the live media-query listener; render.js reads the
+effective reducedMotion value. These controls change presentation only. The
+manual's native close event restores the pause state saved when it opened.

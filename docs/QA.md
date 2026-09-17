@@ -937,3 +937,34 @@ Louise's 250 fortress health/capacity increase without repeated bonuses. Node
 tactical checks pass; portrait Chromium runs **638 passing assertions**. Evidence:
 artifacts/audit-support-browser.txt. No game rules changed in this audit.
 CURRENT-AUDIT.md records remaining console attribution and media-preference proof.
+
+## 0.35.1 — motion preference and field-manual lifecycle
+
+The field manual now offers System, Reduced and Full motion. The system mode
+reads the actual media query and listens for subsequent preference changes; an
+explicit choice persists locally. Reduced mode uses the existing renderer's
+static infantry poses and disables walking bob and drifting dust. Simulation
+orders, positions, health and timing are unchanged.
+
+A new browser assertion exposed the field manual leaving an originally running
+mission paused. Closing it now restores the prior pause state, including when
+it was already paused. Native close events are asynchronous, so the browser
+check waits for a frame before inspecting the restored state.
+
+Syntax/atlas checks and Node tactical checks pass. **647 real-browser assertions**
+pass at desktop, 390×844 portrait and 844×390 landscape. They exercise the actual
+selector, renderer mode, visible status, stored preference, actual system-query
+value, unchanged simulation state, resume and preservation of an existing pause.
+Manual selection of Reduced, reload, new mission and reopening the manual retained
+Reduced. The system default was restored after testing. Artifacts: motion-*-checks.txt
+and motion-portrait.png. OS-level preference switching was not emulated: the
+supported browser API exposes no media override. This is distinct from the
+verified in-game reduced/full choices and reading the actual system preference.
+
+The console did record the historical unlocated MutationObserver error during
+iframe navigation. A script-free blank iframe control page reproduced the exact
+error, establishing that it does not require game or QA scripts. It is retained
+in motion-blank-control-errors.json, not suppressed. A standalone client load,
+start, motion change, close and automatic resume produced **no captured warnings
+or errors** in its timestamp-bounded observation (motion-standalone-errors.json).
+This scoped observation does not claim every possible future session is error-free.

@@ -293,3 +293,7 @@ a bounded catch-up budget. Node and Chromium now match the tested full Commander
 replay at all recorded checkpoints. See
 [SIMULATION-CONSISTENCY.md](docs/SIMULATION-CONSISTENCY.md) for the tested scope,
 performance measurements and updated balance results. Run `npm run test:clock`.
+
+The field manual (`?`) includes a persistent Battlefield motion setting. System
+follows your device preference; Reduced disables walking poses, bob and drifting
+dust without changing gameplay. Closing the manual restores the prior pause state.

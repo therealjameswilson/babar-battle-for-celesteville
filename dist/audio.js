@@ -4,8 +4,30 @@ let audioContext = null,
   muted = false,
   lastSound = 0,
   musicBeat = 0;
-const reducedMotion =
-  typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motionMedia = typeof matchMedia === 'function'
+  ? matchMedia('(prefers-reduced-motion: reduce)') : null;
+let motionPreference = 'system', reducedMotion = !!motionMedia?.matches;
+try {
+  const saved = localStorage.getItem('babar-motion');
+  if (['system', 'reduced', 'full'].includes(saved)) motionPreference = saved;
+} catch {}
+function applyMotionPreference() {
+  reducedMotion = motionPreference === 'reduced' ||
+    (motionPreference === 'system' && !!motionMedia?.matches);
+  $('motion-preference').value = motionPreference;
+  $('motion-status').textContent = reducedMotion
+    ? 'Reduced motion: static infantry poses, no walking bob or drifting dust.'
+    : 'Full motion: walking poses and battlefield effects enabled.';
+}
+$('motion-preference').onchange = () => {
+  const value = $('motion-preference').value;
+  if (!['system', 'reduced', 'full'].includes(value)) return;
+  motionPreference = value;
+  try { localStorage.setItem('babar-motion', value); } catch {}
+  applyMotionPreference();
+};
+motionMedia?.addEventListener?.('change', applyMotionPreference);
+applyMotionPreference();
 try {
   muted = localStorage.getItem('babar-muted') === 'true';
 } catch {}

@@ -1122,11 +1122,16 @@ document
 $('restart').onclick = () => {
   if (confirm('Restart this mission? Current progress will be lost.')) location.reload();
 };
+let helpWasPaused = false;
 $('help').onclick = () => {
+  helpWasPaused = paused;
   if (running && !paused) togglePause();
   $('help-dialog').showModal();
 };
 $('help-close').onclick = () => $('help-dialog').close();
+$('help-dialog').addEventListener('close', () => {
+  if (running && !ended && !helpWasPaused && paused) togglePause();
+});
 
 $('groups-open').onclick = () => {
   if (!running || ended) return;

@@ -50,3 +50,14 @@ and additional campaigns are useful future work, not substitutes for closing the
 explicit current QA requirements. Current public URLs:
 https://github.com/therealjameswilson/babar-battle-for-celesteville and
 https://therealjameswilson.github.io/babar-battle-for-celesteville/.
+
+## Follow-up at 0.35.1
+
+The two concrete QA gaps above have stronger evidence now (QA.md): the original
+MutationObserver message reproduces on a script-free iframe control; standalone
+gameplay/settings/resume has no captured errors. An explicit persistent motion
+selector verifies reduced/full renderer integration in the browser, while System
+reads the actual media preference. OS preference switching remains untested,
+not claimed. 647 checks pass at all three tested sizes. The field manual now
+restores its prior pause state. Publication of this follow-up is still pending;
+recheck the actual workflow and public files before closing the release audit.

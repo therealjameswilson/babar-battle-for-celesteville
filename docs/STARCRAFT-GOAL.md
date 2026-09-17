@@ -74,3 +74,11 @@ Original support-effect checks now run in real Chromium as well as Node;
 638 portrait assertions pass. Public assets and Story defeat/restart are verified.
 Next: current browser error attribution and actual reduced-motion preference
 integration. The goal remains active until the explicit evidence gaps close.
+
+## 0.35.1 — close presentation QA gaps
+
+Explicit reduced-motion preferences and field-manual pause restoration are
+implemented; 647 browser checks pass across the three layouts. The recurring
+console error reproduces without game scripts on a blank iframe, whereas the
+standalone tested client has no captured errors. Publication remains to verify
+before the final current-scope audit can close.

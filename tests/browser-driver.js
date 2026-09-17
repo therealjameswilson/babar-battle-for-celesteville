@@ -61,6 +61,28 @@ async function browserSuite() {
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
     supportChecks(check);
+    qaReset();
+    const savedMotion=motionPreference, motionTime=t;
+    const motionOrder=JSON.stringify(units.map(u=>[u.id,u.x,u.y,u.hp,u.order?.kind]));
+    $('help').click();
+    check($('help-dialog').open && paused,'Motion preferences open inside the paused field manual');
+    $('motion-preference').value='reduced';$('motion-preference').dispatchEvent(new Event('change'));
+    check(reducedMotion && infantryWalkPhase({movingUntil:t+1,walkDistance:14})===null,'Reduced-motion selector disables actual renderer walk poses');
+    check(localStorage.getItem('babar-motion')==='reduced','Motion preference persists locally');
+    check($('motion-status').textContent.startsWith('Reduced motion'),'Current motion behavior is explained visibly');
+    $('motion-preference').value='full';$('motion-preference').dispatchEvent(new Event('change'));
+    check(!reducedMotion && infantryWalkPhase({movingUntil:t+1,walkDistance:14})===1,'Full-motion selector restores renderer walking poses');
+    $('motion-preference').value='system';$('motion-preference').dispatchEvent(new Event('change'));
+    check(reducedMotion===matchMedia('(prefers-reduced-motion: reduce)').matches,'System option reads the actual browser media preference');
+    check(t===motionTime && JSON.stringify(units.map(u=>[u.id,u.x,u.y,u.hp,u.order?.kind]))===motionOrder,'Motion settings cannot alter simulation time, health or orders');
+    $('motion-preference').value=savedMotion;$('motion-preference').dispatchEvent(new Event('change'));
+    $('help-close').click();
+    await new Promise(requestAnimationFrame);
+    check(!paused && !$('help-dialog').open,'Closing motion settings restores command');
+    togglePause();$('help').click();$('help-close').click();
+    await new Promise(requestAnimationFrame);
+    check(paused,'Closing the field manual preserves an existing pause');
+    togglePause();
     batteryChecks(check);
     clockChecks(check);
     deliveryChecks(check);
