@@ -257,6 +257,7 @@ function controlGroup(number, save = false, append = false) {
   updateUI(true);
 }
 function reset() {
+  minimapGesture = null;
   technologies = new Set(); enemyTechnologies = new Set();
   attackReports=[];attackCursor=0;attackToneAt=-100;
   controlGroups = {};
@@ -1031,11 +1032,6 @@ canvas.addEventListener(
   },
   { passive: false }
 );
-mini.addEventListener('pointerdown', (e) => {
-  const r = mini.getBoundingClientRect();
-  cam.x = ((e.clientX - r.left) / r.width) * W;
-  cam.y = ((e.clientY - r.top) / r.height) * H;
-});
 window.addEventListener('keydown', (e) => {
   if (e.target.tagName === 'SELECT') return;
   if (cameraViewKey(e)) return;

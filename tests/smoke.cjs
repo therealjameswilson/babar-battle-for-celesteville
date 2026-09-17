@@ -80,6 +80,7 @@ for (const file of [
   'cast.js',
   'game.js',
   'camera-views.js',
+  'minimap-input.js',
   'alerts.js',
   'selection.js',
   'combat-roles.js',

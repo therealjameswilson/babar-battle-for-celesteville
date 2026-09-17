@@ -253,3 +253,13 @@ the same paid economic opening. Use `-- --size=14` or `-- --size=24` to compare
 other commitment sizes. See docs/PUSH-COMPARISON.md for wins, an unresolved browser
 run and timing tradeoffs. These are repeatable tactical examples, not a guarantee
 that staged artillery always wins or that larger forces always perform better.
+
+### Minimap command controls (0.32.0)
+
+Drag the minimap to move the camera. Right-click it to issue a contextual order
+or set selected production buildings’ rally points. Shift or Queue appends
+waypoints. On touch, choose Move, Attack-move, Patrol, Gather or Repair and tap
+the minimap. These use the same visibility, formation and queue rules as the
+battlefield. An order tap leaves the camera in place; releasing outside cancels
+the tap. While placing a building, the minimap only pans: confirm its footprint
+on the main battlefield. Pausing prevents orders but allows camera movement.

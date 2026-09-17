@@ -28,3 +28,11 @@ Next substantive work: audit remaining combat, presentation and long-match recon
 Fog-aware depleted-stock worker fallback, recruitment and resource rally handling are implemented.
 Selection subgroups now avoid reselecting a mixed army for specialist orders. Adaptive expansion locations are implemented; wider human balance remains open. Do not mark the broad goal complete
 on the strength of the artillery release alone.
+
+## 0.32.0 — command from the minimap
+
+Minimap camera dragging, right-click contextual orders/rally points, Shift/Queue
+waypoints and explicit touch orders now share battlefield command rules.
+Thirteen added checks cover rule behavior and browser pointer listeners. This
+closes a concrete command responsiveness gap. The broader goal remains active;
+the outstanding balance, expansion and visual evidence above still needs review.

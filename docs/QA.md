@@ -810,3 +810,19 @@ resources; this supplements, rather than replaces, normal-speed fixture inspecti
   battery-portrait.png, battery-landscape.png, battery-performance.txt,
   push-staged-browser-unresolved.json, push-early-browser.json and
   push-early-victory.png. The unresolved run remains part of the evidence.
+
+## 0.32.0 — minimap commands (2026-09-17)
+
+Baseline and updated JavaScript/atlas checks and deterministic tactical suite pass.
+Nine shared minimap checks cover panning, selection preservation, contextual move,
+Shift queues, attack-move, outside release, pause, paid-placement protection,
+rallies and reset. Four browser-only assertions exercise registered PointerEvent
+listeners for touch dragging/attack-move, mouse Shift queues and cancellation.
+The real in-app Chromium browser passes **584 checks** at desktop, 390×844
+portrait and 844×390 landscape sizes. Screenshots inspected and saved as
+`artifacts/minimap-{desktop,portrait,landscape}.png`; full check output is
+`artifacts/minimap-browser-checks.txt`. The main game was also started directly;
+Army selection followed by an actual tool mouse right-click on the minimap
+returned “Orders confirmed.” Pause/resume worked. Touch events were synthetic,
+not a physical iPhone test. No new full-match balance claim is made by this input
+change; full scenario regressions remain in the publication workflow.

@@ -58,6 +58,19 @@ async function browserSuite() {
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
     batteryChecks(check);
+    minimapChecks(check);
+    qaReset();const miniUnit=alive(0).find(u=>u.type==='trooper');selected=[miniUnit];
+    const miniRect=mini.getBoundingClientRect();
+    const miniEvent=(type,x,y,extra={})=>mini.dispatchEvent(new PointerEvent(type,{bubbles:true,cancelable:true,pointerId:91,pointerType:'touch',button:0,clientX:miniRect.left+x*miniRect.width,clientY:miniRect.top+y*miniRect.height,...extra}));
+    miniEvent('pointerdown',.3,.3);miniEvent('pointermove',.6,.6);miniEvent('pointerup',.6,.6);
+    check(Math.abs(cam.x-W*.6)<.01,'Minimap pointer listeners drag camera on touch');
+    document.querySelector('[data-mode="attack"]').click();
+    miniEvent('pointerdown',.4,.4);miniEvent('pointerup',.4,.4);
+    check(miniUnit.order?.kind==='attack','Touch Attack-move button and minimap tap issue attack-move');
+    miniEvent('pointerdown',.6,.4,{button:2,pointerType:'mouse',shiftKey:true});
+    check(miniUnit.orders.length===1,'Mouse minimap event queues a waypoint with Shift');
+    mode=null;miniEvent('pointerdown',.2,.2);miniEvent('pointercancel',.2,.2);
+    check(minimapGesture===null,'Pointer cancellation clears minimap camera capture');
     reconChecks(check);
     enemyOperationChecks(check);
     enemyRaidExecutionChecks(check);

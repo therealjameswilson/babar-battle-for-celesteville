@@ -331,3 +331,7 @@ console.log('PASS: paid recurring reconnaissance, route memory, visibility, with
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'battery-checks.js'),'utf8'));
 run('batteryChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: read-only battery readiness, observation, reload, blind spot, friendly fire and group status.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'minimap-checks.js'),'utf8'));
+run('minimapChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: minimap commands, waypoints, rally points, camera dragging and placement guards.');

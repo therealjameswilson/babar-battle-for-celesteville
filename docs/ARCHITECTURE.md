@@ -533,3 +533,9 @@ march policy issues combined attack-move. Both preserve withdrawals and can regr
 The browser fixture owns fixed simulation steps, pauses an unresolved 900s window,
 and never labels it a win. Default test:push runs in CI alongside earlier balance
 comparisons. See PUSH-COMPARISON.md for the results and their limitations.
+
+`minimap-input.js` owns pointer capture and camera drag state. It passes orders
+to `command()` instead of duplicating targeting or formation rules. It loads
+after game.js/camera-views.js and clears gestures on reset, cancellation or blur.
+Shared minimap checks run in the VM and browser; browser-only checks additionally
+dispatch mouse/touch PointerEvents through the registered listeners.

@@ -99,3 +99,13 @@ see COMMANDER-OPENING.md. Earlier rush-opening defeats are retained as compariso
 evidence. This does not prove every human opening is balanced. Remaining gameplay
 work includes selection subgroups, adaptive expansion choices and broader human
 balance; do not mark the overall goal complete from this result alone.
+
+## Minimap commands, 0.32.0
+
+Minimap pointer input now lives in minimap-input.js. Default drag pans; right-click
+orders selected units/sets production rallies; explicit order plus tap works on
+touch. Shift/Queue uses command() and existing limits. Building placement pans
+without spending; out-of-bounds releases cancel explicit taps. Shared and browser
+event checks pass (584 browser assertions across desktop/portrait/landscape).
+Overall StarCraft fidelity goal remains active; see STARCRAFT-GOAL.md for remaining
+audit and longer-match comparisons.
