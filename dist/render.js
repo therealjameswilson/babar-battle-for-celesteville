@@ -68,11 +68,23 @@ function atlas(image, col, row, x, y, w, h, building = false) {
   );
   return true;
 }
+// Original Canvas field camp: canvas roof, timber office and faction command flag.
+function drawHeadquarters(team) {
+  ctx.fillStyle='#34392e';ctx.fillRect(-38,-4,76,30);
+  ctx.fillStyle='#8b8464';ctx.beginPath();ctx.moveTo(-46,-4);ctx.lineTo(0,-72);ctx.lineTo(46,-4);ctx.closePath();ctx.fill();
+  ctx.strokeStyle='#c4b789';ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#282d26';ctx.fillRect(-10,-4,20,30);
+  ctx.fillStyle='#b6a57b';ctx.fillRect(-33,4,15,9);ctx.fillRect(18,4,15,9);
+  ctx.strokeStyle='#b6a57b';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(32,15);ctx.lineTo(32,-79);ctx.stroke();
+  ctx.fillStyle=team?'#863f48':'#395c41';ctx.fillRect(32,-79,28,19);
+  ctx.fillStyle='#eee0b1';ctx.font='bold 10px monospace';ctx.textAlign='center';ctx.fillText('HQ',46,-66);ctx.textAlign='left';
+}
 function drawRememberedBuilding(k) {
   const col=k.type==='core'?0:k.type==='forge'?1:k.type==='factory'?2:3;
   const h=k.type==='core'?150:k.type==='factory'?126:k.type==='forge'?113:94;
   ctx.save();ctx.translate(k.x,k.y);ctx.globalAlpha=.38;
-  if(k.type!=='quarry')atlas(buildingSheet,col,1,-h*.49,-h+29,h*.98,h,true);
+  if(k.type==='headquarters')drawHeadquarters(1);
+  else if(k.type!=='quarry')atlas(buildingSheet,col,1,-h*.49,-h+29,h*.98,h,true);
   ctx.globalAlpha=.7;ctx.strokeStyle='#b9a2a0';ctx.lineWidth=1.5;ctx.setLineDash([4,5]);
   const r=defs[k.type].r;ctx.strokeRect(-r,-r,r*2,r*2);ctx.setLineDash([]);
   ctx.fillStyle='#e0ccbb';ctx.font='10px monospace';ctx.textAlign='center';
@@ -214,7 +226,8 @@ function drawUnit(u) {
     const row = u.type === 'turret' ? 1 : u.team;
     const height =
       u.type === 'core' ? 150 : u.type === 'factory' ? 126 : u.type === 'forge' ? 113 : 94;
-    if (u.type === 'quarry') {
+    if(u.type==='headquarters')drawHeadquarters(u.team);
+    else if (u.type === 'quarry') {
       // Local procedural extraction machinery, distinct from supply homes.
       ctx.fillStyle = '#697b7d'; ctx.fillRect(-29, -9, 58, 25);
       ctx.strokeStyle = '#c3b795'; ctx.lineWidth = 5;

@@ -826,3 +826,26 @@ Army selection followed by an actual tool mouse right-click on the minimap
 returned “Orders confirmed.” Pause/resume worked. Touch events were synthetic,
 not a physical iPhone test. No new full-match balance claim is made by this input
 change; full scenario regressions remain in the publication workflow.
+
+## 0.33.0 — independent headquarters (2026-09-17)
+
+Syntax/atlas and deterministic tactical checks pass. Seventeen shared camp checks
+cover scouting, paid foundations, cancellation, population, worker recruitment,
+rallies, independent supply and severed links, destruction, faction symmetry and
+report-based enemy planning. Three browser-only checks use the actual build
+button and synthetic touch placement and confirm the control is reachable.
+The real in-app Chromium browser passes **604 assertions** at desktop, 390×844
+portrait and 844×390 landscape. The protected expansion fixture was rendered
+through four simulation minutes; its 2,100 delivered Supplies and 2,200 available
+Supplies match Node. Desktop and mobile screenshots were inspected, including the
+original Canvas tent, local workers, production actions and minimap. The selected
+camp description was shortened so compact panels retain readable orders.
+
+Evidence: artifacts/headquarters-browser-checks.txt,
+artifacts/headquarters-economy-browser.json and
+artifacts/headquarters-{desktop,portrait,landscape}.png. Controlled home/protected/
+destroyed camp results are documented in EXPANSION-COMPARISON.md and enforced by
+`npm run test:expansion`. This isolates delivery economics with identical crews;
+it does not establish a full-match expansion build order. Touch is synthetic and
+viewports are browser frames, not physical Safari testing. No subjective audio
+claim or new all-roster art claim accompanies the procedural headquarters asset.

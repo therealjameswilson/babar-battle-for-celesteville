@@ -10,6 +10,7 @@ const W = 1800,
   RED = '#ce6c63';
 const defs = {
   core: { name: 'Royal Palace', hp: 1800, r: 47, cost: 400, build: 24 },
+  headquarters: { name: 'Field Headquarters', hp: 1100, r: 38, cost: 400, build: 30 },
   forge: { name: 'Guard School', hp: 850, r: 34, cost: 150, build: 12 },
   factory: { name: 'Artillery Works', hp: 1050, r: 38, cost: 240, materials: 50, build: 18 },
   quarry: { name: 'Materials Quarry', hp: 600, r: 26, cost: 100, build: 12 },
@@ -157,7 +158,7 @@ function cap(team = 0) {
             ? 0
             : u.type === 'core'
               ? 20
-              : u.type === 'relay'
+              : u.type === 'headquarters' ? 10 : u.type === 'relay'
                 ? team === 0 && benefits.has('celeste-mother')
                   ? 15
                   : 10
@@ -510,7 +511,7 @@ function update(dt) {
         const base = nearest(
           u,
           alive(u.team).filter(
-            (a) => (a.type === 'core' || a.type === 'relay') && !a.construction && supplied(a)
+            (a) => deliveryBase(a) && !a.construction && supplied(a)
           )
         );
         if (base && move(u, base, dt, base.r + u.r + 8)) {
@@ -628,7 +629,7 @@ function build(type) {
   if (ore < buildingCost(type)) return say('Not enough supplies.');
   placing = type;
   mode = null;
-  say(type === 'quarry' ? 'Tap a marked Materials deposit near your supply line. Then assign provisioners with Gather.' : 'Tap open ground near your base to place ' + defs[type].name + '.');
+  say(type === 'headquarters' ? 'Establish a supply base on clear ground currently seen by your forces. '+buildingCost(type)+' Supplies; protect the builder.' : type === 'quarry' ? 'Tap a marked Materials deposit near your supply line. Then assign provisioners with Gather.' : 'Tap open ground near your base to place ' + defs[type].name + '.');
   updateUI(true);
 }
 function validBuild(p, type, team = 0) {
@@ -638,7 +639,7 @@ function validBuild(p, type, team = 0) {
     p.y > 60 &&
     p.x < W - 60 &&
     p.y < H - 60 &&
-    alive(team).some((u) => !defs[u.type].speed && !u.construction && dist(u, p) < 310) &&
+    (type==='headquarters' ? observesPosition(team,p) : alive(team).some((u) => !defs[u.type].speed && !u.construction && dist(u, p) < 310)) &&
     !solidAt(p.x, p.y, defs[type].r + 24) &&
     units.every((u) => u.hp <= 0 || dist(u, p) > u.r + defs[type].r + 12) &&
     nodes.every((n) => (type === 'quarry' && n === materialSite(p)) || dist(n, p) > defs[type].r + 35)
@@ -662,7 +663,7 @@ function command(p, append = queueOrders) {
   if (placing) {
     if (placing === 'quarry') { const deposit = materialSite(p); if (deposit) p = {x:deposit.x,y:deposit.y}; }
     if (!validBuild(p, placing))
-      return say(placing === 'quarry' ? 'Choose an unoccupied Materials deposit near a friendly building.' : 'Choose clear ground within reach of a friendly building.');
+      return say(placing === 'headquarters' ? 'Scout clear ground first. Keep the headquarters footprint away from units, resources and obstacles.' : placing === 'quarry' ? 'Choose an unoccupied Materials deposit near a friendly building.' : 'Choose clear ground within reach of a friendly building.');
     if (ore < buildingCost(placing) || materials < materialCost(placing)) return say('Not enough Supplies or Materials.');
     const builder=constructionWorker(p,append);
     if(!builder)return say(append?'Select a provisioner with room in its 16-order queue.':'Construction needs a free provisioner. Recruit one or finish the current site.');
@@ -690,7 +691,7 @@ function command(p, append = queueOrders) {
     );
   if (enemy && dist(p, enemy) > enemy.r + 22) enemy = null;
   if (node && dist(p, node) > 40) node = null;
-  const producers = selected.filter(u => mode !== 'patrol' && ['core', 'forge', 'factory'].includes(u.type));
+  const producers = selected.filter(u => mode !== 'patrol' && ['core', 'headquarters', 'forge', 'factory'].includes(u.type));
   for (const b of producers) b.rally = { x: clamp(p.x, 25, W - 25), y: clamp(p.y, 25, H - 25), node };
   if (producers.length) say('Production rally point set. Provisioners gather when rallied to supplies.');
   let movers = selected.filter((u) => defs[u.type].speed);
@@ -768,9 +769,11 @@ function updateUI(force = false) {
           : u.type === 'hero'
             ? 'Stand together: +20 morale and 25% less damage for nearby troops, for 8s.'
             : u.type === 'worker'
-              ? (u.order?.node?.kind === 'materials' ? 'Quarry duty: ' + (quarryFor(u.order.node, 0) ? '3 extraction slots. Return Materials to a linked palace/home.' : 'WAITING: complete and supply a quarry on this deposit.') : 'Gathers Supplies (2 extraction slots per cache). Quarries yield Materials. Can build and repair.')
+              ? (u.order?.node?.kind === 'materials' ? 'Quarry duty: ' + (quarryFor(u.order.node, 0) ? '3 extraction slots. Return Materials to a headquarters or linked palace/home.' : 'WAITING: complete and supply a quarry on this deposit.') : 'Gathers Supplies (2 extraction slots per cache). Quarries yield Materials. Can build and repair.')
               : u.type === 'core'
                 ? 'Invite gatherers and expand Celesteville.'
+                : u.type === 'headquarters'
+                  ? 'Local deliveries & provisioner recruitment. +10 population.'
                 : u.type === 'forge'
                   ? 'Trains infantry. Choose weapons or field protection research; research suspends recruitment at this school.'
                   : u.type === 'factory'
@@ -801,7 +804,7 @@ function updateUI(force = false) {
       : u.construction
         ? 'Paid foundation · Repair assigns a replacement builder; cancel refunds 75%.'
       : supplied(u)
-        ? 'Supply line operational'
+        ? (u.type==='headquarters'?'Independent supply base':'Supply line operational')
         : 'ISOLATED · training at 25%. Link buildings within 360m; clear raiders.'
     : 'Hold a supply route and scout both approaches.';
   if(selected.length>1&&selected.every(w=>w.type==='worker')){
@@ -843,7 +846,7 @@ function updateUI(force = false) {
     }
     if (u && !u.construction && selected.length === 1) {
       if (u.type === 'hero') a.push(['Babar: Stand together', Math.max(0, u.commandReadyAt - t) > 0 ? Math.ceil(u.commandReadyAt - t) + 's cooldown' : '50 energy · Q', () => commanderAbility(u)]);
-      if (u.type === 'core') a.push(['Provisioner', '● 50', () => train('worker')]);
+      if (workerProducer(u)) a.push(['Provisioner', '● 50', () => train('worker')]);
       if (u.type === 'forge') {
         a.push(['Elephant Guard', '60', () => train('trooper')]);
         a.push(['Forest Scout', '55', () => train('scout')]);
@@ -851,12 +854,12 @@ function updateUI(force = false) {
       }
       if (u.type === 'factory') a.push(['Field Artillery', '160 S · 25 M', () => train('walker')]);
     }
-    if(u&&!u.construction&&((selected.length===1&&u.type==='core')||selected.every(w=>w.team===0&&w.type==='worker')))
-      for(const type of ['forge','relay','quarry','factory','turret'])
+    if(u&&!u.construction&&((selected.length===1&&workerProducer(u))||selected.every(w=>w.team===0&&w.type==='worker')))
+      for(const type of ['forge','relay','quarry','factory','turret','headquarters'])
         a.push([defs[type].name,buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
     if (selected.length > 1) {
       for (const type of ['worker','trooper','scout','sapper','walker']) {
-        const producers = selected.filter(b => b.team === 0 && b.type === producerFor(type) && !b.construction);
+        const producers = selected.filter(b => b.team === 0 && produces(b,type) && !b.construction);
         if (producers.length) a.push([defs[type].name, defs[type].cost + ' S' + (materialCost(type) ? ' · ' + materialCost(type) + ' M' : '') + ' · ' + producers.length + ' sites', () => train(type), !unitUnlocked(type)]);
       }
     }

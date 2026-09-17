@@ -36,3 +36,14 @@ waypoints and explicit touch orders now share battlefield command rules.
 Thirteen added checks cover rule behavior and browser pointer listeners. This
 closes a concrete command responsiveness gap. The broader goal remains active;
 the outstanding balance, expansion and visual evidence above still needs review.
+
+## 0.33.0 — independent economic expansion
+
+Field Headquarters enable worker-built remote economies on currently scouted
+ground: 400 Supplies, 30s construction, independent supply root, delivery and
+worker production, +10 population. Enemy macro considers the same paid structure
+when current reports show local depletion and a safe remote resource opportunity.
+A four-minute controlled comparison measures investment/payback and destruction
+cost (EXPANSION-COMPARISON.md); protected-camp income matches real Chromium.
+Full-match expansion timing versus army expenditure remains unproven and is the
+next substantive economic comparison. No change to the palace-loss objective.

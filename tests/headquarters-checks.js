@@ -1,0 +1,31 @@
+function headquartersChecks(check){
+ const fresh=()=>{easy=false;reset();running=true;paused=false;nextWave=enemySpawn=9999;ore=1000;};
+ fresh();const remote={x:1020,y:1070};
+ check(!validBuild(remote,'headquarters'),'Remote headquarters requires current scouting');
+ const scout=add('scout',0,960,980);sightAt=-1;
+ check(validBuild(remote,'headquarters')&&!validBuild(remote,'relay'),'Scouted headquarters can start beyond the old building chain');
+ selected=[alive(0).find(w=>w.type==='worker')];const beforeCap=cap();build('headquarters');command(remote);
+ const hq=alive(0).find(b=>b.type==='headquarters');rebuildSupply();
+ check(ore===600&&hq?.construction===30&&!supplied(hq)&&cap()===beforeCap,'Paid headquarters foundation grants no premature supply or population');
+ selected=[hq];train('worker');check(!hq.queue.length,'Unfinished headquarters cannot recruit workers');
+ cancelConstruction(hq);check(ore===900&&hq.hp===0,'Cancelled headquarters refunds only 75 percent');
+ const ready=add('headquarters',0,remote.x,remote.y);rebuildSupply();
+ check(supplied(ready)&&cap()===beforeCap+10,'Completed headquarters independently supplies itself and adds ten population');
+ const school=add('forge',0,1170,1060);rebuildSupply();check(supplied(school),'Remote headquarters supplies local production');
+ const raider=add('trooper',1,1100,1060);rebuildSupply();check(!supplied(school)&&supplied(ready),'Raiders sever outgoing links without disabling the headquarters root');
+ raider.hp=0;rebuildSupply();selected=[ready];const funds=ore;train('worker');
+ check(ready.queue[0]==='worker'&&ore===funds-50&&productionSites().includes(ready),'Headquarters paid recruitment appears in the global production report');
+ command({x:1000,y:900});check(ready.rally?.x===1000,'Headquarters accepts production rally orders');
+ ready.hp=0;rebuildSupply();check(!supplied(school),'Destroying the remote root isolates its school');
+ fresh();const enemyCamp=add('headquarters',1,1020,1070);rebuildSupply();
+ check(supplied(enemyCamp),'Rhino headquarters uses identical supply-root rules');
+ const core=alive(1).find(b=>b.type==='core');core.research={id:'weapons',progress:0};enemyBudget=200;enemyMaterials=0;
+ check(enemyQueue('worker')&&enemyCamp.queue[0]==='worker'&&enemyBudget===150,'Enemy recruits from headquarters when the palace cannot produce');
+ fresh();add('scout',1,960,980);observeEnemyEconomy();
+ check(!enemyHeadquartersSite(),'Enemy retains home economy while observed home stocks remain rich');
+ for(const report of enemyResourceReports.values())if(!report.kind&&report.x>1400)report.amount=0;
+ check(!!enemyHeadquartersSite(),'Enemy can plan an observed remote camp after reported home depletion');
+ for(const n of nodes)if(!n.kind&&n.x>1400)n.amount=9000;
+ check(!!enemyHeadquartersSite(),'Unobserved live stock edits do not replace stored planning reports');
+ t=121;check(!enemyHeadquartersSite(),'Stale stock reports cannot justify an enemy headquarters');
+}

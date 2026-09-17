@@ -76,9 +76,9 @@ function rebuildSupply() {
   linked = new Set();
   for (const team of [0, 1]) {
     const buildings = alive(team).filter((b) => !defs[b.type].speed && !b.construction);
-    const core = buildings.find((b) => b.type === 'core');
-    if (!core) continue;
-    linked.add(core.id);
+    const roots=buildings.filter(workerProducer);
+    if(!roots.length)continue;
+    for(const root of roots)linked.add(root.id);
     let changed = true;
     while (changed) {
       changed = false;
@@ -110,7 +110,7 @@ function orderRetreat(u) {
   u.followup = null;
   const base = nearest(
     u,
-    alive(u.team).filter((b) => b.type === 'core' || (b.type === 'relay' && supplied(b)))
+    alive(u.team).filter((b) => deliveryBase(b) && supplied(b))
   );
   if (base)
     u.order = {
@@ -182,7 +182,7 @@ function updateTactics(dt) {
     if (u.type === 'hero') u.commandEnergy = Math.min(100, u.commandEnergy + dt * 1.25);
     const officer = friendlyTeams[u.team].some((b) => b.type === 'hero' && dist(u, b) < 190);
     const hospital = friendlyTeams[u.team].some(
-      (b) => (b.type === 'core' || b.type === 'relay') && supplied(b) && dist(u, b) < 160
+      (b) => deliveryBase(b) && supplied(b) && dist(u, b) < 160
     );
     if (t - (u.hitAt ?? -100) > 3)
       u.morale = clamp(u.morale + dt * (officer ? 12 : hospital ? 10 : 4), 0, 100);

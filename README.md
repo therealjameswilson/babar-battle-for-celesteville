@@ -263,3 +263,14 @@ the minimap. These use the same visibility, formation and queue rules as the
 battlefield. An order tap leaves the camera in place; releasing outside cancels
 the tap. While placing a building, the minimap only pans: confirm its footprint
 on the main battlefield. Pausing prevents orders but allows camera movement.
+
+### Independent expansion bases (0.33.0)
+
+Select a provisioner or palace and build **Field Headquarters** on clear ground
+currently seen by your scouts. It costs 400 Supplies and 30 seconds of builder
+work. Once complete it accepts deliveries, recruits provisioners, grants ten
+population and supplies nearby buildings without a palace connection. Defend it:
+losing the camp lengthens delivery trips and isolates its local production.
+Village Homes remain a cheaper option along protected connected routes. Losing
+the original palace still ends the mission. See [measured expansion costs and
+income](docs/EXPANSION-COMPARISON.md); run `npm run test:expansion` to reproduce them.

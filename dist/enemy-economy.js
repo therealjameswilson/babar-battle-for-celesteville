@@ -19,7 +19,7 @@ function enemyExpansionSite() {
   // Map routes are common knowledge; their economic value comes from scouting.
   const candidates=[{x:1120,y:620},{x:1100,y:890},{x:1320,y:740},
     {x:1380,y:740},{x:1180,y:850},{x:1320,y:850}];
-  const drops=buildings.filter(b=>b.type==='core'||b.type==='relay');
+  const drops=buildings.filter(b=>deliveryBase(b));
   const reports=[...enemyResourceReports.values()].filter(r=>r.amount>0 && t-r.at<=120);
   const ranked=[];
   for (const p of candidates) {
@@ -41,13 +41,26 @@ function enemyExpansionSite() {
   ranked.sort((a,b)=>b.score-a.score);
   return ranked[0]?.p || null;
 }
+function enemyHeadquartersSite() {
+  if(alive(1).some(b=>b.type==='headquarters'))return null;
+  const core=alive(1).find(b=>b.type==='core');if(!core)return null;
+  const reports=[...enemyResourceReports.values()].filter(r=>r.kind!=='materials'&&t-r.at<=120);
+  const local=reports.filter(r=>dist(r,core)<420);
+  // Do not infer depletion from missing or stale observations.
+  if(local.length<2||local.reduce((sum,r)=>sum+r.amount,0)>=900)return null;
+  const candidates=[{x:1020,y:1070},{x:1150,y:1020},{x:1130,y:700},{x:710,y:1060}];
+  return candidates.filter(p=>enemySeesPoint(p)&&enemySafe(p)&&validBuild(p,'headquarters',1)&&
+    ![...enemyThreatReports.values()].some(r=>dist(r,p)<270)&&
+    reports.some(r=>r.amount>=400&&dist(r,p)<300))
+    .sort((a,b)=>dist(a,core)-dist(b,core))[0]||null;
+}
 function enemySeesPoint(p) { return alive(1).some(u => dist(u,p) < vision(u)); }
 function enemySafe(p) {
   return !alive(0).some(u => defs[u.type].damage && sees(1,u) && dist(u,p) < 240);
 }
 function enemyQueue(type) {
   if (!unitUnlocked(type,1)) return false;
-  const producer = alive(1).filter(b => b.type === producerFor(type) && !b.construction && !b.research && !b.plannedResearch && b.queue.length < 2)
+  const producer = alive(1).filter(b => produces(b,type) && !b.construction && !b.research && !b.plannedResearch && b.queue.length < 2)
     .sort((a,b) => a.queue.length-b.queue.length || a.id-b.id)[0];
   if (!producer || supply(1) >= cap(1) || enemyBudget < defs[type].cost || enemyMaterials < materialCost(type)) return false;
   enemyBudget -= defs[type].cost; enemyMaterials -= materialCost(type);
@@ -76,7 +89,7 @@ function enemyAssignWorkers() {
   const workers=alive(1).filter(u=>u.type==='worker');
   // Only known, locally visible stocks enter economic planning. No hidden depletion reads.
   const resources=nodes.filter(n=>enemySeesPoint(n) && n.amount>0 && enemySafe(n) &&
-    (n.kind!=='materials' || quarryFor(n,1)) && alive(1).some(b=>(b.type==='core'||b.type==='relay') && supplied(b) && dist(b,n)<520));
+    (n.kind!=='materials' || quarryFor(n,1)) && alive(1).some(b=>(deliveryBase(b)) && supplied(b) && dist(b,n)<520));
   // Three assigned workers per stock includes delivery travel; extraction slots remain 2/3.
   const counts=new Map();
   for (const w of workers) {
@@ -117,6 +130,8 @@ function enemyMacro() {
     else if (supply(1)>=cap(1)-3 && cap(1)<(easy?40:60)) { type='relay'; site=enemyFindSite(type,core); }
     else if (!buildings.some(b=>b.type==='quarry')) { type='quarry'; site=nodes.find(n=>n.kind==='materials'&&enemySeesPoint(n)&&n.amount>0&&validBuild(n,type,1)); }
     else if (!buildings.some(b=>b.type==='factory') && t>90) { type='factory'; site=enemyFindSite(type,core); }
+    // Independent camps are paid only after current reports show home stocks running low.
+    else if(enemyBudget>=550&&(site=enemyHeadquartersSite())){type='headquarters';isExpansion=true;}
     // Up to two scouted expansions shorten deliveries; raids can change the route.
     else if (t>(easy?150:100) && enemyBudget>=160) {
       site=enemyExpansionSite(); if (site) {type='relay';isExpansion=true;}

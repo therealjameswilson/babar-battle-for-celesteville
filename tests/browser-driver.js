@@ -58,6 +58,17 @@ async function browserSuite() {
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
     batteryChecks(check);
+    headquartersChecks(check);
+    qaReset();ore=500;add('scout',0,960,980);cam={x:1020,y:1070,zoom:.7};
+    selected=[alive(0).find(w=>w.type==='worker')];updateUI(true);
+    const hqButton=[...$('actions').querySelectorAll('button')].find(b=>b.textContent.includes('Field Headquarters'));
+    hqButton.scrollIntoView({block:'nearest'});const hqButtonRect=hqButton.getBoundingClientRect();
+    check(hqButtonRect.top>=0&&hqButtonRect.bottom<=innerHeight&&hqButtonRect.left>=0&&hqButtonRect.right<=innerWidth,'Headquarters build control is reachable inside the game viewport');
+    hqButton.click();
+    check(placing==='headquarters','Visible headquarters build button arms remote construction');
+    const hqCanvas=canvas.getBoundingClientRect(),hqPoint=screen({x:1020,y:1070});
+    for(const type of ['pointerdown','pointerup'])canvas.dispatchEvent(new PointerEvent(type,{bubbles:true,pointerType:'touch',pointerId:80,button:0,clientX:hqCanvas.left+hqPoint.x,clientY:hqCanvas.top+hqPoint.y}));
+    check(alive(0).some(b=>b.type==='headquarters'&&b.construction)&&ore===100,'Touch placement creates one paid remote headquarters');
     minimapChecks(check);
     qaReset();const miniUnit=alive(0).find(u=>u.type==='trooper');selected=[miniUnit];
     const miniRect=mini.getBoundingClientRect();
@@ -846,4 +857,13 @@ function browserBatteryBattle(){
  browserBattle();selected=alive(0).filter(u=>u.type==='walker');
  for(const gun of selected){gun.deployed=true;issueOrder(gun,{kind:'hold'});}
  updateUI(true);draw();qaReport('Representative battle with the six-gun live battery report selected.');
+}
+
+function browserHeadquarters(){
+ qaReset();expansionSetup(true);cam={x:1000,y:960,zoom:.9};
+ selected=[expansionLedger.site];updateUI(true);
+ qaInterval=setInterval(()=>{for(let i=0;i<20&&!ended&&t<239.99;i++)update(.05);
+ qaReport(JSON.stringify(expansionResult(),null,2));
+ if(ended||t>=239.99){clearInterval(qaInterval);qaInterval=null;togglePause();}
+ },50);
 }

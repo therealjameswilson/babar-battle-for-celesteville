@@ -335,3 +335,7 @@ console.log('PASS: read-only battery readiness, observation, reload, blind spot,
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'minimap-checks.js'),'utf8'));
 run('minimapChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: minimap commands, waypoints, rally points, camera dragging and placement guards.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'headquarters-checks.js'),'utf8'));
+run('headquartersChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: field headquarters costs, supply roots, recruitment, destruction and fair enemy expansion.');

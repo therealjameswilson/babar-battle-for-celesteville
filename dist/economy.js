@@ -61,9 +61,12 @@ function selectIdleWorkers() {
   say(selected.length ? selected.length + ' idle provisioners selected. Assign a cache, quarry or construction site.' : 'All provisioners have work.');
   updateUI(true);
 }
+function workerProducer(b) { return b.type==='core'||b.type==='headquarters'; }
+function deliveryBase(b) { return workerProducer(b)||b.type==='relay'; }
+function produces(b,type) { return type==='worker'?workerProducer(b):b.type===producerFor(type); }
 function producerFor(type) { return type === 'worker' ? 'core' : type === 'walker' ? 'factory' : 'forge'; }
 function readyProducers(type) {
-  return selected.filter(u => u.team === 0 && u.hp > 0 && u.type === producerFor(type) && !u.construction && !u.research && u.queue.length < 5)
+  return selected.filter(u => u.team === 0 && u.hp > 0 && produces(u,type) && !u.construction && !u.research && u.queue.length < 5)
     .sort((a,b) => a.queue.reduce((sum, item) => sum + defs[item].time, defs[type].time-a.progress) / (supplied(a) ? 1 : .25) -
       b.queue.reduce((sum, item) => sum + defs[item].time, defs[type].time-b.progress) / (supplied(b) ? 1 : .25) || a.id - b.id);
 }
@@ -91,7 +94,7 @@ function resourceWorkReport(n, team=0) {
     else if(quarry.construction){const crew=constructionCrew(quarry);state=crew.queued&&!crew.active?'queued':'construction';reason=state==='queued'?'Quarry queued. Provisioner is finishing earlier orders.':'Finish the quarry with a provisioner.';}
     else if(!supplied(quarry)){state='isolated';reason='QUARRY ISOLATED. Clear raiders or restore its building link.';}
   }
-  if(state==='working'&&!alive(team).some(b=>['core','relay'].includes(b.type)&&!b.construction&&supplied(b))){state='delivery';reason='No linked delivery base. Restore a palace or home connection.';}
+  if(state==='working'&&!alive(team).some(b=>deliveryBase(b)&&!b.construction&&supplied(b))){state='delivery';reason='No linked delivery base. Restore a headquarters or palace/home connection.';}
   const extractionOpen=state==='working'||state==='delivery';
   const extracting=extractionOpen&&n.claimAt===t?nearby.filter(w=>n.claims?.includes(w.id)).length:0;
   const waiting=nearby.length-extracting;

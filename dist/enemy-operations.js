@@ -2,12 +2,12 @@
 // Plans use intelligence snapshots. Hidden live objects never enter target scoring.
 function enemyRaidTarget() {
   const reports=intel[1];
-  const targets=reports.filter(r=>['quarry','relay','worker'].includes(r.type)&&
+  const targets=reports.filter(r=>['quarry','relay','headquarters','worker'].includes(r.type)&&
     (r.type!=='worker'||t-r.seen<=30));
   const ranked=targets.map(r=>{
     const defenders=reports.filter(d=>defs[d.type].damage&&(!defs[d.type].speed||t-d.seen<=60)&&dist(d,r)<260);
     const danger=defenders.reduce((n,d)=>n+(d.type==='turret'?3:d.type==='walker'?2:1),0);
-    const value=r.type==='quarry'?6:r.type==='relay'?4:2;
+    const value=r.type==='headquarters'?8:r.type==='quarry'?6:r.type==='relay'?4:2;
     return {r,danger,score:value-danger*2};
   }).filter(p=>p.danger<3&&p.score>0);
   ranked.sort((a,b)=>b.score-a.score||b.r.seen-a.r.seen||a.r.id-b.r.id);

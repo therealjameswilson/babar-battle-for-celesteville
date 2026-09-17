@@ -1,7 +1,7 @@
 
 'use strict';
 const productionRows=new Map();
-function productionSites() {return alive(0).filter(b=>['core','forge','factory'].includes(b.type));}
+function productionSites() {return alive(0).filter(b=>['core','headquarters','forge','factory'].includes(b.type));}
 function productionReport(b) {
   if(b.construction) {
     const crew=constructionCrew(b);

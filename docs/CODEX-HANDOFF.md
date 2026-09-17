@@ -109,3 +109,13 @@ without spending; out-of-bounds releases cancel explicit taps. Shared and browse
 event checks pass (584 browser assertions across desktop/portrait/landscape).
 Overall StarCraft fidelity goal remains active; see STARCRAFT-GOAL.md for remaining
 audit and longer-match comparisons.
+
+## Independent expansions, 0.33.0
+
+New `headquarters` structure uses shared production, delivery and supply helpers.
+Remote placement needs current scouting; other structures retain near-building
+placement. Production panel, rally, refunds, population, healing, retreat, enemy
+raids and fog memory recognize camps. Enemy planning uses recent stock reports
+and observed safe sites. See EXPANSION-COMPARISON.md and `npm run test:expansion`.
+Protected versus destroyed economic comparison is controlled, not a full-match
+balance verdict. Follow up with a paid full-match expansion/military comparison.

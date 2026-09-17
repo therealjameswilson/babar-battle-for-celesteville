@@ -539,3 +539,11 @@ to `command()` instead of duplicating targeting or formation rules. It loads
 after game.js/camera-views.js and clears gestures on reset, cancellation or blur.
 Shared minimap checks run in the VM and browser; browser-only checks additionally
 dispatch mouse/touch PointerEvents through the registered listeners.
+
+`headquarters` is a distinct economic structure, not an additional victory core.
+`workerProducer`, `deliveryBase` and `produces` in economy.js centralize production
+and delivery membership. Supply rebuild seeds all completed palace/HQ roots for
+both teams, then applies the same disruptible links. Only headquarters placement
+can bypass the near-building rule, and it requires current friendly sight.
+Enemy headquarters planning reads resource/threat reports with explicit expiry.
+The command tent is original procedural artwork in render.js.

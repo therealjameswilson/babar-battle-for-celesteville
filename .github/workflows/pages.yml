@@ -27,6 +27,7 @@ jobs:
       - run: npm run test:burst
       - run: npm run test:doctrine
       - run: npm run test:push
+      - run: npm run test:expansion
   deploy:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     needs: check
