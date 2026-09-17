@@ -60,6 +60,7 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    supportChecks(check);
     batteryChecks(check);
     clockChecks(check);
     deliveryChecks(check);

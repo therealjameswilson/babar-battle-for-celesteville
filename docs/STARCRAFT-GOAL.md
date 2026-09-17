@@ -66,3 +66,11 @@ above apply to earlier releases; SIMULATION-CONSISTENCY.md records the tested fi
 and its limits. Existing balance scenarios were rerun after trajectory changes.
 The next step is the complete current-source audit against the original scope,
 not assuming that a passing replay establishes every deliverable.
+
+## Current scope audit
+
+See CURRENT-AUDIT.md for requirement-by-requirement evidence at 5db2027.
+Original support-effect checks now run in real Chromium as well as Node;
+638 portrait assertions pass. Public assets and Story defeat/restart are verified.
+Next: current browser error attribution and actual reduced-motion preference
+integration. The goal remains active until the explicit evidence gaps close.

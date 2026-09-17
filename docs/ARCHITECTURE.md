@@ -1,11 +1,11 @@
-# Architecture and balance — 0.3
+# Architecture and balance — current through 0.35.0
 
-Classic scripts share one simulation state, preserving the prototype’s dependency-free deployment. Script order in index.html matters: cast, game declarations and controls, navigation, tactics, audio, court, then renderer/startup. No ES-module server requirement.
+Classic scripts share one simulation state, preserving the prototype’s dependency-free deployment. Script order in index.html is authoritative: cast and game declarations first, fixed-clock and command/economy/combat modules next, navigation and tactics before enemy controllers, then audio, court and renderer/startup. No ES-module server requirement.
 
 | File | Responsibility |
 |---|---|
 | game.js | Definitions, economy, construction, recruitment, combat, recovery, controls and UI |
-| navigation.js | 30m grid A*, clearance, corner rules, rerouting and safe separation |
+| navigation.js | 30px grid A*, clearance, corner rules, rerouting and safe separation |
 | tactics.js | Supply graph, depot, visibility/intelligence, morale and enemy decisions |
 | court.js / cast.js | Roster and support mechanics; relationship metadata |
 | render.js | Terrain, atlas crops, directional facing, guns, smoke, damage, fog, minimap |
@@ -13,7 +13,7 @@ Classic scripts share one simulation state, preserving the prototype’s depende
 
 ## Rules
 
-World: 1800 × 1260. Navigation: 60 × 42 cells, 30m each. Forest blocks north/south edges and a middle segment, leaving northern and southern roads. A* uses eight neighbors with diagonal corner checks and a binary heap. Static buildings have clearance; approach points stop at a target’s perimeter. Routes refresh when the destination moves, buildings change, or a two-second timer elapses. Mobile separation checks static collision before displacement. Construction cannot overlap units or terrain. Crowds can briefly queue at a narrow passage; this is local separation, not reservation-based multi-agent planning.
+World: 1800 × 1260. Navigation: 60 × 42 cells, 30px each. Forest blocks north/south edges and a middle segment, leaving northern and southern roads. A* uses eight neighbors with diagonal corner checks and a binary heap. Static buildings have clearance; approach points stop at a target’s perimeter. Routes refresh when the destination moves, buildings change, or a two-second timer elapses. Mobile separation checks static collision before displacement. Construction cannot overlap units or terrain. Crowds can briefly queue at a narrow passage; this is local separation, not reservation-based multi-agent planning.
 
 Visibility is sampled once each simulation step, symmetric for both armies. Hidden enemies cannot be acquired or tracked as focus-fire targets. Terrain and cache locations are strategic map knowledge. Both armies know the starting capital coordinates; AI chooses individual combat targets only within current sight. Reconnaissance updates its capital memory. Exact enemy funds are hidden. Economy planning reads resource quantities only in friendly sight and responds to visible threats.
 
@@ -22,12 +22,13 @@ Visibility is sampled once each simulation step, symmetric for both armies. Hidd
 | Provisioner | 50 | 85 | 84 | — | — | Gather, deliver, repair |
 | Guard | 60 | 145 | 77 | 145 | 12 / 0.9s | Infantry screen |
 | Scout | 55 | 75 | 125 | 95 | 7 / 1.1s | 410m vision |
-| Artillery | 160 | 240 | 43 | 270 | 48 / 2.8s | 1.8× building damage |
+| Artillery | 160 S + 25 M | 240 | 43 | 270 mobile; 90–390 deployed | 48 / 2.8s mobile; 72 / 3.6s deployed | Armored siege; friendly splash when deployed |
+| Sapper | 90 S + 20 M | 105 | 83 | 170 | 10 (+20 vs armored) / 1.2s | Anti-armor; requires Artillery Works |
 | Commander | 100 to recover | 640 | 72 | 100 | 24 / 0.85s | Officer aura and rally |
 
-Palace/Guard School/Artillery Works/home/tower costs: 400/150/240/100/160; starting structures are free. Tower range 190; artillery can engage beyond it. Population: palace 20, home 10, maximum 100. Training queue maximum 5. See `defs` for construction and training times.
+Palace/Guard School/Artillery Works/home/tower cost 400/150/240/100/160 Supplies; Artillery Works also costs 50 Materials. Headquarters cost 400 Supplies; quarries cost 100. Starting structures are free. Tower range 190; artillery can engage beyond it. Population: palace 20, home 10, maximum 100. Training queue maximum 5. See `defs` for construction and training times.
 
-Supply graph: completed buildings within 360m; a hostile combatant within 85m of a segment cuts that edge. Disconnected queues run at 0.25 speed; resources are not refunded or lost. Only connected homes/palaces receive deliveries and heal troops. Workers divert deliveries to another linked receiver. Repair: 18 health/s, 0.3 supplies per health, stops when funds run out.
+Supply graph: completed buildings within 360m; a hostile combatant within 85m of a segment cuts that edge. Disconnected queues run at 0.25 speed; resources are not refunded or lost. Connected homes, palaces and headquarters receive deliveries and heal troops; a completed headquarters is an independent supply root. Workers divert deliveries to another linked receiver. Repair: 18 health/s, 0.3 supplies per health, stops when funds run out.
 
 Depot: one side must hold within 90m for 8 uncontested seconds. Ownership grants
 2 Supplies/s to either faction. All other rhino Supplies are physical worker
@@ -40,9 +41,9 @@ Morale: 100 maximum, ordinary hits remove 12, artillery removes 26. Below 25, au
 
 ## Rendering and performance
 
-Faction base rings, health/morale bars, facing ticks, mirrored unit art and rotating field guns provide direction and identification. Moving units produce restrained dust; firing has muzzle flashes and projectile feedback. Damaged buildings show cracks, a dark breach below 35% HP, and smoke. Reduced motion removes idle/walk bobbing and drifting dust/smoke animation; there is no camera shake.
+Faction base rings, health/morale bars, four-way infantry art, mirrored commander/worker art and rotating field guns provide direction and identification. Moving units produce restrained dust; firing has muzzle flashes and projectile feedback. Damaged buildings show cracks, a dark breach below 35% HP, and smoke. Reduced motion removes idle/walk bobbing and drifting dust/smoke animation; there is no camera shake.
 
-Visibility sets and static collision candidates are cached once per simulation step. The measured 60-unit browser fixture improved average update cost from 2.60ms to 0.75ms after those changes; see QA.md for scope. The renderer caps device pixel ratio at 2.
+Visibility sets and static collision candidates are cached once per simulation step. The current 69-object browser fixture measured draw mean/p95 1.02/1.60ms and simulation work per display frame 0.78/2.80ms over 120 frames; see QA.md for measurement scope. The renderer caps device pixel ratio at 2.
 
 ## Expansion boundary
 

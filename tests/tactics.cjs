@@ -88,54 +88,9 @@ assert(run('kills>0'));
 console.log(
   'PASS: obstacle and building routes, blocked supply and restoration, isolated queues, cover, suppression, hold, repair, depot capture, finite recruitment, fog fairness, wounded recovery, paid commander return, lethal focus fire.'
 );
-// Numerical effects behind every support description, beyond activation checks.
-fresh();
-run("ore=1000;usePower('pom');selected=[alive(0)[0]];build('relay');command({x:600,y:1030})");
-assert.equal(
-  run('alive(0).find(u=>u.x===600).buildDuration'),
-  6.3,
-  'Pom cuts construction time by 30%.'
-);
-fresh();
-run(
-  "ore=1000;usePower('troubadour');selected=[alive(0).find(u=>u.type==='forge')];train('trooper');update(1)"
-);
-assert.equal(
-  run('selected[0].progress'),
-  1.25,
-  'Troubadour adds 25% production speed (20% less time).'
-);
-fresh();
-run(
-  "units=units.filter(u=>u.type!=='worker');const courier=add('worker',0,388,900,{carrying:10,order:{kind:'gather',node:nodes[0]}});benefits.add('pompadour');const oldOre=ore;update(.05)"
-);
-assert.equal(run('ore-oldOre'), 12.5, 'Pompadour increases each delivery by 25%.');
-fresh();
-run(
-  "const runner=add('scout',0,550,650);const beforeX=runner.x;move(runner,{x:700,y:650},.1);const plainDistance=runner.x-beforeX;runner.x=beforeX;benefits.add('arthur');move(runner,{x:700,y:650},.1)"
-);
-assert(
-  Math.abs(run('(runner.x-beforeX)/plainDistance') - 1.15) < 0.001,
-  'Arthur adds 15% movement speed.'
-);
-fresh();
-run(
-  "units=units.filter(u=>!defs[u.type].speed);const patient=add('trooper',0,390,970,{hp:50});benefits.add('celeste');t=10;updateTactics(1)"
-);
-assert.equal(run('patient.hp'), 56, 'Celeste increases recovery to 6/s.');
-fresh();
-run('t=50;nextWave=50;wave=2;enemyThink()');
-assert.equal(run('nextWave'), 170, 'Victor buys 20 extra seconds after wave three.');
-fresh();
-run("wave=2;const basilSchool=alive(1).find(b=>b.type==='forge');basilSchool.queue=['trooper'];rebuildSupply();");
-tick(20);
-assert(Math.abs(run('basilSchool.progress')-1.25)<.0001, 'Basil reduces actual production time by 20% after wave two.');
-fresh();
-run(
-  "const rhino=add('scout',1,1000,650);const startX=rhino.x;wave=0;move(rhino,{x:1150,y:650},.1);const ordinary=rhino.x-startX;rhino.x=startX;wave=4;move(rhino,{x:1150,y:650},.1)"
-);
-assert(Math.abs(run('(rhino.x-startX)/ordinary') - 1.1) < 0.001, 'Rhudi adds 10% movement speed.');
-console.log('PASS: all support powers have numerical-effect checks.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname, 'support-checks.js'), 'utf8'));
+run('supportChecks((ok, label) => { if (!ok) throw new Error(label); })');
+console.log('PASS: shared original support-effect checks.');
 fresh();
 run('nextWave=0;enemyThink()');
 assert.equal(

@@ -922,3 +922,18 @@ and the early-expansion report exactly equal Node outputs; the protected camp
 receives 1,800 Supplies against 600 spent. Evidence: clock-secured-expansion.json.
 The actual Deploy again button was clicked after that victory; Take command and
 Pause then worked in the reloaded game, with the clock at 00:00 and no old backlog.
+
+## Current-scope audit and original support effects
+
+All 28 public client files byte-match 5db2027 (artifact:
+clock-public-verification.txt). Public Take command and Pause were clicked.
+The current unattended Story browser fixture loses at 02:33; Deploy again,
+Take command and Pause work after that defeat. This is accelerated actual-browser
+gameplay, not a manually defended match.
+
+Eight formerly Node-only numerical council checks now share support-checks.js
+with the browser. Three added assertions cover Alexander's 25-second delay and
+Louise's 250 fortress health/capacity increase without repeated bonuses. Node
+tactical checks pass; portrait Chromium runs **638 passing assertions**. Evidence:
+artifacts/audit-support-browser.txt. No game rules changed in this audit.
+CURRENT-AUDIT.md records remaining console attribution and media-preference proof.
