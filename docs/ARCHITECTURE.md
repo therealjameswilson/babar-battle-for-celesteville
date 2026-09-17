@@ -547,3 +547,12 @@ both teams, then applies the same disruptible links. Only headquarters placement
 can bypass the near-building rule, and it requires current friendly sight.
 Enemy headquarters planning reads resource/threat reports with explicit expiry.
 The command tent is original procedural artwork in render.js.
+
+Completed delivery increments `deliveredSupplies` or `deliveredMaterials` on the
+receiving building alongside the actual faction resource credit. Rendering reads
+those receipts via `headquartersSummary`; querying the report changes no economy
+state. Missing counters mean zero for an unused base. The shared delivery checks
+cover separate cargo types, repeat ticks, council credit, destruction and factions.
+`expansion-opening.js` adds paid economic decisions around the existing staged
+army controller. Its optional reserve and detached-unit arguments default to the
+previous push behavior; legacy push comparisons remain unchanged.

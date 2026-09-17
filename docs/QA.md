@@ -849,3 +849,33 @@ destroyed camp results are documented in EXPANSION-COMPARISON.md and enforced by
 it does not establish a full-match expansion build order. Touch is synthetic and
 viewports are browser frames, not physical Safari testing. No subjective audio
 claim or new all-roster art claim accompanies the procedural headquarters asset.
+
+## 0.34.0 — paid openings and delivery feedback (2026-09-17)
+
+`npm run test:expansion-openings` completes three normal-resource Commander
+matches: army-first wins at 255s, early camp loses at 189s, secured camp wins at
+396s. Assertions cover identical first-minute state, actual camp payment/work/
+deliveries, a measured defensive cost and a viable protected alternative. Exact
+match times and mandatory early defeat are not assertions.
+
+Actual rendered Chromium matches also reach terminal results: army-first wins at
+345s, early camp loses at 189s and secured camp wins at 476s. The secured palace
+remains at 1,800 health; the early camp survives but the palace falls. Screenshots
+show both mission result overlays and the selected camp's real delivery total.
+These are accelerated fixed-step scripted matches; no manual competitive balance
+or cross-runtime lockstep equivalence is claimed. Rounded receipt totals differ
+from the integer-floor status display by at most one Supply.
+
+Eight added shared receipt checks cover physical delivery, no double credit,
+separate Materials, the council bonus, live display, read-only reporting,
+destruction and faction parity. The real browser passes **612 assertions** at
+desktop, 390×844 portrait and 844×390 landscape. The camp report is unclipped and
+shows its own receipts: in the controlled four-minute fixture, 2,040 Supplies
+reach the camp and 60 reached home while it was being built (2,100 total).
+Phone-sized frames and synthetic touch events are not physical Safari testing.
+
+Artifacts: early-expansion-browser.json, early-expansion-loss.png,
+secured-expansion-browser.json, secured-expansion-victory.png,
+army-opening-browser.json, delivery-browser-checks.txt and delivery portrait/
+landscape screenshots under artifacts/. See EXPANSION-OPENINGS.md for methodology
+and the distinction between gross camp receipts and net profit.

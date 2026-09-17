@@ -339,3 +339,7 @@ console.log('PASS: minimap commands, waypoints, rally points, camera dragging an
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'headquarters-checks.js'),'utf8'));
 run('headquartersChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: field headquarters costs, supply roots, recruitment, destruction and fair enemy expansion.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'delivery-checks.js'),'utf8'));
+run('deliveryChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: physical base delivery accounting, material separation, council bonus, destruction and faction parity.');

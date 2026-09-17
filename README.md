@@ -274,3 +274,13 @@ losing the camp lengthens delivery trips and isolates its local production.
 Village Homes remain a cheaper option along protected connected routes. Losing
 the original palace still ends the mission. See [measured expansion costs and
 income](docs/EXPANSION-COMPARISON.md); run `npm run test:expansion` to reproduce them.
+
+### Expansion timing and delivery reports (0.34.0)
+
+A selected Field Headquarters reports the Supplies and Materials physically
+delivered there. These are gross receipts, including supply-efficiency bonuses,
+not profit after construction, recruitment or casualties. Scout and protect the
+route before diverting money and troops from the palace. Three normal-resource
+Commander openings compare army-first, early camp and depot-secured camp in
+[EXPANSION-OPENINGS.md](docs/EXPANSION-OPENINGS.md). Run
+`npm run test:expansion-openings` to reproduce the Node comparisons.

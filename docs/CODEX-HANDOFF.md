@@ -119,3 +119,14 @@ raids and fog memory recognize camps. Enemy planning uses recent stock reports
 and observed safe sites. See EXPANSION-COMPARISON.md and `npm run test:expansion`.
 Protected versus destroyed economic comparison is controlled, not a full-match
 balance verdict. Follow up with a paid full-match expansion/military comparison.
+
+## Paid expansion openings, 0.34.0
+
+Headquarters now show physical delivery totals. `npm run test:expansion-openings`
+compares three normal-resource Commander policies with the same first minute:
+army-first wins, early investment exposes the palace and loses, and depot-secured
+investment wins with a larger economy. Browser verification also shows early
+loss and secured victory, with runtime-dependent timestamps/totals. See
+EXPANSION-OPENINGS.md; this does not imply all early player expansions lose.
+Next fidelity work should investigate the known long-run Node/Chromium numerical
+divergence and continue the current-scope completion audit before adding breadth.

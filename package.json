@@ -1,6 +1,6 @@
 {
   "name": "babar-battle-for-celesteville",
-  "version": "0.33.0",
+  "version": "0.34.0",
   "private": true,
   "description": "A Babar-themed single-player real-time strategy fan game with a 33-character family and council roster.",
   "scripts": {
@@ -15,7 +15,8 @@
     "test:doctrine": "node tests/doctrine-comparison.cjs",
     "test:burst": "node tests/burst-comparison.cjs",
     "test:earned-raids": "node tests/earned-raids.cjs",
-    "test:expansion": "node tests/expansion.cjs"
+    "test:expansion": "node tests/expansion.cjs",
+    "test:expansion-openings": "node tests/expansion-opening.cjs"
   },
   "engines": {
     "node": ">=20"

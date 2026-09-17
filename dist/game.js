@@ -515,9 +515,12 @@ function update(dt) {
           )
         );
         if (base && move(u, base, dt, base.r + u.r + 8)) {
-          if (u.cargoKind === 'materials') { if (!u.team) materials += u.carrying; else enemyMaterials += u.carrying; }
-          else if (!u.team) ore += u.carrying * (benefits.has('pompadour') ? 1.25 : 1);
-          else enemyBudget += u.carrying;
+          if (u.cargoKind === 'materials') { if (!u.team) materials += u.carrying; else enemyMaterials += u.carrying; base.deliveredMaterials=(base.deliveredMaterials||0)+u.carrying; }
+          else {
+            const credited=u.carrying*(!u.team&&benefits.has('pompadour')?1.25:1);
+            if(!u.team)ore+=credited;else enemyBudget+=credited;
+            base.deliveredSupplies=(base.deliveredSupplies||0)+credited;
+          }
           u.carrying = 0;
           u.harvest = 0;
           if (u.orders?.length) completeOrder(u);
@@ -773,7 +776,7 @@ function updateUI(force = false) {
               : u.type === 'core'
                 ? 'Invite gatherers and expand Celesteville.'
                 : u.type === 'headquarters'
-                  ? 'Local deliveries & provisioner recruitment. +10 population.'
+                  ? headquartersSummary(u)
                 : u.type === 'forge'
                   ? 'Trains infantry. Choose weapons or field protection research; research suspends recruitment at this school.'
                   : u.type === 'factory'
@@ -818,7 +821,7 @@ function updateUI(force = false) {
     $('tactical-status').textContent=`${selected.length>1?'Lowest morale':'Morale'} ${Math.ceil(Math.min(...selected.map(g=>g.morale)))} · Siege 90–390m · 3s deploy / 2s pack · Splash also hits allies.`;
   }
   const workNode=selectionResource();
-  $('selected-info').classList.toggle('economy-info',!!workNode||!!u?.construction||!!battery);
+  $('selected-info').classList.toggle('economy-info',!!workNode||!!u?.construction||!!battery||u?.type==='headquarters');
   if(workNode){
     const report=resourceWorkReport(workNode);
     $('selected-info').textContent=resourceWorkSummary(workNode,report)+(report.reason?' · '+report.reason:'');

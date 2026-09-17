@@ -111,3 +111,7 @@ function selectionResource() {
 function resourceWorkSummary(n, report=resourceWorkReport(n)) {
   return `${n.kind==='materials'?'Materials':'Supplies'} · ${report.assigned} assigned · ${report.extracting}/${report.slots} extracting`;
 }
+
+function headquartersSummary(b) {
+  return `Delivered ${Math.floor(b.deliveredSupplies||0)} S · ${Math.floor(b.deliveredMaterials||0)} M. +10 population. Recruits provisioners.`;
+}

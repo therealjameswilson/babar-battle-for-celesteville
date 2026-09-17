@@ -58,6 +58,7 @@ async function browserSuite() {
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
     batteryChecks(check);
+    deliveryChecks(check);
     headquartersChecks(check);
     qaReset();ore=500;add('scout',0,960,980);cam={x:1020,y:1070,zoom:.7};
     selected=[alive(0).find(w=>w.type==='worker')];updateUI(true);
@@ -867,3 +868,21 @@ function browserHeadquarters(){
  if(ended||t>=239.99){clearInterval(qaInterval);qaInterval=null;togglePause();}
  },50);
 }
+
+function browserExpansionOpening(policy){
+ qaReset();expansionOpeningSetup(policy);let stepCount=0;
+ qaInterval=setInterval(()=>{
+  for(let k=0;k<20&&!ended&&t<899.99;k++){
+   if(stepCount%20===0)expansionOpeningStep();
+   update(.05);expansionOpeningObserve(.05);stepCount++;
+  }
+  const e=expansionOpening;
+  cam.x=e.site?.x||PUSH_LINE[pushStage].x;cam.y=e.site?.y||PUSH_LINE[pushStage].y;cam.zoom=.7;
+  if(e.site?.hp>0)selected=[e.site];updateUI();
+  qaReport(JSON.stringify(expansionOpeningResult(),null,2));
+  if(ended||t>=899.99){clearInterval(qaInterval);qaInterval=null;if(!ended)togglePause();}
+ },50);
+}
+function browserEarlyCampMatch(){browserExpansionOpening('early');}
+function browserSecuredCampMatch(){browserExpansionOpening('secured');}
+function browserArmyMatch(){browserExpansionOpening('army');}

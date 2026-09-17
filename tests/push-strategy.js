@@ -3,9 +3,9 @@ let pushCommitSize=18;
 let pushCommitted=false,pushStage=0,pushCommitAt=null,pushStages=[],pushDeploySeconds=0,pushScouted=false;
 const PUSH_LINE=[{x:510,y:850},{x:710,y:850},{x:930,y:830},{x:1130,y:700},{x:1290,y:520},{x:1370,y:440}];
 function pushSetup(size=18){pushCommitSize=size;easy=false;reset();running=true;pushCommitted=false;pushStage=0;pushCommitAt=null;pushStages=[];pushDeploySeconds=0;pushScouted=false;}
-function pushStep(policy){
- defenseStep([],false,false,0,false);
- const own=alive(0),guns=own.filter(u=>u.type==='walker'),army=own.filter(u=>defs[u.type].speed&&defs[u.type].damage&&u.order?.kind!=='retreat');
+function pushStep(policy,reserveSupplies=0,detachedIds=[]){
+ defenseStep(detachedIds,false,false,reserveSupplies,false);
+ const own=alive(0),guns=own.filter(u=>u.type==='walker'),army=own.filter(u=>!detachedIds.includes(u.id)&&defs[u.type].speed&&defs[u.type].damage&&u.order?.kind!=='retreat');
  if(!pushCommitted&&t>=120&&army.length>=pushCommitSize&&guns.length>=3){pushCommitted=true;pushCommitAt??=Math.round(t);pushStage=1;pushStages.push({at:Math.round(t),stage:1});}
  if(pushCommitted&&(army.length<8||guns.length<2)){pushCommitted=false;pushStage=0;}
  if(Math.floor(t)%3!==0)return;
