@@ -424,3 +424,28 @@ receive the same building buttons as a single worker. The existing construction
 command chooses one available selected builder and preserves other workers' orders.
 Action-cache identity now includes every selected ID, so changing group membership
 without changing its size cannot leave stale construction buttons.
+
+
+## Queued worker construction (0.28.1)
+
+construction.js selects a builder with queue capacity before command spends either
+resource or creates a foundation. Shift/Queue uses the selected worker's existing
+order list; no selected worker with a full queue is silently replaced by another
+worker. Queue capacity remains sixteen future orders. Foundations are paid and
+vulnerable immediately, but only an active builder on site contributes labor.
+
+finishConstructionOrder advances through consecutive build orders, retaining the
+original gathering fallback until the chain ends. Explicit follow-up orders take
+priority over that fallback. Cancellation removes references to the site from
+current and future orders, with the existing one-time 75% refund. Destroyed future
+sites are skipped when reached; dead builders leave paid sites halted for Repair
+reassignment. Deliberately queued orders now follow retreat completion. Depleted
+gathering without a known replacement, or cargo-free Materials gathering blocked
+by a missing/isolated quarry, yields to queued work. Carried resources are delivered
+first. constructionCrew provides active/queued counts for production and quarry
+reports without altering orders or progress. Foundation status no longer describes
+unfinished buildings as active isolated recruitment sites.
+
+Shared build-queue-checks.js covers lifecycle and resource accounting in Node and
+Chromium. The browser suite separately uses the real construction controls, touch
+Queue and Shift-pointer input. No production costs or construction times changed.

@@ -55,6 +55,19 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    buildQueueChecks(check);
+    qaReset();ore=1000;const queueBuilder=alive(0).find(u=>u.type==='worker');selected=[queueBuilder];cam={x:500,y:1020,zoom:1};updateUI(true);
+    const placePointer=(p,kind,shift)=>{const rect=canvas.getBoundingClientRect(),q=screen(p);for(const type of ['pointerdown','pointerup'])canvas.dispatchEvent(new PointerEvent(type,{pointerId:91,pointerType:kind,button:0,buttons:type==='pointerdown'?1:0,shiftKey:shift,clientX:rect.left+q.x,clientY:rect.top+q.y,bubbles:true}));};
+    [...$('actions').querySelectorAll('button')].find(b=>b.textContent.startsWith('Village Home')).click();placePointer({x:570,y:1070},'touch',false);
+    const firstBuildTarget=queueBuilder.order.target;
+    $('queue-orders').click();
+    [...$('actions').querySelectorAll('button')].find(b=>b.textContent.startsWith('Village Home')).click();placePointer({x:620,y:970},'touch',false);
+    check(queueBuilder.order.target===firstBuildTarget&&queueBuilder.orders.length===1,'Touch Queue and building placement append without replacing active construction');
+    $('queue-orders').click();
+    [...$('actions').querySelectorAll('button')].find(b=>b.textContent.startsWith('Village Home')).click();placePointer({x:680,y:1060},'mouse',true);
+    check(queueBuilder.orders.length===2&&ore===700,'Shift placement appends a third paid foundation');
+    selected=[queueBuilder.orders[0].target];updateUI(true);
+    check($('selected-info').textContent.includes('Queued construction')&&$('tactical-status').textContent.includes('Paid foundation'),'Selected future foundation explains its queued builder and paid status');
     workforceChecks(check);
     qaReset();const reportingWorker=alive(0).find(u=>u.type==='worker');selected=[reportingWorker];qaTicks(2);updateUI(true);
     check($('selected-info').textContent.includes('assigned')&&$('selected-info').textContent.includes('extracting'),'Selected worker displays assignment and extraction counts');
@@ -757,4 +770,12 @@ function browserWorkforce(){
 function browserWorkerBattle(){
  browserBattle();selected=alive(0).filter(u=>u.type==='worker');updateUI(true);
  qaReport('Representative battle with provisioners selected and visible resource workload labels.');
+}
+
+function browserBuildQueue(){
+ qaReset();nextWave=enemySpawn=9999;ore=700;
+ selected=[alive(0).find(u=>u.type==='worker')];cam={x:500,y:1020,zoom:1};
+ build('relay');command({x:570,y:1070},false);
+ build('forge');command({x:620,y:970},true);
+ updateUI(true);draw();qaReport('One provisioner: build the home, then the queued school, then resume gathering. Select the school or open Production to inspect its queued status. Foundations are paid at placement; cancellation refunds 75%.');
 }

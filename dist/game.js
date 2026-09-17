@@ -469,14 +469,12 @@ function update(dt) {
     if (u.type === 'worker' && u.order?.kind === 'build') {
       const site = u.order.target;
       if (!site || site.hp <= 0 || !site.construction) {
-        completeOrder(u);
-        if (!u.order && u.returnToWork) u.order = u.returnToWork;
-        u.returnToWork = null;
+        finishConstructionOrder(u);
       } else move(u, site, dt, site.r + u.r + 8);
       continue;
     }
     if (u.order?.kind === 'retreat') {
-      if (move(u, u.order, dt, 14)) u.order = { kind: 'hold' };
+      if (move(u, u.order, dt, 14)) { completeOrder(u); if(!u.order)u.order={kind:'hold'}; }
       continue;
     }
     if (u.type === 'worker' && u.order?.kind === 'repair') {
@@ -498,9 +496,13 @@ function update(dt) {
         n = nextKnownResource(u,n?.kind||'supplies');
         u.order.node = n;
         if (!n) {
-          u.order = null;
+          completeOrder(u);
           continue;
         }
+      }
+      if(!u.carrying&&u.orders?.length&&n.kind==='materials'&&!quarryFor(n,u.team)){
+        completeOrder(u);
+        continue;
       }
       if (u.carrying > 0) {
         const base = nearest(
@@ -609,6 +611,7 @@ function cancelConstruction(b) {
   ore += (b.paid || 0) * .75;
   materials += (b.paidMaterials || 0) * .75;
   b.hp = 0;
+  removeConstructionOrders(b);
   selected = selected.filter(u => u !== b);
   say('Construction cancelled. 75% of paid resources recovered.');
   updateUI(true);
@@ -659,18 +662,17 @@ function command(p, append = queueOrders) {
     if (!validBuild(p, placing))
       return say(placing === 'quarry' ? 'Choose an unoccupied Materials deposit near a friendly building.' : 'Choose clear ground within reach of a friendly building.');
     if (ore < buildingCost(placing) || materials < materialCost(placing)) return say('Not enough Supplies or Materials.');
-    const available = alive(0).filter(w => w.type === 'worker' && w.order?.kind !== 'build');
-    const builder = nearest(p, available.filter(w => selected.includes(w))) || nearest(p, available);
-    if (!builder) return say('Construction needs a free provisioner. Recruit one or finish the current site.');
+    const builder=constructionWorker(p,append);
+    if(!builder)return say(append?'Select a provisioner with room in its 16-order queue.':'Construction needs a free provisioner. Recruit one or finish the current site.');
     let d = defs[placing];
     const paid = buildingCost(placing);
     ore -= paid;
     const paidMaterials = materialCost(placing); materials -= paidMaterials;
     const duration = d.build * (benefits.has('pom') ? 0.7 : 1);
     const site = add(placing, 0, p.x, p.y, { construction: duration, buildDuration: duration, paid, paidMaterials, hp: 1 });
-    builder.returnToWork = builder.order?.kind === 'gather' ? builder.order : null;
-    issueOrder(builder, { kind: 'build', target: site });
-    say(d.name + ' construction started.');
+    builder.returnToWork=builder.order?.kind==='gather'?builder.order:append&&builder.order?.kind==='build'?builder.returnToWork:null;
+    issueOrder(builder,{kind:'build',target:site},append);
+    say(d.name+(builder.order?.target===site?' construction started.':' foundation paid. Provisioner will build after earlier orders.'));
     placing = null;
     updateUI(true);
     return;
@@ -748,7 +750,7 @@ function updateUI(force = false) {
     ? selected.length > 1
       ? (productionGroup ? selected.reduce((n,b)=>n+b.queue.length,0) + ' queued · Recruitment uses the soonest available completion.' : 'Use Attack to engage enemies along the way.')
       : u.construction
-        ? 'Construction · ' + Math.ceil(u.construction) + 's work remaining. Requires a provisioner on site.'
+        ? productionReport(u).text
         : u.research
           ? researchDefs[u.research.id].name + ' · ' + Math.floor(100 * u.research.progress / researchDefs[u.research.id].time) + '% · recruitment suspended'
         : u.queue.length
@@ -794,6 +796,8 @@ function updateUI(force = false) {
         ' / 100 · ' +
         (u.order?.kind || 'ready') + (u.type === 'hero' ? ` · Energy ${Math.floor(u.commandEnergy)}/100` : '') + ((u.disciplineUntil || 0) > t ? ' · PROTECTED' : '') + ((u.advanceUntil || 0) > t ? ' · ADVANCING' : '') + (weaponMultiplier(u) > 1 ? ' · WEAPONS UPGRADED' : '') + (infantryArmor(u) ? ` · ARMOR −${infantryArmor(u)}/hit` : '') + (rapidActive(u)?` · RAPID ${Math.ceil(u.rapidUntil-t)}s`:'') + (u.orders?.length ? ` · ${u.orders.length} queued` : '') +
         (inCover(u) ? ' · IN COVER' : '')
+      : u.construction
+        ? 'Paid foundation · Repair assigns a replacement builder; cancel refunds 75%.'
       : supplied(u)
         ? 'Supply line operational'
         : 'ISOLATED · training at 25%. Link buildings within 360m; clear raiders.'
@@ -803,12 +807,12 @@ function updateUI(force = false) {
     $('selected-name').textContent='Provisioners';
   }
   const workNode=selectionResource();
-  $('selected-info').classList.toggle('economy-info',!!workNode);
+  $('selected-info').classList.toggle('economy-info',!!workNode||!!u?.construction);
   if(workNode){
     const report=resourceWorkReport(workNode);
     $('selected-info').textContent=resourceWorkSummary(workNode,report)+(report.reason?' · '+report.reason:'');
     $('tactical-status').textContent=`${report.hauling} hauling · ${report.approaching} approaching · ${report.waiting} waiting nearby`+
-      (u.type==='worker'?` · Morale ${Math.ceil(u.morale)}`:'')+
+      (u.type==='worker'?` · Morale ${Math.ceil(u.morale)}${u.orders?.length?' · '+u.orders.length+' queued':''}`:'')+
       (report.state==='working'&&report.waiting?' · Extra workers may help delivery travel; spread waiting workers to another site.':'');
   }else if(selected.length&&selected.every(w=>w.type==='worker')){
     $('selected-info').textContent='Provisioners gather, deliver, construct and repair. Assign Gather to a Supplies cache or Materials Quarry.';

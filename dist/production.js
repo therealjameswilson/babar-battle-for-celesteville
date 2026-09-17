@@ -4,9 +4,9 @@ const productionRows=new Map();
 function productionSites() {return alive(0).filter(b=>['core','forge','factory'].includes(b.type));}
 function productionReport(b) {
   if(b.construction) {
-    const assigned=alive(0).filter(w=>w.order?.kind==='build'&&w.order.target===b);
+    const crew=constructionCrew(b);
     return {fraction:1-b.construction/(b.buildDuration||defs[b.type].build),
-      text:assigned.length?'Construction · '+Math.ceil(b.construction)+'s on-site work':'Construction halted · assign a builder'};
+      text:crew.active?'Construction · '+Math.ceil(b.construction)+'s on-site work':crew.queued?'Queued construction · '+crew.queued+' provisioner finishing earlier orders':'Construction halted · assign a builder'};
   }
   const isolation=supplied(b)?'':' · ISOLATED: 25% speed';
   if(b.research) {

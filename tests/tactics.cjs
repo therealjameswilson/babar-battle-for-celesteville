@@ -312,3 +312,7 @@ console.log('PASS: saved camera snapshots, selection/order isolation, zoom, paus
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'workforce-checks.js'),'utf8'));
 run('workforceChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: read-only workforce assignment, extraction, hauling, waiting, fog knowledge, quarry supply and delivery feedback.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'build-queue-checks.js'),'utf8'));
+run('buildQueueChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: paid queued construction, delivery handoff, cancellation, queue capacity, builder loss, replacement and blocked gathering.');

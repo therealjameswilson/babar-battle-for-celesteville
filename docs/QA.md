@@ -681,3 +681,29 @@ under ignored `artifacts/parallel-doctrine-*` and `doctrine-*-trace.json`.
   `workforce-performance.txt`. Occupancy is a current-tick snapshot and changes
   naturally as provisioners leave to deliver; assignment count is not an optimal
   staffing recommendation. No extraction rates, income or unit balance changed.
+
+
+## 0.28.1 — queued worker construction
+
+- Syntax and deterministic suites passed, including 23 shared construction checks:
+  immediate payment, queue capacity, sequential labor, gathering resumption,
+  explicit follow-up orders, cargo delivery, one-time cancellation refunds,
+  destroyed sites, dead/replacement builders, Hold, retreat completion, depleted
+  resources and blocked Materials gathering followed by quarry construction.
+- Real Chromium browser suite: 514 checks passed, zero failed. Three additional
+  UI assertions use touch Queue, Shift-pointer placement and selected-foundation
+  reporting. The report distinguishes queued, active and halted construction;
+  unfinished sites show paid-foundation guidance rather than training isolation.
+- Inspected desktop, 390×844 portrait and 844×390 landscape. Selected a queued
+  school through Production; used its actual cancellation button in portrait and
+  observed the 75% refund. A normal-speed rendered chain completed both buildings
+  and the school became an idle producer. Physical iPhone/Safari remains untested.
+- A 66-unit representative browser battle rendered 120 frames in 1999ms.
+  Drawing mean/p95: 0.513/0.600ms; simulation mean/p95: 0.851/1.200ms.
+  This bounded sample did not reveal a frame bottleneck needing optimization.
+- Evidence: ignored artifacts/build-queue-browser-checks.txt,
+  build-queue-desktop.png, build-queue-portrait-selected.png,
+  build-queue-landscape.png and build-queue-performance.txt. Scripted checks are
+  distinct from the normal-speed visual/control inspections above. Foundations
+  are paid and vulnerable as soon as placed; queueing does not reserve future
+  spending or guarantee safety. No costs or work durations changed.

@@ -88,7 +88,7 @@ function resourceWorkReport(n, team=0) {
   else if(n.kind==='materials'){
     const quarry=alive(team).find(b=>b.type==='quarry'&&dist(b,n)<8);
     if(!quarry){state='missing';reason='Build a Materials Quarry on this deposit.';}
-    else if(quarry.construction){state='construction';reason='Finish the quarry with a provisioner.';}
+    else if(quarry.construction){const crew=constructionCrew(quarry);state=crew.queued&&!crew.active?'queued':'construction';reason=state==='queued'?'Quarry queued. Provisioner is finishing earlier orders.':'Finish the quarry with a provisioner.';}
     else if(!supplied(quarry)){state='isolated';reason='QUARRY ISOLATED. Clear raiders or restore its building link.';}
   }
   if(state==='working'&&!alive(team).some(b=>['core','relay'].includes(b.type)&&!b.construction&&supplied(b))){state='delivery';reason='No linked delivery base. Restore a palace or home connection.';}
