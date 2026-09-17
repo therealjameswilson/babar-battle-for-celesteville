@@ -263,6 +263,7 @@ function reset() {
   queueOrders = false;
   $('queue-orders').setAttribute('aria-pressed', 'false');
   enemyScoutSent = false;
+  enemyReconNextAt = 22;
   sightAt = -1;
   sightCount = -1;
   solidCacheAt = -1;
@@ -460,7 +461,7 @@ function update(dt) {
             ? { kind: 'gather', node: u.rally.node }
             : { kind: 'move', x: u.rally.x, y: u.rally.y };
         }
-        if (u.team === 1 && type === 'scout' && !enemyScoutSent) { enemyScoutSent = true; issueOrder(n,{kind:'move',x:650,y:880}); }
+        if(u.team===1&&type==='scout'&&!alive(1).some(s=>s!==n&&s.recon)){enemyScoutSent=true;n.recon=true;enemyReconThink();}
         u.queue.shift();
         u.progress = 0;
         if (u.team === 0) say(defs[type].name + ' ready.');

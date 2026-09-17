@@ -323,3 +323,7 @@ console.log('PASS: scouted economic raids, persistent defense memory, stale work
 
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'enemy-raid-scenario.js'),'utf8'));
 console.log('PASS: rendered-compatible economic raid comparison',run('JSON.stringify(enemyRaidExecutionChecks((ok,label)=>{if(!ok)throw Error(label)}))'));
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'recon-checks.js'),'utf8'));
+run('reconChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: paid recurring reconnaissance, route memory, visibility, withdrawal, recovery and mission reset.');

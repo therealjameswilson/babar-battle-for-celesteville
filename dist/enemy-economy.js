@@ -133,7 +133,8 @@ function enemyMacro() {
     if (w) issueOrder(w,{kind:'repair',target:damaged});
   }
   enemyResearchPlan(buildings);
-  if (t>=22 && !enemyScoutSent && !buildings.some(b=>b.queue.includes('scout'))) enemyQueue('scout');
+  recruitEnemyRecon(buildings);
+  enemyReconThink();
   const troops=alive(1).filter(u=>defs[u.type].damage&&defs[u.type].speed).length;
   if (troops<(easy?16:24)) {
     const type=enemyCounterChoice(troops,buildings);

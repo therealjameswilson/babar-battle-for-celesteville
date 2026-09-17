@@ -1,6 +1,6 @@
 # Siege release handoff
 
-The client has since advanced through 0.29.1. Read README.md, STARCRAFT-GOAL.md,
+The client has since advanced through 0.30.0. Read README.md, STARCRAFT-GOAL.md,
 ARCHITECTURE.md and the latest QA.md entries for current behavior and evidence.
 The original imported baseline and publication history below are retained.
 

@@ -226,3 +226,14 @@ Defend expansions, deny reconnaissance and withdraw provisioners when raiders
 appear. Retreating troops and units below 40% health are excluded from new assault
 orders. Navigation also tries another side of a building if the nearest approach
 is trapped between terrain and structures, preserving repeated supply deliveries.
+
+
+## Sustained reconnaissance (0.30.0)
+
+The rhinos reserve one paid scout for repeated reconnaissance of both approaches.
+It revisits the least recently checked safe route, avoids remembered defenses,
+withdraws from visible weapon threats and returns after recovery. Main assaults
+leave this scout on reconnaissance duty. Kill it to deny fresh information, or
+destroy the Guard School to stop replacement training. A replacement uses normal
+Supplies, queue time and population; purchases are separated by at least 75 seconds
+in Story or 55 in Commander. No hidden unit positions feed these decisions.

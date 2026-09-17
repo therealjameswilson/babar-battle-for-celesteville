@@ -1,5 +1,6 @@
 /* Local-only browser QA. Not included in dist or deployed. */
 let qaInterval = null;
+let qaObserverInterval = null;
 // Accelerated fixtures own simulation time. The normal RAF loop still renders,
 // but must not add a second simulation step between the fixture's fixed steps.
 const qaLiveLoop=loop;
@@ -12,6 +13,7 @@ function qaReport(s) {
 }
 function qaReset() {
   clearInterval(qaInterval);qaInterval=null;
+  clearInterval(qaObserverInterval);qaObserverInterval=null;
   easy = true;
   reset();
   running = true;
@@ -55,6 +57,7 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    reconChecks(check);
     enemyOperationChecks(check);
     enemyRaidExecutionChecks(check);
     buildQueueChecks(check);
@@ -790,4 +793,17 @@ function browserEnemyRaid(){
 function browserDefendedOutpost(){
  qaReset();enemyRaidScenario(true);draw();updateUI(true);
  qaReport('Controlled defended outpost: the observed tower deters the raid. Watch two provisioners deliver around the home, tower and forest, then return to the cache. The main rhino force holds away from the test.');
+}
+
+function browserReconCircuit(){
+ qaReset();easy=false;nextWave=enemySpawn=9999;t=22;
+ units=units.filter(u=>u.type==='core'||(u.team===1&&u.type==='forge'));
+ const school=alive(1).find(u=>u.type==='forge');recruitEnemyRecon([school]);
+ for(let k=0;k<500&&!alive(1).some(u=>u.recon);k++)update(.05);
+ revealUntil=t+600;cam={x:920,y:640,zoom:.65};selected=[];updateUI(true);draw();
+ qaObserverInterval=setInterval(()=>{
+  enemyReconThink();
+  const scout=alive(1).find(u=>u.recon);
+  qaReport('Normal-speed reconnaissance fixture; player fog revealed for visual review only. Scout paid through school. '+JSON.stringify(scout?{order:scout.order?.kind,goal:scout.reconGoal?.key,visited:Object.keys(scout.reconVisits||{}),health:Math.round(scout.hp)}:{scout:'lost'}));
+ },3000);
 }

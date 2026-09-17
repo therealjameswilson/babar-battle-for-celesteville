@@ -478,3 +478,31 @@ A successful alternate approach is retained until reached, so direct steering ca
 cut back into the same pocket. It is invalidated when the target, stop distance or
 target position changes. Both armies share this navigation rule. The fixture checks
 legal structure placement and clear unit starts, then proves repeated deliveries.
+
+
+## Recurring reconnaissance (0.30.0)
+
+enemy-recon.js reserves one recruited scout (recon flag) independently of wave
+orders. Recruitment first becomes eligible at 22s and calls enemyQueue, so normal
+cost, prerequisites, population and production time apply. A living scout or queued
+scout prevents duplicate spending. Successful purchases defer the next opportunity
+by 75s in Story or 55s in Commander; failure leaves the opportunity available.
+Mission reset restores the initial time. A completed replacement receives the role.
+
+Every macro tick the scout chooses the least recently visited safe route from
+(650,880), (650,440), (1040,900), (1100,430). Arrival within 35m records a visit.
+Route risk uses intelligence snapshots only: static weapons persist; mobile reports
+expire after 60s. The exclusion radius is the known type's range + body radius +70m;
+artillery is conservatively assumed capable of its deployed range. Immediate
+withdrawal checks live weapons only after sees confirms visibility. Scouts retreat
+below 60% health or 60 morale, then wait at least eight seconds and recover to 80%
+health/80 morale before returning. If all routes are threatened they withdraw.
+They use Move to observe rather than stopping to attack; existing fog and navigation
+rules still apply. Dedicated scouts are excluded from main assault/raid selection.
+
+The autonomous resource accounting test now measures income from owned-depot ticks
+in addition to physically gathered Supplies. Recurring reconnaissance can change
+depot ownership; omitting that legitimate income would falsely report free funds.
+The equality assertion remains strict. Shared recon-checks covers paid recruitment,
+replacement denial, fog memory, withdrawal/recovery, mission reset and a two-minute
+physical circuit that discovers the player capital through normal vision.

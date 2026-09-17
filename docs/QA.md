@@ -749,3 +749,34 @@ and retained a 20% active-attack disruption requirement for both compositions, p
 proxy; see RAID-COMPARISON.md for exact measurements and rationale. The real-browser
 accelerated Story playthrough also reached victory at 02:59 with normal starting
 resources; this supplements, rather than replaces, normal-speed fixture inspection.
+
+
+## 0.30.0 — sustained paid reconnaissance
+
+- Syntax and deterministic suites passed, including 21 reconnaissance checks:
+  opening time, normal queue/payment, duplicate prevention, replacement interval,
+  affordability, destroyed production, hidden/static/mobile memory, danger response,
+  retained withdrawal, recovery, assault exclusion, a two-minute multi-route circuit,
+  actual capital discovery and mission reset.
+- The autonomous economy equality now includes measured owned-depot income; scouts
+  can alter depot ownership. The check still requires spending, inventory and cargo
+  to equal starting funds plus gathered and depot Supplies.
+- Real Chromium suite: 559 checks passed. Inspected the paid scout traversing all
+  four routes and beginning another circuit in a normal-speed rendered fixture.
+  Player fog is revealed in this fixture only to inspect motion; enemy knowledge
+  still uses its own vision. The observer timer is separate from the accelerated
+  simulation timer and uses the normal three-second planning cadence. No physical
+  phone/Safari verification is claimed. No production UI controls changed.
+- Full local suites passed: balance, compositions, Commander, controlled raids,
+  earned raids, burst and doctrine comparisons. Current Node timings: Story siege
+  won at 177s; Story mixed won at 279s; Commander siege lost at 194s; Commander mixed
+  lost at 441s; fortified Commander won at 276s. These scripted offensive losses
+  remain visible evidence for further counterplay/balance work, not passing claims
+  that every opening is viable. Established paid raid/main-army branches both won
+  around 300s; those policies start from a defended economy.
+- A 66-unit representative browser battle rendered 120 frames in 1998ms. Drawing
+  mean/p95 0.557/0.700ms; simulation mean/p95 0.954/1.300ms. No measured frame
+  bottleneck required an optimization.
+- Evidence under ignored artifacts/: recon-browser-checks.txt,
+  recon-performance.txt, recon-circuit-desktop.png, recon-circuit-result.txt and
+  recon-circuit-landscape.png. Older balance timings describe their release only.

@@ -15,7 +15,7 @@ function enemyRaidTarget() {
   return best?{x:best.x,y:best.y,type:best.type,id:best.id}:null;
 }
 function dispatchEnemyAssault(number) {
-  const troops=alive(1).filter(u=>defs[u.type].damage&&defs[u.type].speed&&
+  const troops=alive(1).filter(u=>!u.recon&&defs[u.type].damage&&defs[u.type].speed&&
     (u.type!=='hero'||number>=2)&&u.morale>50&&u.hp/u.max>=.4&&u.order?.kind!=='retreat');
   const known=intel[1].filter(k=>k.type==='core').sort((a,b)=>b.seen-a.seen)[0];
   const goal=known?{x:known.x,y:known.y}:{x:320,y:900};

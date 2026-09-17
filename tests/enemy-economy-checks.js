@@ -57,10 +57,11 @@ function enemyEconomyChecks(check) {
   enemyMaterials=0; check(!enemyQueue('walker')&&alive(1).filter(u=>u.type==='walker').length===enemyGunCount,'Enemy artillery queues require earned Materials');
   freshEnemy(); units=units.filter(u=>u.team===1||!defs[u.type].speed); enemyScoutSent=true;
   const initialFunds=enemyBudget, initialSupplies=nodes.filter(n=>n.kind!=='materials').reduce((n,p)=>n+p.amount,0);
-  enemySpawn=0; steps(220);
+  enemySpawn=0;let depotIncome=0;
+  for(let k=0;k<220*20&&!ended;k++){update(.05);if(depot.team===1)depotIncome+=.1;}
   const delivered=initialSupplies-nodes.filter(n=>n.kind!=='materials').reduce((n,p)=>n+p.amount,0);
   const cargo=alive(1).filter(w=>w.cargoKind==='supplies').reduce((n,w)=>n+w.carrying,0);
-  check(Math.abs(enemyBudget+enemySpent+cargo-initialFunds-delivered)<.001,'Autonomous base spending and inventory conserve physically extracted Supplies');
+  check(Math.abs(enemyBudget+enemySpent+cargo-initialFunds-delivered-depotIncome)<.001,'Autonomous spending and inventory conserve extraction plus measured owned-depot income');
   check(alive(1).some(b=>b.type==='relay'&&b.x===1100&&!b.construction),'Enemy funds a complete central expansion from starting funds and real gathering');
   freshEnemy(); observeEnemyEconomy();
   const preferred=enemyExpansionSite();
