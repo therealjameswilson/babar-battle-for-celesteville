@@ -740,3 +740,12 @@ under ignored `artifacts/parallel-doctrine-*` and `doctrine-*-trace.json`.
   enemy-operation-performance.txt, enemy-economic-raid-desktop.png and
   enemy-defended-outpost-portrait.png. Current full-match logs supersede historical
   timings when comparing this version; cross-runtime long-match divergence remains.
+
+
+0.29.1 publication follow-up: the original quarry comparison gate failed after
+the navigation correction improved enemy worker recovery. Added 45s/90s checkpoints
+and retained a 20% active-attack disruption requirement for both compositions, plus
+20% final denial for demolition. Removed the misleading total-spending-as-repair
+proxy; see RAID-COMPARISON.md for exact measurements and rationale. The real-browser
+accelerated Story playthrough also reached victory at 02:59 with normal starting
+resources; this supplements, rather than replaces, normal-speed fixture inspection.

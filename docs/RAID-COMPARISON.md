@@ -78,3 +78,31 @@ These results support an opportunity cost for an early specialized force and fav
 combined pressure in this particular opening. They do not prove every raid is weak,
 that any resource price is correct, or that a dedicated flanking/worker-raid policy
 cannot outperform this one. No gameplay cost was changed to force a desired result.
+
+
+## 0.29.1: active disruption versus recovery
+
+The alternate building-approach fix lets workers escape a routing pocket that
+previously delayed repeated deliveries. The unchanged guard-raid policy now cuts
+extraction during its 45-second attack but the rhino economy recovers afterward.
+The old gate requiring every composition to retain a 20% deficit at 180s therefore
+failed. New checkpoints preserve the 20% requirement during the actual attack;
+sapper demolition still must reduce extraction by 20% at the final 180s observation.
+A destroyed, unreplaced quarry must extract nothing after the active-raid checkpoint.
+This changes the test's economic question, not resource costs or the raid policy.
+
+| Composition / order | Materials extracted at 45s | At 90s | At 180s | Quarry at 180s | Raider survivors |
+| --- | ---: | ---: | ---: | --- | ---: |
+| Guards / control | 150 | 260 | 800 | Intact | 5 |
+| Guards / raid | 40 | 250 | 740 | Intact | 0 |
+| Sappers / control | 150 | 260 | 800 | Intact | 4 |
+| Sappers / raid | 30 | 30 | 30 | Destroyed | 0 |
+
+All four branches still produced three guns. Final enemy spending was 2315 in
+both controls, 2415 after guard harassment and 1885 after sapper demolition.
+Total spending is not a reliable repair/rebuild metric: shutting down extraction
+can reduce purchases. The old additional-total-spending assertion is removed;
+paid repair, replacement and recruitment accounting remain covered by the engine
+rule checks. Neither comparison demonstrates a cost-effective raid: both attacking
+squads were lost. The active interruption and the enemy's later recovery are now
+reported separately instead of treating lasting damage as guaranteed.
