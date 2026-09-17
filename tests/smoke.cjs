@@ -79,6 +79,7 @@ vm.createContext(sandbox);
 for (const file of [
   'cast.js',
   'game.js',
+  'simulation-clock.js',
   'camera-views.js',
   'minimap-input.js',
   'alerts.js',

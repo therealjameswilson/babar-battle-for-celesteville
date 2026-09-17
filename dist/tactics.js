@@ -103,7 +103,8 @@ function segmentDistance(p, a, b) {
   const dx = b.x - a.x,
     dy = b.y - a.y,
     q = clamp(((p.x - a.x) * dx + (p.y - a.y) * dy) / (dx * dx + dy * dy || 1), 0, 1);
-  return Math.hypot(p.x - a.x - q * dx, p.y - a.y - q * dy);
+  const x=p.x-a.x-q*dx,y=p.y-a.y-q*dy;
+  return Math.sqrt(x*x+y*y);
 }
 function orderRetreat(u) {
   u.orders = [];

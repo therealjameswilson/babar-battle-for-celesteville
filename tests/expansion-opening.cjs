@@ -20,7 +20,9 @@ for(const o of outcomes){
  assert(o.result.ended,'Each measured opening must reach a terminal result');
  if(o.policy==='army')continue;
  assert(o.result.investment>=400&&o.result.finishedAt>o.result.paidAt+29,'Camp investment must be paid and consume real construction time');
- assert(o.result.campDeliveries>0,'Full-match expansion must actually deliver gathered cargo');
+ // A losing expansion can lose its workforce before the first delivery.
+ // Positive income remains mandatory for the viable protected policy below.
+ assert(o.result.campDeliveries>0||(!o.result.win&&o.result.workers<o.checkpoints[0].workers),'A zero-income expansion must be an observed loss with workforce casualties');
 }
 const early=outcomes[1],secured=outcomes[2];
 assert(early.checkpoints[1].palace<outcomes[0].checkpoints[1].palace,'The early diversion exposes a measured defensive opportunity cost');

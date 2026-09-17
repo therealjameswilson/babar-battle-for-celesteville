@@ -102,7 +102,7 @@ let units = [],
   heroRecovery = [],
   panMode = false;
 const rand = (a, b) => a + Math.random() * (b - a),
-  dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y),
+  dist = (a, b) => Math.sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y)),
   clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 function add(type, team, x, y, extra = {}) {
   let d = defs[type];
@@ -258,6 +258,7 @@ function controlGroup(number, save = false, append = false) {
   updateUI(true);
 }
 function reset() {
+  resetSimulationClock();
   minimapGesture = null;
   technologies = new Set(); enemyTechnologies = new Set();
   attackReports=[];attackCursor=0;attackToneAt=-100;
@@ -934,6 +935,7 @@ function finish(win) {
 function togglePause() {
   if (!running || ended) return;
   paused = !paused;
+  resetSimulationClock();
   $('pause').textContent = paused ? 'Resume' : 'Pause';
   say(paused ? 'Command paused.' : 'Command resumed.');
 }
@@ -1129,7 +1131,7 @@ $('help-close').onclick = () => $('help-dialog').close();
 $('groups-open').onclick = () => {
   if (!running || ended) return;
   const wasPaused = paused;
-  paused = true;
+  paused = true;resetSimulationClock();
   const holder = $('group-actions');
   holder.replaceChildren();
   for (let i = 1; i <= 4; i++) {
@@ -1146,7 +1148,7 @@ $('groups-open').onclick = () => {
       holder.appendChild(button);
     }
   }
-  $('groups-dialog').onclose = () => { paused = wasPaused; };
+  $('groups-dialog').onclose = () => { paused = wasPaused;resetSimulationClock(); };
   $('groups-dialog').showModal();
 };
 $('groups-close').onclick = () => $('groups-dialog').close();

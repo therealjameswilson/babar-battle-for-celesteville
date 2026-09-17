@@ -78,9 +78,10 @@ function enemyBuild(type, p) {
   if (visible(site)) say('Rhino engineers are constructing ' + defs[type].name + '.');
   return site;
 }
+const SITE_DIRECTIONS=[[1,0],[Math.sqrt(3)/2,.5],[.5,Math.sqrt(3)/2],[0,1],[-.5,Math.sqrt(3)/2],[-Math.sqrt(3)/2,.5],[-1,0],[-Math.sqrt(3)/2,-.5],[-.5,-Math.sqrt(3)/2],[0,-1],[.5,-Math.sqrt(3)/2],[Math.sqrt(3)/2,-.5]];
 function enemyFindSite(type, center) {
   for (const radius of [100,150,210,270]) for (let i=0;i<12;i++) {
-    const p={x:Math.round(center.x+Math.cos(i*Math.PI/6)*radius),y:Math.round(center.y+Math.sin(i*Math.PI/6)*radius)};
+    const p={x:Math.round(center.x+SITE_DIRECTIONS[i][0]*radius),y:Math.round(center.y+SITE_DIRECTIONS[i][1]*radius)};
     if (validBuild(p,type,1) && enemySafe(p)) return p;
   }
   return null;

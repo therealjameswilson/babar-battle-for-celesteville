@@ -56,3 +56,13 @@ Chromium both show an early defensive cost and a viable secured expansion, with
 different exact timings. Headquarters now expose actual per-resource delivery
 receipts. Cross-runtime trajectory divergence remains an explicit limitation;
 the complete original-scope audit has not yet proved overall goal completion.
+
+## 0.35.0 — fixed simulation and matched runtime replay
+
+Live play now uses fixed ticks and smooth presentation interpolation. The full
+Commander doctrine replay and all seven state snapshots match Node and Chromium,
+and Node's 30/60/144-FPS runs are identical. Historical runtime-divergence warnings
+above apply to earlier releases; SIMULATION-CONSISTENCY.md records the tested fix
+and its limits. Existing balance scenarios were rerun after trajectory changes.
+The next step is the complete current-source audit against the original scope,
+not assuming that a passing replay establishes every deliverable.

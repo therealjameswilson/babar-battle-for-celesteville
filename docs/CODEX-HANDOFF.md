@@ -130,3 +130,16 @@ loss and secured victory, with runtime-dependent timestamps/totals. See
 EXPANSION-OPENINGS.md; this does not imply all early player expansions lose.
 Next fidelity work should investigate the known long-run Node/Chromium numerical
 divergence and continue the current-scope completion audit before adding breadth.
+
+## Fixed simulation and runtime consistency, 0.35.0
+
+Vector movement plus fixed direction tables remove the measured Node/Chromium
+trajectory divergence in the tested replay. simulation-clock.js advances 50ms
+ticks with five-tick catch-up and presentation interpolation; pause resets timing.
+`npm run test:clock` compares full Commander matches at 30/60/144 FPS. Browser
+trace equals Node at all seven checkpoints and the 282s victory result. See
+SIMULATION-CONSISTENCY.md for scope, performance and why the early-expansion income
+assertion was corrected without weakening protected-expansion viability.
+Keep iframe and script cache versions aligned in tests/browser.html during QA.
+Continue the original-scope completion audit; physical Safari and comprehensive
+human balance are not established by these automated replays.

@@ -110,7 +110,8 @@ function drawUnit(u) {
   const d = defs[u.type],
     color = u.team ? RED : BLUE;
   ctx.save();
-  ctx.translate(u.x, u.y);
+  const rendered=renderedPosition(u);
+  ctx.translate(rendered.x, rendered.y);
   ctx.globalAlpha = u.construction ? 0.65 : 1;
   ctx.fillStyle = '#1e321e33';
   ctx.beginPath();
@@ -627,7 +628,8 @@ function draw() {
   );
 }
 function loop(now) {
-  const dt = Math.min((now - last) / 1000 || 0, 0.05);
+  const elapsed=last===null?0:Math.max(0,(now-last)/1000||0);
+  const dt=Math.min(elapsed,.05);
   last = now;
   if (running && !paused && !ended) {
     const pan = (420 * dt) / cam.zoom;
@@ -637,9 +639,9 @@ function loop(now) {
     if (keys.ArrowDown) cam.y += pan;
     cam.x = clamp(cam.x, 0, W);
     cam.y = clamp(cam.y, 0, H);
-    update(dt);
     soundscape();
   }
+  advanceSimulation(elapsed);
   draw();
   requestAnimationFrame(loop);
 }

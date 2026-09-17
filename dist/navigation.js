@@ -16,6 +16,7 @@ const covers = [
   { x: 1090, y: 875, r: 80 },
   { x: 1330, y: 540, r: 65 },
 ];
+const NAV_DIRECTIONS = [[1,0],[Math.SQRT1_2,Math.SQRT1_2],[0,1],[-Math.SQRT1_2,Math.SQRT1_2],[-1,0],[-Math.SQRT1_2,-Math.SQRT1_2],[0,-1],[Math.SQRT1_2,-Math.SQRT1_2]];
 let navVersion = 0,
   navStamp = '',
   blocked = new Uint8Array(NC * NR),
@@ -32,7 +33,7 @@ function solidAt(x, y, r = 21) {
   if (x < r || y < r || x > W - r || y > H - r) return true;
   if (obstacles.some((o) => x > o.x - r && x < o.x + o.w + r && y > o.y - r && y < o.y + o.h + r))
     return true;
-  return solidBuildings.some((b) => b.hp > 0 && Math.hypot(x - b.x, y - b.y) < b.r + r);
+  return solidBuildings.some((b) => b.hp > 0 && dist({x,y},b) < b.r + r);
 }
 function rebuildNav() {
   const stamp = units
@@ -191,8 +192,8 @@ function move(u, target, dt, stop = 3) {
       if(!u.path.length&&stop>5){
         const radius=stop+NAV;
         const approaches=Array.from({length:8},(_,i)=>({
-          x:target.x+Math.cos(i*Math.PI/4)*radius,
-          y:target.y+Math.sin(i*Math.PI/4)*radius,
+          x:target.x+NAV_DIRECTIONS[i][0]*radius,
+          y:target.y+NAV_DIRECTIONS[i][1]*radius,
         })).filter(p=>!solidAt(p.x,p.y,u.r+2)).sort((a,b)=>dist(a,goal)-dist(b,goal));
         for(const approach of approaches){
           const path=route(u,approach);
@@ -214,8 +215,9 @@ function move(u, target, dt, stop = 3) {
     (u.order?.kind === 'retreat' ? 1.2 : u.morale < 45 ? 0.7 : 1);
   const step = Math.min(speed * dt, dist(u, waypoint));
   u.angle = Math.atan2(waypoint.y - u.y, waypoint.x - u.x);
-  const x = u.x + Math.cos(u.angle) * step,
-    y = u.y + Math.sin(u.angle) * step;
+  const length=dist(u,waypoint)||1;
+  const x = u.x + (waypoint.x-u.x)/length * step,
+    y = u.y + (waypoint.y-u.y)/length * step;
   if (!solidAt(x, y, u.r)) {
     u.x = x;
     u.y = y;
@@ -234,18 +236,18 @@ function separate() {
         b = mobile[j],
         dx = a.x - b.x,
         dy = a.y - b.y,
-        d = Math.hypot(dx, dy),
+        d = Math.sqrt(dx*dx+dy*dy),
         min = a.r + b.r + 3;
       if (d < min) {
-        const angle = d > 0.01 ? Math.atan2(dy, dx) : a.id * 2.4;
+        const direction = d > 0.01 ? [dx/d,dy/d] : NAV_DIRECTIONS[a.id%8];
         const push = (min - d) * 0.28;
         for (const [u, sign] of [
           [a, 1],
           [b, -1],
         ]) {
           if (artilleryLocked(u)) continue;
-          const x = u.x + Math.cos(angle) * push * sign,
-            y = u.y + Math.sin(angle) * push * sign;
+          const x = u.x + direction[0] * push * sign,
+            y = u.y + direction[1] * push * sign;
           if (!solidAt(x, y, u.r)) {
             u.x = x;
             u.y = y;

@@ -343,3 +343,7 @@ console.log('PASS: field headquarters costs, supply roots, recruitment, destruct
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'delivery-checks.js'),'utf8'));
 run('deliveryChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: physical base delivery accounting, material separation, council bonus, destruction and faction parity.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'clock-checks.js'),'utf8'));
+run('clockChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: fixed simulation cadence, frame jitter, interpolation, pause, restart and bounded catch-up.');

@@ -556,3 +556,12 @@ cover separate cargo types, repeat ticks, council credit, destruction and factio
 `expansion-opening.js` adds paid economic decisions around the existing staged
 army controller. Its optional reserve and detached-unit arguments default to the
 previous push behavior; legacy push comparisons remain unchanged.
+
+`simulation-clock.js` owns fixed 50ms ticks, bounded frame accumulation and separate
+render-position samples. render.js calls `advanceSimulation(elapsed)` once per
+live display frame. Simulation code never reads interpolated positions; rendering
+uses `renderedPosition`. Reset/pause/menu transitions clear accumulated time.
+Movement and separation normalize vectors directly; direction tables stabilize
+navigation/construction candidates. Angles serve presentation only. Browser
+performance fixtures suspend the normal loop's updates while measuring the clock
+and rendering, so there is only one simulation owner.

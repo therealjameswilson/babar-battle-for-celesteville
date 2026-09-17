@@ -1,17 +1,20 @@
 /* Local-only browser QA. Not included in dist or deployed. */
 let qaInterval = null;
 let qaObserverInterval = null;
+let qaMeasuring=false;
 // Accelerated fixtures own simulation time. The normal RAF loop still renders,
 // but must not add a second simulation step between the fixture's fixed steps.
 const qaLiveLoop=loop;
 loop=function(timestamp){
-  if(qaInterval){last=timestamp;draw();requestAnimationFrame(loop);}
+  if(qaMeasuring){last=timestamp;requestAnimationFrame(loop);}
+  else if(qaInterval){last=timestamp;draw();requestAnimationFrame(loop);}
   else qaLiveLoop(timestamp);
 };
 function qaReport(s) {
   parent.document.getElementById('report').textContent = s;
 }
 function qaReset() {
+  qaMeasuring=false;
   clearInterval(qaInterval);qaInterval=null;
   clearInterval(qaObserverInterval);qaObserverInterval=null;
   easy = true;
@@ -58,6 +61,7 @@ async function browserSuite() {
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
     batteryChecks(check);
+    clockChecks(check);
     deliveryChecks(check);
     headquartersChecks(check);
     qaReset();ore=500;add('scout',0,960,980);cam={x:1020,y:1070,zoom:.7};
@@ -469,36 +473,23 @@ function browserBattle() {
   qaReport('Representative battle: 60 combatants, infantry and field artillery.');
 }
 async function browserPerformance() {
-  const samples = [],
-    updates = [];
-  const initial = performance.now();
-  for (let n = 0; n < 120; n++) {
-    await new Promise(requestAnimationFrame);
-    let a = performance.now();
-    draw();
-    samples.push(performance.now() - a);
-    a = performance.now();
-    if (!ended) update(1 / 60);
-    updates.push(performance.now() - a);
-  }
-  const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length,
-    p95 = (a) => a.sort((x, y) => x - y)[Math.floor(a.length * 0.95)];
-  qaReport(
-    JSON.stringify(
-      {
-        frames: 120,
-        elapsedMs: Math.round(performance.now() - initial),
-        drawMeanMs: avg(samples),
-        drawP95Ms: p95(samples),
-        updateMeanMs: avg(updates),
-        updateP95Ms: p95(updates),
-        units: units.length,
-        navigation: navStats,
-      },
-      null,
-      2
-    )
-  );
+  if(qaInterval)return qaReport('Choose a live Battle fixture before measuring.');
+  const samples=[],updates=[];qaMeasuring=true;
+  const initial=await new Promise(requestAnimationFrame),startedAt=t;
+  let previous=initial,steps=0,maxFrameMs=0,clippedMs=0;
+  try{
+    for(let n=0;n<120&&qaMeasuring;n++){
+      const now=await new Promise(requestAnimationFrame);
+      const elapsed=(now-previous)/1000;maxFrameMs=Math.max(maxFrameMs,elapsed*1000);clippedMs+=Math.max(0,elapsed-.25)*1000;
+      let at=performance.now();steps+=advanceSimulation(elapsed);previous=now;
+      updates.push(performance.now()-at);at=performance.now();draw();samples.push(performance.now()-at);
+    }
+  }finally{qaMeasuring=false;last=null;}
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length,p95=a=>[...a].sort((x,y)=>x-y)[Math.floor(a.length*.95)];
+  qaReport(JSON.stringify({frames:samples.length,elapsedMs:Math.round(previous-initial),maxFrameMs,clippedMs,
+    simulationSeconds:t-startedAt,simulationTicks:steps,drawMeanMs:avg(samples),drawP95Ms:p95(samples),
+    updateMeanMs:avg(updates),updateP95Ms:p95(updates),units:units.length,navigation:navStats},null,2));
+  if(!paused&&!ended)togglePause();
 }
 
 function browserReview() {
@@ -886,3 +877,5 @@ function browserExpansionOpening(policy){
 function browserEarlyCampMatch(){browserExpansionOpening('early');}
 function browserSecuredCampMatch(){browserExpansionOpening('secured');}
 function browserArmyMatch(){browserExpansionOpening('army');}
+
+function browserClockReplay(){qaReset();const result=clockScenario(60);paused=true;updateUI(true);draw();qaReport(JSON.stringify(result,null,2));}

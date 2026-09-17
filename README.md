@@ -284,3 +284,12 @@ route before diverting money and troops from the palace. Three normal-resource
 Commander openings compare army-first, early camp and depot-secured camp in
 [EXPANSION-OPENINGS.md](docs/EXPANSION-OPENINGS.md). Run
 `npm run test:expansion-openings` to reproduce the Node comparisons.
+
+### Consistent simulation timing (0.35.0)
+
+Gameplay now uses fixed 50ms ticks independently of display refresh, with smooth
+interpolation for moving units. Pause discards elapsed time; a stalled frame has
+a bounded catch-up budget. Node and Chromium now match the tested full Commander
+replay at all recorded checkpoints. See
+[SIMULATION-CONSISTENCY.md](docs/SIMULATION-CONSISTENCY.md) for the tested scope,
+performance measurements and updated balance results. Run `npm run test:clock`.

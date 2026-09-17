@@ -879,3 +879,46 @@ secured-expansion-browser.json, secured-expansion-victory.png,
 army-opening-browser.json, delivery-browser-checks.txt and delivery portrait/
 landscape screenshots under artifacts/. See EXPANSION-OPENINGS.md for methodology
 and the distinction between gross camp receipts and net profit.
+
+## 0.35.0 — fixed clock and movement consistency (2026-09-17)
+
+All existing deterministic tactical, balance, composition, Commander, raid,
+earned-raid, burst, doctrine, push and controlled-expansion checks were rerun.
+The full-match expansion assertion was corrected for the verified zero-income
+losing camp; protected expansion must still win and receive more than its direct
+expenditure. Rationale and exact new outcomes are in SIMULATION-CONSISTENCY.md.
+
+Fifteen shared clock assertions bring the real-browser suite to **627 passing
+checks** at desktop, 390×844 portrait and 844×390 landscape. They cover multiple
+frame rates, uneven frames, sub-tick accumulation, interpolation without changing
+simulation positions, pause, restart, ended missions and capped stall recovery.
+The browser reports Chrome 152.0.0.0. No physical Safari claim is made.
+
+The full Commander clock replay wins at 282s in both Node and Chromium. The entire
+captured final result and seven recorded state snapshots compare exactly equal. Node
+also compares full runs at 30/60/144 FPS. A separate actual rendered Story fixture
+wins at 03:05; the early-expansion browser fixture confirms the new 380s loss,
+zero workers, zero camp cargo and camp destruction at 202s. These results are
+scripted/accelerated except for the representative live-frame measurement.
+
+The corrected performance fixture gives simulation time one owner, warms up one
+animation frame, records frame gaps/capped time, and pauses at completion. In a
+69-object battle, 120 frames / 2,000ms advance exactly 40 ticks / 2s, with no
+clipped time. Draw mean/p95 1.02/1.60ms; simulation work per display frame mean/p95
+0.78/2.80ms. No measured bottleneck required further optimization. The first
+startup-stall sample is retained and explained separately, not relabeled as this
+active-frame measurement.
+
+Artifacts: clock-node-trace.json, clock-browser-trace.json,
+clock-performance-active.json, clock-battle-desktop.png, clock-browser-checks.txt,
+clock-story-result.txt, clock-story-victory.png, clock-early-expansion.json,
+clock-portrait.png and clock-landscape.png under artifacts/. Synchronous long QA
+buttons can exceed the tool's click timeout; their existing completed report was
+read afterward instead of restarting the run. QA cache versions now cover both
+the iframe document and its script bundle.
+
+The secured-expansion browser rerun also wins at 330s. Its complete reported result
+and the early-expansion report exactly equal Node outputs; the protected camp
+receives 1,800 Supplies against 600 spent. Evidence: clock-secured-expansion.json.
+The actual Deploy again button was clicked after that victory; Take command and
+Pause then worked in the reloaded game, with the clock at 00:00 and no old backlog.
