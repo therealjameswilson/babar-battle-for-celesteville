@@ -316,3 +316,10 @@ console.log('PASS: read-only workforce assignment, extraction, hauling, waiting,
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'build-queue-checks.js'),'utf8'));
 run('buildQueueChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: paid queued construction, delivery handoff, cancellation, queue capacity, builder loss, replacement and blocked gathering.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'enemy-operation-checks.js'),'utf8'));
+run('enemyOperationChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: scouted economic raids, persistent defense memory, stale workers, split armies, approach routes and preserved withdrawals.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'enemy-raid-scenario.js'),'utf8'));
+console.log('PASS: rendered-compatible economic raid comparison',run('JSON.stringify(enemyRaidExecutionChecks((ok,label)=>{if(!ok)throw Error(label)}))'));

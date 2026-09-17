@@ -210,3 +210,19 @@ long delivery route. Persistent waiting is a reason to consider another site.
 The report explains missing/unfinished quarries, cut supply links and depleted
 stocks without exposing unseen depletion. You can also construct from a selected
 provisioner group: one available worker builds while the others keep their orders.
+
+
+## Scouted economic raids (0.29.1)
+
+Every third rhino assault can split off a small squad against an economic target
+it has observed: a quarry, home or worker sighted within the last 30 seconds.
+Known towers and concentrations of defenders deter these raids. Story sends up to
+three raiders; Commander up to four, while keeping at least four troops in the main
+column. Scouts and sappers take priority; guns and Rataxes remain with the main
+army. No vulnerable known site means a concentrated assault. The enemy keeps its
+memory of hidden buildings rather than learning about unseen destruction.
+
+Defend expansions, deny reconnaissance and withdraw provisioners when raiders
+appear. Retreating troops and units below 40% health are excluded from new assault
+orders. Navigation also tries another side of a building if the nearest approach
+is trapped between terrain and structures, preserving repeated supply deliveries.

@@ -34,7 +34,7 @@ Depot: one side must hold within 90m for 8 uncontested seconds. Ownership grants
 deliveries. Starting funds are 480 Story / 650 Commander. Recruitment now uses
 real paid building queues and shared population limits (see enemy economy below).
 
-Story: enemy damage ×0.7, first assault 120s, later interval 100s. Commander: full damage, first assault 85s, later interval 72s. Enemy scouts start at 22s, main assaults alternate with a northern flank every third wave. Wounded enemies retreat below 27% health and regroup at aid stations; fit units rejoin on a subsequent assault. Rataxes joins from wave two. Louise fortifies the fortress after wave one; Victor adds 20s after wave three; Rhudi boosts speed from wave four.
+Story: enemy damage ×0.7, first assault 120s, later interval 100s. Commander: full damage, first assault 85s, later interval 72s. Enemy scouts start at 22s, every third assault may detach a scouted economic raid (see 0.29.1 below). Wounded enemies retreat below 27% health and regroup at aid stations; fit units rejoin on a subsequent assault. Rataxes joins from wave two. Louise fortifies the fortress after wave one; Victor adds 20s after wave three; Rhudi boosts speed from wave four.
 
 Morale: 100 maximum, ordinary hits remove 12, artillery removes 26. Below 25, automatic retreat. Below 45, movement ×0.7 and firing intervals ×1.5. After 3s without damage: recover 4/s, 12/s within 190m of an officer, or 10/s within 160m of a supplied aid station. Retreat speed ×1.2 and no attacks until reaching recovery ground. Hold fires without pursuing. Aid stations restore 2 HP/s after 5s without damage; Celeste increases this to 6. Commander recovery: 45s and 100 supplies/reserves, or 25s with Periwinkle.
 
@@ -449,3 +449,32 @@ unfinished buildings as active isolated recruitment sites.
 Shared build-queue-checks.js covers lifecycle and resource accounting in Node and
 Chromium. The browser suite separately uses the real construction controls, touch
 Queue and Shift-pointer input. No production costs or construction times changed.
+
+
+## Scouted economic operations and building approaches (0.29.1)
+
+enemy-operations.js separates attack planning from the wave timer. enemyRaidTarget
+reads intel[1] snapshots only: quarries score 6, homes 4, and workers 2. Worker
+positions expire for raid selection after 30s. Within 260m of a candidate, known
+towers count as three threats, guns two, other armed units one; each threat deducts
+two points. Three threats or a nonpositive score rejects the target. Static defense
+reports persist until re-observation; mobile threats expire after 60s. Candidates
+are ordered by score, recency and ID. Hidden hp, movement and destruction are never
+read by this planner.
+
+Every third wave can detach 2–3 troops in Story or 2–4 in Commander, preserving four
+main-column troops. Scouts, sappers, then guards are selected; heroes and guns stay
+in the main column. Raiders queue a southern (950,1050) or northern (950,430) staging
+point, followed by the target snapshot. Shared attack-move/pathfinding acquires
+only currently visible enemies. The main column attacks its remembered capital
+location, or the public starting capital coordinate. Commands go through issueOrder
+and replace obsolete queues. Retreating or below-40%-health units retain their orders.
+The specific raid dispatch message requires currently visible raiders.
+
+The controlled outpost comparison exposed an unreachable nearest approach cell
+between a home, tower and forest. If normal routing fails for a stand-off destination,
+move tries eight other approach points at stop-distance + one navigation cell.
+A successful alternate approach is retained until reached, so direct steering cannot
+cut back into the same pocket. It is invalidated when the target, stop distance or
+target position changes. Both armies share this navigation rule. The fixture checks
+legal structure placement and clear unit starts, then proves repeated deliveries.

@@ -707,3 +707,36 @@ under ignored `artifacts/parallel-doctrine-*` and `doctrine-*-trace.json`.
   distinct from the normal-speed visual/control inspections above. Foundations
   are paid and vulnerable as soon as placed; queueing does not reserve future
   spending or guarantee safety. No costs or work durations changed.
+
+
+## 0.29.1 — scouted economic raids and reachable approaches
+
+- Syntax and deterministic suites passed. Nineteen planner checks cover unscouted
+  sites, hidden-state isolation, persistent static defenses, stale worker/mobile
+  reports, target priority, army split limits, role choice, both approaches,
+  concentration when no safe target exists and retained withdrawal orders.
+- Five shared execution checks use legal fixture structures and clear unit starts.
+  At 60s, an exposed outpost lost its home and both workers after 20 Supplies were
+  extracted; the observed-tower branch detached no raiders, retained both workers
+  and the intact 450-health home, and extracted 130 Supplies (120 delivered).
+  The main column is held away from this controlled comparison. It is not an
+  earned-resource full opening, and cannot establish general tower balance.
+- This comparison initially failed because the protected workers became stuck at
+  an unreachable nearest approach. Navigation now retains a reachable alternate
+  approach until reached; returning workers no longer re-enter the same pocket.
+  The comparison requires repeated extraction, not just one successful delivery.
+- Real Chromium browser suite: 538 checks passed, zero failures. Inspected the
+  normal-speed rendered raid and used the actual Retreat button for provisioners.
+  Recorded desktop raid aftermath and inspected the defended delivery fixture in
+  a 390×844 portrait viewport. No physical-phone/Safari verification is claimed.
+- After the navigation fix, full-match Node comparisons: Story siege won at 180s;
+  Story mixed won at 374s with 429 palace health; Commander siege lost at 256s;
+  Commander mixed won at 375s; defensive Commander won at 268s with 1800 palace
+  health. The intermediate pre-navigation Commander mixed loss at 441s is not the
+  final release result. These scripted policies do not prove broad human balance.
+- A 66-unit representative browser battle: 120 frames in 1996ms; drawing mean/p95
+  0.512/0.700ms; simulation mean/p95 0.903/1.400ms. No new measured bottleneck.
+- Ignored evidence: artifacts/enemy-operation-browser-checks.txt,
+  enemy-operation-performance.txt, enemy-economic-raid-desktop.png and
+  enemy-defended-outpost-portrait.png. Current full-match logs supersede historical
+  timings when comparing this version; cross-runtime long-match divergence remains.

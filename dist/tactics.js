@@ -205,16 +205,7 @@ function enemyThink() {
   if (t < nextWave) return;
   wave++;
   nextWave = t + (easy ? 100 : 72);
-  const flank = wave % 3 === 0;
-  const known = intel[1].filter((k) => k.type === 'core').sort((a, b) => b.seen - a.seen)[0];
-  const goal = known || { x: 320, y: 900 };
-  for (const e of alive(1).filter(
-    (u) =>
-      defs[u.type].damage && defs[u.type].speed && (u.type !== 'hero' || wave >= 2) && u.morale > 50
-  )) {
-    e.order = { kind: 'attack', x: flank ? 650 : goal.x, y: flank ? 430 : goal.y };
-    e.followup = flank ? { kind: 'attack', x: goal.x, y: goal.y } : null;
-  }
+  const operation=dispatchEnemyAssault(wave);
   if (wave === 1) {
     const f = alive(1).find((u) => u.type === 'core');
     if (f) {
@@ -224,8 +215,8 @@ function enemyThink() {
   }
   if (wave === 3) nextWave += 20;
   say(
-    flank
-      ? 'Rhino columns are taking the northern road.'
+    operation.raiders.some(visible)
+      ? 'Rhino raiders are breaking away toward a supply position.'
       : 'Basil’s main assault is advancing. Prepare the defenses.'
   );
 }

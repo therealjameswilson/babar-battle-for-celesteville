@@ -55,6 +55,8 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    enemyOperationChecks(check);
+    enemyRaidExecutionChecks(check);
     buildQueueChecks(check);
     qaReset();ore=1000;const queueBuilder=alive(0).find(u=>u.type==='worker');selected=[queueBuilder];cam={x:500,y:1020,zoom:1};updateUI(true);
     const placePointer=(p,kind,shift)=>{const rect=canvas.getBoundingClientRect(),q=screen(p);for(const type of ['pointerdown','pointerup'])canvas.dispatchEvent(new PointerEvent(type,{pointerId:91,pointerType:kind,button:0,buttons:type==='pointerdown'?1:0,shiftKey:shift,clientX:rect.left+q.x,clientY:rect.top+q.y,bubbles:true}));};
@@ -778,4 +780,14 @@ function browserBuildQueue(){
  build('relay');command({x:570,y:1070},false);
  build('forge');command({x:620,y:970},true);
  updateUI(true);draw();qaReport('One provisioner: build the home, then the queued school, then resume gathering. Select the school or open Production to inspect its queued status. Foundations are paid at placement; cancellation refunds 75%.');
+}
+
+function browserEnemyRaid(){
+ qaReset();enemyRaidScenario();draw();updateUI(true);
+ qaReport('Controlled raid: the rhino scout observed this outpost. Four raiders approach via the southern road while the main column holds for this fixture. Withdraw the provisioners or defend the home.');
+}
+
+function browserDefendedOutpost(){
+ qaReset();enemyRaidScenario(true);draw();updateUI(true);
+ qaReport('Controlled defended outpost: the observed tower deters the raid. Watch two provisioners deliver around the home, tower and forest, then return to the cache. The main rhino force holds away from the test.');
 }

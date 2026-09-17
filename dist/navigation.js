@@ -150,6 +150,12 @@ function route(start, goal) {
 }
 function move(u, target, dt, stop = 3) {
   if (artilleryLocked(u)) return false;
+  let approaching=false;
+  if(u.approach){
+    const a=u.approach;
+    if(a.target!==target||a.stop!==stop||dist(a,target)>30||dist(u,a.point)<7)u.approach=null;
+    else {target=a.point;stop=3;approaching=true;}
+  }
   // Coordinate orders must finish at a traversable destination. A* already
   // routes to a free cell, but comparing arrival against the original blocked
   // click left these orders alive forever and trapped subsequent waypoints.
@@ -164,7 +170,7 @@ function move(u, target, dt, stop = 3) {
     target=u.resolvedDestination.point;
   }
   const distance = dist(u, target);
-  if (distance <= stop + 1) return true;
+  if (distance <= stop + 1) return !approaching;
   let goal = { x: target.x, y: target.y };
   if (stop > 5) {
     goal.x += ((u.x - target.x) / distance) * stop;
@@ -180,6 +186,19 @@ function move(u, target, dt, stop = 3) {
       t > (u.repathAt || 0)
     ) {
       u.path = route(u, goal);
+      // A nearest stand-off cell can be an isolated pocket between a building
+      // and terrain. Try other approach sides before leaving cargo stranded.
+      if(!u.path.length&&stop>5){
+        const radius=stop+NAV;
+        const approaches=Array.from({length:8},(_,i)=>({
+          x:target.x+Math.cos(i*Math.PI/4)*radius,
+          y:target.y+Math.sin(i*Math.PI/4)*radius,
+        })).filter(p=>!solidAt(p.x,p.y,u.r+2)).sort((a,b)=>dist(a,goal)-dist(b,goal));
+        for(const approach of approaches){
+          const path=route(u,approach);
+          if(path.length){u.path=path;u.approach={target,x:target.x,y:target.y,stop,point:approach};break;}
+        }
+      }
       u.pathGoal = goal;
       u.pathVersion = navVersion;
       u.repathAt = t + 2 + (u.id % 5) * 0.12;
