@@ -789,7 +789,7 @@ function updateUI(force = false) {
                         : 'Ready for orders.'
     : 'Tap a friendly unit or building.';
   if(u && selected.length===1 && u.queue.length && !u.research && !u.construction && populationBlocked(u.team)) $('selected-info').textContent='POPULATION BLOCKED · Build a Village Home. Paid queue and training progress are retained.';
-  if (u && selected.length===1 && combatRole(u)) $('selected-info').textContent = combatRole(u);
+  if (u && selected.length===1 && u.type!=='walker' && combatRole(u)) $('selected-info').textContent = combatRole(u);
   $('tactical-status').textContent = productionGroup ? selected.filter(supplied).length + '/' + selected.length + ' supplied sites · isolated production runs at 25%' : u
     ? defs[u.type].speed
       ? 'Morale ' +
@@ -807,8 +807,14 @@ function updateUI(force = false) {
     $('selected-type').textContent=`SUPPLY DETAIL · ${selected.length} PROVISIONERS`;
     $('selected-name').textContent='Provisioners';
   }
+  const battery=selected.length&&selected.every(s=>s.type==='walker');
+  if(battery){
+    if(selected.length>1)$('selected-name').textContent='Artillery battery';
+    $('selected-info').textContent=batterySummary(selected);
+    $('tactical-status').textContent=`${selected.length>1?'Lowest morale':'Morale'} ${Math.ceil(Math.min(...selected.map(g=>g.morale)))} · Siege 90–390m · 3s deploy / 2s pack · Splash also hits allies.`;
+  }
   const workNode=selectionResource();
-  $('selected-info').classList.toggle('economy-info',!!workNode||!!u?.construction);
+  $('selected-info').classList.toggle('economy-info',!!workNode||!!u?.construction||!!battery);
   if(workNode){
     const report=resourceWorkReport(workNode);
     $('selected-info').textContent=resourceWorkSummary(workNode,report)+(report.reason?' · '+report.reason:'');

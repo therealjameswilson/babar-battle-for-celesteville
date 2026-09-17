@@ -506,3 +506,30 @@ depot ownership; omitting that legitimate income would falsely report free funds
 The equality assertion remains strict. Shared recon-checks covers paid recruitment,
 replacement denial, fog memory, withdrawal/recovery, mission reset and a two-minute
 physical circuit that discovers the player capital through normal vision.
+
+
+## Battery reports and staged-offensive evidence (0.31.0)
+
+batteryReport in artillery.js reads living guns, transitions, cooldowns and visible
+in-arc targets. It mirrors focus-target priority, then nearest-target selection,
+without issuing orders or applying damage. Allies within the splash radius of that
+likely target produce a warning. Visible armed enemies inside the 90m blind spot
+are reported separately; hidden units never enter the report. A no-target message
+means no currently visible target is in the gun's firing arc, not that no enemies
+exist nearby. Summaries update through the existing UI cadence.
+
+Single guns and all-gun selections retain siege range, transition times and morale.
+Their information panel allows wrapping in compact layouts. Generic combat-role
+text previously overwrote the detailed artillery description; the battery report
+now has its own final selection branch. Mixed selections keep their existing group
+interface. No damage, costs, fire-control behavior or movement rules change.
+
+tests/push-strategy.js shares the paid defense economy via manageArmy=false;
+repairs and recruitment remain enabled while the comparison owns troop orders.
+Before 120s both policies use the same defense. They commit after reaching the
+chosen mobile combat-unit count and at least three guns. The staged policy uses
+scouts, infantry screens and deployed guns along successive map positions; the
+march policy issues combined attack-move. Both preserve withdrawals and can regroup.
+The browser fixture owns fixed simulation steps, pauses an unresolved 900s window,
+and never labels it a win. Default test:push runs in CI alongside earlier balance
+comparisons. See PUSH-COMPARISON.md for the results and their limitations.

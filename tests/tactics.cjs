@@ -327,3 +327,7 @@ console.log('PASS: rendered-compatible economic raid comparison',run('JSON.strin
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'recon-checks.js'),'utf8'));
 run('reconChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: paid recurring reconnaissance, route memory, visibility, withdrawal, recovery and mission reset.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'battery-checks.js'),'utf8'));
+run('batteryChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: read-only battery readiness, observation, reload, blind spot, friendly fire and group status.');

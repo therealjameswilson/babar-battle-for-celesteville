@@ -237,3 +237,19 @@ leave this scout on reconnaissance duty. Kill it to deny fresh information, or
 destroy the Guard School to stop replacement training. A replacement uses normal
 Supplies, queue time and population; purchases are separated by at least 75 seconds
 in Story or 55 in Commander. No hidden unit positions feed these decisions.
+
+
+## Battery control and offensive timings (0.31.0)
+
+Select one or more guns to see deployed/mobile counts, readiness, reloads, close
+threats and friendly-fire risk. The report uses current vision and actual firing
+range. It warns when allies are near a likely impact, but does not hold fire for
+you. Keep infantry ahead, use scouts to reveal distant targets, and command them
+separately while deployed guns fire. Move the battery forward after clearing its
+current position; attack-move also packs deployed guns.
+
+`npm run test:push` compares a direct march with a staged Commander offensive from
+the same paid economic opening. Use `-- --size=14` or `-- --size=24` to compare
+other commitment sizes. See docs/PUSH-COMPARISON.md for wins, an unresolved browser
+run and timing tradeoffs. These are repeatable tactical examples, not a guarantee
+that staged artillery always wins or that larger forces always perform better.

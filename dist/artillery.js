@@ -59,3 +59,32 @@ function enemyArtillery() {
     }
   }
 }
+
+// Read-only battery feedback uses current faction sight, never hidden targets.
+function batteryReport(guns){
+  const report={mobile:0,deployed:0,transitioning:0,ready:0,reloading:0,unspotted:0,close:0,splash:0};
+  for(const gun of guns.filter(u=>u.type==='walker'&&u.hp>0)){
+    if(gun.artilleryTransition){report.transitioning++;continue;}
+    if(!gun.deployed){report.mobile++;continue;}
+    report.deployed++;
+    const seen=alive(1-gun.team).filter(e=>sees(gun.team,e));
+    if(seen.some(e=>defs[e.type].damage&&dist(gun,e)<SIEGE.minimum))report.close++;
+    const targets=seen.filter(e=>inWeaponArc(gun,e));
+    const target=targets.includes(gun.order?.target)?gun.order.target:nearest(gun,targets);
+    if(!target){report.unspotted++;continue;}
+    if(gun.cool>0)report.reloading++;else report.ready++;
+    if(alive(gun.team).some(a=>a!==gun&&dist(a,target)<=SIEGE.radius))report.splash++;
+  }
+  return report;
+}
+function batterySummary(guns){
+  const r=batteryReport(guns);
+  const parts=[`${r.deployed} deployed`,`${r.mobile} mobile`];
+  if(r.transitioning)parts.push(`${r.transitioning} changing mode`);
+  if(r.ready)parts.push(`${r.ready} ready to fire`);
+  if(r.reloading)parts.push(`${r.reloading} reloading`);
+  if(r.unspotted)parts.push(`${r.unspotted} with no visible target in range — scout or reposition`);
+  if(r.close)parts.push(`CLOSE THREAT at ${r.close} gun${r.close===1?'':'s'} — screen or pack`);
+  if(r.splash)parts.push(`FRIENDLY FIRE RISK at ${r.splash} gun${r.splash===1?'':'s'} — allies near likely impacts`);
+  return parts.join(' · ');
+}

@@ -780,3 +780,33 @@ resources; this supplements, rather than replaces, normal-speed fixture inspecti
 - Evidence under ignored artifacts/: recon-browser-checks.txt,
   recon-performance.txt, recon-circuit-desktop.png, recon-circuit-result.txt and
   recon-circuit-landscape.png. Older balance timings describe their release only.
+
+
+## 0.31.0 — battery feedback and paid offensive timings
+
+- Syntax and deterministic suites passed. Twelve battery checks cover mobile and
+  deployed state, hidden targets, forward observation, reload, friendly-fire risk,
+  read-only behavior, the blind spot, dead threats, packing, group selection and
+  observer loss. Single-gun information no longer gets overwritten by generic role
+  text. The report does not stop a shot or alter any combat rule.
+- Real Chromium suite: 571 checks passed. Inspected desktop, 390×844 portrait and
+  844×390 landscape. Used Resume and the actual Pack artillery control in portrait;
+  the report changed to its mode-transition state. Current morale and range remain
+  visible. Physical device/Safari testing remains unverified.
+- A 64-unit battle with six player guns selected rendered 120 frames in 1998ms;
+  drawing mean/p95 0.554/0.700ms, simulation mean/p95 0.928/1.300ms. The report did
+  not introduce a measured frame bottleneck in this bounded sample.
+- Paid Commander comparisons use identical pre-commitment economy/army records,
+  normal gathering/recruitment and current visibility. Default 18-unit Node march
+  won at 343s, staged push at 288s. Exploratory 14/24-unit commitments show that
+  waiting for a larger force does not always improve the result. Exact commands,
+  measurements and limits are in PUSH-COMPARISON.md; CI now runs test:push.
+- Real-browser 18-unit staged push was unresolved at 901s; no victory is claimed.
+  The browser observation window now caps and pauses at 900s instead of resuming
+  uncontrolled simulation after the fixture timer stops. The earlier 14-unit push
+  won in Chromium at 345s, after regrouping once, with the palace at 1800 health.
+  These are accelerated rendered matches, separate from normal control/layout QA.
+- Ignored evidence: artifacts/battery-browser-checks.txt, battery-desktop.png,
+  battery-portrait.png, battery-landscape.png, battery-performance.txt,
+  push-staged-browser-unresolved.json, push-early-browser.json and
+  push-early-victory.png. The unresolved run remains part of the evidence.

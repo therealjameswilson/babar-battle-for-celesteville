@@ -57,6 +57,7 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    batteryChecks(check);
     reconChecks(check);
     enemyOperationChecks(check);
     enemyRaidExecutionChecks(check);
@@ -806,4 +807,30 @@ function browserReconCircuit(){
   const scout=alive(1).find(u=>u.recon);
   qaReport('Normal-speed reconnaissance fixture; player fog revealed for visual review only. Scout paid through school. '+JSON.stringify(scout?{order:scout.order?.kind,goal:scout.reconGoal?.key,visited:Object.keys(scout.reconVisits||{}),health:Math.round(scout.hp)}:{scout:'lost'}));
  },3000);
+}
+
+function browserPush(policy,size=18){
+ qaReset();pushSetup(size);paused=false;$('overlay').classList.add('hidden');
+ qaInterval=setInterval(()=>{
+  if(!ended&&t<899.99){pushStep(policy);for(let k=0;k<20&&!ended&&t<899.99;k++){update(.05);pushObserve(.05);}}
+  cam={...PUSH_LINE[pushStage],zoom:.8};draw();qaReport(JSON.stringify({policy,...pushResult()},null,2));
+  if(ended||t>=899.99){clearInterval(qaInterval);qaInterval=null;if(!ended)togglePause();}
+ },50);
+}
+function browserStagedPush(){browserPush('staged');}
+function browserMarchPush(){browserPush('march');}
+function browserBatteryStatus(){
+ qaReset();nextWave=enemySpawn=9999;units=units.filter(u=>u.type==='core');rebuildNav();
+ const gun=add('walker',0,650,750,{deployed:true,order:{kind:'hold'}});
+ add('scout',0,820,750);add('trooper',0,910,770);add('trooper',1,950,750);
+ selected=[gun];cam={x:780,y:750,zoom:1};togglePause();sightAt=-1;updateUI(true);draw();
+ qaReport('Paused battery review: forward scout reveals the target; friendly infantry is inside its splash radius. Status warns but does not prevent firing. Resume, pack or reposition the screen.');
+}
+
+function browserEarlyPush(){browserPush('staged',14);}
+
+function browserBatteryBattle(){
+ browserBattle();selected=alive(0).filter(u=>u.type==='walker');
+ for(const gun of selected){gun.deployed=true;issueOrder(gun,{kind:'hold'});}
+ updateUI(true);draw();qaReport('Representative battle with the six-gun live battery report selected.');
 }

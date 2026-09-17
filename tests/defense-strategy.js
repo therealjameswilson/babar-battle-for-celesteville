@@ -1,6 +1,6 @@
 // Earned-resource defensive opening. Uses only player orders and visible threats.
 let defenseCommitted=false;
-function defenseStep(excludedIds = [], allowAdvance = true, reserveSchool = false, reserveSupplies = 0) {
+function defenseStep(excludedIds = [], allowAdvance = true, reserveSchool = false, reserveSupplies = 0, manageArmy = true) {
   if(t<1)defenseCommitted=false;
   if(ended)return;
   const spendable=()=>ore-reserveSupplies;
@@ -43,6 +43,7 @@ function defenseStep(excludedIds = [], allowAdvance = true, reserveSchool = fals
   if(army.length<12||guns.length<2)defenseCommitted=false;
   const advance=allowAdvance&&defenseCommitted;
   if(Math.floor(t)%5===0){
+    if(manageArmy){
     if(advance){selected=army;mode='attack';command(depot.team===0?{x:1400,y:360}:{x:950,y:830});}
     else {
       const defenders=army.filter(u=>u.type!=='walker');
@@ -51,6 +52,7 @@ function defenseStep(excludedIds = [], allowAdvance = true, reserveSchool = fals
         if(dist(gun,{x:480,y:860})>100&&!gun.deployed){selected=[gun];mode='move';command({x:480+(gun.id%3)*35,y:870+(gun.id%2)*40});}
         else if(!gun.deployed&&!gun.artilleryTransition){selected=[gun];toggleArtillery();}
       }
+    }
     }
     const damaged=own.find(u=>!defs[u.type].speed&&!u.construction&&u.hp<u.max*.7);
     if(damaged && !workers.some(w=>w.order?.kind==='repair')){

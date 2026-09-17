@@ -41,7 +41,7 @@
   </head>
   <body>
     <nav>
-      <button id="recon-circuit">Recon circuit</button><button id="defended-outpost">Defended outpost</button><button id="enemy-raid">Enemy economic raid</button><button id="build-queue">Construction queue</button><button id="worker-battle">Worker overlay battle</button><button id="workforce">Workforce report</button><button id="camera-views">Camera views</button><button id="exact-doctrine">Fixed-step doctrine check</button><button id="parallel-doctrine">Two-school doctrine ×20</button><button id="doctrine">Paid doctrine match ×20</button><button id="burst-battle">Infantry burst battle</button><button id="burst-checks">Burst comparisons</button><button id="rapid">Rapid advance</button><button id="walking">Walking review</button><button id="earned-raid">Paid raid match ×20</button><button id="raid">Quarry raid ×20</button><button id="memory">Building intelligence</button><button id="patrol">Patrol route</button><button id="technology">Technology choices</button><button id="directions">Infantry directions</button><button id="waypoints">Blocked waypoints</button><button id="population">Housing raid</button><button id="production">Production report</button><button id="stocks">Scouted stocks</button><button id="adaptive">Adaptive expansion</button><button id="subgroups">Selection subgroups</button><button id="commander">Defensive Commander ×20</button><button id="alerts">Attack reports</button><button id="mixed">Mixed Story ×20</button><button id="counters">Counter battle</button><button id="enemy-economy">Enemy economy</button><button id="economy">Economy opening</button><button id="siege">Siege battle</button><button id="expansion">Expansion checks</button><button id="suite">Run browser checks</button
+      <button id="early-push">Early staged push ×20</button><button id="staged-push">Staged push ×20</button><button id="march-push">Direct march ×20</button><button id="battery-battle">Battery battle</button><button id="battery-status">Battery status</button><button id="recon-circuit">Recon circuit</button><button id="defended-outpost">Defended outpost</button><button id="enemy-raid">Enemy economic raid</button><button id="build-queue">Construction queue</button><button id="worker-battle">Worker overlay battle</button><button id="workforce">Workforce report</button><button id="camera-views">Camera views</button><button id="exact-doctrine">Fixed-step doctrine check</button><button id="parallel-doctrine">Two-school doctrine ×20</button><button id="doctrine">Paid doctrine match ×20</button><button id="burst-battle">Infantry burst battle</button><button id="burst-checks">Burst comparisons</button><button id="rapid">Rapid advance</button><button id="walking">Walking review</button><button id="earned-raid">Paid raid match ×20</button><button id="raid">Quarry raid ×20</button><button id="memory">Building intelligence</button><button id="patrol">Patrol route</button><button id="technology">Technology choices</button><button id="directions">Infantry directions</button><button id="waypoints">Blocked waypoints</button><button id="population">Housing raid</button><button id="production">Production report</button><button id="stocks">Scouted stocks</button><button id="adaptive">Adaptive expansion</button><button id="subgroups">Selection subgroups</button><button id="commander">Defensive Commander ×20</button><button id="alerts">Attack reports</button><button id="mixed">Mixed Story ×20</button><button id="counters">Counter battle</button><button id="enemy-economy">Enemy economy</button><button id="economy">Economy opening</button><button id="siege">Siege battle</button><button id="expansion">Expansion checks</button><button id="suite">Run browser checks</button
       ><button id="victory">Story playthrough ×20</button
       ><button id="loss">Loss playthrough ×20</button
       ><button id="battle">Representative battle</button
@@ -49,16 +49,16 @@
       ><span id="status">Loading game</span>
     </nav>
     <pre id="report"></pre>
-    <iframe id="play" src="../dist/index.html?v=0.30.0"></iframe>
+    <iframe id="play" src="../dist/index.html?v=0.31.0"></iframe>
     <script>
       const frame = document.getElementById('play');
       const sizes = new URLSearchParams(location.search);
       if (sizes.has('width')) { frame.style.width = sizes.get('width') + 'px'; frame.style.height = sizes.get('height') + 'px'; }
       document.querySelectorAll('nav button').forEach(b => b.disabled = true);
       frame.onload = async () => {
-        for (const file of ['burst-strategy.js', 'burst-comparison-checks.js', 'strategy.js', 'raid-strategy.js', 'defense-strategy.js', 'doctrine-strategy.js', 'earned-raid-strategy.js', 'alert-checks.js', 'selection-checks.js', 'resource-memory-checks.js', 'production-checks.js', 'population-checks.js', 'waypoint-checks.js', 'armor-checks.js', 'patrol-checks.js', 'intelligence-checks.js', 'rapid-checks.js', 'camera-view-checks.js', 'workforce-checks.js', 'enemy-raid-scenario.js', 'recon-checks.js', 'enemy-operation-checks.js', 'build-queue-checks.js', 'book-checks.js', 'siege-checks.js', 'economy-checks.js', 'enemy-economy-checks.js', 'counter-checks.js', 'browser-driver.js']) {
+        for (const file of ['burst-strategy.js', 'burst-comparison-checks.js', 'strategy.js', 'raid-strategy.js', 'defense-strategy.js', 'push-strategy.js', 'battery-checks.js', 'doctrine-strategy.js', 'earned-raid-strategy.js', 'alert-checks.js', 'selection-checks.js', 'resource-memory-checks.js', 'production-checks.js', 'population-checks.js', 'waypoint-checks.js', 'armor-checks.js', 'patrol-checks.js', 'intelligence-checks.js', 'rapid-checks.js', 'camera-view-checks.js', 'workforce-checks.js', 'enemy-raid-scenario.js', 'recon-checks.js', 'enemy-operation-checks.js', 'build-queue-checks.js', 'book-checks.js', 'siege-checks.js', 'economy-checks.js', 'enemy-economy-checks.js', 'counter-checks.js', 'browser-driver.js']) {
           const s = frame.contentDocument.createElement('script');
-          s.src = '../tests/' + file + '?v=0.30.0-doctrine5';
+          s.src = '../tests/' + file + '?v=0.31.0-doctrine5';
           s.async = false;
           await new Promise((resolve, reject) => { s.onload = resolve; s.onerror = reject; frame.contentDocument.body.append(s); });
         }
@@ -66,6 +66,11 @@
         document.querySelectorAll('nav button').forEach(b => b.disabled = false);
       };
       for (const [id, fn] of [
+        ['early-push', 'browserEarlyPush'],
+        ['staged-push', 'browserStagedPush'],
+        ['march-push', 'browserMarchPush'],
+        ['battery-battle', 'browserBatteryBattle'],
+        ['battery-status', 'browserBatteryStatus'],
         ['recon-circuit', 'browserReconCircuit'],
         ['defended-outpost', 'browserDefendedOutpost'],
         ['enemy-raid', 'browserEnemyRaid'],
