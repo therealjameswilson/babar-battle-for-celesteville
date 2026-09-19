@@ -297,3 +297,7 @@ performance measurements and updated balance results. Run `npm run test:clock`.
 The field manual (`?`) includes a persistent Battlefield motion setting. System
 follows your device preference; Reduced disables walking poses, bob and drifting
 dust without changing gameplay. Closing the manual restores the prior pause state.
+
+### Character gallery (0.37.0)
+
+Family & council now includes portraits for all 33 roster entries. Open the linked [character gallery](https://therealjameswilson.github.io/babar-battle-for-celesteville/characters.html) to browse full-body sprites and download their transparent sheets. See [art provenance and crop conventions](docs/CHARACTER-ART.md). These are single-pose character assets; existing battlefield animation remains separate.

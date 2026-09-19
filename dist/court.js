@@ -119,8 +119,8 @@ function renderCourt() {
             : 'From wave ' + onset;
     }
     card.innerHTML =
-      '<div class="member-top"><span class="member-monogram">' +
-      member.initials +
+      '<div class="member-top"><span class="member-monogram member-portrait">' +
+      characterArtMarkup(member.id, true) +
       '</span><div><h4>' +
       member.name +
       '</h4><p>' +

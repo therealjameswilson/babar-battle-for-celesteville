@@ -10,3 +10,4 @@ for (const name of ['characters-siege.png', 'buildings-siege.png', 'infantry-dir
     throw Error(name + ' must be 1254px RGBA');
 }
 console.log('PASS: final atlas dimensions and alpha channel');
+require('./character-art.cjs');

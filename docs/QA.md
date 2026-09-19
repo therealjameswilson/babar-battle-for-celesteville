@@ -992,3 +992,12 @@ suite. These are local-only test controls, not deployed game features.
 New visual screenshots and native-input manual testing remain blocked by that
 preview limitation. The changed action is reachable according to browser geometry,
 and existing deployed artwork/layout have not been redesigned in this increment.
+
+## 0.37.0 — character portraits and sprites (2026-09-19)
+
+- Created and visually inspected six generated PNG sheets covering all 33 existing roster ids. Inspected each full-body crop against decoded alpha; no opaque silhouette pixels cross crop edges. Images are single-pose sprites with portrait crops, not new animation cycles.
+- Passed `tests/check.cjs` (including new PNG decoder/crop validation) and `tests/tactics.cjs` (existing simulation/support-power regressions). Local npm is absent in this runtime, so ran the exact package-script targets directly with bundled Node. CI still runs the named npm commands.
+- Real Codex in-app browser: gallery loaded, manual Cornelius search returned one matching card. DOM layout checks at 390×844, 844×390 and 1280×900 showed all 33 cards and no horizontal page overflow.
+- `tests/art-browser.html`: **117 real-browser checks passed**. All six actual image decodes, 33 Canvas draws with visible and transparent pixels, 33 portrait/full-body SVG pairs, search/empty/reset, and all three council tabs at widths 390, 844 and 1280. No warning/error console entries.
+- Screenshot capture returned “Unable to capture screenshot.” Generated source sheets were visually inspected, but final composited page screenshots and a fresh manual animated-game playthrough remain unverified. The source-authored browser fixture dispatches events for its checks; it is not a claim of manual touch playtesting. Existing gameplay and battle animations were not changed in this artwork release.
+- Review evidence: `artifacts/character-art-browser.txt` (ignored, not deployed). Raw online reference images also remain ignored under `artifacts/character-references/`.
