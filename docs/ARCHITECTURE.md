@@ -573,3 +573,19 @@ The field manual exposes System/Reduced/Full motion. audio.js owns the stored
 preference (babar-motion) and the live media-query listener; render.js reads the
 effective reducedMotion value. These controls change presentation only. The
 manual's native close event restores the pause state saved when it opened.
+
+## On-screen type selection — 0.36.0
+
+selection.js owns matching-type selection and single-unit toggling. Double-click
+or Ctrl/Command-click selects living friendly units/buildings whose centers lie
+inside the current canvas viewport; Shift appends matches without duplicates.
+Ordinary Shift-click removes an already selected unit, or adds an absent one.
+The Same type action provides an explicit touch equivalent for a uniform
+selection; mixed armies can first choose their existing unit-type subgroup.
+Selection leaves orders, simulation time, resources and camera unchanged.
+Paused/ended games and open dialogs block matching-type commands.
+
+This increment follows Blizzard's [special-control guide](https://news.blizzard.com/en-us/article/4552955/game-guide-special-control)
+and [simplified-control guide](https://news.blizzard.com/en-us/article/6640645/game-guide-simplified-controls).
+It is a focused control improvement; “10%” is treated as a modest increment,
+not a measurable fidelity score.

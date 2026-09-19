@@ -968,3 +968,27 @@ in motion-blank-control-errors.json, not suppressed. A standalone client load,
 start, motion change, close and automatic resume produced **no captured warnings
 or errors** in its timestamp-bounded observation (motion-standalone-errors.json).
 This scoped observation does not claim every possible future session is error-free.
+
+## 0.36.0 — on-screen selection micro (2026-09-19)
+
+Syntax/atlas and Node tactical checks pass. Thirteen new shared assertions cover
+on-screen matching, faction/life filtering, append/deduplication, Shift removal,
+ordinary replacement, unchanged orders/time/camera, pause/modal guards and
+matching production buildings. Six focused browser checks exercise actual
+Ctrl-click, Shift-click and double-click listeners, the touch action, its viewport
+reachability, and mixed-selection behavior. All **19 focused checks** pass in
+Chromium at desktop, 390×844 portrait and 844×390 landscape. Reports are saved
+as artifacts/selection-{desktop,portrait,landscape}.txt.
+
+This run does not claim the previous full 647-check browser suite passed again.
+The preview loads scripts and runs the focused synchronous fixture, but automation
+input dispatch times out, native dialog close events do not complete, and screenshot
+capture fails. Reopening the preview and explicitly sizing it did not resolve
+those problems. The full suite reaches the existing motion/dialog checkpoint and
+waits. Its dialog waits now use the actual close event instead of an animation
+frame. A run=type URL runs just the changed controls; run=suite retains the full
+suite. These are local-only test controls, not deployed game features.
+
+New visual screenshots and native-input manual testing remain blocked by that
+preview limitation. The changed action is reachable according to browser geometry,
+and existing deployed artwork/layout have not been redesigned in this increment.

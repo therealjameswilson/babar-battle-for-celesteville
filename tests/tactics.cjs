@@ -302,3 +302,7 @@ console.log('PASS: physical base delivery accounting, material separation, counc
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'clock-checks.js'),'utf8'));
 run('clockChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: fixed simulation cadence, frame jitter, interpolation, pause, restart and bounded catch-up.');
+
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'type-selection-checks.js'),'utf8'));
+run('typeSelectionChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: on-screen type selection, mixed append, Shift removal, buildings and input guards.');

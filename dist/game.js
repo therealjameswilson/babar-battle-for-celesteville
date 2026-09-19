@@ -886,6 +886,8 @@ function updateUI(force = false) {
     if (u?.queue.length && selected.length === 1) {
       u.queue.forEach((type, index) => a.push([`Cancel ${index + 1}: ${defs[type].name}`, `Refund ${defs[type].cost}`, () => cancelRecruit(u, index)]));
     }
+    if (u && selected.every(member => member.team === 0 && member.type === u.type))
+      a.push(['Same type', 'Select matching units or buildings on screen', () => selectOnscreenType(u)]);
     const holder = $('actions');
     holder.replaceChildren();
     for (const [name, cost, fn, disabled] of a) {
@@ -974,6 +976,7 @@ canvas.addEventListener('pointerdown', (e) => {
     ...pointer,
     id: e.pointerId,
     shift: e.shiftKey,
+    typeSelect: e.ctrlKey || e.metaKey,
     pan: e.button === 1 || panMode,
     touch: e.pointerType === 'touch',
     cx: cam.x,
@@ -1014,7 +1017,8 @@ canvas.addEventListener('pointerup', (e) => {
   } else {
     let u = nearest(wp, alive(0));
     if (u && dist(u, wp) < u.r + 18) {
-      selected = start.shift ? [...new Set([...selected, u])] : [u];
+      if (start.typeSelect) selectOnscreenType(u, start.shift);
+      else clickSelection(u, start.shift);
     } else if (
       start.touch &&
       selected.length &&

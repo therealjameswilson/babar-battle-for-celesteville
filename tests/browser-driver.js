@@ -33,6 +33,7 @@ async function browserSuite() {
     const check = (ok, label) => {
       if (!ok) throw Error(label);
       results.push('PASS ' + label);
+      parent.document.getElementById('status').textContent='Running '+results.length+': '+label;
     };
     qaReset();const gaitScout=add('scout',0,600,1050);issueOrder(gaitScout,{kind:'move',x:750,y:1050});qaTicks(.5);
     check(gaitScout.walkDistance>20,'Actual navigation advances the visual walk-distance counter');
@@ -60,6 +61,7 @@ async function browserSuite() {
       for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++)if(pixels[(yy*w+xx)*4+3]>20){occupied++;if(xx<3||yy<3||xx>=w-3||yy>=h-3)clipped=true;}
       check(!clipped&&occupied>10000,`Faction ${team}, facing ${direction}: sprite has transparent crop margins and visible artwork`);
     }
+    browserTypeSelectionChecks(check);
     supportChecks(check);
     qaReset();
     const savedMotion=motionPreference, motionTime=t;
@@ -76,11 +78,10 @@ async function browserSuite() {
     check(reducedMotion===matchMedia('(prefers-reduced-motion: reduce)').matches,'System option reads the actual browser media preference');
     check(t===motionTime && JSON.stringify(units.map(u=>[u.id,u.x,u.y,u.hp,u.order?.kind]))===motionOrder,'Motion settings cannot alter simulation time, health or orders');
     $('motion-preference').value=savedMotion;$('motion-preference').dispatchEvent(new Event('change'));
-    $('help-close').click();
-    await new Promise(requestAnimationFrame);
+    await new Promise(resolve=>{$('help-dialog').addEventListener('close',resolve,{once:true});$('help-close').click();});
     check(!paused && !$('help-dialog').open,'Closing motion settings restores command');
-    togglePause();$('help').click();$('help-close').click();
-    await new Promise(requestAnimationFrame);
+    togglePause();$('help').click();
+    await new Promise(resolve=>{$('help-dialog').addEventListener('close',resolve,{once:true});$('help-close').click();});
     check(paused,'Closing the field manual preserves an existing pause');
     togglePause();
     batteryChecks(check);
@@ -269,8 +270,7 @@ async function browserSuite() {
     check(document.querySelector('#court-roster button').disabled, 'Story archive has no purchasable power');
     $('court-search').value = ''; $('tab-elephants').click();
     check(document.querySelectorAll('#court-roster .court-card').length === 28, 'Faction tab retains original and new civilian characters');
-    $('court-close').click();
-    await new Promise(requestAnimationFrame);
+    await new Promise(resolve=>{$('court-dialog').addEventListener('close',resolve,{once:true});$('court-close').click();});
     check(!paused && !$('court-dialog').open, 'Council closes and resumes');
     ore = 10000;
     for (const c of COURT.filter((c) => c.team === 0 && !c.storyOnly)) {
@@ -902,3 +902,38 @@ function browserSecuredCampMatch(){browserExpansionOpening('secured');}
 function browserArmyMatch(){browserExpansionOpening('army');}
 
 function browserClockReplay(){qaReset();const result=clockScenario(60);paused=true;updateUI(true);draw();qaReport(JSON.stringify(result,null,2));}
+
+function browserTypeSelectionChecks(check) {
+    typeSelectionChecks(check);
+    qaReset();units=[];cam={x:900,y:630,zoom:1};
+    const typeGuard=add('trooper',0,870,630),typePartner=add('trooper',0,930,630),typeScout=add('scout',0,900,690);
+    selected=[typeGuard];updateUI(true);
+    const typePoint=screen(typeGuard),typeRect=canvas.getBoundingClientRect();
+    const typeClick=(extra={})=>{
+      for(const kind of ['pointerdown','pointerup'])canvas.dispatchEvent(new PointerEvent(kind,{bubbles:true,pointerId:99,pointerType:'mouse',button:0,clientX:typeRect.left+typePoint.x,clientY:typeRect.top+typePoint.y,...extra}));
+    };
+    typeClick({ctrlKey:true});
+    check(selected.length===2&&selected.includes(typePartner),'Actual Ctrl-click listener selects the on-screen unit type');
+    typeClick({shiftKey:true});check(selected.length===1&&selected[0]===typePartner,'Actual Shift-click listener removes a selected unit');
+    typeClick();
+    canvas.dispatchEvent(new MouseEvent('dblclick',{bubbles:true,button:0,clientX:typeRect.left+typePoint.x,clientY:typeRect.top+typePoint.y}));
+    check(selected.length===2&&selected.includes(typePartner),'Actual double-click listener selects matching units');
+    selected=[typeGuard];updateUI(true);
+    const sameTypeButton=[...$('actions').querySelectorAll('button')].find(b=>b.textContent.startsWith('Same type'));
+    sameTypeButton.scrollIntoView({block:'nearest'});
+    const typeButtonRect=sameTypeButton.getBoundingClientRect();
+    check(typeButtonRect.top>=0&&typeButtonRect.bottom<=innerHeight,'Same type control is reachable inside the viewport');
+    sameTypeButton.click();check(selected.length===2&&selected.includes(typePartner),'Explicit Same type button selects matching units for touch');
+    selected=[typeGuard,typeScout];updateUI(true);
+    check(![...$('actions').querySelectorAll('button')].some(b=>b.textContent.startsWith('Same type')),'Mixed selection requires choosing a type before expanding it');
+
+}
+function browserTypeSelection() {
+  const results=[];
+  try {
+    browserTypeSelectionChecks((ok,label)=>{if(!ok)throw Error(label);results.push('PASS '+label);});
+    qaReport(results.join('\n'));
+    parent.document.getElementById('status').textContent=results.length+' selection checks passed';
+    selected=alive(0).filter(u=>u.type==='trooper');updateUI(true);draw();paused=true;
+  } catch(error) { qaReport('FAIL '+error.stack); }
+}
