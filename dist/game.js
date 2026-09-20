@@ -399,6 +399,7 @@ function shoot(u, v) {
   u.cool = (u.deployed ? SIEGE.rate : d.rate) * (u.morale < 45 ? 1.5 : 1) * (rapidActive(u)?RAPID_ADVANCE.interval:1);
   u.angle = Math.atan2(v.y - u.y, v.x - u.x);
   u.firedAt = t;
+  u.firedAngle = u.angle; // Preserve shot bearing for the brief presentation pose.
   if (u.deployed) {
     // Resolve the entire impact from one snapshot, including nearby friendly troops.
     const victims = units.filter(a => a.hp > 0 && (a === v || dist(a, v) <= SIEGE.radius));

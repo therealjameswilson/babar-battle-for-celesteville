@@ -6,9 +6,9 @@ const context = vm.createContext({});
 vm.runInContext(fs.readFileSync('dist/cast.js','utf8') + '\n' + fs.readFileSync('dist/character-art.js','utf8') + '\nthis.roster=COURT;this.art=CHARACTER_ART;', context);
 assert.equal(context.roster.length, 33);
 assert.deepEqual(Object.keys(context.art).sort(),Array.from(context.roster,c=>c.id).sort());
-function rgba(file) {
+function rgba(file, expectedWidth = 1536, expectedHeight = 1024) {
   const b=fs.readFileSync('dist/'+file), w=b.readUInt32BE(16), h=b.readUInt32BE(20);
-  assert.equal(w,1536); assert.equal(h,1024); assert.equal(b[24],8); assert.equal(b[25],6); assert.equal(b[28],0);
+  assert.equal(w,expectedWidth); assert.equal(h,expectedHeight); assert.equal(b[24],8); assert.equal(b[25],6); assert.equal(b[28],0);
   const blocks=[];
   for(let p=8;p<b.length;) { const n=b.readUInt32BE(p);if(b.toString('ascii',p+4,p+8)==='IDAT')blocks.push(b.subarray(p+8,p+8+n));p+=n+12; }
   const raw=zlib.inflateSync(Buffer.concat(blocks)), stride=w*4, pixels=Buffer.alloc(w*h*4);
@@ -29,3 +29,5 @@ for(const [id,a] of Object.entries(context.art)) {
 }
 assert.equal(sheets.size,6);
 console.log('PASS: all 33 roster sprites, six decoded RGBA atlases, transparent margins, valid portrait/full-body bounds, no opaque pixels clipped');
+
+module.exports = { rgba };

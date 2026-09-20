@@ -301,3 +301,7 @@ dust without changing gameplay. Closing the manual restores the prior pause stat
 ### Character gallery (0.37.0)
 
 Family & council now includes portraits for all 33 roster entries. Open the linked [character gallery](https://therealjameswilson.github.io/babar-battle-for-celesteville/characters.html) to browse full-body sprites and download their transparent sheets. See [art provenance and crop conventions](docs/CHARACTER-ART.md). These are single-pose character assets; existing battlefield animation remains separate.
+
+### Commander animation (0.38.0)
+
+Babar and Rataxes now face four directions, alternate walking poses with distance traveled, and show a firing stance and aligned muzzle flash after a shot. Reduced motion disables the walking cycle and flashes. See [animation assets, prompts and tests](docs/COMMANDER-ANIMATION.md).

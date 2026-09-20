@@ -147,3 +147,7 @@ human balance are not established by these automated replays.
 ## Character artwork 0.37.0
 
 All 33 council members have generated portrait/full-body artwork in six local RGBA sheets. `character-art.js` contains inspected per-character crops; `characters.html` is a searchable full-body gallery linked from Family & council. Source/reference caveats and generation recipe: `docs/CHARACTER-ART.md`. Do not assume equal atlas cells. Children/archives remain support/story roles. `tests/character-art.cjs` is included in `npm run check`; `tests/art-browser.html` passed 117 actual browser checks. Screenshot capture remains unavailable in this preview; see QA for scope. Next artwork task: reference-led costume refinement for the lesser-documented book allies, followed by directional commander walk/fire sheets.
+
+## Commander animation 0.38.0
+
+`commander-animation.js` now draws Babar/Rataxes from local 16-frame RGBA sheets. Foot/muzzle anchors and inspected crops are explicit; preserve them when changing art. Movement is distance-driven, shooting uses firedAt/firedAngle, pause freezes the pose, reduced motion removes the gait/flash. Existing atlases provide a missing-image fallback. See COMMANDER-ANIMATION.md for prompts and architecture. Node crop/pose checks and 309 real-browser checks passed; Canvas review saved under ignored artifacts. Full-page screenshots/manual live-motion QA remain limited; see QA.md. Next art refinement: four-phase gait and diagonal facings.

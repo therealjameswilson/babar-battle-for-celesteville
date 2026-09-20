@@ -131,7 +131,7 @@ function drawUnit(u) {
       width = height * 0.61;
     const bob = !reducedMotion && u.movingUntil > t ? Math.sin(t * 9 + u.id) * 1.1 : 0;
     ctx.save();
-    const directional=drawDirectionalInfantry(u,bob);
+    const directional=drawCommanderSprite(ctx,u,t,reducedMotion) || drawDirectionalInfantry(u,bob);
     if (!directional) {
       if (Math.cos(u.angle) < 0) ctx.scale(-1, 1);
       const col = { hero: 0, worker: 1, trooper: 2, walker: 3, scout: 2, sapper: 2 }[u.type];
@@ -170,7 +170,7 @@ function drawUnit(u) {
       ctx.fillRect(-6, -14, 13, 5);
       ctx.fillRect(-6, 9, 13, 5);
     }
-    if (t - (u.firedAt ?? -10) < 0.12) {
+    if (u.type !== 'hero' && t - (u.firedAt ?? -10) < 0.12) {
       ctx.fillStyle = '#e4c47e';
       ctx.beginPath();
       ctx.arc(u.type === 'walker' ? 40 : 24, 0, u.type === 'walker' ? 7 : 4, 0, Math.PI * 2);
