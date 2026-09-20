@@ -166,3 +166,10 @@ selection/order/pan code stays in game.js. Final CSS phone overrides provide
 470 browser fixture checks pass; see QA.md for physical Safari and screenshot
 limitations. Next task: a physical iPhone Safari match, especially notch/browser
 chrome transitions, gestures and measured battery/frame-time behavior.
+
+## Battlefield art 0.41.0
+
+Static ground now lives in battlefield-art.js and is cached below fog. Preserve
+module order before render.js and include it in the smoke harness. Original earth
+asset and prompt are documented in BATTLEFIELD-ART.md. No simulation terrain was
+added. Browser Canvas review artifacts exist; full-page capture remains blocked.

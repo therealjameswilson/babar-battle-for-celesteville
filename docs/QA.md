@@ -1026,3 +1026,13 @@ and existing deployed artwork/layout have not been redesigned in this increment.
 - Checked main control target sizes (at least 44×44), viewport containment, battlefield height, all three command tabs, pinch zoom, cancellation and release without unintended orders, single-finger orders after pinch, pause/resume, council opening/closing, help and restart availability. Pointer events are programmatically dispatched through actual browser handlers; these are not manual finger gestures.
 - Phone command deck is 250px high in portrait instead of 340px; landscape uses a 270px side panel. Safe-area padding and dynamic viewport height preserve browser chrome space. Existing renderer DPR cap remains 2; no unmeasured frame-rate improvement is claimed.
 - Full-page screenshot capture was attempted and returned “Unable to capture screenshot.” Physical iPhone Safari, actual notch insets, keyboard/browser-toolbar transitions, battery/thermal behavior and manual multi-touch play remain unverified. These require a device pass.
+
+## Battlefield art — 0.41.0 (2026-09-20)
+
+Syntax/asset and deterministic tactics checks passed. New art fixture passed 18
+actual-browser assertions across portrait, landscape and desktop. Generated earth
+and browser-exported battlefield PNGs were visually inspected; first-pass regular
+road stripes/tree spacing were revised to scuffs and varied silhouettes. See
+BATTLEFIELD-ART.md for performance measurement scope and asset provenance. HTML
+briefing text was explicitly given light colors for the darker panel. Full-page
+screenshots and physical iPhone Safari remain unverified.

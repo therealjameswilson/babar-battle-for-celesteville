@@ -97,6 +97,7 @@ for (const file of [
   'character-art.js',
   'court.js',
   'commander-animation.js',
+  'battlefield-art.js',
   'render.js',
 ])
   vm.runInContext(fs.readFileSync(path.join(root, 'dist', file), 'utf8'), sandbox, {

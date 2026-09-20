@@ -1627,3 +1627,24 @@ dialog {
   main {display:grid;grid-template-columns:minmax(0,1fr) 270px;}
   aside {height:100%;border-left:1px solid #63805a;}
 }
+
+/* Brushed field equipment, parchment orders and crisp brass edges. */
+:root {--bg:#171e1a;--panel:#232d27;--line:#62614e;--mint:#c5c9a7;--text:#eee5ce;--muted:#b6baa5;--gold:#cfb77b;--red:#c58576;}
+body, aside {background:#202821;}
+header {background:linear-gradient(#30382f,#1b251f);border-bottom-color:#9b8960;}
+button, select {border-radius:2px;background:#303b31;border-color:#74735c;box-shadow:inset 0 1px #c2b18324;}
+button:hover {background:#424b3b;}
+button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
+.mission, .brief, #production-panel, #camera-views-panel {border-radius:2px;border-color:#9e8a60;}
+.mission {background:#1c2522f2;box-shadow:3px 3px 0 #10171277;}
+.brief {background:linear-gradient(125deg,#263329,#18231e);box-shadow:0 10px 40px #0009;}
+.brief h1 {color:#eee2bb;text-shadow:0 2px #080f0b;}
+#minimap {border-radius:0;border-color:#a28b5e;}
+#health, #health i {border-radius:0;}
+.court-card, .member-portrait {border-radius:2px;}
+.court-card {background:#eee7d4;border-color:#aaa185;}
+#toast {background:#17201ee8;border:1px solid #827957;border-radius:2px;color:#f0e7d1;}
+.brief {color:#e2dcc6;}
+.brief > p:not(.eyebrow), .brief > small {color:#c9cbb6;}
+.brief .eyebrow, .steps b {color:#cbb77d;}
+.steps {border-color:#77745a;}

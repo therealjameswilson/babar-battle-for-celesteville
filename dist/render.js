@@ -113,7 +113,7 @@ function drawUnit(u) {
   const rendered=renderedPosition(u);
   ctx.translate(rendered.x, rendered.y);
   ctx.globalAlpha = u.construction ? 0.65 : 1;
-  ctx.fillStyle = '#1e321e33';
+  ctx.fillStyle = '#10181288';
   ctx.beginPath();
   ctx.ellipse(0, 6, u.r * 1.25, u.r * 0.65, 0, 0, Math.PI * 2);
   ctx.fill();
@@ -255,7 +255,8 @@ function drawUnit(u) {
     ctx.stroke();
     if (u.hp / u.max < 0.35) {
       ctx.fillStyle = '#22251f';
-      ctx.fillRect(-u.r * 0.45, -8, u.r * 0.7, 30);
+      poly([[-u.r*.45,20],[-u.r*.4,-3],[-8,-8],[-2,0],[5,-5],[u.r*.25,9],[u.r*.3,24]],'#1e211d','#76664a');
+      for(let i=0;i<6;i++){ctx.fillStyle=i%2?'#80765e':'#464638';ctx.fillRect(-u.r*.5+i*7,20+(i%3)*3,5,4);}
     }
     for (let i = 0; i < 4; i++) {
       const phase = reducedMotion ? 0.4 : (t * 0.23 + i * 0.25) % 1;
@@ -312,58 +313,14 @@ function draw() {
     canvas.height = Math.round(ch * dpr);
   }
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
   ctx.fillStyle = '#263e30';
   ctx.fillRect(0, 0, cw, ch);
   ctx.translate(cw / 2, ch / 2);
   ctx.scale(cam.zoom, cam.zoom);
   ctx.translate(-cam.x, -cam.y);
-  ctx.fillStyle = '#52604b';
-  ctx.fillRect(0, 0, W, H);
-  for (const road of [
-    [
-      [320, 900],
-      [640, 880],
-      [1080, 870],
-      [1460, 280],
-    ],
-    [
-      [320, 900],
-      [610, 450],
-      [1010, 420],
-      [1460, 280],
-    ],
-  ]) {
-    ctx.strokeStyle = '#766d53';
-    ctx.lineWidth = 62;
-    ctx.lineJoin = 'round';
-    ctx.beginPath();
-    road.forEach((p, i) => (i ? ctx.lineTo(...p) : ctx.moveTo(...p)));
-    ctx.stroke();
-    ctx.strokeStyle = '#524f3e';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([10, 9]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-  }
-  for (const p of terrain) {
-    ctx.fillStyle = p.c > 0.5 ? '#d1c09220' : '#172e2525';
-    ctx.fillRect(p.x, p.y, p.r * 2, p.r);
-  }
-  for (const o of obstacles) {
-    ctx.fillStyle = '#263e30';
-    ctx.fillRect(o.x, o.y, o.w, o.h);
-    for (let y = o.y + 10; y < o.y + o.h; y += 33)
-      for (let x = o.x + 10; x < o.x + o.w; x += 30) {
-        ctx.fillStyle = '#304a36';
-        ctx.beginPath();
-        ctx.arc(x, y, 22, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = '#1f352980';
-        ctx.beginPath();
-        ctx.arc(x - 6, y + 5, 14, 0, Math.PI * 2);
-        ctx.fill();
-      }
-  }
+  drawBattlefieldGround(ctx);
   for (const c of covers) {
     ctx.strokeStyle = '#b1a17a60';
     ctx.lineWidth = 1;
@@ -469,7 +426,7 @@ function draw() {
   }
   fc.clearRect(0, 0, cw, ch);
   if (t >= revealUntil) {
-    fc.fillStyle = '#183427bd';
+    fc.fillStyle = '#141c1fbd';
     fc.fillRect(0, 0, cw, ch);
     fc.globalCompositeOperation = 'destination-out';
     for (const u of alive(0)) {
@@ -532,8 +489,7 @@ function draw() {
   for (const f of fx) {
     ctx.globalAlpha = f.life / f.max;
     if (f.shellImpact) {
-      ctx.fillStyle = '#99846540'; ctx.strokeStyle = '#d6b473'; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.arc(f.x, f.y, f.r * (reducedMotion ? 1 : 1 - f.life / f.max * .6), 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      drawShellImpact(ctx,f,reducedMotion);
     } else if (f.burst) {
       ctx.fillStyle = '#252a24';
       ctx.beginPath();
