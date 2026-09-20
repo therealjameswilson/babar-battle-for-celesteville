@@ -151,3 +151,7 @@ All 33 council members have generated portrait/full-body artwork in six local RG
 ## Commander animation 0.38.0
 
 `commander-animation.js` now draws Babar/Rataxes from local 16-frame RGBA sheets. Foot/muzzle anchors and inspected crops are explicit; preserve them when changing art. Movement is distance-driven, shooting uses firedAt/firedAngle, pause freezes the pose, reduced motion removes the gait/flash. Existing atlases provide a missing-image fallback. See COMMANDER-ANIMATION.md for prompts and architecture. Node crop/pose checks and 309 real-browser checks passed; Canvas review saved under ignored artifacts. Full-page screenshots/manual live-motion QA remain limited; see QA.md. Next art refinement: four-phase gait and diagonal facings.
+
+## Fire discipline 0.39.0
+
+Hold fire / Weapons free (C) is a persistent stance for combat units. Both acquisition and shoot enforce it. Fresh player focus orders set forceFire for one target; enabling Hold fire clears earlier focus permissions while preserving routes. See FIRE-DISCIPLINE.md. Node checks and 108 actual browser fixture checks passed. The action grid now constrains/wraps text on mobile. Full-page screenshots/manual playthrough remain limited by preview tooling; do not describe fixture events as manual touch QA. Next focused improvement: contextual retreat/escort control for protecting an artillery battery while repositioning.

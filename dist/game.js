@@ -394,7 +394,7 @@ function damageUnit(u, v, baseDamage, scale = 1) {
   }
 }
 function shoot(u, v) {
-  if (u.hp <= 0 || v.hp <= 0 || u.artilleryTransition || !inWeaponArc(u, v) || !sees(u.team, v)) return false;
+  if (!firePermission(u,v) || u.hp <= 0 || v.hp <= 0 || u.artilleryTransition || !inWeaponArc(u, v) || !sees(u.team, v)) return false;
   const d = defs[u.type];
   u.cool = (u.deployed ? SIEGE.rate : d.rate) * (u.morale < 45 ? 1.5 : 1) * (rapidActive(u)?RAPID_ADVANCE.interval:1);
   u.angle = Math.atan2(v.y - u.y, v.x - u.x);
@@ -542,7 +542,7 @@ function update(dt) {
     }
     if (u.order?.kind==='patrol'&&!u.order.returnPoint) u.order.returnPoint={x:u.x,y:u.y};
     if (u.order?.target && (u.order.target.hp <= 0 || !sees(u.team, u.order.target))) completeOrder(u);
-    if (d.damage && u.order?.kind !== 'move') {
+    if (d.damage && u.order?.kind !== 'move' && firePermission(u)) {
       let target = null;
       const range = weaponRange(u);
       const enemies = alive(1 - u.team).filter((a) => sees(u.team, a) && (!u.deployed || dist(u, a) >= SIEGE.minimum));
@@ -550,7 +550,7 @@ function update(dt) {
       else
         target = nearest(
           u,
-          enemies.filter((a) => dist(u, a) < range + a.r + (u.order?.kind === 'hold' || u.deployed ? 0 : 65))
+          enemies.filter((a) => !u.holdFire && dist(u, a) < range + a.r + (u.order?.kind === 'hold' || u.deployed ? 0 : 65))
         );
       if (target) {
         const distance = dist(u, target);
@@ -703,7 +703,7 @@ function command(p, append = queueOrders) {
   movers.forEach((u, i) => {
     if (mode !== 'patrol' && u.type === 'worker' && node) issueOrder(u, { kind: 'gather', node }, append);
     else if (mode === 'gather') return;
-    else if (mode !== 'patrol' && enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy }, append);
+    else if (mode !== 'patrol' && enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy, forceFire: true }, append);
     else {
       let cols = Math.ceil(Math.sqrt(movers.length)),
         ox = ((i % cols) - (cols - 1) / 2) * 40,
@@ -833,6 +833,8 @@ function updateUI(force = false) {
   }else if(selected.length&&selected.every(w=>w.type==='worker')){
     $('selected-info').textContent='Provisioners gather, deliver, construct and repair. Assign Gather to a Supplies cache or Materials Quarry.';
   }
+  const fireStatus = fireDisciplineSummary();
+  if (fireStatus) $('tactical-status').textContent += ' · ' + fireStatus;
   $('depot-status').textContent =
     'DEPOT ' +
     (depot.team === 0 ? 'OURS · +2/s' : depot.team === 1 ? 'RHINOS' : 'CONTESTED') +
@@ -840,9 +842,12 @@ function updateUI(force = false) {
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
-  if (force || key + rapidKey !== actionKey) {
-    actionKey = key + rapidKey;
+  const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('');
+  if (force || key + rapidKey + disciplineKey !== actionKey) {
+    actionKey = key + rapidKey + disciplineKey;
     let a = [];
+    const armed = selected.filter(u=>u.team===0&&fireDisciplineUnit(u));
+    if(armed.length) a.push([armed.every(u=>u.holdFire)?'Weapons free':'Hold fire','C · '+armed.filter(u=>u.holdFire).length+'/'+armed.length+' holding fire',toggleFireDiscipline]);
     const infantry=selected.filter(u=>u.team===0&&rapidInfantry(u));
     if(infantry.length){
       const ready=infantry.filter(rapidReady).length;
@@ -894,7 +899,7 @@ function updateUI(force = false) {
     for (const [name, cost, fn, disabled] of a) {
       const b = document.createElement('button');
       b.innerHTML = '<span>' + name + '</span><small>' + cost + '</small>';
-      if (name==='Rapid advance'||Object.values(researchDefs).some(tech=>tech.name===name)) b.className='research-action';
+      if (['Hold fire','Weapons free','Rapid advance'].includes(name)||Object.values(researchDefs).some(tech=>tech.name===name)) b.className='research-action';
       b.onclick = fn;
       b.disabled = !!disabled;
       holder.appendChild(b);
@@ -1071,6 +1076,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'm') setMode('move');
   if (e.key.toLowerCase() === 'p') setMode('patrol');
   if (e.key.toLowerCase() === 'v') rapidAdvance();
+  if (e.key.toLowerCase() === 'c' && !e.ctrlKey && !e.metaKey && !e.altKey && !['INPUT','TEXTAREA'].includes(e.target.tagName) && !e.target.isContentEditable) toggleFireDiscipline();
   if (e.key.toLowerCase() === 'g') setMode('gather');
   if (e.key.toLowerCase() === 's') tacticalOrders('hold');
   if (e.key.toLowerCase() === 'r') tacticalOrders('retreat');

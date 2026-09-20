@@ -306,3 +306,6 @@ console.log('PASS: fixed simulation cadence, frame jitter, interpolation, pause,
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'type-selection-checks.js'),'utf8'));
 run('typeSelectionChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: on-screen type selection, mixed append, Shift removal, buildings and input guards.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'fire-discipline-checks.js'),'utf8'));
+run('fireDisciplineChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: fire discipline, silent movement/patrol, ambush release, explicit focus, target loss, faction symmetry, mixed groups, routes, modal guards and reset.');

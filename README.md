@@ -305,3 +305,7 @@ Family & council now includes portraits for all 33 roster entries. Open the link
 ### Commander animation (0.38.0)
 
 Babar and Rataxes now face four directions, alternate walking poses with distance traveled, and show a firing stance and aligned muzzle flash after a shot. Reduced motion disables the walking cycle and flashes. See [animation assets, prompts and tests](docs/COMMANDER-ANIMATION.md).
+
+### Fire discipline (0.39.0)
+
+Select soldiers or commanders and press **C**, or use **Hold fire / Weapons free**. Silent units scout and follow routes without automatically engaging. A new focus-fire command permits only its chosen target; weapons free releases the selected force. This enables deliberate ambushes and artillery volleys, but provides no invisibility. [Rules and tests](docs/FIRE-DISCIPLINE.md).

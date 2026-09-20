@@ -132,7 +132,7 @@ function tacticalOrders(kind) {
   say(
     kind === 'retreat'
       ? 'Withdraw to the aid station. Officers restore morale.'
-      : 'Hold this ground. Fire only within range.'
+      : 'Hold this ground. Current fire discipline still applies.'
   );
   updateUI(true);
 }
