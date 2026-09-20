@@ -309,3 +309,13 @@ Babar and Rataxes now face four directions, alternate walking poses with distanc
 ### Fire discipline (0.39.0)
 
 Select soldiers or commanders and press **C**, or use **Hold fire / Weapons free**. Silent units scout and follow routes without automatically engaging. A new focus-fire command permits only its chosen target; weapons free releases the selected force. This enables deliberate ambushes and artillery volleys, but provides no invisibility. [Rules and tests](docs/FIRE-DISCIPLINE.md).
+
+## iPhone controls (0.40.0)
+
+Phone layouts use **Orders**, **Build / skills**, and **Unit status** tabs with
+44px or larger primary touch buttons. Drag two fingers to pan; pinch to zoom.
+The entire gesture, including the last finger lifting, cannot issue an order.
+One finger still selects, box-selects, or applies the chosen order; Pan map
+switches it to camera movement. Switching apps pauses the match. Resume manually.
+The layout accounts for safe-area insets and changing browser-toolbar height.
+Restart remains available from the field manual (`?`). No installation required.

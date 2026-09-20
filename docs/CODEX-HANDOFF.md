@@ -155,3 +155,14 @@ All 33 council members have generated portrait/full-body artwork in six local RG
 ## Fire discipline 0.39.0
 
 Hold fire / Weapons free (C) is a persistent stance for combat units. Both acquisition and shoot enforce it. Fresh player focus orders set forceFire for one target; enabling Hold fire clears earlier focus permissions while preserving routes. See FIRE-DISCIPLINE.md. Node checks and 108 actual browser fixture checks passed. The action grid now constrains/wraps text on mobile. Full-page screenshots/manual playthrough remain limited by preview tooling; do not describe fixture events as manual touch QA. Next focused improvement: contextual retreat/escort control for protecting an artillery battery while repositioning.
+
+## iPhone controls 0.40.0
+
+`mobile.js` owns the compact command tabs, field-manual restart link, two-finger
+navigation and visibility auto-pause. Capture-phase pointer listeners suppress
+orders until every finger from a navigation gesture lifts. Existing one-finger
+selection/order/pan code stays in game.js. Final CSS phone overrides provide
+44px primary targets, safe-area padding and dvh layout; desktop retains its panel.
+470 browser fixture checks pass; see QA.md for physical Safari and screenshot
+limitations. Next task: a physical iPhone Safari match, especially notch/browser
+chrome transitions, gestures and measured battery/frame-time behavior.

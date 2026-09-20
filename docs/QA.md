@@ -1018,3 +1018,11 @@ and existing deployed artwork/layout have not been redesigned in this increment.
 - **108 real-browser checks passed** through `tests/fire-discipline-browser.html` at 390×844, 844×390 and 1280×900. These include the shared simulation checks plus actual DOM button handlers, keyboard events, copy/search guards, status, no horizontal overflow, action bounds and battlefield drawing. This is a source-authored browser fixture, not manual touch playtesting.
 - The first browser run caught an action extending beyond the phone viewport. Constrained grid columns and wrapped labels fixed the overflow, including the existing Same type description. Reloaded with a fresh stylesheet version and reran all three layouts successfully.
 - No warning/error console entries were reported for the fixture. Full-page screenshot capture still fails in the preview, so visual screenshots and a manual playthrough are not newly verified for this release. Text evidence is saved under ignored `artifacts/fire-discipline-browser.txt`.
+
+## iPhone command deck — 0.40.0 (2026-09-20)
+
+- Syntax/asset checks and deterministic tactics regression passed using the bundled Node runtime (the same check/test entry points used by npm in CI).
+- Real Chromium browser fixture `tests/phone-browser.html`: **470 assertions passed** at 320×568, 375×667, 390×844, 430×932, 667×375, 844×390, 932×430 and desktop 1280×900.
+- Checked main control target sizes (at least 44×44), viewport containment, battlefield height, all three command tabs, pinch zoom, cancellation and release without unintended orders, single-finger orders after pinch, pause/resume, council opening/closing, help and restart availability. Pointer events are programmatically dispatched through actual browser handlers; these are not manual finger gestures.
+- Phone command deck is 250px high in portrait instead of 340px; landscape uses a 270px side panel. Safe-area padding and dynamic viewport height preserve browser chrome space. Existing renderer DPR cap remains 2; no unmeasured frame-rate improvement is claimed.
+- Full-page screenshot capture was attempted and returned “Unable to capture screenshot.” Physical iPhone Safari, actual notch insets, keyboard/browser-toolbar transitions, battery/thermal behavior and manual multi-touch play remain unverified. These require a device pass.

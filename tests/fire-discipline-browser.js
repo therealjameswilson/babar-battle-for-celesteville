@@ -8,6 +8,7 @@
    const ready=new Promise(r=>f.onload=r);f.src='../dist/index.html?v=0.39.0-discipline2';document.getElementById('games').append(f);await ready;
    const g=f.contentWindow,d=f.contentDocument;g.eval(checks);g.fireDisciplineChecks(check);
    g.eval("reset();running=true;paused=false;selected=[alive(0).find(u=>u.type==='scout')||add('scout',0,500,1000)];updateUI(true)");
+   d.querySelector('#phone-tabs [data-panel=actions]')?.click();
    const button=name=>[...d.querySelectorAll('#actions button')].find(b=>b.querySelector('span')?.textContent===name);
    check(!!button('Hold fire'),'Touch action present');button('Hold fire').click();
    check(g.eval('selected[0].holdFire'),'Touch action enables stance');

@@ -1567,3 +1567,63 @@ dialog {
 @media (min-width:951px) and (min-height:501px) {
   #actions { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
+
+/* Phone command deck: one scroll region per tab, with a clear battlefield. */
+#phone-tabs {display:none;}
+@media (max-width:580px), (max-height:500px) and (min-width:581px) {
+  html {height:100%;overscroll-behavior:none;}
+  body {height:100vh;height:100dvh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overscroll-behavior:none;}
+  button {touch-action:manipulation;}
+  header {height:96px;padding:4px 8px;display:flex;flex-wrap:wrap;gap:4px;}
+  header .brand {display:none;}
+  .resources {width:100%;margin:0;justify-content:space-around;gap:6px;font-size:14px;}
+  .resources em {font-size:9px;margin:0;}
+  header button, header #pause, header #help, header .court-button {height:44px;min-height:44px;padding:6px 8px;font-size:12px;margin:0;}
+  header #help {min-width:44px;}
+  header .court-button {flex:1;}
+  main {min-height:0;}
+  .field {min-height:0;}
+  footer {display:none;}
+  aside {height:250px;min-height:0;padding:6px 8px;display:flex;flex-direction:column;gap:6px;overflow:hidden;}
+  #phone-tabs {display:flex;gap:4px;flex-shrink:0;}
+  #phone-tabs button {flex:1;min-width:0;min-height:44px;padding:4px;font-size:12px;}
+  aside .panel-title, aside .hint, aside .selection, aside #actions, aside .quick, aside .orders {display:none;}
+  aside[data-panel='orders'] .quick, aside[data-panel='orders'] .orders {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;margin:0;padding:0;border:0;flex-shrink:0;}
+  aside[data-panel='orders'] .quick {grid-auto-rows:auto;}
+  aside[data-panel='orders'] {overflow-y:auto;}
+  aside .orders p, aside kbd {display:none;}
+  aside .quick button, aside .orders button {min-height:44px;padding:4px;font-size:12px;}
+  aside[data-panel='actions'] #actions {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-height:none;overflow-y:auto;min-height:0;align-content:start;}
+  aside #actions button, aside #actions .research-action {min-height:48px;padding:8px;font-size:13px;}
+  aside[data-panel='status'] .selection {display:block;overflow-y:auto;margin:0;}
+  #selected-info, .selection #selected-info.economy-info {font-size:13px;max-height:none;overflow:visible;}
+  #tactical-status {font-size:12px;line-height:1.4;}
+  #health {display:block;}
+  .mission {top:5px;left:5px;right:auto;max-width:calc(100% - 10px);padding:3px 6px;}
+  .mission > span, .mission > strong, .map-label {display:none;}
+  .mission small {font-size:10px;}
+  #production-open {min-height:44px;margin:0;}
+  #attack-alert {min-height:44px;}
+  .camera-tools {left:6px;right:auto;bottom:6px;display:flex;gap:4px;}
+  .camera-tools button {min-width:44px;min-height:44px;padding:5px;font-size:12px;}
+  .field #minimap {right:6px;bottom:56px;width:86px;height:60px;}
+  #toast {left:6px;right:100px;bottom:55px;font-size:11px;pointer-events:none;}
+  aside, #actions, .selection, dialog {overscroll-behavior:contain;touch-action:pan-y;}
+  dialog {max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));overflow-y:auto;}
+  dialog button, #court-search, dialog select {min-height:44px;}
+  #court-search, dialog select {font-size:16px;}
+  .court-heading {position:sticky;top:-1px;background:#ece8ce;z-index:2;}
+  .brief {overflow-y:auto;max-height:100%;padding:12px;}
+  .brief .story-portrait, .brief .steps {display:none;}
+  .brief h1 {font-size:25px;margin:6px 0;}
+  .brief h1 br {display:none;}
+  .brief > p:not(.eyebrow) {font-size:12px;line-height:1.4;margin:6px 0;}
+  .launch select {font-size:16px;min-width:0;max-width:100%;}
+  .launch button {min-height:44px;}
+}
+@media (max-height:500px) and (min-width:581px) {
+  header {height:52px;flex-wrap:nowrap;}
+  .resources {width:auto;flex:1;}
+  main {display:grid;grid-template-columns:minmax(0,1fr) 270px;}
+  aside {height:100%;border-left:1px solid #63805a;}
+}
