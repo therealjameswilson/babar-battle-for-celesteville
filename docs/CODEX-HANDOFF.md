@@ -181,3 +181,8 @@ and before render. It does not advance simulation. Three 8-second scenes use
 original dialogue and generated local border artwork. Skip/Escape/timer completion
 return to briefing; reduced motion uses manual advance. Keep all score voices and
 timers cleaned up on close. Browser fixture includes full timed completion.
+
+0.43.0 adds hero-combat.js before tactics.js: Babar Fight/Royal strike and Madame’s
+independent Iron Parasol council attack. See HERO-COMBAT.md for costs, targeting,
+state guards and module responsibilities. The shared hero-combat-checks.js runs
+in deterministic tests and tests/hero-combat-browser.html (108 browser checks).

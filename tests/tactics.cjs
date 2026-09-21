@@ -309,3 +309,6 @@ console.log('PASS: on-screen type selection, mixed append, Shift removal, buildi
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'fire-discipline-checks.js'),'utf8'));
 run('fireDisciplineChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: fire discipline, silent movement/patrol, ambush release, explicit focus, target loss, faction symmetry, mixed groups, routes, modal guards and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'hero-combat-checks.js'),'utf8'));
+run('heroCombatChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: hero fighting, strike costs/cooldowns, focus, cover, fog/range, stance and state guards.');

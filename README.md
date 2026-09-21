@@ -327,3 +327,13 @@ Choose Begin opening to enable its original synthesized score, or Skip to briefi
 Pause, Next scene, mute and Escape remain available. Reduced motion uses static,
 manually advanced scenes. Returning from another app requires Resume opening.
 Watch opening replays it from the briefing; combat begins only with Take command.
+
+### Hero combat
+
+Select Babar → Build / skills → Fight, then tap an enemy or ground. Royal strike
+(F) spends 35 energy for 60 base damage with a 12-second cooldown. Energy is shared
+with Stand together. In Family / council, Madame’s separate Iron Parasol button
+spends 90 supplies to hit a visible enemy within 220m of Babar for 160 base damage,
+plus 70 splash within 90m and 30 additional morale loss. Cooldown: 45 seconds.
+Her original permanent population bonus remains independent. These are invented
+game abilities. See [combat rules](docs/HERO-COMBAT.md).

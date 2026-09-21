@@ -772,7 +772,7 @@ function updateUI(force = false) {
           : u.type === 'walker'
             ? (u.artilleryTransition ? (u.artilleryTransition.deploy ? 'Deploying' : 'Packing') + ' · ' + Math.ceil(u.artilleryTransition.until - t) + 's' : u.deployed ? 'Deployed: range 90–390m; splash hits allies. Move or Retreat packs the gun in 2s.' : 'Mobile gun. Deploy (D): 3s setup, 390m range and splash. Needs a scout and infantry screen.')
           : u.type === 'hero'
-            ? 'Stand together: +20 morale and 25% less damage for nearby troops, for 8s.'
+            ? 'Fighter · 24 damage / 0.85s · 100m. Fight chooses a target; Royal strike deals 60 damage for 35 energy. Q protects nearby troops.'
             : u.type === 'worker'
               ? (u.order?.node?.kind === 'materials' ? 'Quarry duty: ' + (quarryFor(u.order.node, 0) ? '3 extraction slots. Return Materials to a headquarters or linked palace/home.' : 'WAITING: complete and supply a quarry on this deposit.') : 'Gathers Supplies (2 extraction slots per cache). Quarries yield Materials. Can build and repair.')
               : u.type === 'core'
@@ -842,7 +842,7 @@ function updateUI(force = false) {
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
-  const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('');
+  const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
   if (force || key + rapidKey + disciplineKey !== actionKey) {
     actionKey = key + rapidKey + disciplineKey;
     let a = [];
@@ -855,6 +855,10 @@ function updateUI(force = false) {
       a.push(['Rapid advance',technologies.has('rapid')?`V · ${ready}/${infantry.length} ready · 20 health · 6s burst${cooldown?' · '+cooldown+'s cooldown':''}`:'Research Rapid advance doctrine at a Guard School',rapidAdvance,!ready]);
     }
     if (u && !u.construction && selected.length === 1) {
+      if (u.type === 'hero') {
+        a.push(['Fight','Tap enemy to focus fire · tap ground to advance',()=>heroFight(u)]);
+        a.push(['Royal strike',t<(u.strikeReadyAt||0)?Math.ceil(u.strikeReadyAt-t)+'s cooldown':'F · 35 energy · 60 damage · 100m',()=>royalStrike(u),u.commandEnergy<35||t<(u.strikeReadyAt||0)]);
+      }
       if (u.type === 'hero') a.push(['Babar: Stand together', Math.max(0, u.commandReadyAt - t) > 0 ? Math.ceil(u.commandReadyAt - t) + 's cooldown' : '50 energy · Q', () => commanderAbility(u)]);
       if (workerProducer(u)) a.push(['Provisioner', '● 50', () => train('worker')]);
       if (u.type === 'forge') {
@@ -1071,6 +1075,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key.toLowerCase() === 'i') selectIdleWorkers();
   if (e.key.toLowerCase() === 't') cycleSubgroup(e.shiftKey);
   if (e.key.toLowerCase() === 'd') toggleArtillery();
+  if (e.key.toLowerCase() === 'f' && !e.ctrlKey && !e.metaKey && !e.altKey && !['INPUT','TEXTAREA'].includes(e.target.tagName) && !e.target.isContentEditable) royalStrike(selected.find(u=>u.type==='hero'));
   if (e.key.toLowerCase() === 'q') commanderAbility(selected.find(u => u.type === 'hero'));
   if (e.key.toLowerCase() === 'a') setMode('attack');
   if (e.key.toLowerCase() === 'm') setMode('move');

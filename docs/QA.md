@@ -1048,3 +1048,15 @@ landscape was visually inspected. Full-page screenshot capture still reports
 unavailable; native browser click injection timed out. Fixture actions run in the
 real browser, but are programmatic and do not establish physical Safari or
 speaker-listening verification. See OPENING.md for design and asset provenance.
+
+## Hero combat and Madame — 0.43.0 (2026-09-21)
+
+Syntax/assets and full deterministic tactics suite passed. Shared combat assertions
+cover basic attacks, Royal strike costs/cooldowns, focus, cover, fog/range, fire
+stance and state guards; Madame primary/splash damage, suppression, costs,
+cooldown, range, pause/end guards and independent population support.
+Real in-app browser fixture passed 108 checks at 390×844, 844×390 and 1280×900,
+including actual Fight/strike buttons, F shortcut, disabled cooldown, Madame’s
+council attack during its modal pause, visible cooldown and action layout bounds.
+These use programmatic browser events in the real client. Physical iPhone Safari,
+native touch injection and full-page screenshot verification remain unverified.

@@ -146,6 +146,14 @@ function renderCourt() {
       !!member.team || !!member.storyOnly || !running || ended || active || ready > 0 || ore < member.cost;
     button.onclick = () => usePower(member.id);
     card.appendChild(button);
+    if(member.id==='madame') {
+      const attack=document.createElement('button');
+      const wait=Math.max(0,(usedPowers['madame-attack']??-1000)+IRON_PARASOL.cooldown-t);
+      attack.textContent=wait>0?'Iron Parasol · '+Math.ceil(wait)+'s':'Iron Parasol · 90 supplies';
+      attack.disabled=!running || ended || wait>0 || ore<IRON_PARASOL.cost;
+      attack.onclick=madameAttack;
+      card.appendChild(attack);
+    }
     holder.appendChild(card);
   }
   if (!count) { const empty = document.createElement('p'); empty.textContent = 'No matching characters in this section. Try another name or tab.'; holder.appendChild(empty); }
