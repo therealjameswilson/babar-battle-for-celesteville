@@ -318,3 +318,6 @@ console.log('PASS: Munitions income, denial, cap, conversion, costs, buffs, expi
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'atomic-checks.js'),'utf8'));
 run('atomicChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: atomic tech gates, faction costs, assembly, isolation, fog, AI targeting, warning, blast, counterplay and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'hbomb-checks.js'),'utf8'));
+run('hbombChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: H-bomb prerequisites, costs, faction parity, shared cap, payload identity, warning, blast and AI launch.');

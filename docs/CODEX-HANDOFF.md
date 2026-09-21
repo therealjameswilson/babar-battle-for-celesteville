@@ -204,3 +204,7 @@ See PHONE-DIRECT.md and phone-direct.html / phone-browser.html for regression QA
 counterplay and fair enemy targeting. Atomic research requires shells + armor2;
 researchRequirement supports requiresAlso. Assembly blocks site training/research.
 See ATOMIC.md for balance values and tests/atomic-browser.html for browser QA.
+
+0.48.0 adds hydrogen research after atomic. atomic.js shares logic via payloadSpec,
+with kind preserved in atomicJob/atomicKind/strike.kind; missing kind retains legacy
+atomic behavior. render.js owns warning drawing. See H-BOMB.md and hbomb-browser.html.

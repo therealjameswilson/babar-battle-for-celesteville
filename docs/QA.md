@@ -1107,3 +1107,14 @@ pause/end guards and reset. Real in-app browser fixture passed 102 checks at
 390×844, 844×390 and 1280×900, including actual assembly/launch buttons, touch map
 targeting, warning HUD and layout. No browser warnings/errors were reported.
 Physical iPhone Safari and long human-played endgame balance remain unverified.
+
+## H-bomb tier — 0.48.0 (2026-09-21)
+
+Syntax/assets and full deterministic tactics suite passed, including existing
+atomic checks. New checks cover H prerequisite, costs and assembly duration for
+both factions, shared payload limit, no free upgrades, 28-second warning, larger
+blast radius/damage, supply interruption, visible AI launch and invalid kind guard.
+The real in-app browser passed 87 checks across 390×844, 844×390 and 1280×900,
+including assembly/launch buttons, touch targeting and H-BOMB countdown in the HUD.
+No browser console warnings/errors. Physical iPhone testing and long human-played
+endgame balance remain unverified; this extends the existing tested launch model.

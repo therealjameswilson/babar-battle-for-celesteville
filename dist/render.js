@@ -616,7 +616,7 @@ function draw() {
     mc.fillRect((u.x / W) * 300 - s / 2, (u.y / H) * 210 - s / 2, s, s);
   }
   for(const a of activeAttacks()){mc.strokeStyle='#ffb58c';mc.lineWidth=2;mc.beginPath();mc.arc(a.x/W*300,a.y/H*210,7,0,Math.PI*2);mc.stroke();}
-  for(const s of atomicStrikes){mc.strokeStyle='#ffba77';mc.lineWidth=2;mc.beginPath();mc.arc(s.x/W*300,s.y/H*210,ATOMIC.radius/W*300,0,Math.PI*2);mc.stroke();}
+  for(const s of atomicStrikes){mc.strokeStyle='#ffba77';mc.lineWidth=2;mc.beginPath();mc.arc(s.x/W*300,s.y/H*210,payloadSpec(s.kind).radius/W*300,0,Math.PI*2);mc.stroke();}
   mc.strokeStyle = '#fff1bc';
   mc.lineWidth = 1.5;
   mc.strokeRect(
@@ -664,4 +664,13 @@ function drawResourceWork(n,y){
  ctx.font='9px monospace';ctx.fillStyle=r.state==='working'?'#e1ca82':'#e4b3a0';
  ctx.fillText(`${r.extracting}/${r.slots} extracting · ${r.assigned} assigned`,n.x-58,y);
  if(r.state!=='working')ctx.fillText(r.state==='isolated'?'SUPPLY CUT':r.state==='construction'?'BUILDING':r.state==='missing'?'QUARRY NEEDED':r.state.toUpperCase(),n.x-40,y+12);
+}
+
+function drawAtomicWarnings(){
+  for(const s of atomicStrikes){
+    ctx.save();ctx.strokeStyle='#ffba77';ctx.lineWidth=3;ctx.setLineDash([9,6]);
+    ctx.beginPath();ctx.arc(s.x,s.y,payloadSpec(s.kind).radius,0,Math.PI*2);ctx.stroke();
+    ctx.setLineDash([]);ctx.fillStyle='#fff0cf';ctx.font='bold 16px sans-serif';ctx.textAlign='center';
+    ctx.fillText(payloadLabel(s.kind)+' IMPACT · '+Math.ceil(Math.max(0,s.at-t))+'s',s.x,s.y-payloadSpec(s.kind).radius-12);ctx.restore();
+  }
 }

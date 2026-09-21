@@ -35,7 +35,7 @@ read hidden positions. Killing scouts can deny targeting; destroying quarries or
 workers starves the resource-intensive progression. Enemy AI can use the feature,
 but it is not guaranteed a free bomb or a scripted launch each mission.
 
-atomic.js owns assembly, launch, AI selection and warning drawing. game.js owns
+atomic.js owns assembly, launch and AI selection; render.js owns warning drawing. game.js owns
 research definitions and command/UI hooks; combat-roles.js enforces the extra
 research prerequisite; production/economy prevent queue overlap. Reset clears all
 strikes and targeting. Original Canvas rings/smoke and existing local sounds are
@@ -45,3 +45,5 @@ Validation: tests/atomic-checks.js runs in Node and the real-browser fixture
 atomic-browser.html. Coverage includes faction parity, tech gates, costs, assembly,
 supply loss, visibility, enemy targeting, warning delay, friendly fire, launcher
 counterplay, pause/end/reset and touch activation at phone/desktop sizes.
+
+The next tier is documented in [H-BOMB.md](H-BOMB.md).

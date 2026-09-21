@@ -1,0 +1,11 @@
+function hbombChecks(check){
+ function fresh(team=0){reset();running=true;paused=false;units=units.filter(u=>u.type==='core');const b=add('factory',team,900,1000);linked.add(b.id);ore=enemyBudget=5000;materials=enemyMaterials=2000;selected=team?[]:[b];return b;}
+ let b=fresh();check(!!researchRequirement('hydrogen',0),'H research needs atomic');technologies.add('atomic');check(!researchRequirement('hydrogen',0)&&purchaseResearch(b,'hydrogen'),'H research purchase');check(ore===4000&&materials===1650,'H research payment');
+ for(const team of [0,1]){b=fresh(team);factionResearch(team).add('atomic');check(!assembleAtomic(b,'hydrogen'),'atomic alone cannot build H');factionResearch(team).add('hydrogen');check(assembleAtomic(b,'hydrogen'),'both factions assemble H');check((team?enemyBudget:ore)===4000&&(team?enemyMaterials:materials)===1650,'H assembly payment');check(!assembleAtomic(b,'atomic'),'shared payload cap');updateAtomic(109);check(!b.atomicReady,'H longer assembly');updateAtomic(1);check(b.atomicReady&&b.atomicKind==='hydrogen','H payload retained');}
+ b=fresh();technologies.add('atomic');assembleAtomic(b);technologies.add('hydrogen');updateAtomic(75);check(b.atomicKind==='atomic','research never upgrades an existing bomb for free');
+ b=fresh();b.atomicReady=true;b.atomicKind='hydrogen';const inner=add('trooper',1,950,1000,{hp:3000,max:3000}),outer=add('trooper',1,1150,1000,{hp:3000,max:3000});sightAt=-1;
+ check(launchAtomic(b,{x:950,y:1000})&&atomicStrikes[0].kind==='hydrogen','launch stores H type');check(atomicStrikes[0].at===28,'28 second warning');t=27.9;updateAtomic(0);check(inner.hp===3000,'H warning delay');t=28;updateAtomic(0);check(inner.hp===1650&&outer.hp<3000,'larger H blast and damage');
+ b=fresh();b.atomicReady=true;b.atomicKind='hydrogen';launchAtomic(b,{x:950,y:1000});linked.delete(b.id);updateAtomic(0);check(!atomicStrikes.length&&!b.atomicReady,'H supply counterplay');
+ b=fresh(1);b.x=1300;enemyTechnologies.add('atomic');enemyTechnologies.add('hydrogen');b.atomicReady=true;b.atomicKind='hydrogen';add('relay',0,900,1000);add('scout',1,1200,1000);sightAt=-1;updateAtomic(0);check(atomicStrikes.length===1&&atomicStrikes[0].kind==='hydrogen','AI launches ready H at visible target');
+ b=fresh();check(!assembleAtomic(b,'invalid'),'unknown payload rejected');
+}

@@ -360,3 +360,7 @@ Both armies can research Atomic command after Field protection II and Calibrated
 field shells, then assemble one costly bomb at Artillery Works. Launch at a visible
 location; the opponent gets 18 seconds to evacuate or destroy/isolate the launcher.
 Friendly fire applies. [Technology, costs and counterplay](docs/ATOMIC.md).
+
+After Atomic command, both factions can research **H-bomb command**. The larger
+payload costs more and takes longer, with a 28-second warning. Both bomb types
+share one payload slot. [H-bomb progression and balance](docs/H-BOMB.md).

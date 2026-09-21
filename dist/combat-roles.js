@@ -51,6 +51,7 @@ function enemyResearchPlan(buildings) {
   if(t>=180)priorities.push('armor','armor2');
   if(t>=240)priorities.push('rapid');
   if(t>=480)priorities.push('shells','atomic');
+  if(t>=780)priorities.push('hydrogen');
   for (const id of priorities) {
     const tech=researchDefs[id];
     if (researchRequirement(id,1)||enemyTechnologies.has(id)||buildings.some(b=>b.research?.id===id)) continue;

@@ -176,6 +176,7 @@ function say(s) {
   }
 }
 const researchDefs = {
+  hydrogen: {name:'H-bomb command',building:'factory',requires:'atomic',cost:1000,materials:350,time:120,description:'After Atomic command: unlock H-bomb assembly (1000 Supplies, 350 Materials, 110s). Larger 230m blast; 28s warning and friendly fire. Shares the atomic payload limit.'},
   atomic: {name:'Atomic command',building:'factory',requires:'shells',requiresAlso:'armor2',cost:800,materials:300,time:90,description:'Unlock assembly of one atomic bomb per faction at supplied Artillery Works. Assembly: 650 Supplies, 200 Materials, 75s. Launch: 18s warning, friendly fire.'},
   rapid: { name: 'Rapid advance doctrine', building:'forge', requires:'drill', cost:180, materials:60, time:35,
     description:'Unlock V for guards, scouts and sappers: +30% speed, 30% shorter firing interval for 6s. Costs 20 health each; 24s cooldown.' },
@@ -852,12 +853,12 @@ function updateUI(force = false) {
   $('depot-status').textContent =
     'DEPOT ' +
     (depot.team === 0 ? 'OURS · +2/s' : depot.team === 1 ? 'RHINOS' : 'CONTESTED') +
-    ' · MU '+(munitionsIncome()?'+0.5/s':'STOPPED')+(atomicStrikes.length?' · ATOMIC '+Math.ceil(Math.max(0,Math.min(...atomicStrikes.map(s=>s.at))-t))+'s':'');
+    ' · MU '+(munitionsIncome()?'+0.5/s':'STOPPED')+(atomicStrikes.length?' · '+atomicStrikes.map(s=>payloadLabel(s.kind)+' '+Math.ceil(Math.max(0,s.at-t))+'s').join(' / '):'');
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
-  const munKey=selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
+  const munKey=selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
   if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
     actionKey = key + rapidKey + disciplineKey + munKey;
     let a = [];

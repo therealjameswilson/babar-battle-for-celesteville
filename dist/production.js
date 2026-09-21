@@ -3,8 +3,8 @@
 const productionRows=new Map();
 function productionSites() {return alive(0).filter(b=>['core','headquarters','forge','factory'].includes(b.type));}
 function productionReport(b) {
-  if(b.atomicJob)return {fraction:b.atomicJob.progress/ATOMIC.build,text:'Atomic assembly · '+Math.ceil(ATOMIC.build-b.atomicJob.progress)+'s'+(supplied(b)?'':' · ISOLATED: halted')};
-  if(b.atomicReady)return {fraction:1,text:'Atomic bomb ready · select site to launch'};
+  if(b.atomicJob)return {fraction:b.atomicJob.progress/payloadSpec(b.atomicJob.kind).build,text:payloadName(b.atomicJob.kind)+' assembly · '+Math.ceil(payloadSpec(b.atomicJob.kind).build-b.atomicJob.progress)+'s'+(supplied(b)?'':' · ISOLATED: halted')};
+  if(b.atomicReady)return {fraction:1,text:payloadName(b.atomicKind)+' ready · select site to launch'};
   if(b.construction) {
     const crew=constructionCrew(b);
     return {fraction:1-b.construction/(b.buildDuration||defs[b.type].build),
