@@ -1038,11 +1038,9 @@ canvas.addEventListener('pointerup', (e) => {
     if (u && dist(u, wp) < u.r + 18) {
       if (start.typeSelect) selectOnscreenType(u, start.shift);
       else clickSelection(u, start.shift);
+      if(start.touch&&!defs[u.type].speed)document.querySelector('#phone-tabs [data-panel="actions"]')?.click();
     } else if (
-      start.touch &&
-      selected.length &&
-      nearest(wp, nodes) &&
-      dist(wp, nearest(wp, nodes)) < 40
+      start.touch && selected.length
     ) {
       command(wp);
     } else selected = [];
@@ -1106,7 +1104,7 @@ window.addEventListener('keydown', (e) => {
 window.addEventListener('keyup', (e) => delete keys[e.key]);
 window.addEventListener('blur', () => {
   keys = {};
-  if (running && !paused) togglePause();
+  // Focus can move during Safari touch interaction. Only actual page hiding pauses.
 });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && running && !paused) togglePause();

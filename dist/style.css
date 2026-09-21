@@ -1678,3 +1678,37 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
 #opening-replay {margin-top:12px;min-height:44px;font-size:13px;}
 @media(max-width:580px){.opening-body{padding:32px 20px max(24px,env(safe-area-inset-bottom));}.opening-rivals>div{width:45%;height:57%;opacity:.18!important;}.opening-babar{left:-10%;}.opening-rataxes{right:-10%;}#opening-line{font-size:16px;}#opening-reply{font-size:17px;}#opening-title{font-size:36px;margin-bottom:20px;}#opening-tag{font-size:10px;letter-spacing:2px;}.opening-controls{display:grid;grid-template-columns:1fr 1fr;width:100%;}.opening-body{padding-top:max(30px,env(safe-area-inset-top));}}
 @media(max-height:500px){.opening-body{padding:16px max(24px,env(safe-area-inset-right)) 16px max(24px,env(safe-area-inset-left));}#opening-title{font-size:32px;margin-bottom:10px;}#opening-tag{margin-bottom:10px;}#opening-line,#opening-reply{font-size:15px;margin:8px 0;}#opening-speaker{margin:6px 0;}.opening-progress,.opening-controls{margin-top:10px;}#opening-hint{margin-top:8px;}}
+
+/* Phone-first battlefield: compact dock, optional command sheet, deliberate menu. */
+#phone-menu, #phone-production {display:none;}
+@media (max-width:580px), (max-height:500px) and (min-width:581px) {
+  header {height:48px;min-height:48px;flex-wrap:nowrap;padding:2px 6px;gap:4px;}
+  .resources {width:auto;flex:1;gap:4px;font-size:12px;}
+  .resources>span {min-width:0;}
+  .resources em {font-size:7px;}
+  header>#pause, header>#mute, header>#court-open, header>#help {display:none;}
+  #phone-menu {display:block;position:relative;z-index:25;}
+  #phone-menu summary {list-style:none;display:grid;place-items:center;min-width:48px;min-height:44px;border:1px solid #9b8960;cursor:pointer;font-size:12px;touch-action:manipulation;}
+  #phone-menu>div {position:absolute;right:0;top:46px;width:180px;background:#202821;border:1px solid #9b8960;padding:6px;display:grid;gap:6px;}
+  #phone-menu button {min-height:44px;}
+  main {position:relative;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) 102px;overflow:hidden;}
+  .field {grid-column:1;grid-row:1;height:100%;min-height:0;}
+  aside {grid-column:1;grid-row:2;height:102px;width:100%;padding:4px 6px;gap:4px;border-left:0;z-index:12;}
+  aside[data-panel='orders'] {overflow:hidden;}
+  aside[data-panel='orders'] .orders {display:none;}
+  aside[data-panel='orders'] .quick {grid-template-columns:repeat(4,minmax(0,1fr));}
+  aside .quick>#groups-open, aside .quick>#idle-workers, aside .quick>#queue-orders {display:none;}
+  #phone-production {display:block;}
+  aside[data-panel='actions'], aside[data-panel='status'] {position:absolute;bottom:0;height:min(330px,70dvh);box-shadow:0 -5px 20px #0007;}
+  aside[data-panel='status'] .orders {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;flex-shrink:0;}
+  aside[data-panel='status'] .selection {flex:1;min-height:0;}
+  #phone-tabs button {font-size:11px;}
+  .mission {pointer-events:none;}
+  .mission #production-open {display:none;}
+  .mission #attack-alert {pointer-events:auto;}
+  #production-panel {max-height:calc(100% - 12px);overflow-y:auto;}
+  .camera-tools #pan, .camera-tools #camera-views-open {display:none;}
+  .camera-tools button {min-width:44px;}
+  #toast {bottom:6px;left:110px;right:94px;font-size:10px;}
+  .field #minimap {bottom:6px;}
+}

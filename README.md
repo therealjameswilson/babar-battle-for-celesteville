@@ -348,3 +348,8 @@ troops or a workshop → Build / skills. [Full rules](docs/MUNITIONS.md).
 
 Rendering now uses bounded Retina-resolution sprite caching, subtle sprite contrast,
 and offscreen unit culling. [Rendering measurements](docs/RENDERING.md).
+
+On iPhone, tap troops then ground to move or an enemy to attack. Tap a building to
+open Build / train; Production selects other sites. Army / move collapses the
+panel. Menu holds pause, sound and council. Touch focus changes no longer pause
+play; switching away from the app still does. [Phone controls](docs/PHONE-DIRECT.md).

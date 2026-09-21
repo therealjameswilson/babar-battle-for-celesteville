@@ -195,3 +195,7 @@ See MUNITIONS.md for exact rules and tests/munitions-browser.html for browser QA
 0.45.0: render.js adds bounded high-DPI sprite caching and viewport culling;
 commander-animation.js uses the same cache with its standalone test fallback.
 See RENDERING.md and tests/render-performance.html for measured results.
+
+0.46.0 fixes visible-window blur pauses, enables direct touch movement/focus/rally,
+and introduces a compact phone dock/menu with expandable production controls.
+See PHONE-DIRECT.md and phone-direct.html / phone-browser.html for regression QA.

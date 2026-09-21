@@ -1084,3 +1084,15 @@ commander, infantry, buildings and HUD displayed with intact silhouettes. The
 Munitions controls/layout fixture passed 116 checks across four responsive sizes.
 Physical iPhone Safari and sustained GPU/frame-pacing measurements remain pending.
 See RENDERING.md for bounds, methodology and reproduction.
+
+## Direct phone play — 0.46.0 (2026-09-21)
+
+Syntax/assets and full deterministic suite passed. Real in-app browser: 58 direct
+control assertions across 320×568, 390×844, 844×390 and 1280×900; 316 responsive /
+gesture assertions across eight sizes including small portrait and landscape.
+Visible window blur no longer pauses, touch issues movement/focus/rally orders,
+production remains live, and actual document hiding still pauses. Expanded status
+sheet initially collapsed its content on the smallest phone; fixed its height to
+use dynamic viewport units and reran the suite successfully. Phone battlefield
+screenshot visually inspected. Pointer events are programmatic browser tests;
+physical iPhone Safari confirmation remains outstanding.

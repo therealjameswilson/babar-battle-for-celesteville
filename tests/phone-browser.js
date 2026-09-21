@@ -4,7 +4,7 @@
  try{
  for(const [w,h] of [[320,568],[375,667],[390,844],[430,932],[667,375],[844,390],[932,430],[1280,900]]){
   const f=document.createElement('iframe');f.width=w;f.height=h;
-  const ready=new Promise(r=>f.onload=r);f.src='../dist/index.html?phone=40';document.querySelector('#games').append(f);await ready;
+  const ready=new Promise(r=>f.onload=r);f.src='../dist/index.html?phone=462';document.querySelector('#games').append(f);await ready;
   const g=f.contentWindow,d=f.contentDocument, q=s=>d.querySelector(s), rect=s=>q(s).getBoundingClientRect();
   q('#start').click();g.eval('paused=true');
   const phone=w<=580||h<=500;
@@ -13,7 +13,7 @@
   check(rect('aside').bottom<=h+1,'panel fits '+w);
   if(phone){
    for(const b of d.querySelectorAll('#phone-tabs button,.quick button,.orders button,header button,.camera-tools button')){
-    const r=b.getBoundingClientRect();check(r.height>=44&&r.width>=44,'target size '+w+' '+b.textContent+' '+r.width+' '+r.height);
+    const r=b.getBoundingClientRect();if(!r.width||!r.height)continue;check(r.height>=44&&r.width>=44,'target size '+w+' '+b.textContent+' '+r.width+' '+r.height);
     check(r.left>=0&&r.right<=w+1&&r.bottom<=h+1,'target bounds '+w+' '+b.textContent);
    }
    q('[data-panel="actions"]').click();check(rect('#actions').height>0,'actions accessible');
