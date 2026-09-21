@@ -173,3 +173,11 @@ Static ground now lives in battlefield-art.js and is cached below fog. Preserve
 module order before render.js and include it in the smoke harness. Original earth
 asset and prompt are documented in BATTLEFIELD-ART.md. No simulation terrain was
 added. Browser Canvas review artifacts exist; full-page capture remains blocked.
+
+## Rivalry opening 0.42.0
+
+opening.js is an isolated native-dialog prologue loaded after character-art/audio
+and before render. It does not advance simulation. Three 8-second scenes use
+original dialogue and generated local border artwork. Skip/Escape/timer completion
+return to briefing; reduced motion uses manual advance. Keep all score voices and
+timers cleaned up on close. Browser fixture includes full timed completion.

@@ -1036,3 +1036,15 @@ road stripes/tree spacing were revised to scuffs and varied silhouettes. See
 BATTLEFIELD-ART.md for performance measurement scope and asset provenance. HTML
 briefing text was explicitly given light colors for the darker panel. Full-page
 screenshots and physical iPhone Safari remain unverified.
+
+## Rivalry opening — 0.42.0 (2026-09-20)
+
+Opening fixture checks initial modal isolation and no audio context on load,
+three scenes, frozen pre-game simulation, pause/resume, replay, reduced motion,
+mute toggling, skip/Escape, 44px targets and control bounds at 320×568, 390×844,
+844×390 and 1280×900. Full 24-second timer playback also returned to briefing
+without launching combat. Engine and syntax/asset checks passed. Generated
+landscape was visually inspected. Full-page screenshot capture still reports
+unavailable; native browser click injection timed out. Fixture actions run in the
+real browser, but are programmatic and do not establish physical Safari or
+speaker-listening verification. See OPENING.md for design and asset provenance.

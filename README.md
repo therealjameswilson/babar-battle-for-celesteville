@@ -319,3 +319,11 @@ One finger still selects, box-selects, or applies the chosen order; Pan map
 switches it to camera movement. Switching apps pauses the match. Resume manually.
 The layout accounts for safe-area insets and changing browser-toolbar height.
 Restart remains available from the field manual (`?`). No installation required.
+
+## Rivalry opening (0.42.0)
+
+A three-scene, roughly 24-second illustrated opening introduces the border war.
+Choose Begin opening to enable its original synthesized score, or Skip to briefing.
+Pause, Next scene, mute and Escape remain available. Reduced motion uses static,
+manually advanced scenes. Returning from another app requires Resume opening.
+Watch opening replays it from the briefing; combat begins only with Take command.
