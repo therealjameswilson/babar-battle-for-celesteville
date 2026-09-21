@@ -1072,3 +1072,15 @@ and 1280×900 using tests/munitions-browser.html. Actual DOM buttons activated b
 buffs and workshop packing; HUD, status, cooldown controls and resource bounds
 passed. Browser console had no warnings/errors. These are programmatic real-browser
 checks; physical iPhone Safari and full-page screenshot review remain unverified.
+
+## Crisp rendering — 0.45.0 (2026-09-21)
+
+Syntax/atlas checks and full deterministic tactical suite passed. The real-browser
+render-performance fixture passed 8 assertions (density, cache budget, viewport
+edges, selected-unit retention and workload). Controlled 133-unit comparison:
+133 vs 37 draws, median 0.6 vs 0.3ms, p95 0.8 vs 0.5ms. This measures CPU render
+submission only. A browser screenshot of the 390px battlefield was inspected:
+commander, infantry, buildings and HUD displayed with intact silhouettes. The
+Munitions controls/layout fixture passed 116 checks across four responsive sizes.
+Physical iPhone Safari and sustained GPU/frame-pacing measurements remain pending.
+See RENDERING.md for bounds, methodology and reproduction.

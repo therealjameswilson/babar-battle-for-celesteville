@@ -1,4 +1,37 @@
 'use strict';
+// Cache the expensive atlas downsample at the current physical display scale.
+// Bound retained RGBA surfaces to ~12 MiB and preserve every inspected crop.
+const spriteRasterCache=new Map();
+let spriteRasterPixels=0;
+function crispSprite(context,image,sx,sy,sw,sh,dx,dy,dw,dh){
+  const transform=context.getTransform?.();
+  if(!transform){context.drawImage(image,sx,sy,sw,sh,dx,dy,dw,dh);return;}
+  const scale=Math.min(4,Math.max(.5,Math.ceil(Math.hypot(transform.a,transform.b)*4)/4));
+  const width=Math.max(1,Math.ceil(Math.abs(dw)*scale)),height=Math.max(1,Math.ceil(Math.abs(dh)*scale));
+  const key=[image.src,sx,sy,sw,sh,width,height].join(':');
+  let raster=spriteRasterCache.get(key);
+  if(!raster){
+    raster=document.createElement('canvas');raster.width=width;raster.height=height;
+    const c=raster.getContext('2d');c.imageSmoothingEnabled=true;c.imageSmoothingQuality='high';
+    c.filter='contrast(1.06)';c.drawImage(image,sx,sy,sw,sh,0,0,width,height);
+    spriteRasterCache.set(key,raster);spriteRasterPixels+=width*height;
+    while(spriteRasterPixels>3000000 && spriteRasterCache.size>1){
+      const oldest=spriteRasterCache.keys().next().value,old=spriteRasterCache.get(oldest);
+      spriteRasterPixels-=old.width*old.height;spriteRasterCache.delete(oldest);
+    }
+  }else{spriteRasterCache.delete(key);spriteRasterCache.set(key,raster);}
+  context.drawImage(raster,dx,dy,dw,dh);
+}
+function battlefieldPixelRatio(width,height,ratio=devicePixelRatio||1){
+  return Math.max(1,Math.min(ratio,3,Math.sqrt(3000000/Math.max(1,width*height))));
+}
+function unitInViewport(u,width=canvas.clientWidth,height=canvas.clientHeight){
+  if(u.hp<=0)return false;
+  if(selected.includes(u))return true; // Preserve selected artillery range indicators.
+  const p=renderedPosition(u),margin=180;
+  return Math.abs(p.x-cam.x)<=width/(2*cam.zoom)+margin && Math.abs(p.y-cam.y)<=height/(2*cam.zoom)+margin;
+}
+
 const spriteSheet = new Image(),
   buildingSheet = new Image(), infantrySheet = new Image(), infantryWalkSheet = new Image();
 spriteSheet.src = 'assets/characters-siege.png';
@@ -26,7 +59,7 @@ function drawDirectionalInfantry(u,bob) {
   const phase=infantryWalkPhase(u),walking=phase!==null&&infantryWalkSheet.complete&&infantryWalkSheet.naturalWidth;
   const [x,y,w,h]=walking?infantryWalkFrames[u.team][phase][infantryDirection(u.angle)]:infantryFrames[u.team][infantryDirection(u.angle)];
   const height=52,width=height*w/h;
-  ctx.drawImage(walking?infantryWalkSheet:infantrySheet,x,y,w,h,-width/2,15-height+(walking?0:bob),width,height);
+  crispSprite(ctx,walking?infantryWalkSheet:infantrySheet,x,y,w,h,-width/2,15-height+(walking?0:bob),width,height);
   return true;
 }
 const fog = document.createElement('canvas'),
@@ -55,7 +88,7 @@ function atlas(image, col, row, x, y, w, h, building = false) {
   const xs = building ? [0, 326, 632, 982, 1254] : [0, 335, 635, 935, 1254];
   const ys = building ? [0, 610, 1254] : [70, 642, 1210];
   const scale = image.naturalWidth / 1254;
-  ctx.drawImage(
+  crispSprite(ctx,
     image,
     xs[col] * scale,
     ys[row] * scale,
@@ -315,7 +348,7 @@ function drawUnit(u) {
 function draw() {
   const cw = canvas.clientWidth,
     ch = canvas.clientHeight,
-    dpr = Math.min(devicePixelRatio || 1, 2);
+    dpr = battlefieldPixelRatio(cw,ch);
   if (canvas.width !== Math.round(cw * dpr) || canvas.height !== Math.round(ch * dpr)) {
     canvas.width = Math.round(cw * dpr);
     canvas.height = Math.round(ch * dpr);
@@ -450,7 +483,7 @@ function draw() {
     ctx.restore();
   }
   for (const k of rememberedBuildings()) drawRememberedBuilding(k);
-  for (const u of units.filter((u) => visible(u)).sort((a, b) => a.y - b.y)) {
+  for (const u of units.filter((u) => unitInViewport(u,cw,ch) && visible(u)).sort((a, b) => a.y - b.y)) {
     ctx.save();
     if (u.team && !visible(u)) ctx.globalAlpha = 0.42;
     drawUnit(u);

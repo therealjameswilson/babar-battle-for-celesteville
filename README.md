@@ -345,3 +345,6 @@ cover (25% protection, 6 per unit for 12s). Start with 24; hold the central depo
 for +0.5/s up to 100. Enemy soldiers interrupt its output. Supplied Guard Schools
 and Artillery Works can pack 20 for 60 Supplies + 20 Materials every 30s. Select
 troops or a workshop → Build / skills. [Full rules](docs/MUNITIONS.md).
+
+Rendering now uses bounded Retina-resolution sprite caching, subtle sprite contrast,
+and offscreen unit culling. [Rendering measurements](docs/RENDERING.md).

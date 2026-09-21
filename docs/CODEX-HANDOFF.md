@@ -191,3 +191,7 @@ in deterministic tests and tests/hero-combat-browser.html (108 browser checks).
 from an uncontested owned depot or paid workshop conversion and funds temporary
 attack/protection buffs. AI denies the depot but retains its existing economy.
 See MUNITIONS.md for exact rules and tests/munitions-browser.html for browser QA.
+
+0.45.0: render.js adds bounded high-DPI sprite caching and viewport culling;
+commander-animation.js uses the same cache with its standalone test fallback.
+See RENDERING.md and tests/render-performance.html for measured results.

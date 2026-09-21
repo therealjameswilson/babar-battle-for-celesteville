@@ -36,7 +36,8 @@ function drawCommanderSprite(context, u, now, minimizeMotion = false) {
   const pose = commanderPose(u, now, minimizeMotion);
   const {crop, anchor} = COMMANDER_FRAMES[u.team][pose.row][pose.direction];
   const [x,y,w,h] = crop, scale = 80 / 300;
-  context.drawImage(sheet,x,y,w,h,(x-anchor[0])*scale,15+(y-anchor[1])*scale,w*scale,h*scale);
+  if(typeof crispSprite==='function')crispSprite(context,sheet,x,y,w,h,(x-anchor[0])*scale,15+(y-anchor[1])*scale,w*scale,h*scale);
+  else context.drawImage(sheet,x,y,w,h,(x-anchor[0])*scale,15+(y-anchor[1])*scale,w*scale,h*scale);
   if (pose.flash) {
     const muzzle = COMMANDER_MUZZLES[u.team][pose.direction];
     context.fillStyle = '#ead195';context.beginPath();
