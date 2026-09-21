@@ -290,7 +290,7 @@ function reset() {
   resetCameraViews();
   closeProduction();
   ore = 300;
-  materials = 0; enemyMaterials = 60;
+  materials = 0; enemyMaterials = 60; munitions = MUNITIONS.start;
   t = 0;
   wave = 0;
   nextWave = easy ? 120 : 85;
@@ -375,7 +375,7 @@ function nearest(u, list) {
 }
 function damageUnit(u, v, baseDamage, scale = 1) {
   if (v.hp <= 0) return;
-  const rawDamage = (baseDamage + counterBonus(u,v)) * scale * weaponMultiplier(u) *
+  const rawDamage = (baseDamage + counterBonus(u,v)) * scale * weaponMultiplier(u) * ((u.heavyRoundsUntil||0)>t?1.5:1) *
     (u.team === 1 && easy ? 0.7 : 1) * (inCover(v) ? 0.65 : 1) *
     ((v.disciplineUntil || 0) > t ? 0.75 : 1) *
     (u.type === 'walker' && !defs[v.type].speed ? 1.8 : 1);
@@ -418,6 +418,7 @@ function update(dt) {
   t += dt;
   observeResources();
   updateTactics(dt);
+  updateMunitions(dt);
   updateAttackAlert();
   selected = selected.filter((u) => u.hp > 0);
   if (t > toastUntil) $('toast').textContent = '';
@@ -734,6 +735,8 @@ function updateUI(force = false) {
   renderProduction();
   $('ore').textContent = Math.floor(ore);
   $('materials').textContent = Math.floor(materials);
+  $('munitions').textContent = Math.floor(munitions) + '/100';
+  $('munitions-stock').title = 'Munitions: '+(munitionsIncome()?'+0.5/s from depot':'no depot income')+'. Pack 20 for 60 Supplies + 20 Materials at a supplied Guard School or Artillery Works.';
   $('idle-workers').textContent = 'Idle ' + idleWorkers().length;
   $('supply').textContent = supply() + ' / ' + cap();
   $('clock').textContent = time(t);
@@ -833,19 +836,25 @@ function updateUI(force = false) {
   }else if(selected.length&&selected.every(w=>w.type==='worker')){
     $('selected-info').textContent='Provisioners gather, deliver, construct and repair. Assign Gather to a Supplies cache or Materials Quarry.';
   }
+  if(selected.length===1&&u){
+    if((u.heavyRoundsUntil||0)>t)$('tactical-status').textContent+=' · Heavy rounds '+Math.ceil(u.heavyRoundsUntil-t)+'s';
+    if((u.disciplineUntil||0)>t)$('tactical-status').textContent+=' · Protected '+Math.ceil(u.disciplineUntil-t)+'s';
+  }
   const fireStatus = fireDisciplineSummary();
   if (fireStatus) $('tactical-status').textContent += ' · ' + fireStatus;
   $('depot-status').textContent =
     'DEPOT ' +
     (depot.team === 0 ? 'OURS · +2/s' : depot.team === 1 ? 'RHINOS' : 'CONTESTED') +
-    ' · Scout workers and production';
+    ' · MU '+(munitionsIncome()?'+0.5/s':'STOPPED');
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
-  if (force || key + rapidKey + disciplineKey !== actionKey) {
-    actionKey = key + rapidKey + disciplineKey;
+  const munKey=Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
+  if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
+    actionKey = key + rapidKey + disciplineKey + munKey;
     let a = [];
+    munitionsActions(a,u);
     const armed = selected.filter(u=>u.team===0&&fireDisciplineUnit(u));
     if(armed.length) a.push([armed.every(u=>u.holdFire)?'Weapons free':'Hold fire','C · '+armed.filter(u=>u.holdFire).length+'/'+armed.length+' holding fire',toggleFireDiscipline]);
     const infantry=selected.filter(u=>u.team===0&&rapidInfantry(u));

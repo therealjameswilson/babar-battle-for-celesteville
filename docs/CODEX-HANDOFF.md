@@ -186,3 +186,8 @@ timers cleaned up on close. Browser fixture includes full timed completion.
 independent Iron Parasol council attack. See HERO-COMBAT.md for costs, targeting,
 state guards and module responsibilities. The shared hero-combat-checks.js runs
 in deterministic tests and tests/hero-combat-browser.html (108 browser checks).
+
+0.44.0 adds munitions.js before economy.js. A capped player command reserve comes
+from an uncontested owned depot or paid workshop conversion and funds temporary
+attack/protection buffs. AI denies the depot but retains its existing economy.
+See MUNITIONS.md for exact rules and tests/munitions-browser.html for browser QA.

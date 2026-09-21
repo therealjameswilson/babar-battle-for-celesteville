@@ -312,3 +312,6 @@ console.log('PASS: fire discipline, silent movement/patrol, ambush release, expl
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'hero-combat-checks.js'),'utf8'));
 run('heroCombatChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: hero fighting, strike costs/cooldowns, focus, cover, fog/range, stance and state guards.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'munitions-checks.js'),'utf8'));
+run('munitionsChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: Munitions income, denial, cap, conversion, costs, buffs, expiry, state guards and restart.');

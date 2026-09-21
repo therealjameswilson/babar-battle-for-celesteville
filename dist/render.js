@@ -91,6 +91,14 @@ function drawRememberedBuilding(k) {
   ctx.fillText('LAST SEEN '+time(t-k.seen)+' AGO',0,46);ctx.restore();
 }
 function drawUnit(u) {
+  if((u.smokeUntil||0)>t){
+    ctx.save();ctx.fillStyle='#afb6aa';ctx.globalAlpha=.18;
+    for(let i=0;i<3;i++){ctx.beginPath();ctx.ellipse(u.x+(i-1)*14,u.y+6,u.r+8,u.r*.8,0,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
+  }
+  if((u.heavyRoundsUntil||0)>t){
+    ctx.fillStyle='#f0b85a';for(let i=0;i<3;i++)ctx.fillRect(u.x-7+i*5,u.y-u.r-14,3,7);
+  }
   if (u.type === 'walker' && selected.includes(u)) {
     ctx.save(); ctx.setLineDash([7, 7]); ctx.lineWidth = 1;
     ctx.strokeStyle = '#d5c48c80'; ctx.beginPath();
@@ -390,7 +398,7 @@ function draw() {
   ctx.textAlign = 'center';
   ctx.fillText('CENTRAL DEPOT', depot.x, depot.y - 43);
   ctx.fillText(
-    depot.team === 0 ? 'SECURED +2/s' : depot.team === 1 ? 'RHINO SHIPMENTS' : 'HOLD 8s TO CAPTURE',
+    depot.team === 0 ? (munitionsIncome()?'SECURED +2 S / +0.5 MU':'MUNITIONS INTERRUPTED') : depot.team === 1 ? 'RHINO SHIPMENTS' : 'HOLD 8s TO CAPTURE',
     depot.x,
     depot.y + 50
   );

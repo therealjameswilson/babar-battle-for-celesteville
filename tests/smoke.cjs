@@ -85,6 +85,7 @@ for (const file of [
   'alerts.js',
   'selection.js',
   'combat-roles.js',
+  'munitions.js',
   'economy.js',
   'construction.js',
   'production.js',

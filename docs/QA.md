@@ -1060,3 +1060,15 @@ including actual Fight/strike buttons, F shortcut, disabled cooldown, Madame’s
 council attack during its modal pause, visible cooldown and action layout bounds.
 These use programmatic browser events in the real client. Physical iPhone Safari,
 native touch injection and full-page screenshot verification remain unverified.
+
+## Munitions — 0.44.0 (2026-09-21)
+
+Syntax/assets and full deterministic tactics suite passed. Munitions checks cover
+starting reserve, depot income, enemy interruption, ownership denial, cap,
+workshop conversion/cooldown/isolation, overflow rejection, damage/protection,
+expiry, no stacking, commander interaction, atomic group purchases, pause/end
+and reset. The real in-app browser passed 116 checks at 320×568, 390×844, 844×390
+and 1280×900 using tests/munitions-browser.html. Actual DOM buttons activated both
+buffs and workshop packing; HUD, status, cooldown controls and resource bounds
+passed. Browser console had no warnings/errors. These are programmatic real-browser
+checks; physical iPhone Safari and full-page screenshot review remain unverified.

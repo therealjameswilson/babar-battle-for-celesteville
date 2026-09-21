@@ -337,3 +337,11 @@ spends 90 supplies to hit a visible enemy within 220m of Babar for 160 base dama
 plus 70 splash within 90m and 30 additional morale loss. Cooldown: 45 seconds.
 Her original permanent population bonus remains independent. These are invented
 game abilities. See [combat rules](docs/HERO-COMBAT.md).
+
+### Munitions
+
+The third resource funds Heavy rounds (+50% damage, 8 per unit for 15s) or Smoke
+cover (25% protection, 6 per unit for 12s). Start with 24; hold the central depot
+for +0.5/s up to 100. Enemy soldiers interrupt its output. Supplied Guard Schools
+and Artillery Works can pack 20 for 60 Supplies + 20 Materials every 30s. Select
+troops or a workshop → Build / skills. [Full rules](docs/MUNITIONS.md).

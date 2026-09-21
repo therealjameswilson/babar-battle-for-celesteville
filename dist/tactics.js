@@ -10,7 +10,7 @@ function commanderAbility(u) {
   const nearby = alive(u.team).filter(a => defs[a.type].speed && dist(a, u) <= 180);
   for (const a of nearby) {
     if (u.team === 0) {
-      a.disciplineUntil = t + 8;
+      a.disciplineUntil = Math.max(a.disciplineUntil||0,t + 8);
       a.morale = Math.min(100, a.morale + 20);
     } else a.advanceUntil = t + 8;
   }
