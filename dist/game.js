@@ -176,6 +176,7 @@ function say(s) {
   }
 }
 const researchDefs = {
+  atomic: {name:'Atomic command',building:'factory',requires:'shells',requiresAlso:'armor2',cost:800,materials:300,time:90,description:'Unlock assembly of one atomic bomb per faction at supplied Artillery Works. Assembly: 650 Supplies, 200 Materials, 75s. Launch: 18s warning, friendly fire.'},
   rapid: { name: 'Rapid advance doctrine', building:'forge', requires:'drill', cost:180, materials:60, time:35,
     description:'Unlock V for guards, scouts and sappers: +30% speed, 30% shorter firing interval for 6s. Costs 20 health each; 24s cooldown.' },
   armor: { name: 'Field protection I', building: 'forge', cost: 140, materials: 40, time: 30,
@@ -196,7 +197,7 @@ function startResearch(id) {
   const missing = researchRequirement(id,0);
   if (missing) return say(missing);
   const b = selected.find(u => u.team === 0 && u.hp > 0 && u.type === tech.building && !u.construction);
-  if (!b || b.research || b.queue.length) return say('Research needs an idle production building.');
+  if (!b || b.research || b.atomicJob || b.queue.length) return say('Research needs an idle production building.');
   if (alive(0).some(u => u.research?.id === id)) return say('This research is already underway.');
   if (materials < (tech.materials || 0)) return say('Not enough Materials. Staff a supplied quarry.');
   if (ore < tech.cost) return say('Not enough supplies for research.');
@@ -290,7 +291,7 @@ function reset() {
   resetCameraViews();
   closeProduction();
   ore = 300;
-  materials = 0; enemyMaterials = 60; munitions = MUNITIONS.start;
+  materials = 0; enemyMaterials = 60; munitions = MUNITIONS.start; atomicStrikes=[];atomicTargetSite=null;atomicAIAt=0;
   t = 0;
   wave = 0;
   nextWave = easy ? 120 : 85;
@@ -419,6 +420,7 @@ function update(dt) {
   observeResources();
   updateTactics(dt);
   updateMunitions(dt);
+  updateAtomic(dt);
   updateAttackAlert();
   selected = selected.filter((u) => u.hp > 0);
   if (t > toastUntil) $('toast').textContent = '';
@@ -666,6 +668,11 @@ function setMode(m) {
 }
 function command(p, append = queueOrders) {
   if (!running || paused || ended) return;
+  if(mode==='atomic'){
+    if(launchAtomic(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
+    else say('Atomic launch needs a supplied, ready Works and a currently visible target.');
+    return;
+  }
   if (placing) {
     if (placing === 'quarry') { const deposit = materialSite(p); if (deposit) p = {x:deposit.x,y:deposit.y}; }
     if (!validBuild(p, placing))
@@ -845,16 +852,17 @@ function updateUI(force = false) {
   $('depot-status').textContent =
     'DEPOT ' +
     (depot.team === 0 ? 'OURS · +2/s' : depot.team === 1 ? 'RHINOS' : 'CONTESTED') +
-    ' · MU '+(munitionsIncome()?'+0.5/s':'STOPPED');
+    ' · MU '+(munitionsIncome()?'+0.5/s':'STOPPED')+(atomicStrikes.length?' · ATOMIC '+Math.ceil(Math.max(0,Math.min(...atomicStrikes.map(s=>s.at))-t))+'s':'');
   $('health').firstElementChild.style.width = (u ? (u.hp / u.max) * 100 : 0) + '%';
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
-  const munKey=Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
+  const munKey=selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
   if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
     actionKey = key + rapidKey + disciplineKey + munKey;
     let a = [];
     munitionsActions(a,u);
+    atomicActions(a,u);
     const armed = selected.filter(u=>u.team===0&&fireDisciplineUnit(u));
     if(armed.length) a.push([armed.every(u=>u.holdFire)?'Weapons free':'Hold fire','C · '+armed.filter(u=>u.holdFire).length+'/'+armed.length+' holding fire',toggleFireDiscipline]);
     const infantry=selected.filter(u=>u.team===0&&rapidInfantry(u));

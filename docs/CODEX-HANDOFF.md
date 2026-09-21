@@ -199,3 +199,8 @@ See RENDERING.md and tests/render-performance.html for measured results.
 0.46.0 fixes visible-window blur pauses, enables direct touch movement/focus/rally,
 and introduces a compact phone dock/menu with expandable production controls.
 See PHONE-DIRECT.md and phone-direct.html / phone-browser.html for regression QA.
+
+0.47.0 adds atomic.js (before hero-combat.js): shared atomic assembly, launch,
+counterplay and fair enemy targeting. Atomic research requires shells + armor2;
+researchRequirement supports requiresAlso. Assembly blocks site training/research.
+See ATOMIC.md for balance values and tests/atomic-browser.html for browser QA.

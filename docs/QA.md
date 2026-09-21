@@ -1096,3 +1096,14 @@ sheet initially collapsed its content on the smallest phone; fixed its height to
 use dynamic viewport units and reran the suite successfully. Phone battlefield
 screenshot visually inspected. Pointer events are programmatic browser tests;
 physical iPhone Safari confirmation remains outstanding.
+
+## Atomic command — 0.47.0 (2026-09-21)
+
+Syntax/assets and full deterministic tactics suite passed. Atomic-specific checks
+cover both-faction payments and assembly time, both prerequisites, isolation,
+payload cap, hidden-target refusal, launch consumption, warning delay, blast and
+friendly fire, destroying/isolating the launcher, AI current-visibility targeting,
+pause/end guards and reset. Real in-app browser fixture passed 102 checks at
+390×844, 844×390 and 1280×900, including actual assembly/launch buttons, touch map
+targeting, warning HUD and layout. No browser warnings/errors were reported.
+Physical iPhone Safari and long human-played endgame balance remain unverified.

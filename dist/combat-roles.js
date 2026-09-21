@@ -16,6 +16,7 @@ function researchRequirement(id,team) {
   const tech=researchDefs[id];
   if (!tech) return 'Unknown research.';
   if (tech.requires && !factionResearch(team).has(tech.requires)) return 'Requires ' + researchDefs[tech.requires].name + '.';
+  if(tech.requiresAlso&&!factionResearch(team).has(tech.requiresAlso))return 'Requires '+researchDefs[tech.requiresAlso].name+'.';
   if (tech.requiresBuilding && !alive(team).some(b=>b.type===tech.requiresBuilding&&!b.construction)) return 'Requires completed ' + defs[tech.requiresBuilding].name + '.';
   return '';
 }
@@ -26,7 +27,7 @@ function infantryArmor(u) {
 }
 function purchaseResearch(b, id) {
   const tech=researchDefs[id];
-  if (!tech || !b || researchRequirement(id,b.team) || b.hp<=0 || b.type!==tech.building || b.construction || b.research || b.queue.length ||
+  if (!tech || !b || researchRequirement(id,b.team) || b.hp<=0 || b.type!==tech.building || b.construction || b.research || b.atomicJob || b.queue.length ||
       factionResearch(b.team).has(id) || alive(b.team).some(a=>a.research?.id===id)) return false;
   if ((b.team?enemyBudget:ore)<tech.cost || (b.team?enemyMaterials:materials)<(tech.materials||0)) return false;
   if (b.team) {enemyBudget-=tech.cost;enemyMaterials-=tech.materials||0;enemySpent+=tech.cost;}
@@ -49,6 +50,7 @@ function enemyResearchPlan(buildings) {
   const priorities=guns>=2?['shells','drill']:['drill'];
   if(t>=180)priorities.push('armor','armor2');
   if(t>=240)priorities.push('rapid');
+  if(t>=480)priorities.push('shells','atomic');
   for (const id of priorities) {
     const tech=researchDefs[id];
     if (researchRequirement(id,1)||enemyTechnologies.has(id)||buildings.some(b=>b.research?.id===id)) continue;

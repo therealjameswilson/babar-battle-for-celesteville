@@ -353,3 +353,10 @@ On iPhone, tap troops then ground to move or an enemy to attack. Tap a building 
 open Build / train; Production selects other sites. Army / move collapses the
 panel. Menu holds pause, sound and council. Touch focus changes no longer pause
 play; switching away from the app still does. [Phone controls](docs/PHONE-DIRECT.md).
+
+### Atomic endgame
+
+Both armies can research Atomic command after Field protection II and Calibrated
+field shells, then assemble one costly bomb at Artillery Works. Launch at a visible
+location; the opponent gets 18 seconds to evacuate or destroy/isolate the launcher.
+Friendly fire applies. [Technology, costs and counterplay](docs/ATOMIC.md).

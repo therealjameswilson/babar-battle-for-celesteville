@@ -315,3 +315,6 @@ console.log('PASS: hero fighting, strike costs/cooldowns, focus, cover, fog/rang
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'munitions-checks.js'),'utf8'));
 run('munitionsChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: Munitions income, denial, cap, conversion, costs, buffs, expiry, state guards and restart.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'atomic-checks.js'),'utf8'));
+run('atomicChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: atomic tech gates, faction costs, assembly, isolation, fog, AI targeting, warning, blast, counterplay and reset.');

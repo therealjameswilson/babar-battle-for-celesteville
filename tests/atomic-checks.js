@@ -1,0 +1,12 @@
+function atomicChecks(check){
+ function fresh(team=0){reset();running=true;paused=false;units=units.filter(u=>u.type==='core');const b=add('factory',team,900,1000);linked.add(b.id);ore=enemyBudget=3000;materials=enemyMaterials=1500;selected=team?[]:[b];return b;}
+ let b=fresh();check(!!researchRequirement('atomic',0),'requires shells');technologies.add('shells');check(!!researchRequirement('atomic',0),'requires armor II');technologies.add('armor2');check(!researchRequirement('atomic',0)&&purchaseResearch(b,'atomic'),'research purchase');check(ore===2200&&materials===1200,'research cost');
+ for(const team of [0,1]){b=fresh(team);factionResearch(team).add('atomic');check(assembleAtomic(b),'both factions assemble');check((team?enemyBudget:ore)===2350&&(team?enemyMaterials:materials)===1300,'assembly costs');check(!assembleAtomic(b),'single payload cap');linked.delete(b.id);updateAtomic(40);check(b.atomicJob.progress===0,'isolation halts assembly');linked.add(b.id);updateAtomic(74);check(!b.atomicReady,'full build time');updateAtomic(1);check(b.atomicReady&&!b.atomicJob,'bomb completes');}
+ b=fresh();technologies.add('atomic');b.atomicReady=true;check(!launchAtomic(b,{x:100,y:100})&&b.atomicReady,'unseen target rejected without spending');
+ const enemy=add('trooper',1,950,1000,{hp:2000,max:2000}),ally=add('trooper',0,970,1000,{hp:2000,max:2000});sightAt=-1;
+ check(launchAtomic(b,{x:950,y:1000})&&!b.atomicReady,'launch consumes payload');updateAtomic(0);check(enemy.hp===2000,'warning prevents instant damage');t=18;updateAtomic(0);check(enemy.hp===1100&&ally.hp<2000,'blast and friendly fire');check(atomicStrikes.length===0,'strike finishes');
+ b=fresh();b.atomicReady=true;launchAtomic(b,{x:950,y:1000});b.hp=0;updateAtomic(0);check(!atomicStrikes.length,'destroy launcher aborts');
+ b=fresh();b.atomicReady=true;launchAtomic(b,{x:950,y:1000});linked.delete(b.id);updateAtomic(0);check(!atomicStrikes.length&&!b.atomicReady,'cut supply aborts and spends payload');
+ b=fresh(1);enemyTechnologies.add('atomic');b.atomicReady=true;const base=add('relay',0,500,1000);atomicAIAt=0;updateAtomic(0);check(!atomicStrikes.length,'AI cannot target hidden buildings');add('scout',1,750,1100);sightAt=-1;atomicAIAt=0;updateAtomic(0);check(atomicStrikes.length===1&&atomicStrikes[0].x===500,'AI launches at observed target');
+ b=fresh();technologies.add('atomic');paused=true;check(!assembleAtomic(b),'pause guard');paused=false;ended=true;check(!assembleAtomic(b),'end guard');reset();check(!atomicStrikes.length&&!atomicTargetSite,'reset clears strikes');
+}

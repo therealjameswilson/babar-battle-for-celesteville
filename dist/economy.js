@@ -66,7 +66,7 @@ function deliveryBase(b) { return workerProducer(b)||b.type==='relay'; }
 function produces(b,type) { return type==='worker'?workerProducer(b):b.type===producerFor(type); }
 function producerFor(type) { return type === 'worker' ? 'core' : type === 'walker' ? 'factory' : 'forge'; }
 function readyProducers(type) {
-  return selected.filter(u => u.team === 0 && u.hp > 0 && produces(u,type) && !u.construction && !u.research && u.queue.length < 5)
+  return selected.filter(u => u.team === 0 && u.hp > 0 && produces(u,type) && !u.construction && !u.research && !u.atomicJob && u.queue.length < 5)
     .sort((a,b) => a.queue.reduce((sum, item) => sum + defs[item].time, defs[type].time-a.progress) / (supplied(a) ? 1 : .25) -
       b.queue.reduce((sum, item) => sum + defs[item].time, defs[type].time-b.progress) / (supplied(b) ? 1 : .25) || a.id - b.id);
 }

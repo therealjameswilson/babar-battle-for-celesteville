@@ -60,7 +60,7 @@ function enemySafe(p) {
 }
 function enemyQueue(type) {
   if (!unitUnlocked(type,1)) return false;
-  const producer = alive(1).filter(b => produces(b,type) && !b.construction && !b.research && !b.plannedResearch && b.queue.length < 2)
+  const producer = alive(1).filter(b => produces(b,type) && !b.construction && !b.research && !b.atomicJob && !b.plannedResearch && b.queue.length < 2)
     .sort((a,b) => a.queue.length-b.queue.length || a.id-b.id)[0];
   if (!producer || supply(1) >= cap(1) || enemyBudget < defs[type].cost || enemyMaterials < materialCost(type)) return false;
   enemyBudget -= defs[type].cost; enemyMaterials -= materialCost(type);

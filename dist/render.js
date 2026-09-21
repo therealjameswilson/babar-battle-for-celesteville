@@ -482,6 +482,7 @@ function draw() {
     ctx.drawImage(fog, 0, 0);
     ctx.restore();
   }
+  drawAtomicWarnings();
   for (const k of rememberedBuildings()) drawRememberedBuilding(k);
   for (const u of units.filter((u) => unitInViewport(u,cw,ch) && visible(u)).sort((a, b) => a.y - b.y)) {
     ctx.save();
@@ -615,6 +616,7 @@ function draw() {
     mc.fillRect((u.x / W) * 300 - s / 2, (u.y / H) * 210 - s / 2, s, s);
   }
   for(const a of activeAttacks()){mc.strokeStyle='#ffb58c';mc.lineWidth=2;mc.beginPath();mc.arc(a.x/W*300,a.y/H*210,7,0,Math.PI*2);mc.stroke();}
+  for(const s of atomicStrikes){mc.strokeStyle='#ffba77';mc.lineWidth=2;mc.beginPath();mc.arc(s.x/W*300,s.y/H*210,ATOMIC.radius/W*300,0,Math.PI*2);mc.stroke();}
   mc.strokeStyle = '#fff1bc';
   mc.lineWidth = 1.5;
   mc.strokeRect(
