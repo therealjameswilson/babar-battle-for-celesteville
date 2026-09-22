@@ -1176,3 +1176,13 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   844×390 and 1280×900. Photo decoded; Babar prerequisite context, observed Rataxes
   project, hidden enemy project, non-pausing behavior and horizontal bounds passed.
 - Visually inspected the mobile command-panel card. Physical iPhone Safari not tested.
+
+## v0.56.2 — map-wide matching selection
+- Double-click, Ctrl/Command-click and touch Same type select all living friendly
+  units/buildings of the anchor type, independent of camera position.
+- Syntax/assets and full deterministic tactical suite passed. Updated selection
+  checks cover offscreen matches, enemy/dead exclusion, append without duplicates,
+  buildings, pause/modal guards, and unchanged orders/time/camera.
+- Real browser `tests/type-selection-browser.html`: 48 assertions passed across
+  390×844, 844×390 and 1280×900, including double-click event and touch-button paths.
+  Physical iPhone Safari remains untested.

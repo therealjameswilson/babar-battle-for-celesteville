@@ -951,7 +951,7 @@ function updateUI(force = false) {
       u.queue.forEach((type, index) => a.push([`Cancel ${index + 1}: ${defs[type].name}`, `Refund ${defs[type].cost}`, () => cancelRecruit(u, index)]));
     }
     if (u && selected.every(member => member.team === 0 && member.type === u.type))
-      a.push(['Same type', 'Select matching units or buildings on screen', () => selectOnscreenType(u)]);
+      a.push(['Same type', 'Select all matching friendly units or buildings across the map', () => selectAllOfType(u)]);
     const holder = $('actions');
     holder.replaceChildren();
     for (const [name, cost, fn, disabled] of a) {
@@ -1081,7 +1081,7 @@ canvas.addEventListener('pointerup', (e) => {
   } else {
     let u = nearest(wp, alive(0));
     if (u && dist(u, wp) < u.r + 18) {
-      if (start.typeSelect) selectOnscreenType(u, start.shift);
+      if (start.typeSelect) selectAllOfType(u, start.shift);
       else clickSelection(u, start.shift);
       if(start.touch&&!defs[u.type].speed)document.querySelector('#phone-tabs [data-panel="actions"]')?.click();
     } else if (

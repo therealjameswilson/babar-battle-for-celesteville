@@ -6,7 +6,7 @@ A static, single-player Canvas RTS: a storybook kingdom caught in a border war. 
 
 Run `npm start`, then open http://localhost:8000. Or open `dist/index.html` directly. No install, build, backend, API key, or sign-in is needed to play. Requires Node 20+ for checks and Python 3 for the optional local server.
 
-- Click or drag to select; Shift-click adds or removes a unit. Double-click or Ctrl/Command-click selects friendly units/buildings of the same type currently on screen. Touch: select one type, then choose **Same type** in the actions list. Right-click a location to move or a visible enemy to focus fire.
+- Click or drag to select; Shift-click adds or removes a unit. Double-click or Ctrl/Command-click selects all friendly units/buildings of the same type across the map. Touch: select one type, then choose **Same type** in the actions list. Right-click a location to move or a visible enemy to focus fire.
 - **A** attack-move, **M** move, **G** gather, **E** repair, **S** hold, **R** retreat. **F2** selects the army, **F3** cycles recent attack reports, **H** returns to the palace, **I** selects idle provisioners, **Space** pauses. Arrow keys/minimap pan; wheel or +/− zoom.
 - Ctrl/Command + 0–9 saves a control group; the digit recalls it. Groups offers four touch slots. Shift-command or Queue appends waypoints. Production buildings accept rally points, including supply caches for provisioners. Recruitment can be cancelled with a full refund.
 - **Q** activates Babar’s Stand together: 50 energy, 35s cooldown, +20 morale and 25% damage reduction for nearby troops for 8s.
@@ -410,7 +410,7 @@ Defense Batteries**. Supply and fund batteries to intercept incoming missiles;
 overlapping batteries are needed against H-bombs. Reload gaps allow saturation.
 Nuclear launch authorization remains with the faction leader. See [costs and rules](docs/MISSILES.md).
 
-### Nuclear reference card (0.56.1)
+### Nuclear reference card (0.56.2)
 Austin Long's supplied photograph now accompanies the nuclear decision briefing for
 Babar and observed Rataxes projects. Open Build / train on phones to read it.
 The card does not pause play or reveal hidden enemy research.

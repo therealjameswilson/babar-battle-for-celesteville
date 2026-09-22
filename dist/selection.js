@@ -1,18 +1,14 @@
 
 'use strict';
-function selectOnscreenType(unit, append = false) {
+function selectAllOfType(unit, append = false) {
   if (!running || paused || ended || !unit || unit.team !== 0 || unit.hp <= 0 ||
       ['help-dialog','court-dialog','groups-dialog'].some(id => $(id).open)) return false;
-  const matches = alive(0).filter(u => {
-    const p = screen(u);
-    return u.type === unit.type && p.x >= 0 && p.x <= canvas.clientWidth &&
-      p.y >= 0 && p.y <= canvas.clientHeight;
-  });
+  const matches = alive(0).filter(u => u.type === unit.type);
   if (!matches.length) return false;
   selected = append ? [...new Set([...selected.filter(u => u.hp > 0 && u.team === 0), ...matches])] : matches;
   mode = null; placing = null;
   updateUI(true);
-  say(`${matches.length} ${defs[unit.type].name} on screen selected.`);
+  say(`${matches.length} ${defs[unit.type].name} across the map selected.`);
   return true;
 }
 function clickSelection(unit, extend = false) {
@@ -25,7 +21,7 @@ canvas.addEventListener('dblclick', e => {
   const point = world(eventPoint(e)), unit = nearest(point, alive(0));
   if (unit && dist(unit, point) < unit.r + 18) {
     e.preventDefault();
-    selectOnscreenType(unit, e.shiftKey);
+    selectAllOfType(unit, e.shiftKey);
   }
 });
 // Retain a mixed selection while the commander issues orders to one unit type.
