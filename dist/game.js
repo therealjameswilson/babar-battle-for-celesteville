@@ -177,6 +177,8 @@ function say(s) {
   }
 }
 const researchDefs = {
+  damageLimitation: {name:'Austin Long: Damage Limitation',building:'forge',cost:150,materials:50,time:40,
+    description:'Unlock Civil Defense shelters and automatic worker evacuation. A fictional skill inspired by Austin Long’s writing on damage limitation; shelter effects are game rules.'},
   hydrogen: {name:'H-bomb command',building:'factory',requires:'atomic',cost:1000,materials:350,time:120,description:'After Atomic command: unlock H-bomb assembly (1000 Supplies, 350 Materials, 80 Uranium, 110s). Larger 230m blast; 28s warning and friendly fire. Shares the atomic payload limit.'},
   atomic: {name:'Atomic command',building:'factory',requires:'shells',requiresAlso:'armor2',cost:800,materials:300,time:90,description:'Unlock assembly of one atomic bomb per faction at supplied Artillery Works. Assembly: 650 Supplies, 200 Materials, 40 Uranium, 75s. Launch: 18s warning, friendly fire.'},
   rapid: { name: 'Rapid advance doctrine', building:'forge', requires:'drill', cost:180, materials:60, time:35,
@@ -637,7 +639,7 @@ function buildingCost(type) {
 }
 function build(type) {
   if (!running || paused || ended) return;
-  if (!prerequisite(type)) return say('Complete a Guard School before building Artillery Works.');
+  if (!prerequisite(type)) return say(type==='shelter'?'Research Austin Long: Damage Limitation at a Guard School to unlock Civil Defense.':'Complete a Guard School before building Artillery Works.');
   if (materials < materialCost(type)) return say('Not enough Materials. Build and staff a quarry first.');
   if (ore < buildingCost(type)) return say('Not enough supplies.');
   placing = type;
@@ -896,7 +898,7 @@ function updateUI(force = false) {
     }
     if(u&&!u.construction&&((selected.length===1&&workerProducer(u))||selected.every(w=>w.team===0&&w.type==='worker')))
       for(const type of ['forge','relay','quarry','factory','turret','headquarters','shelter'])
-        a.push([defs[type].name,buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
+        a.push([defs[type].name,type==='shelter'&&!prerequisite(type)?'Requires Austin Long: Damage Limitation · Guard School':buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
     if (selected.length > 1) {
       for (const type of ['worker','trooper','scout','sapper','walker']) {
         const producers = selected.filter(b => b.team === 0 && produces(b,type) && !b.construction);

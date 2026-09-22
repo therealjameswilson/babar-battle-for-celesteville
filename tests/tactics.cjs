@@ -327,3 +327,6 @@ console.log('PASS: Uranium gates, extraction, delivery, depletion, faction costs
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'civil-defense-checks.js'),'utf8'));
 run('civilDefenseChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: civil defense construction, faction evacuation, protection, cargo/queue preservation, all-clear, abort and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'damage-limitation-checks.js'),'utf8'));
+run('damageLimitationChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: Damage Limitation faction gates, costs, timing, completion, cancellation, destruction and restart.');

@@ -1141,3 +1141,9 @@ Real Codex browser: tests/uranium-browser.html passed 112 checks at 320×568, 39
 Full deterministic tactics suite passed, including new tests for paid shelter construction, both-faction evacuation, physical arrival, retained cargo/queued work, H-bomb protection versus exposed-worker death, all-clear, aborted strikes, unusable shelters and reset. Syntax and asset checks passed.
 
 Real browser fixture tests/civil-defense-browser.html passed 78 assertions at 390×844, 844×390 and 1280×900: build action, touch placement/payment without pausing, warning-triggered worker destinations, shared rule checks and layout bounds. Inspected bunker art, workers converging and protection perimeter; no captured console errors. Review screenshot: artifacts/civil-defense-mobile.png (local, excluded from deployment). Physical iPhone Safari remains unverified.
+
+## Damage Limitation v0.52.0
+
+Syntax/assets and the full deterministic tactics suite passed. New checks verify both factions start locked, placement cannot bypass the gate, research payment/timing/completion, duplicate prevention, cancellation/refund, destroyed-site behavior and restart. Existing Civil Defense tests now explicitly grant their required technology for shelter-construction scenarios.
+
+Real browser: tests/damage-limitation-browser.html passed 75 assertions across 390×844, 844×390 and 1280×900. Verified the disabled shelter button explains the prerequisite, the named skill starts paid research, completion enables shelter placement, and phone layouts remain within viewport bounds. No captured browser console errors. Physical iPhone Safari remains unverified.

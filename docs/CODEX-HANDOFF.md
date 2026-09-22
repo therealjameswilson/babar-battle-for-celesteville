@@ -223,3 +223,10 @@ Three finite deposits (120 U each) now supply nuclear production. Completed Arti
 Build a reinforced Civil Defense shelter for 180 Supplies and 80 Materials (22s, 1,800 HP). Any public nuclear launch warning—including friendly fire—automatically evacuates both factions' provisioners to completed friendly shelters, preferring sites outside the blast warning. Navigation distributes workers around the shelter. Workers within 110m receive 95% nuclear damage reduction; this does not protect them against ordinary weapons. Protection is sampled before each blast so unit iteration order cannot change survival. Supply links are not required. Incomplete or destroyed shelters provide no protection, and distant workers must arrive in time.
 
 Evacuation temporarily overrides movement and pauses work without discarding cargo or queued orders. Work resumes three seconds after the last active warning disappears, including aborted strikes. New orders issued during an alert take effect after all-clear. Without a usable shelter workers continue their orders. Rhino command can pay to build a shelter after seven minutes. Local Canvas bunker art uses concrete walls, a reinforced entrance and a civil-defense triangle; no new external assets.
+
+## v0.52.0
+Civil Defense construction now requires the faction's damageLimitation technology.
+Guard School research: 150 S / 50 M / 40s. Both UI and simulation placement enforce
+the gate. AI considers the skill after 360s and pays the same costs. Attribution
+and the distinction between scholarship and fictional mechanics are documented in
+DAMAGE-LIMITATION.md.

@@ -20,7 +20,7 @@ function civilDefenseChecks(check){
   b.construction=0;updateCivilDefense();launcher.hp=0;t=40;updateCivilDefense();check(!w.civilDefense,'aborted strike releases workers');
  }
  reset();running=true;paused=false;ore=1000;materials=200;selected=[alive(0).find(u=>u.type==='worker')];
- build('shelter');command({x:490,y:1080});
+ technologies.add('damageLimitation');build('shelter');command({x:490,y:1080});
  check(alive(0).some(b=>b.type==='shelter'&&b.construction)&&ore===820&&materials===120,'shelter construction costs');
  reset();check(!units.some(w=>w.civilDefense),'reset clears evacuation');
 }

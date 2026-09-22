@@ -29,6 +29,7 @@ function nextKnownResource(u, kind='supplies') {
 
 function materialCost(type) { return defs[type].materials || 0; }
 function prerequisite(type, team = 0) {
+  if(type==='shelter')return factionResearch(team).has('damageLimitation');
   return type !== 'factory' || alive(team).some(b => b.type === 'forge' && !b.construction);
 }
 function materialSite(p) { return nodes.find(n => n.kind === 'materials' && n.amount > 0 && dist(n, p) < 25); }

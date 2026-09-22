@@ -134,7 +134,7 @@ function enemyMacro() {
     else if (supply(1)>=cap(1)-3 && cap(1)<(easy?40:60)) { type='relay'; site=enemyFindSite(type,core); }
     else if (!buildings.some(b=>b.type==='quarry')) { type='quarry'; site=nodes.find(n=>n.kind==='materials'&&enemySeesPoint(n)&&n.amount>0&&validBuild(n,type,1)); }
     else if (!buildings.some(b=>b.type==='factory') && t>90) { type='factory'; site=enemyFindSite(type,core); }
-    else if(t>420&&!buildings.some(b=>b.type==='shelter')&&enemyBudget>=300&&enemyMaterials>=80){type='shelter';site=enemyFindSite(type,core);}
+    else if(t>420&&prerequisite('shelter',1)&&!buildings.some(b=>b.type==='shelter')&&enemyBudget>=300&&enemyMaterials>=80){type='shelter';site=enemyFindSite(type,core);}
     // Independent camps are paid only after current reports show home stocks running low.
     else if(enemyBudget>=550&&(site=enemyHeadquartersSite())){type='headquarters';isExpansion=true;}
     // Up to two scouted expansions shorten deliveries; raids can change the route.
