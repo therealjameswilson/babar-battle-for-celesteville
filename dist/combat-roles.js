@@ -9,6 +9,7 @@ function combatRole(u) {
   if(u.type==='bike')return 'Arthur · fast courier motorbike · no standard weapon. Neutron strike unlocks after your first completed nuclear payload.';
   if (u.type === 'sapper') return 'Light · 10 +20 vs armored · 170m. Weak to guards.';
   if (u.type === 'walker') return 'Armored · siege/splash. Weak to sappers; screen with guards.';
+  if (shotgunEquipped(u)) return 'Shotgun guard · within 95m: 24 damage + up to two 10-damage cone hits · 1.5s reload. Rifle at longer range.';
   if (u.type === 'trooper') return 'Light · beats sappers, screens guns. Weak to siege splash.';
   if (u.type === 'scout') return 'Light · fast scouting and flanking. Avoid infantry fire.';
   return '';
@@ -89,4 +90,18 @@ function enemyRapidAdvance(){
  if(!enemyTechnologies.has('rapid'))return;
  const threats=alive(0).filter(u=>defs[u.type].damage&&sees(1,u));
  for(const u of alive(1))if(rapidReady(u)&&u.hp>u.max*.55&&u.morale>50&&u.order?.kind!=='retreat'&&threats.some(v=>dist(u,v)<weaponRange(u)+v.r+70))activateRapid(u);
+}
+
+// Fictional close-range shotgun kit; normal armor, cover and suppression still apply.
+function shotgunEquipped(u){return u.team===0&&u.type==='trooper'&&technologies.has('shotguns');}
+function fireBuckshot(u,target){
+  const bearing=Math.atan2(target.y-u.y,target.x-u.x);
+  const secondary=alive(1-u.team).filter(v=>v!==target&&sees(u.team,v)&&dist(u,v)<=95&&
+    Math.cos(Math.atan2(v.y-u.y,v.x-u.x)-bearing)>=Math.cos(.35))
+    .sort((a,b)=>dist(u,a)-dist(u,b)||a.id-b.id).slice(0,2);
+  damageUnit(u,target,24);
+  for(const v of secondary)damageUnit(u,v,10);
+  for(const spread of [-.22,-.11,.11,.22])fx.push({x:u.x,y:u.y,
+    tx:u.x+Math.cos(bearing+spread)*95,ty:u.y+Math.sin(bearing+spread)*95,
+    life:.16,max:.16,team:u.team});
 }

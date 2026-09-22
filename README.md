@@ -421,3 +421,12 @@ mining when construction finishes, unless you queued another order. On touch,
 select provisioners and tap a quarry to mine; tapping an unfinished quarry sends
 them to finish construction. Keep the quarry linked to your palace or headquarters.
 Materials enter your stockpile when workers deliver their cargo.
+
+### Elephant shotguns (0.57.0)
+Research **Elephant shotgun kit** at an idle Guard School: 160 Supplies,
+40 Materials, 30 seconds. Existing and newly recruited Elephant Guards switch to
+buckshot within 95m: 24 base damage to the target and 10 to up to two visible enemies
+inside a narrow forward cone, with a 1.5-second reload. Rifles remain available at
+longer range. Cover, armor, suppression and infantry upgrades apply normally.
+Friendly units are excluded from pellet damage. Guards carry an original Canvas
+shotgun overlay with pellet trails and an original synthesized firing sound.

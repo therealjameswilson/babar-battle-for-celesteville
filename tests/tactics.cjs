@@ -339,3 +339,6 @@ console.log('PASS: faction leader nuclear authority, personal sight, blockers, h
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'missile-checks.js'),'utf8'));
 run('missileChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: ballistic faction costs, fog/range, warning, friendly fire, defense coverage/cost/reload/supply, H-bomb layering, AI, research and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'shotgun-checks.js'),'utf8'));
+run('shotgunChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: shotgun research, cone, range, faction, friendly exclusions and reset.');

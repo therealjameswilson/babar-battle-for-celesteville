@@ -48,7 +48,7 @@ function battleSound(kind) {
   const now = audioContext.currentTime;
   if (now - lastSound < 0.07) return;
   lastSound = now;
-  const length = kind === 'cannon' ? 0.35 : 0.12,
+  const length = kind === 'cannon' ? 0.35 : kind === 'shotgun' ? .22 : 0.12,
     buffer = audioContext.createBuffer(
       1,
       audioContext.sampleRate * length,
@@ -62,7 +62,7 @@ function battleSound(kind) {
     gain = audioContext.createGain();
   source.buffer = buffer;
   filter.type = 'lowpass';
-  filter.frequency.value = kind === 'cannon' ? 350 : 1800;
+  filter.frequency.value = kind === 'cannon' ? 350 : kind === 'shotgun' ? 800 : 1800;
   gain.gain.value = 0.12;
   source.connect(filter).connect(gain).connect(audioContext.destination);
   source.start();

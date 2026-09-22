@@ -216,6 +216,11 @@ function drawUnit(u) {
       ctx.fillRect(-6, -14, 13, 5);
       ctx.fillRect(-6, 9, 13, 5);
     }
+    if(shotgunEquipped(u)){
+      ctx.fillStyle='#78543b';ctx.fillRect(5,-3,13,6);
+      ctx.fillStyle='#b3b8af';ctx.fillRect(16,-4,17,3);ctx.fillRect(16,1,17,3);
+      ctx.fillStyle='#151b18';ctx.fillRect(31,-4,3,8);
+    }
     if (u.type !== 'hero' && t - (u.firedAt ?? -10) < 0.12) {
       ctx.fillStyle = '#e4c47e';
       ctx.beginPath();

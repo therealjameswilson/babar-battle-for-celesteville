@@ -1198,3 +1198,12 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Real browser: 21 assertions at 390×844, 844×390 and 1280×900. Built the starting
   quarry, advanced simulation through construction and physical delivery (170 M),
   exercised touch assignment and unfinished-site construction. No physical iPhone test.
+
+## v0.57.0 — Elephant shotgun kit
+- Syntax/assets and full deterministic suite passed. New shotgun checks cover paid
+  research, unfinished lock, faction/unit restrictions, target/cone damage,
+  friendly/rear/distant exclusions, reload, long-range rifle fallback and restart.
+- Real browser fixture `tests/shotgun-browser.html`: 42 assertions passed at
+  390×844, 844×390 and 1280×900. Clicked research, completed its timer, equipped
+  existing guards, checked unit description and inspected rendered weapon overlays.
+- Physical iPhone Safari and audible output were not directly verified.

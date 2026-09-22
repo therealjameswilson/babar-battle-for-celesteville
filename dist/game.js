@@ -180,6 +180,7 @@ function say(s) {
   }
 }
 const researchDefs = {
+  shotguns: {name:'Elephant shotgun kit',building:'forge',cost:160,materials:40,time:30,description:'Guards fire buckshot within 95m: 24 damage to the target and 10 to up to two nearby enemies in a narrow cone; 1.5s reload. Retain rifles at longer range.'},
   ballistics: {name:'Ballistic command',building:'factory',cost:220,materials:80,time:45,description:'Unlock Ballistic Launchers: conventional precision strikes, 900m range, 10s warning. Missile defenses can intercept them.'},
   damageLimitation: {name:'Austin Long: Damage Limitation',building:'forge',cost:150,materials:50,time:40,
     description:'Unlock Civil Defense shelters, automatic worker evacuation and Missile Defense Batteries. A fictional skill inspired by Austin Long’s writing on damage limitation; shelter effects are game rules.'},
@@ -406,7 +407,8 @@ function damageUnit(u, v, baseDamage, scale = 1) {
 function shoot(u, v) {
   if (!firePermission(u,v) || u.hp <= 0 || v.hp <= 0 || u.artilleryTransition || !inWeaponArc(u, v) || !sees(u.team, v)) return false;
   const d = defs[u.type];
-  u.cool = (u.deployed ? SIEGE.rate : d.rate) * (u.morale < 45 ? 1.5 : 1) * (rapidActive(u)?RAPID_ADVANCE.interval:1);
+  const buckshot=shotgunEquipped(u)&&dist(u,v)<=95;
+  u.cool = (buckshot ? 1.5 : u.deployed ? SIEGE.rate : d.rate) * (u.morale < 45 ? 1.5 : 1) * (rapidActive(u)?RAPID_ADVANCE.interval:1);
   u.angle = Math.atan2(v.y - u.y, v.x - u.x);
   u.firedAt = t;
   u.firedAngle = u.angle; // Preserve shot bearing for the brief presentation pose.
@@ -418,9 +420,10 @@ function shoot(u, v) {
       damageUnit(u, a, SIEGE.damage, a === v || distance <= 22 ? 1 : distance <= 43 ? .5 : .25);
     }
     fx.push({ x: v.x, y: v.y, life: .55, max: .55, shellImpact: true, r: SIEGE.radius });
-  } else damageUnit(u, v, d.damage);
+  } else if(buckshot) fireBuckshot(u,v);
+  else damageUnit(u, v, d.damage);
   fx.push({ x: u.x, y: u.y, tx: v.x, ty: v.y, life: .3, max: .3, team: u.team, heavy: u.type === 'walker' });
-  battleSound(u.type === 'walker' ? 'cannon' : 'shot');
+  battleSound(buckshot ? 'shotgun' : u.type === 'walker' ? 'cannon' : 'shot');
   return true;
 }
 
