@@ -1129,3 +1129,9 @@ Canvas state, correct H-bomb impact effect and layout. Generated atlas and rende
 comparison visually inspected. The browser reported an injected MutationObserver
 observe error (no MutationObserver exists in project sources); fixture assertions
 and gameplay rendering completed. Physical iPhone Safari remains unverified.
+
+## Uranium v0.50.0
+
+Syntax/asset checks and the full deterministic tactics suite passed. Added paired-faction tests for Works access, timed extraction, finite depletion, physical delivery, atomic/H-bomb payment, insufficient funds without partial spending, AI assignment, deposit clearance and reset. Updated earlier nuclear fixtures to provide their now-required resource. The old twelve supply caches remain; three Uranium deposits are additional.
+
+Real Codex browser: tests/uranium-browser.html passed 112 checks at 320×568, 390×844, 844×390 and 1280×900. Exercised assembly buttons at 39/40 U, payment/HUD refresh, touch gathering without pausing, all resource-counter bounds and horizontal overflow. Inspected rendered phone deposit, hauler and compact HUD. No captured browser console errors. This is browser viewport testing, not physical iPhone Safari verification.

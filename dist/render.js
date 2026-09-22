@@ -239,7 +239,7 @@ function drawUnit(u) {
       ctx.stroke();
     }
     if (u.type === 'worker' && u.carrying) {
-      ctx.fillStyle = u.cargoKind === 'materials' ? '#97b4bb' : '#ac9062';
+      ctx.fillStyle = u.cargoKind === 'uranium' ? '#b7ad62' : u.cargoKind === 'materials' ? '#97b4bb' : '#ac9062';
       ctx.fillRect(12, -27, 10, 8);
       ctx.strokeStyle = '#332f25';
       ctx.strokeRect(12, -27, 10, 8);
@@ -398,6 +398,13 @@ function draw() {
   const showWork=selected.some(u=>u.type==='worker'||u.type==='quarry');
   for (const n of nodes) {
     if (knownResourceAmount(n,0) === 0) continue;
+    if (n.kind === 'uranium') {
+      poly([[n.x-24,n.y+12],[n.x-16,n.y-15],[n.x+5,n.y-22],[n.x+23,n.y+8],[n.x+10,n.y+19]], '#77745b', '#b7ad62');
+      ctx.fillStyle='#ded39a';ctx.font='bold 11px monospace';ctx.fillText('U',n.x-4,n.y+3);
+      ctx.font='10px monospace';ctx.fillText('URANIUM '+resourceLabel(n),n.x-38,n.y+34);
+      if(showWork&&resourceObserved(n))drawResourceWork(n,n.y+47);
+      continue;
+    }
     if (n.kind === 'materials') {
       poly([[n.x-25,n.y+12],[n.x-20,n.y-12],[n.x,n.y-23],[n.x+25,n.y+4],[n.x+15,n.y+19]], '#789499', '#344c52');
       ctx.fillStyle='#dae6db'; ctx.font='10px monospace';
@@ -607,7 +614,7 @@ function draw() {
   mc.fillRect((depot.x / W) * 300 - 4, (depot.y / H) * 210 - 4, 8, 8);
   for (const n of nodes) {
     if (knownResourceAmount(n,0) === 0) continue;
-    mc.fillStyle = '#e8b058';
+    mc.fillStyle = n.kind==='uranium'?'#ded39a':n.kind==='materials'?'#97b4bb':'#e8b058';
     mc.fillRect((n.x / W) * 300 - 2, (n.y / H) * 210 - 2, 4, 4);
   }
   for (const k of rememberedBuildings()) {mc.strokeStyle='#b9a2a0';mc.lineWidth=1;mc.strokeRect(k.x/W*300-3,k.y/H*210-3,6,6);}

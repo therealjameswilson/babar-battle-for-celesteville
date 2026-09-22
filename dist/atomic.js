@@ -1,7 +1,7 @@
 'use strict';
 // Fictional endgame ability; all values are game balance, not weapon specifications.
-const ATOMIC={cost:650,materials:200,build:75,warning:18,radius:150,damage:900};
-const HBOMB={cost:1000,materials:350,build:110,warning:28,radius:230,damage:1350};
+const ATOMIC={cost:650,materials:200,uranium:40,build:75,warning:18,radius:150,damage:900};
+const HBOMB={cost:1000,materials:350,uranium:80,build:110,warning:28,radius:230,damage:1350};
 function payloadSpec(kind){return kind==='hydrogen'?HBOMB:ATOMIC;}
 function payloadLabel(kind){return kind==='hydrogen'?'H-BOMB':'ATOMIC';}
 function payloadName(kind){return kind==='hydrogen'?'H-bomb':'atomic bomb';}
@@ -11,8 +11,8 @@ function assembleAtomic(b,kind='atomic'){
   if(!['atomic','hydrogen'].includes(kind))return false;
   const spec=payloadSpec(kind);
   if(!running||paused||ended||!b||b.hp<=0||b.type!=='factory'||b.construction||b.research||b.queue.length||!supplied(b)||!factionResearch(b.team).has(kind)||atomicBusy(b.team))return false;
-  if((b.team?enemyBudget:ore)<spec.cost||(b.team?enemyMaterials:materials)<spec.materials)return false;
-  if(b.team){enemyBudget-=spec.cost;enemyMaterials-=spec.materials;enemySpent+=spec.cost;}else{ore-=spec.cost;materials-=spec.materials;}
+  if((b.team?enemyBudget:ore)<spec.cost||(b.team?enemyMaterials:materials)<spec.materials||(b.team?enemyUranium:uranium)<spec.uranium)return false;
+  if(b.team){enemyBudget-=spec.cost;enemyMaterials-=spec.materials;enemyUranium-=spec.uranium;enemySpent+=spec.cost;}else{ore-=spec.cost;materials-=spec.materials;uranium-=spec.uranium;}
   b.atomicJob={progress:0,kind};updateUI(true);return true;
 }
 function aimAtomic(b){
@@ -50,7 +50,7 @@ function updateAtomic(dt){
   if(t<atomicAIAt)return;atomicAIAt=t+5;
   const factory=alive(1).find(b=>b.type==='factory'&&!b.construction&&supplied(b));
   if(!factory||!enemyTechnologies.has('atomic'))return;
-  const kind=enemyTechnologies.has('hydrogen')&&enemyBudget>=HBOMB.cost+120&&enemyMaterials>=HBOMB.materials?'hydrogen':'atomic';
+  const kind=enemyTechnologies.has('hydrogen')&&enemyBudget>=HBOMB.cost+120&&enemyMaterials>=HBOMB.materials&&enemyUranium>=HBOMB.uranium?'hydrogen':'atomic';
   if(!atomicBusy(1)&&enemyBudget>=payloadSpec(kind).cost+120)assembleAtomic(factory,kind);
   if(!factory.atomicReady)return;
   const spec=payloadSpec(factory.atomicKind);
@@ -66,6 +66,6 @@ function atomicActions(a,u){
   else if(u.atomicReady)a.push(['Launch '+payloadName(u.atomicKind),'Tap visible target · '+payloadSpec(u.atomicKind).warning+'s warning · friendly fire',()=>aimAtomic(u),!supplied(u)]);
   else for(const kind of ['atomic','hydrogen'])if(technologies.has(kind)){
     const spec=payloadSpec(kind);
-    a.push(['Assemble '+payloadName(kind),spec.cost+' S · '+spec.materials+' M · '+spec.build+'s · shared one-payload limit',()=>assembleAtomic(u,kind),atomicBusy(0)||!!u.research||!!u.queue.length||!supplied(u)||ore<spec.cost||materials<spec.materials]);
+    a.push(['Assemble '+payloadName(kind),spec.cost+' S · '+spec.materials+' M · '+spec.uranium+' U · '+spec.build+'s · shared one-payload limit',()=>assembleAtomic(u,kind),atomicBusy(0)||!!u.research||!!u.queue.length||!supplied(u)||ore<spec.cost||materials<spec.materials||uranium<spec.uranium]);
   }
 }

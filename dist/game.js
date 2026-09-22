@@ -176,8 +176,8 @@ function say(s) {
   }
 }
 const researchDefs = {
-  hydrogen: {name:'H-bomb command',building:'factory',requires:'atomic',cost:1000,materials:350,time:120,description:'After Atomic command: unlock H-bomb assembly (1000 Supplies, 350 Materials, 110s). Larger 230m blast; 28s warning and friendly fire. Shares the atomic payload limit.'},
-  atomic: {name:'Atomic command',building:'factory',requires:'shells',requiresAlso:'armor2',cost:800,materials:300,time:90,description:'Unlock assembly of one atomic bomb per faction at supplied Artillery Works. Assembly: 650 Supplies, 200 Materials, 75s. Launch: 18s warning, friendly fire.'},
+  hydrogen: {name:'H-bomb command',building:'factory',requires:'atomic',cost:1000,materials:350,time:120,description:'After Atomic command: unlock H-bomb assembly (1000 Supplies, 350 Materials, 80 Uranium, 110s). Larger 230m blast; 28s warning and friendly fire. Shares the atomic payload limit.'},
+  atomic: {name:'Atomic command',building:'factory',requires:'shells',requiresAlso:'armor2',cost:800,materials:300,time:90,description:'Unlock assembly of one atomic bomb per faction at supplied Artillery Works. Assembly: 650 Supplies, 200 Materials, 40 Uranium, 75s. Launch: 18s warning, friendly fire.'},
   rapid: { name: 'Rapid advance doctrine', building:'forge', requires:'drill', cost:180, materials:60, time:35,
     description:'Unlock V for guards, scouts and sappers: +30% speed, 30% shorter firing interval for 6s. Costs 20 health each; 24s cooldown.' },
   armor: { name: 'Field protection I', building: 'forge', cost: 140, materials: 40, time: 30,
@@ -292,7 +292,7 @@ function reset() {
   resetCameraViews();
   closeProduction();
   ore = 300;
-  materials = 0; enemyMaterials = 60; munitions = MUNITIONS.start; atomicStrikes=[];atomicTargetSite=null;atomicAIAt=0;
+  materials = 0; enemyMaterials = 60; uranium = enemyUranium = 0; munitions = MUNITIONS.start; atomicStrikes=[];atomicTargetSite=null;atomicAIAt=0;
   t = 0;
   wave = 0;
   nextWave = easy ? 120 : 85;
@@ -324,6 +324,7 @@ function reset() {
     [1510, 420],
   ])
     nodes.push({ x, y, r: 20, amount: 1800 });
+  for (const [x,y] of [[560,1160],[950,700],[1200,550]]) nodes.push({x,y,r:24,amount:120,kind:'uranium'});
   for (const [x, y] of [[275, 650], [1070, 770], [1260, 610]]) nodes.push({x, y, r:26, amount:1600, kind:'materials'});
   add('core', 0, 320, 900);
   add('hero', 0, 395, 800, { name: 'King Babar' });
@@ -509,7 +510,7 @@ function update(dt) {
           continue;
         }
       }
-      if(!u.carrying&&u.orders?.length&&n.kind==='materials'&&!quarryFor(n,u.team)){
+      if(!u.carrying&&u.orders?.length&&((n.kind==='materials'&&!quarryFor(n,u.team))||(n.kind==='uranium'&&!uraniumAccess(u.team)))){
         completeOrder(u);
         continue;
       }
@@ -521,7 +522,8 @@ function update(dt) {
           )
         );
         if (base && move(u, base, dt, base.r + u.r + 8)) {
-          if (u.cargoKind === 'materials') { if (!u.team) materials += u.carrying; else enemyMaterials += u.carrying; base.deliveredMaterials=(base.deliveredMaterials||0)+u.carrying; }
+          if (u.cargoKind === 'uranium') { if (!u.team) uranium += u.carrying; else enemyUranium += u.carrying; base.deliveredUranium=(base.deliveredUranium||0)+u.carrying; }
+          else if (u.cargoKind === 'materials') { if (!u.team) materials += u.carrying; else enemyMaterials += u.carrying; base.deliveredMaterials=(base.deliveredMaterials||0)+u.carrying; }
           else {
             const credited=u.carrying*(!u.team&&benefits.has('pompadour')?1.25:1);
             if(!u.team)ore+=credited;else enemyBudget+=credited;
@@ -533,8 +535,8 @@ function update(dt) {
         }
       } else if (move(u, n, dt, harvestDistance(n)) && canHarvest(u, n)) {
         u.harvest += dt;
-        if (u.harvest > 1.1) {
-          const amount = Math.min(10, n.amount);
+        if (u.harvest > (n.kind==='uranium'?3:1.1)) {
+          const amount = Math.min(n.kind==='uranium'?4:10, n.amount);
           n.amount -= amount;
           u.carrying += amount;
           u.cargoKind = n.kind || 'supplies';
@@ -728,7 +730,7 @@ function command(p, append = queueOrders) {
     fx.push({ x: p.x, y: p.y, life: 0.7, max: 0.7, ring: true });
     say(
       mode === 'patrol' ? 'Patrol established. Units engage visible threats and return to their route.' : node
-        ? (node.kind === 'materials' ? 'Materials gathering started. Keep the quarry supplied.' : 'Supplies gathering started.')
+        ? (node.kind === 'uranium' ? 'Uranium duty assigned. Requires completed Artillery Works; deliver cargo to a linked base.' : node.kind === 'materials' ? 'Materials gathering started. Keep the quarry supplied.' : 'Supplies gathering started.')
         : enemy
           ? 'Concentrate fire on the marked target.'
           : 'Orders confirmed.'
@@ -743,6 +745,7 @@ function updateUI(force = false) {
   renderProduction();
   $('ore').textContent = Math.floor(ore);
   $('materials').textContent = Math.floor(materials);
+  $('uranium').textContent = Math.floor(uranium);
   $('munitions').textContent = Math.floor(munitions) + '/100';
   $('munitions-stock').title = 'Munitions: '+(munitionsIncome()?'+0.5/s from depot':'no depot income')+'. Pack 20 for 60 Supplies + 20 Materials at a supplied Guard School or Artillery Works.';
   $('idle-workers').textContent = 'Idle ' + idleWorkers().length;
@@ -785,7 +788,7 @@ function updateUI(force = false) {
           : u.type === 'hero'
             ? 'Fighter · 24 damage / 0.85s · 100m. Fight chooses a target; Royal strike deals 60 damage for 35 energy. Q protects nearby troops.'
             : u.type === 'worker'
-              ? (u.order?.node?.kind === 'materials' ? 'Quarry duty: ' + (quarryFor(u.order.node, 0) ? '3 extraction slots. Return Materials to a headquarters or linked palace/home.' : 'WAITING: complete and supply a quarry on this deposit.') : 'Gathers Supplies (2 extraction slots per cache). Quarries yield Materials. Can build and repair.')
+              ? (u.order?.node?.kind === 'uranium' ? 'Uranium duty: Artillery Works required. Two extraction slots; 4 U per 3s. Deliver to a linked base.' : u.order?.node?.kind === 'materials' ? 'Quarry duty: ' + (quarryFor(u.order.node, 0) ? '3 extraction slots. Return Materials to a headquarters or linked palace/home.' : 'WAITING: complete and supply a quarry on this deposit.') : 'Gathers Supplies (2 extraction slots per cache). Quarries yield Materials. Can build and repair.')
               : u.type === 'core'
                 ? 'Invite gatherers and expand Celesteville.'
                 : u.type === 'headquarters'
@@ -858,7 +861,7 @@ function updateUI(force = false) {
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
-  const munKey=selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
+  const munKey=(uranium>=40)+':'+(uranium>=80)+':'+selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
   if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
     actionKey = key + rapidKey + disciplineKey + munKey;
     let a = [];

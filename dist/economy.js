@@ -1,5 +1,7 @@
 'use strict';
-let materials = 0, enemyMaterials = 60;
+let materials = 0, enemyMaterials = 60, uranium = 0, enemyUranium = 0;
+function uraniumAccess(team) { return alive(team).some(b=>b.type==='factory'&&!b.construction); }
+function resourceName(n) { return n.kind==='uranium'?'Uranium':n.kind==='materials'?'Materials':'Supplies'; }
 let resourceMemory = [new Map(), new Map()];
 function observesResource(team, n) {
   return (team===0 && t<revealUntil) || alive(team).some(u=>dist(u,n)<vision(u));
@@ -22,7 +24,7 @@ function resourceLabel(n) {
 }
 function nextKnownResource(u, kind='supplies') {
   return nearest(u,nodes.filter(n=>(n.kind||'supplies')===kind && knownResourceAmount(n,u.team)>0 &&
-    (kind!=='materials'||quarryFor(n,u.team))));
+    (kind!=='materials'||quarryFor(n,u.team)) && (kind!=='uranium'||uraniumAccess(u.team))));
 }
 
 function materialCost(type) { return defs[type].materials || 0; }
@@ -36,6 +38,7 @@ function quarryFor(n, team) {
 function resourceObserved(n) { return observesResource(0,n); }
 function harvestDistance(n) { return n.kind === 'materials' ? 53 : 30; }
 function canHarvest(u, n) {
+  if (n.kind === 'uranium' && !uraniumAccess(u.team)) return false;
   if (n.kind === 'materials' && !quarryFor(n, u.team)) return false;
   // Reserve fixed extraction slots per simulation tick, so extra workers cannot
   // multiply a single deposit's production indefinitely.
@@ -43,7 +46,7 @@ function canHarvest(u, n) {
     n.claimAt = t;
     n.claims = units.filter(w => w.hp > 0 && w.type === 'worker' && !w.carrying &&
       w.order?.kind === 'gather' && w.order.node === n && dist(w, n) <= harvestDistance(n) + 2 &&
-      (n.kind !== 'materials' || quarryFor(n, w.team)))
+      (n.kind !== 'materials' || quarryFor(n, w.team)) && (n.kind !== 'uranium' || uraniumAccess(w.team)))
       .sort((a, b) => b.harvest - a.harvest || a.id - b.id)
       .slice(0, n.kind === 'materials' ? 3 : 2).map(w => w.id);
   }
@@ -52,7 +55,7 @@ function canHarvest(u, n) {
 function idleWorkers() {
   return alive(0).filter(u => u.type === 'worker' && (!u.order || u.order.kind === 'hold' ||
     (u.order.kind === 'gather' && !u.carrying && (!u.order.node || knownResourceAmount(u.order.node,0)===0 ||
-      (u.order.node.kind === 'materials' && !quarryFor(u.order.node, 0))))));
+      (u.order.node.kind === 'materials' && !quarryFor(u.order.node, 0)) || (u.order.node.kind==='uranium'&&!uraniumAccess(0))))));
 }
 function selectIdleWorkers() {
   if (!running || paused || ended) return;
@@ -88,6 +91,7 @@ function resourceWorkReport(n, team=0) {
   let state='working',reason='';
   if(amount===undefined){state='unknown';reason='Scout this site to confirm its stock.';}
   else if(amount===0){state='depleted';reason='Depleted. Assign another resource site.';}
+  else if(n.kind==='uranium'&&!uraniumAccess(team)){state='missing';reason='Complete Artillery Works to gather Uranium. Two slots; 4 units per 3 seconds, then deliver to a linked base.';}
   else if(n.kind==='materials'){
     const quarry=alive(team).find(b=>b.type==='quarry'&&dist(b,n)<8);
     if(!quarry){state='missing';reason='Build a Materials Quarry on this deposit.';}
@@ -109,9 +113,9 @@ function selectionResource() {
   return null;
 }
 function resourceWorkSummary(n, report=resourceWorkReport(n)) {
-  return `${n.kind==='materials'?'Materials':'Supplies'} · ${report.assigned} assigned · ${report.extracting}/${report.slots} extracting`;
+  return `${resourceName(n)} · ${report.assigned} assigned · ${report.extracting}/${report.slots} extracting`;
 }
 
 function headquartersSummary(b) {
-  return `Delivered ${Math.floor(b.deliveredSupplies||0)} S · ${Math.floor(b.deliveredMaterials||0)} M. +10 population. Recruits provisioners.`;
+  return `Delivered ${Math.floor(b.deliveredSupplies||0)} S · ${Math.floor(b.deliveredMaterials||0)} M · ${Math.floor(b.deliveredUranium||0)} U. +10 population. Recruits provisioners.`;
 }

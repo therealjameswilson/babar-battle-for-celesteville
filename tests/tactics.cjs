@@ -321,3 +321,6 @@ console.log('PASS: atomic tech gates, faction costs, assembly, isolation, fog, A
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'hbomb-checks.js'),'utf8'));
 run('hbombChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: H-bomb prerequisites, costs, faction parity, shared cap, payload identity, warning, blast and AI launch.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'uranium-checks.js'),'utf8'));
+run('uraniumChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: Uranium gates, extraction, delivery, depletion, faction costs, AI workers and reset.');

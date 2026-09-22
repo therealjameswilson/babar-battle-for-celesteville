@@ -34,7 +34,7 @@ function enemyExpansionSite() {
     }
     // Prefer the central road when current observations cannot distinguish stocks.
     // Its bridge reveals the depot approaches without reading hidden resources.
-    const scouting=[...enemyResourceReports.values()].some(r=>r.kind!=='materials' && r.x<1200)?0:Math.max(0,1400-p.x)*.35;
+    const scouting=[...enemyResourceReports.values()].some(r=>(!r.kind||r.kind==='supplies') && r.x<1200)?0:Math.max(0,1400-p.x)*.35;
     const score=benefit+scouting;
     if (score>30) ranked.push({p,score});
   }
@@ -44,7 +44,7 @@ function enemyExpansionSite() {
 function enemyHeadquartersSite() {
   if(alive(1).some(b=>b.type==='headquarters'))return null;
   const core=alive(1).find(b=>b.type==='core');if(!core)return null;
-  const reports=[...enemyResourceReports.values()].filter(r=>r.kind!=='materials'&&t-r.at<=120);
+  const reports=[...enemyResourceReports.values()].filter(r=>(!r.kind||r.kind==='supplies')&&t-r.at<=120);
   const local=reports.filter(r=>dist(r,core)<420);
   // Do not infer depletion from missing or stale observations.
   if(local.length<2||local.reduce((sum,r)=>sum+r.amount,0)>=900)return null;
@@ -90,8 +90,11 @@ function enemyAssignWorkers() {
   const workers=alive(1).filter(u=>u.type==='worker');
   // Only known, locally visible stocks enter economic planning. No hidden depletion reads.
   const resources=nodes.filter(n=>enemySeesPoint(n) && n.amount>0 && enemySafe(n) &&
-    (n.kind!=='materials' || quarryFor(n,1)) && alive(1).some(b=>(deliveryBase(b)) && supplied(b) && dist(b,n)<520));
+    (n.kind!=='materials' || quarryFor(n,1)) && (n.kind!=='uranium'||(t>=420&&uraniumAccess(1)&&enemyUranium<80)) && alive(1).some(b=>(deliveryBase(b)) && supplied(b) && dist(b,n)<520));
   // Three assigned workers per stock includes delivery travel; extraction slots remain 2/3.
+  const uraniumSite=resources.find(n=>n.kind==='uranium');
+  const uraniumCrew=uraniumSite?workers.filter(w=>!w.carrying&&(!w.order||w.order.kind==='gather')).slice(0,2):[];
+  for(const w of uraniumCrew)if(w.order?.node!==uraniumSite)issueOrder(w,{kind:'gather',node:uraniumSite});
   const counts=new Map();
   for (const w of workers) {
     const order=w.order;

@@ -3,7 +3,7 @@
  for(const [w,h] of [[390,844],[844,390],[1280,900]]){
  const f=document.createElement('iframe');f.width=w;f.height=h;const ready=new Promise(r=>f.onload=r);f.src='../dist/index.html?hbomb=48';document.querySelector('#games').append(f);await ready;
  const g=f.contentWindow,d=f.contentDocument;d.querySelector('#opening-skip').click();d.querySelector('#start').click();g.eval(source);g.hbombChecks(check);
- g.eval("reset();running=true;paused=false;ore=3000;materials=1500;technologies.add('atomic');technologies.add('hydrogen');this.fab=add('factory',0,380,900);rebuildSupply();selected=[fab];cam.x=380;cam.y=900;cam.zoom=1;updateUI(true)");d.querySelector('#phone-tabs [data-panel=actions]').click();
+ g.eval("reset();running=true;paused=false;ore=3000;materials=1500;uranium=200;technologies.add('atomic');technologies.add('hydrogen');this.fab=add('factory',0,380,900);rebuildSupply();selected=[fab];cam.x=380;cam.y=900;cam.zoom=1;updateUI(true)");d.querySelector('#phone-tabs [data-panel=actions]').click();
  const button=name=>[...d.querySelectorAll('#actions button')].find(b=>b.querySelector('span').textContent===name);
  button('Assemble H-bomb').click();check(g.eval('!!fab.atomicJob'),'assembly button');g.eval('updateAtomic(110)');check(!!button('Launch H-bomb'),'launch button');button('Launch H-bomb').click();check(g.eval("mode==='atomic'"),'aim mode');
  d.querySelector('#phone-tabs [data-panel=orders]').click();const canvas=d.querySelector('#game'),r=canvas.getBoundingClientRect(),p=g.eval('screen({x:460,y:900})');

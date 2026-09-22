@@ -40,3 +40,7 @@ H-bomb checks cover prerequisites, faction parity, spending, assembly duration,
 shared cap, immutable payload type, larger damage/radius, warning, supply abort,
 AI launch and invalid kind refusal. Real-browser tests exercise phone/desktop
 assembly and touch targeting at 390×844, 844×390 and 1280×900.
+
+## Uranium — v0.50.0
+
+Three finite deposits (120 U each) now supply nuclear production. Completed Artillery Works unlock gathering: two extraction slots, 4 U per worker per 3 seconds, physical delivery to a supplied base. Uranium starts at zero for both factions. Atomic assembly consumes 40 U; H-bomb assembly consumes 80 U, in addition to Supplies and Materials. Research prices are unchanged. The AI assigns up to two observed-site haulers after 420 seconds and stops stockpiling at 80 U. Deposits and cargo have distinct ochre markings; the phone HUD includes the current stock. These are fictional game balance units.

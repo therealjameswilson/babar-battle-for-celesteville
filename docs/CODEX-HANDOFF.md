@@ -213,3 +213,7 @@ atomic behavior. render.js owns warning drawing. See H-BOMB.md and hbomb-browser
 mushroom-clouds.js loads before atomic.js. The locally generated transparent atlas
 uses inspected irregular crops; tests/mushroom-clouds.cjs validates alpha/poses.
 See MUSHROOM-CLOUDS.md for visual references, provenance and non-simulation limits.
+
+## Uranium — v0.50.0
+
+Three finite deposits (120 U each) now supply nuclear production. Completed Artillery Works unlock gathering: two extraction slots, 4 U per worker per 3 seconds, physical delivery to a supplied base. Uranium starts at zero for both factions. Atomic assembly consumes 40 U; H-bomb assembly consumes 80 U, in addition to Supplies and Materials. Research prices are unchanged. The AI assigns up to two observed-site haulers after 420 seconds and stops stockpiling at 80 U. Deposits and cargo have distinct ochre markings; the phone HUD includes the current stock. These are fictional game balance units.
