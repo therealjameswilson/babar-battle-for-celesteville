@@ -390,3 +390,10 @@ Recruit Arthur at Artillery Works (180 S / 60 M, 20s). After completing your fir
 atomic or H-bomb, his neutron strike unlocks: 400 S / 120 M / 30 U, 360m targeting
 range, 12s warning and 120s cooldown. It affects both armies and favors unit damage
 over building damage. Civil Defense remains effective. See [rules and artwork](docs/ARTHUR-MOTORBIKE.md).
+
+## Leader nuclear authority — v0.54.0
+
+Select **Babar** to launch atomic/H-bombs or authorize Arthur's neutron strike.
+He must personally see a completed friendly Palace or Field Headquarters, within
+his vision range and without intervening forest/buildings. Rataxes follows the same
+rule for rhino launches. Allied vision does not substitute. See [full rules](docs/NUCLEAR-AUTHORITY.md).

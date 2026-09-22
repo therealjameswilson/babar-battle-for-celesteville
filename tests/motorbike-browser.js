@@ -8,10 +8,10 @@ for(const [w,h] of [[390,844],[844,390],[1280,900]]){
  const button=name=>[...d.querySelectorAll('#actions button')].find(b=>b.querySelector('span').textContent===name);
  button('Arthur’s Motorbike').click();check(g.eval("fab.queue[0]==='bike'"),'recruit button');
  g.eval("fab.progress=20;update(.1);this.bike=alive(0).find(u=>u.type==='bike');selected=[bike];updateUI(true)");
- check(button('Arthur: neutron strike').disabled,'strike locked before nuclear acquisition');
- g.eval("technologies.add('atomic');assembleAtomic(fab);updateAtomic(75);selected=[bike];cam.x=bike.x;cam.y=bike.y;updateUI(true)");
- check(!button('Arthur: neutron strike').disabled,'completed payload enables button');
- button('Arthur: neutron strike').click();d.querySelector('#phone-tabs [data-panel=orders]').click();
+ check(button('Neutron payload').disabled,'strike locked before nuclear acquisition');
+ g.eval("technologies.add('atomic');assembleAtomic(fab);updateAtomic(75);selected=[alive(0).find(u=>u.type==='hero')];cam.x=bike.x;cam.y=bike.y;updateUI(true)");
+ check(!button('Authorize neutron strike').disabled,'completed payload enables button');
+ button('Authorize neutron strike').click();d.querySelector('#phone-tabs [data-panel=orders]').click();
  const canvas=d.querySelector('#game'),r=canvas.getBoundingClientRect(),p=g.eval('screen({x:bike.x+80,y:bike.y})');
  for(const type of ['pointerdown','pointerup'])canvas.dispatchEvent(new g.PointerEvent(type,{pointerId:1,pointerType:'touch',button:0,clientX:r.left+p.x,clientY:r.top+p.y,bubbles:true,cancelable:true}));
  check(g.eval("atomicStrikes.some(s=>s.kind==='neutron')&&!paused"),'touch launch without pause');

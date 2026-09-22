@@ -237,3 +237,9 @@ rendering plus his existing portrait. motorbike.js owns the paid neutron ability
 nuclearAcquired flags and shared launch-link validation. atomic.js records completed
 payload acquisition and handles neutron warnings/impacts through the existing Civil
 Defense system. Normal and neutron launches share the one-active-strike-per-team gate.
+
+## v0.54.0
+Nuclear release now requires nuclearAuthority(team): a living hero with individual,
+terrain/structure-occluded sight to a completed friendly core/headquarters. Atomic
+and neutron launch revalidate this gate before spending. Launch actions moved to
+Babar; the enemy AI is gated by Rataxes. No new playable-faction selector was added.

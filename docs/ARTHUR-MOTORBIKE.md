@@ -23,3 +23,7 @@ specifications or a claim of a harmless blast. The smaller cloud is an illustrat
 variant of the existing local artwork. Vehicle rendering combines original Canvas
 wheels/frame/lamps with Arthur’s existing local portrait crop. His motorbike weapon
 role is invented for this game, not attributed to the books or television series.
+
+As of v0.54.0, select Babar and choose “Authorize neutron strike.” Arthur supplies
+the payload and firing position, while Babar must see a friendly headquarters.
+The original Arthur-local launch control described above is superseded.

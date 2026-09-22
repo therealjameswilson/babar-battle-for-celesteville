@@ -16,17 +16,17 @@ function assembleAtomic(b,kind='atomic'){
   b.atomicJob={progress:0,kind};updateUI(true);return true;
 }
 function aimAtomic(b){
-  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||b.team!==0)return false;
+  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||b.team!==0||nuclearAuthority(b.team).reason||selected.length!==1||selected[0]!==nuclearAuthority(b.team).leader)return false;
   atomicTargetSite=b;mode='atomic';placing=null;
   const spec=payloadSpec(b.atomicKind);
   say(payloadLabel(b.atomicKind)+': select a visible target. Blast radius '+spec.radius+'m; friendly fire. Launch gives '+spec.warning+' seconds warning.');return true;
 }
 function launchAtomic(b,p){
-  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||atomicStrikes.some(s=>s.team===b.team)||!supplied(b)||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>W||p.y<0||p.y>H||!observesPosition(b.team,p))return false;
+  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||nuclearAuthority(b.team).reason||atomicStrikes.some(s=>s.team===b.team)||!supplied(b)||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>W||p.y<0||p.y>H||!observesPosition(b.team,p))return false;
   const kind=b.atomicKind||'atomic',spec=payloadSpec(kind);
   b.atomicReady=false;
   atomicStrikes.push({team:b.team,site:b,kind,x:p.x,y:p.y,at:t+spec.warning});
-  say((b.team?'RHINO':'ELEPHANT')+' '+payloadLabel(kind)+' LAUNCH. Evacuate the marked area. Destroy or isolate the launching Artillery Works to abort.');
+  say((b.team?'RATAXES':'BABAR')+' AUTHORIZES '+payloadLabel(kind)+' LAUNCH. Evacuate the marked area. Destroy or isolate the launching Artillery Works to abort.');
   battleSound('cannon');updateUI(true);return true;
 }
 function updateAtomic(dt){
@@ -64,9 +64,10 @@ function updateAtomic(dt){
   if(target)launchAtomic(factory,{x:target.x,y:target.y});
 }
 function atomicActions(a,u){
+  if(selected.length===1&&u?.type==='hero'&&u.team===0){leaderNuclearActions(a,u);return;}
   if(selected.length!==1||u?.type!=='factory'||u.team!==0||u.construction)return;
   if(u.atomicJob)a.push(['Assembling '+payloadName(u.atomicJob.kind),Math.ceil(payloadSpec(u.atomicJob.kind).build-u.atomicJob.progress)+'s · '+(supplied(u)?'supplied':'ISOLATED'),()=>{},true]);
-  else if(u.atomicReady)a.push(['Launch '+payloadName(u.atomicKind),'Tap visible target · '+payloadSpec(u.atomicKind).warning+'s warning · friendly fire',()=>aimAtomic(u),!supplied(u)]);
+  else if(u.atomicReady)a.push([payloadName(u.atomicKind)+' ready','Select Babar to authorize launch; direct sight to headquarters required.',()=>{},true]);
   else for(const kind of ['atomic','hydrogen'])if(technologies.has(kind)){
     const spec=payloadSpec(kind);
     a.push(['Assemble '+payloadName(kind),spec.cost+' S · '+spec.materials+' M · '+spec.uranium+' U · '+spec.build+'s · shared one-payload limit',()=>assembleAtomic(u,kind),atomicBusy(0)||!!u.research||!!u.queue.length||!supplied(u)||ore<spec.cost||materials<spec.materials||uranium<spec.uranium]);
@@ -103,4 +104,37 @@ function civilianEvacuation(w,dt){
   const angle=(w.id%16)/16*Math.PI*2,radius=60+Math.floor(w.id/16)%2*28;
   move(w,{x:b.x+Math.cos(angle)*radius,y:b.y+Math.sin(angle)*radius},dt,5);
   return true;
+}
+
+// Nuclear release requires the living faction leader's own sight, never allied vision.
+function nuclearAuthority(team){
+  const leader=alive(team).find(u=>u.type==='hero');
+  const name=team?'Rataxes':'Babar';
+  if(!leader)return {leader:null,hq:null,reason:name+' is unavailable. Nuclear launch locked.'};
+  const hq=alive(team).find(b=>['core','headquarters'].includes(b.type)&&!b.construction&&leaderSeesHeadquarters(leader,b));
+  return {leader,hq,reason:hq?'':name+' needs direct line of sight to a friendly Palace/Fortress or Field Headquarters.'};
+}
+function leaderSeesHeadquarters(leader,hq){
+  if(dist(leader,hq)>vision(leader))return false;
+  const length=dist(leader,hq),dx=hq.x-leader.x,dy=hq.y-leader.y;
+  const blockers=units.filter(b=>b.hp>0&&!defs[b.type].speed&&b!==hq);
+  // Sample the open segment at <=4m; terrain rectangles and structures occlude sight.
+  for(let d=4;d<length-hq.r;d+=4){
+    const p={x:leader.x+dx*d/length,y:leader.y+dy*d/length};
+    if(obstacles.some(o=>p.x>o.x&&p.x<o.x+o.w&&p.y>o.y&&p.y<o.y+o.h)||
+      blockers.some(b=>dist(p,b)<b.r))return false;
+  }
+  return true;
+}
+function leaderNuclearActions(a,u){
+  const authority=nuclearAuthority(u.team),locked=!!authority.reason;
+  for(const b of alive(u.team).filter(b=>b.type==='factory'&&b.atomicReady)){
+    a.push(['Launch '+payloadName(b.atomicKind),authority.reason||'Leader authorization · '+payloadSpec(b.atomicKind).warning+'s warning',()=>aimAtomic(b),locked||!supplied(b)||atomicStrikes.some(s=>s.team===u.team)]);
+  }
+  const bike=alive(u.team).find(v=>v.type==='bike');
+  if(bike){
+    const status=authority.reason||(!nuclearAcquired[u.team]?'Complete your first atomic or H-bomb':
+      t<(bike.neutronReadyAt||0)?Math.ceil(bike.neutronReadyAt-t)+'s cooldown':'Authorize Arthur · 400 S · 120 M · 30 U · 360m from motorbike');
+    a.push(['Authorize neutron strike',status,()=>aimNeutron(bike),locked||!neutronReady(bike)]);
+  }
 }

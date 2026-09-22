@@ -678,12 +678,12 @@ function command(p, append = queueOrders) {
   if (!running || paused || ended) return;
   if(mode==='neutron'){
     if(launchNeutron(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
-    else say('Neutron strike needs Arthur ready, acquired nuclear weapons, 400 S / 120 M / 30 U, and a visible target within 360m.');
+    else say(nuclearAuthority(0).reason||'Neutron strike needs Arthur ready, acquired nuclear weapons, 400 S / 120 M / 30 U, and a visible target within 360m.');
     return;
   }
   if(mode==='atomic'){
     if(launchAtomic(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
-    else say('Atomic launch needs a supplied, ready Works and a currently visible target.');
+    else say(nuclearAuthority(0).reason||'Atomic launch needs a supplied, ready Works and a currently visible target.');
     return;
   }
   if (placing) {
@@ -874,7 +874,8 @@ function updateUI(force = false) {
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
-  const bikeKey=nuclearAcquired[0]+':'+unitUnlocked('bike')+':'+(ore>=400)+':'+(materials>=120)+':'+(uranium>=30)+':'+Math.ceil(Math.max(0,(u?.neutronReadyAt||0)-t))+':'+atomicStrikes.some(s=>s.team===0);
+  const authorityKey=nuclearAuthority(0).reason;
+  const bikeKey=authorityKey+nuclearAcquired[0]+':'+unitUnlocked('bike')+':'+(ore>=400)+':'+(materials>=120)+':'+(uranium>=30)+':'+Math.ceil(Math.max(0,(u?.neutronReadyAt||0)-t))+':'+atomicStrikes.some(s=>s.team===0);
   const munKey=bikeKey+(uranium>=40)+':'+(uranium>=80)+':'+selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
   if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
     actionKey = key + rapidKey + disciplineKey + munKey;

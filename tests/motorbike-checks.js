@@ -1,7 +1,7 @@
 function motorbikeChecks(check){
  function fresh(){
   reset();running=true;paused=false;nextWave=enemySpawn=1e9;units=[];
-  add('core',0,400,900);add('core',1,1500,300);
+  add('core',0,400,900);add('hero',0,400,800);add('core',1,1500,300);
   const factory=add('factory',0,500,900);linked.add(factory.id);
   ore=3000;materials=1000;uranium=200;selected=[factory];return factory;
  }
@@ -15,7 +15,7 @@ function motorbikeChecks(check){
  const funds=[ore,materials,uranium];check(!launchNeutron(bike,{x:0,y:0})&&ore===funds[0],'invalid or out of range spends nothing');
  bike.x=600;bike.y=900;const victim=add('trooper',1,800,900,{hp:1000,max:1000}),building=add('forge',1,800,900,{hp:1000,max:1000}),ally=add('trooper',0,800,900,{hp:1000,max:1000});
  const shelter=add('shelter',0,800,950),worker=add('worker',0,800,900);
- check(aimNeutron(bike)&&mode==='neutron','ability enters targeting mode');
+ selected=[alive(0).find(u=>u.type==='hero')];check(aimNeutron(bike)&&mode==='neutron','ability enters targeting mode');
  check(launchNeutron(bike,{x:800,y:900}),'visible in-range launch');
  check(ore===funds[0]-400&&materials===funds[1]-120&&uranium===funds[2]-30,'launch cost once');
  check(!launchNeutron(bike,{x:800,y:900}),'active strike and cooldown reject repeats');

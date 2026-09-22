@@ -333,3 +333,6 @@ console.log('PASS: Damage Limitation faction gates, costs, timing, completion, c
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'motorbike-checks.js'),'utf8'));
 run('motorbikeChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: Arthur recruitment, uniqueness, nuclear acquisition, neutron costs/range, warning, damage, shelter, abort, cooldown and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'nuclear-authority-checks.js'),'utf8'));
+run('nuclearAuthorityChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: faction leader nuclear authority, personal sight, blockers, headquarters ownership, death and neutron revalidation.');

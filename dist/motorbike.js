@@ -4,12 +4,12 @@ const NEUTRON={cost:400,materials:120,uranium:30,cooldown:120,range:360,warning:
 let nuclearAcquired=[false,false];
 function strikeCommandActive(s){return s.site.hp>0&&(s.kind==='neutron'||supplied(s.site));}
 function neutronReady(u){
-  return u?.hp>0&&u.type==='bike'&&u.team===0&&nuclearAcquired[0]&&
+  return u?.hp>0&&u.type==='bike'&&u.team===0&&nuclearAcquired[0]&&!nuclearAuthority(u.team).reason&&
     t>=(u.neutronReadyAt||0)&&!atomicStrikes.some(s=>s.team===0)&&
     ore>=NEUTRON.cost&&materials>=NEUTRON.materials&&uranium>=NEUTRON.uranium;
 }
 function aimNeutron(u){
-  if(!running||paused||ended||!neutronReady(u))return false;
+  if(!running||paused||ended||!neutronReady(u)||selected.length!==1||selected[0]!==nuclearAuthority(u.team).leader)return false;
   atomicTargetSite=u;mode='neutron';placing=null;
   say('Arthur: select a visible target within 360m. 12s warning; friendly fire. Workers should reach Civil Defense.');return true;
 }
@@ -18,7 +18,7 @@ function launchNeutron(u,p){
   ore-=NEUTRON.cost;materials-=NEUTRON.materials;uranium-=NEUTRON.uranium;
   u.neutronReadyAt=t+NEUTRON.cooldown;
   atomicStrikes.push({team:0,site:u,kind:'neutron',x:p.x,y:p.y,at:t+NEUTRON.warning});
-  say('ARTHUR: NEUTRON LAUNCH. Evacuate the marked area. Destroying the motorbike aborts the strike.');
+  say('BABAR AUTHORIZES ARTHUR: NEUTRON LAUNCH. Evacuate the marked area. Destroying the motorbike aborts the strike.');
   battleSound('cannon');updateUI(true);return true;
 }
 function motorbikeActions(a,u){
@@ -26,7 +26,7 @@ function motorbikeActions(a,u){
   const status=!nuclearAcquired[0]?'Complete your first atomic or H-bomb to unlock':
     t<(u.neutronReadyAt||0)?Math.ceil(u.neutronReadyAt-t)+'s cooldown':
     '400 S · 120 M · 30 U · 360m range · 12s warning · friendly fire';
-  a.push(['Arthur: neutron strike',status,()=>aimNeutron(u),!neutronReady(u)]);
+  a.push(['Neutron payload',status+' · Select Babar to authorize launch.',()=>{},true]);
 }
 const arthurBikePortrait=new Image();
 arthurBikePortrait.src='assets/roster/leaders.png';

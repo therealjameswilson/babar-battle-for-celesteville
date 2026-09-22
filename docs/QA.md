@@ -1153,3 +1153,9 @@ Real browser: tests/damage-limitation-browser.html passed 75 assertions across 3
 Syntax/assets and the full deterministic tactics suite passed. New tests cover recruitment cost/completion, unique alive/queued Arthur, nuclear acquisition versus research-only, neutron targeting/costs, friendly strike exclusion, warning timing, unit/building damage, friendly fire, shelter protection, launcher loss, cooldown, re-recruitment and restart.
 
 Real browser: tests/motorbike-browser.html passed 81 assertions at 390×844, 844×390 and 1280×900, including paid recruitment buttons, ability lock/unlock, touch launch without pausing, neutron HUD and viewport bounds. Inspected the vehicle/portrait composition and warning ring. No captured browser errors. Screenshot: artifacts/arthur-motorbike-mobile.png, excluded from deployment. Physical iPhone Safari remains unverified.
+
+## Leader nuclear authority v0.54.0
+
+Full deterministic tactics and syntax/asset checks passed. Added paired-faction tests for personal sight/range, forest and structure occlusion, scout/reveal rejection, incomplete/dead/enemy headquarters, completed friendly Field Headquarters, leader death, retained payloads and neutron target-time revalidation. Prior launch fixtures now supply a living leader at headquarters.
+
+Real browser: 360 assertions passed across the nuclear-authority, atomic, H-bomb and motorbike fixtures, each at 390×844, 844×390 and 1280×900. Verified factory launch removal, leader lock explanation, sight-based enablement, leader-authorized touch launches and phone layout bounds. No captured errors in the authority fixture. Review screenshot: artifacts/nuclear-authority-mobile.png. Physical iPhone Safari remains unverified.
