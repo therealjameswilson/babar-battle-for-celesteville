@@ -12,3 +12,4 @@ for (const name of ['characters-siege.png', 'buildings-siege.png', 'infantry-dir
 console.log('PASS: final atlas dimensions and alpha channel');
 require('./character-art.cjs');
 require('./commander-animation.cjs');
+require('./mushroom-clouds.cjs');

@@ -208,3 +208,8 @@ See ATOMIC.md for balance values and tests/atomic-browser.html for browser QA.
 0.48.0 adds hydrogen research after atomic. atomic.js shares logic via payloadSpec,
 with kind preserved in atomicJob/atomicKind/strike.kind; missing kind retains legacy
 atomic behavior. render.js owns warning drawing. See H-BOMB.md and hbomb-browser.html.
+
+0.49.0 replaces nuclear generic bursts with typed mushroom clouds. Visual-only
+mushroom-clouds.js loads before atomic.js. The locally generated transparent atlas
+uses inspected irregular crops; tests/mushroom-clouds.cjs validates alpha/poses.
+See MUSHROOM-CLOUDS.md for visual references, provenance and non-simulation limits.

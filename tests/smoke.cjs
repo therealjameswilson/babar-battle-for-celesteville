@@ -92,6 +92,7 @@ for (const file of [
   'artillery.js',
   'navigation.js',
   'fire-discipline.js',
+  'mushroom-clouds.js',
   'atomic.js',
   'hero-combat.js',
   'tactics.js',

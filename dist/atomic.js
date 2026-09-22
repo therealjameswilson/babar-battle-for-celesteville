@@ -43,7 +43,7 @@ function updateAtomic(dt){
     const source={type:'factory',team:strike.team,id:strike.site.id,x:strike.x,y:strike.y};
     for(const u of units.filter(u=>u.hp>0&&dist(u,strike)<=spec.radius))
       damageUnit(source,u,spec.damage*(1-.5*dist(u,strike)/spec.radius));
-    fx.push({x:strike.x,y:strike.y,life:1.5,max:1.5,burst:true,r:spec.radius});
+    fx.push(mushroomCloudEffect(strike));
     battleSound('cannon');say(payloadLabel(strike.kind)+' impact. Both armies inside the blast area take damage.');
     atomicStrikes=atomicStrikes.filter(s=>s!==strike);
   }

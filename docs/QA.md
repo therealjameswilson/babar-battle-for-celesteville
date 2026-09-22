@@ -1118,3 +1118,14 @@ The real in-app browser passed 87 checks across 390×844, 844×390 and 1280×900
 including assembly/launch buttons, touch targeting and H-BOMB countdown in the HUD.
 No browser console warnings/errors. Physical iPhone testing and long human-played
 endgame balance remain unverified; this extends the existing tested launch model.
+
+## Mushroom clouds — 0.49.0 (2026-09-21)
+
+Full tactical simulation passed with unchanged strike outcomes. Syntax/asset checks
+now decode and validate both cloud crops, transparent margins, distinct lifetimes,
+growth and reduced-motion/expiry poses. Real browser fixture passed 39 checks at
+390×844, 844×390 and 1280×900: actual cloud pixels, unclipped silhouettes, restored
+Canvas state, correct H-bomb impact effect and layout. Generated atlas and rendered
+comparison visually inspected. The browser reported an injected MutationObserver
+observe error (no MutationObserver exists in project sources); fixture assertions
+and gameplay rendering completed. Physical iPhone Safari remains unverified.

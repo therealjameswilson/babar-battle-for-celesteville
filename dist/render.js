@@ -530,7 +530,9 @@ function draw() {
   }
   for (const f of fx) {
     ctx.globalAlpha = f.life / f.max;
-    if (f.shellImpact) {
+    if (f.nuclearCloud) {
+      drawMushroomCloud(ctx,f,reducedMotion);
+    } else if (f.shellImpact) {
       drawShellImpact(ctx,f,reducedMotion);
     } else if (f.burst) {
       ctx.fillStyle = '#252a24';
