@@ -1207,3 +1207,14 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   390×844, 844×390 and 1280×900. Clicked research, completed its timer, equipped
   existing guards, checked unit description and inspected rendered weapon overlays.
 - Physical iPhone Safari and audible output were not directly verified.
+
+## v0.57.1 — iPhone double-tap selection
+- Added explicit touch Pointer Event recognition: two taps on the same friendly
+  unit within 400ms select all living friendly units of that type across the map.
+  Commands, cancelled pointers, drags, panning and reset clear the pending tap.
+- Syntax/assets and deterministic tactical suite passed.
+- Real browser `tests/type-selection-browser.html`: 63 assertions across 390×844,
+  844×390 and 1280×900. Two touch pointer sequences (without a dblclick event)
+  select on/offscreen matching troops; the next map tap orders the entire group.
+  Slow taps, cancellation, desktop double-click and Same type fallback passed.
+- Physical iPhone Safari remains untested; touch-action:none remains on the canvas.

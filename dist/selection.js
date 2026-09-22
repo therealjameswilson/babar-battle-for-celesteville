@@ -1,5 +1,14 @@
 
 'use strict';
+let lastUnitTap = null;
+function clearUnitTap(){lastUnitTap=null;}
+function touchUnitSelection(unit, stamp, extend=false){
+  const doubleTap=lastUnitTap?.unit===unit&&stamp>=lastUnitTap.stamp&&
+    stamp-lastUnitTap.stamp<=400&&selected.includes(unit);
+  if(doubleTap){clearUnitTap();selectAllOfType(unit,extend);}
+  else {clickSelection(unit,extend);lastUnitTap={unit,stamp};}
+}
+
 function selectAllOfType(unit, append = false) {
   if (!running || paused || ended || !unit || unit.team !== 0 || unit.hp <= 0 ||
       ['help-dialog','court-dialog','groups-dialog'].some(id => $(id).open)) return false;
@@ -27,6 +36,7 @@ canvas.addEventListener('dblclick', e => {
 // Retain a mixed selection while the commander issues orders to one unit type.
 let selectionPool = [], selectionSnapshot = [], selectionType = null, selectionKey = '';
 function resetSubgroups() {
+  clearUnitTap();
   selectionPool = []; selectionSnapshot = []; selectionType = null; selectionKey = '';
 }
 function syncSubgroups() {

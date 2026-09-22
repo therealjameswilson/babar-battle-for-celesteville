@@ -682,6 +682,7 @@ function setMode(m) {
   updateUI(true);
 }
 function command(p, append = queueOrders) {
+  clearUnitTap();
   if (!running || paused || ended) return;
   if(mode==='ballistic'){
     if(launchBallistic(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
@@ -1061,16 +1062,17 @@ canvas.addEventListener('pointerup', (e) => {
   if (!down) return;
   const start = down;
   down = null;
-  if (e.button !== 0 || !running || paused || ended) return;
+  if (e.button !== 0 || !running || paused || ended) {clearUnitTap();return;}
   let p = eventPoint(e),
     wp = world(p),
     drag = Math.hypot(p.x - start.x, p.y - start.y) > 9;
-  if (start.pan) return;
+  if (start.pan) {clearUnitTap();return;}
   if (mode || placing) {
     command(wp, start.shift || queueOrders);
     return;
   }
   if (drag) {
+    clearUnitTap();
     let a = world(start);
     let group = alive(0).filter(
       (u) =>
@@ -1089,17 +1091,18 @@ canvas.addEventListener('pointerup', (e) => {
         else command({x:u.x,y:u.y});
         updateUI(true);return;
       } else if (start.typeSelect) selectAllOfType(u, start.shift);
-      else clickSelection(u, start.shift);
+      else if(start.touch)touchUnitSelection(u,e.timeStamp,start.shift);
+      else {clearUnitTap();clickSelection(u, start.shift);}
       if(start.touch&&!defs[u.type].speed)document.querySelector('#phone-tabs [data-panel="actions"]')?.click();
     } else if (
       start.touch && selected.length
     ) {
       command(wp);
-    } else selected = [];
+    } else {clearUnitTap();selected = [];}
   }
   updateUI(true);
 });
-canvas.addEventListener('pointercancel', () => (down = null));
+canvas.addEventListener('pointercancel', () => {down=null;clearUnitTap();});
 canvas.addEventListener(
   'wheel',
   (e) => {
