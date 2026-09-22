@@ -171,7 +171,8 @@ function drawUnit(u) {
     ctx.fillStyle = '#d7edc827';
     ctx.fill();
   }
-  if (d.speed) {
+  if(u.type==='bike')drawArthurMotorbike(ctx,u);
+  else if (d.speed) {
     const height = u.type === 'hero' ? 80 : u.type === 'walker' ? 73 : 59,
       width = height * 0.61;
     const bob = !reducedMotion && u.movingUntil > t ? Math.sin(t * 9 + u.id) * 1.1 : 0;
@@ -690,6 +691,10 @@ function drawResourceWork(n,y){
 }
 
 function drawAtomicWarnings(){
+  if(mode==='neutron'&&atomicTargetSite?.hp>0){
+    ctx.save();ctx.strokeStyle='#c6d298';ctx.lineWidth=2;ctx.setLineDash([6,6]);
+    ctx.beginPath();ctx.arc(atomicTargetSite.x,atomicTargetSite.y,NEUTRON.range,0,Math.PI*2);ctx.stroke();ctx.restore();
+  }
   for(const s of atomicStrikes){
     ctx.save();ctx.strokeStyle='#ffba77';ctx.lineWidth=3;ctx.setLineDash([9,6]);
     ctx.beginPath();ctx.arc(s.x,s.y,payloadSpec(s.kind).radius,0,Math.PI*2);ctx.stroke();

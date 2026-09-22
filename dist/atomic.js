@@ -2,9 +2,9 @@
 // Fictional endgame ability; all values are game balance, not weapon specifications.
 const ATOMIC={cost:650,materials:200,uranium:40,build:75,warning:18,radius:150,damage:900};
 const HBOMB={cost:1000,materials:350,uranium:80,build:110,warning:28,radius:230,damage:1350};
-function payloadSpec(kind){return kind==='hydrogen'?HBOMB:ATOMIC;}
-function payloadLabel(kind){return kind==='hydrogen'?'H-BOMB':'ATOMIC';}
-function payloadName(kind){return kind==='hydrogen'?'H-bomb':'atomic bomb';}
+function payloadSpec(kind){return kind==='neutron'?NEUTRON:kind==='hydrogen'?HBOMB:ATOMIC;}
+function payloadLabel(kind){return kind==='neutron'?'NEUTRON':kind==='hydrogen'?'H-BOMB':'ATOMIC';}
+function payloadName(kind){return kind==='neutron'?'neutron bomb':kind==='hydrogen'?'H-bomb':'atomic bomb';}
 let atomicStrikes=[],atomicTargetSite=null,atomicAIAt=0;
 function atomicBusy(team){return alive(team).some(b=>b.atomicJob||b.atomicReady)||atomicStrikes.some(s=>s.team===team);}
 function assembleAtomic(b,kind='atomic'){
@@ -22,7 +22,7 @@ function aimAtomic(b){
   say(payloadLabel(b.atomicKind)+': select a visible target. Blast radius '+spec.radius+'m; friendly fire. Launch gives '+spec.warning+' seconds warning.');return true;
 }
 function launchAtomic(b,p){
-  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||!supplied(b)||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>W||p.y<0||p.y>H||!observesPosition(b.team,p))return false;
+  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||atomicStrikes.some(s=>s.team===b.team)||!supplied(b)||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>W||p.y<0||p.y>H||!observesPosition(b.team,p))return false;
   const kind=b.atomicKind||'atomic',spec=payloadSpec(kind);
   b.atomicReady=false;
   atomicStrikes.push({team:b.team,site:b,kind,x:p.x,y:p.y,at:t+spec.warning});
@@ -33,11 +33,11 @@ function updateAtomic(dt){
   updateCivilDefense();
   for(const b of units.filter(b=>b.hp>0&&b.atomicJob)){
     if(supplied(b))b.atomicJob.progress+=dt;
-    if(b.atomicJob.progress>=payloadSpec(b.atomicJob.kind).build){b.atomicKind=b.atomicJob.kind||'atomic';b.atomicJob=null;b.atomicReady=true;if(!b.team)say(payloadName(b.atomicKind)+' ready at the Artillery Works.');updateUI(true);}
+    if(b.atomicJob.progress>=payloadSpec(b.atomicJob.kind).build){nuclearAcquired[b.team]=true;b.atomicKind=b.atomicJob.kind||'atomic';b.atomicJob=null;b.atomicReady=true;if(!b.team)say(payloadName(b.atomicKind)+' ready at the Artillery Works.');updateUI(true);}
   }
   for(const strike of [...atomicStrikes]){
     const spec=payloadSpec(strike.kind);
-    if(strike.site.hp<=0||!supplied(strike.site)){
+    if(!strikeCommandActive(strike)){
       atomicStrikes=atomicStrikes.filter(s=>s!==strike);say(payloadLabel(strike.kind)+' launch aborted: command link lost. Payload expended.');continue;
     }
     if(t<strike.at)continue;
@@ -45,7 +45,7 @@ function updateAtomic(dt){
     // Snapshot shelter protection before damage so unit iteration order cannot change survival.
     const protectedWorkers=new Set(units.filter(civilDefenseProtected));
     for(const u of units.filter(u=>u.hp>0&&dist(u,strike)<=spec.radius))
-      damageUnit(source,u,spec.damage*(1-.5*dist(u,strike)/spec.radius),protectedWorkers.has(u)?.05:1);
+      damageUnit(source,u,(strike.kind==='neutron'&&!defs[u.type].speed?NEUTRON.buildingDamage:spec.damage)*(1-.5*dist(u,strike)/spec.radius),protectedWorkers.has(u)?.05:1);
     fx.push(mushroomCloudEffect(strike));
     battleSound('cannon');say(payloadLabel(strike.kind)+' impact. Both armies inside the blast area take damage.');
     atomicStrikes=atomicStrikes.filter(s=>s!==strike);
@@ -79,7 +79,7 @@ function civilDefenseProtected(w){
   return w.hp>0&&w.type==='worker'&&b?.hp>0&&!b.construction&&dist(w,b)<=110;
 }
 function updateCivilDefense(){
-  const warnings=atomicStrikes.filter(s=>s.site.hp>0&&supplied(s.site));
+  const warnings=atomicStrikes.filter(strikeCommandActive);
   for(const w of units.filter(w=>w.hp>0&&w.type==='worker')){
     if(!warnings.length){
       if(w.civilDefense&&t>=w.civilDefense.until){w.civilDefense=null;w.path=null;w.resolvedDestination=null;}

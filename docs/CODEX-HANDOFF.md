@@ -230,3 +230,10 @@ Guard School research: 150 S / 50 M / 40s. Both UI and simulation placement enfo
 the gate. AI considers the skill after 360s and pays the same costs. Attribution
 and the distinction between scholarship and fictional mechanics are documented in
 DAMAGE-LIMITATION.md.
+
+## v0.53.0
+Arthur is a unique Artillery Works recruit, type bike, with local procedural vehicle
+rendering plus his existing portrait. motorbike.js owns the paid neutron ability,
+nuclearAcquired flags and shared launch-link validation. atomic.js records completed
+payload acquisition and handles neutron warnings/impacts through the existing Civil
+Defense system. Normal and neutron launches share the one-active-strike-per-team gate.

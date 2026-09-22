@@ -78,7 +78,7 @@ const COURT = [
     team: 0,
     initials: 'A',
     title: 'Uncle Arthur’s shortcuts',
-    text: 'Elephants travel 15% faster.',
+    text: 'Elephants travel 15% faster. Arthur’s Motorbike can also be recruited at Artillery Works; its fictional neutron strike unlocks after your first completed nuclear payload.',
     cost: 120,
   },
   {

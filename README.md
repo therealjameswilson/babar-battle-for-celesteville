@@ -383,3 +383,10 @@ Evacuation temporarily overrides movement and pauses work without discarding car
 Civil Defense now requires **Austin Long: Damage Limitation** at the Guard School
 (150 Supplies + 50 Materials; 40 seconds). Both factions must finish the research
 before constructing shelters. See [attribution and rules](docs/DAMAGE-LIMITATION.md).
+
+## Arthur’s Motorbike — v0.53.0
+
+Recruit Arthur at Artillery Works (180 S / 60 M, 20s). After completing your first
+atomic or H-bomb, his neutron strike unlocks: 400 S / 120 M / 30 U, 360m targeting
+range, 12s warning and 120s cooldown. It affects both armies and favors unit damage
+over building damage. Civil Defense remains effective. See [rules and artwork](docs/ARTHUR-MOTORBIKE.md).

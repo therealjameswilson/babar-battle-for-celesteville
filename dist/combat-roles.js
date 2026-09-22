@@ -2,9 +2,11 @@
 function armorClass(u) { return u.type === 'walker' || !defs[u.type].speed ? 'armored' : 'light'; }
 function counterBonus(attacker, target) { return attacker.type === 'sapper' && armorClass(target) === 'armored' ? 20 : 0; }
 function unitUnlocked(type, team = 0) {
+  if(type==='bike')return team===0&&!alive(team).some(u=>u.type==='bike'||u.queue.includes('bike'));
   return type !== 'sapper' || alive(team).some(b => b.type === 'factory' && !b.construction);
 }
 function combatRole(u) {
+  if(u.type==='bike')return 'Arthur · fast courier motorbike · no standard weapon. Neutron strike unlocks after your first completed nuclear payload.';
   if (u.type === 'sapper') return 'Light · 10 +20 vs armored · 170m. Weak to guards.';
   if (u.type === 'walker') return 'Armored · siege/splash. Weak to sappers; screen with guards.';
   if (u.type === 'trooper') return 'Light · beats sappers, screens guns. Weak to siege splash.';

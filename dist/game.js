@@ -26,6 +26,7 @@ const defs = {
     damage: 21,
     rate: 0.85,
   },
+  bike: { name: 'Arthur’s Motorbike', hp: 180, r: 16, cost: 180, materials: 60, time: 20, speed: 155 },
   worker: { name: 'Provisioner', hp: 85, r: 13, cost: 50, time: 6, speed: 84 },
   trooper: {
     name: 'Elephant Guard',
@@ -295,7 +296,7 @@ function reset() {
   resetCameraViews();
   closeProduction();
   ore = 300;
-  materials = 0; enemyMaterials = 60; uranium = enemyUranium = 0; munitions = MUNITIONS.start; atomicStrikes=[];atomicTargetSite=null;atomicAIAt=0;
+  materials = 0; enemyMaterials = 60; uranium = enemyUranium = 0; munitions = MUNITIONS.start; atomicStrikes=[];atomicTargetSite=null;atomicAIAt=0;nuclearAcquired=[false,false];
   t = 0;
   wave = 0;
   nextWave = easy ? 120 : 85;
@@ -602,8 +603,8 @@ function update(dt) {
 }
 function train(type) {
   if (!running || paused || ended) return;
-  if (!defs[type] || !['worker','trooper','scout','sapper','walker'].includes(type)) return;
-  if (!unitUnlocked(type)) return say('Complete Artillery Works to equip Field Sappers.');
+  if (!defs[type] || !['worker','trooper','scout','sapper','walker','bike'].includes(type)) return;
+  if (!unitUnlocked(type)) return say(type==='bike'?'Arthur is already deployed or being recruited.':'Complete Artillery Works to equip Field Sappers.');
   const b = readyProducers(type)[0];
   if (!b) return say('Select a ready production building. Research or full queues block recruitment.');
   if (ore < defs[type].cost) return say('Not enough supplies.');
@@ -675,6 +676,11 @@ function setMode(m) {
 }
 function command(p, append = queueOrders) {
   if (!running || paused || ended) return;
+  if(mode==='neutron'){
+    if(launchNeutron(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
+    else say('Neutron strike needs Arthur ready, acquired nuclear weapons, 400 S / 120 M / 30 U, and a visible target within 360m.');
+    return;
+  }
   if(mode==='atomic'){
     if(launchAtomic(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
     else say('Atomic launch needs a supplied, ready Works and a currently visible target.');
@@ -868,12 +874,14 @@ function updateUI(force = false) {
   const key = selected.map(a=>a.id).join(',') + '-' + unitUnlocked('sapper') + '-' + prerequisite('factory') + '-' + (u?.id || 'none') + '-' + selected.length + '-' + !!u?.construction + '-' + (u?.queue.join(',') || '') + '-' + (u?.research?.id || '') + '-' + [...technologies].join(',') + '-' + '-' + selected.filter(a => a.type === 'walker').map(a => (a.deployed ? 'D' : 'M') + (a.artilleryTransition ? Math.ceil(a.artilleryTransition.until - t) : '')).join(',') + (u?.type === 'hero' ? Math.ceil(Math.max(0, u.commandReadyAt - t)) : '');
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
-  const munKey=(uranium>=40)+':'+(uranium>=80)+':'+selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
+  const bikeKey=nuclearAcquired[0]+':'+unitUnlocked('bike')+':'+(ore>=400)+':'+(materials>=120)+':'+(uranium>=30)+':'+Math.ceil(Math.max(0,(u?.neutronReadyAt||0)-t))+':'+atomicStrikes.some(s=>s.team===0);
+  const munKey=bikeKey+(uranium>=40)+':'+(uranium>=80)+':'+selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
   if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
     actionKey = key + rapidKey + disciplineKey + munKey;
     let a = [];
     munitionsActions(a,u);
     atomicActions(a,u);
+    motorbikeActions(a,u);
     const armed = selected.filter(u=>u.team===0&&fireDisciplineUnit(u));
     if(armed.length) a.push([armed.every(u=>u.holdFire)?'Weapons free':'Hold fire','C · '+armed.filter(u=>u.holdFire).length+'/'+armed.length+' holding fire',toggleFireDiscipline]);
     const infantry=selected.filter(u=>u.team===0&&rapidInfantry(u));
@@ -894,7 +902,10 @@ function updateUI(force = false) {
         a.push(['Forest Scout', '55', () => train('scout')]);
         a.push(['Field Sapper', unitUnlocked('sapper') ? '90 S · 20 M' : 'Needs Artillery Works', () => train('sapper'), !unitUnlocked('sapper')]);
       }
-      if (u.type === 'factory') a.push(['Field Artillery', '160 S · 25 M', () => train('walker')]);
+      if (u.type === 'factory') {
+        a.push(['Field Artillery', '160 S · 25 M', () => train('walker')]);
+        a.push(['Arthur’s Motorbike','180 S · 60 M · 20s · one Arthur',()=>train('bike'),!unitUnlocked('bike')]);
+      }
     }
     if(u&&!u.construction&&((selected.length===1&&workerProducer(u))||selected.every(w=>w.team===0&&w.type==='worker')))
       for(const type of ['forge','relay','quarry','factory','turret','headquarters','shelter'])

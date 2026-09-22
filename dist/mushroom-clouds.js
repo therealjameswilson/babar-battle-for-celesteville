@@ -3,11 +3,12 @@
 // lower-/higher-yield profiles, not a way to identify weapon physics by shape.
 const mushroomCloudSheet=new Image();mushroomCloudSheet.src='assets/mushroom-clouds.png';
 const CLOUD_PROFILES={
+  neutron:{crop:[16,440,620,530],width:150,duration:5,grow:1.5},
   atomic:{crop:[16,440,620,530],width:240,duration:8,grow:2.2},
   hydrogen:{crop:[640,64,880,910],width:390,duration:12,grow:3.5},
 };
 function mushroomCloudEffect(strike){
-  const kind=strike.kind==='hydrogen'?'hydrogen':'atomic',profile=CLOUD_PROFILES[kind];
+  const kind=strike.kind==='neutron'?'neutron':strike.kind==='hydrogen'?'hydrogen':'atomic',profile=CLOUD_PROFILES[kind];
   return {x:strike.x,y:strike.y,nuclearCloud:true,kind,life:profile.duration,max:profile.duration};
 }
 function mushroomCloudPose(f,minimizeMotion=false){

@@ -330,3 +330,6 @@ console.log('PASS: civil defense construction, faction evacuation, protection, c
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'damage-limitation-checks.js'),'utf8'));
 run('damageLimitationChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: Damage Limitation faction gates, costs, timing, completion, cancellation, destruction and restart.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'motorbike-checks.js'),'utf8'));
+run('motorbikeChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: Arthur recruitment, uniqueness, nuclear acquisition, neutron costs/range, warning, damage, shelter, abort, cooldown and reset.');
