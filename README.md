@@ -414,3 +414,10 @@ Nuclear launch authorization remains with the faction leader. See [costs and rul
 Austin Long's supplied photograph now accompanies the nuclear decision briefing for
 Babar and observed Rataxes projects. Open Build / train on phones to read it.
 The card does not pause play or reveal hidden enemy research.
+
+### Easier Materials mining (0.56.3)
+Build a Materials Quarry on a marked deposit for 100 Supplies. Its builder begins
+mining when construction finishes, unless you queued another order. On touch,
+select provisioners and tap a quarry to mine; tapping an unfinished quarry sends
+them to finish construction. Keep the quarry linked to your palace or headquarters.
+Materials enter your stockpile when workers deliver their cargo.

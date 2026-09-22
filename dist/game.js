@@ -749,7 +749,7 @@ function command(p, append = queueOrders) {
     fx.push({ x: p.x, y: p.y, life: 0.7, max: 0.7, ring: true });
     say(
       mode === 'patrol' ? 'Patrol established. Units engage visible threats and return to their route.' : node
-        ? (node.kind === 'uranium' ? 'Uranium duty assigned. Requires completed Artillery Works; deliver cargo to a linked base.' : node.kind === 'materials' ? 'Materials gathering started. Keep the quarry supplied.' : 'Supplies gathering started.')
+        ? (node.kind === 'uranium' ? 'Uranium duty assigned. Requires completed Artillery Works; deliver cargo to a linked base.' : node.kind === 'materials' ? materialsOrderMessage(node) : 'Supplies gathering started.')
         : enemy
           ? 'Concentrate fire on the marked target.'
           : 'Orders confirmed.'
@@ -1081,7 +1081,11 @@ canvas.addEventListener('pointerup', (e) => {
   } else {
     let u = nearest(wp, alive(0));
     if (u && dist(u, wp) < u.r + 18) {
-      if (start.typeSelect) selectAllOfType(u, start.shift);
+      if (start.touch && !start.shift && u.type === 'quarry' && selected.length && selected.every(w=>w.team===0&&w.type==='worker')) {
+        if(u.construction) repairOrder({x:u.x,y:u.y},queueOrders);
+        else command({x:u.x,y:u.y});
+        updateUI(true);return;
+      } else if (start.typeSelect) selectAllOfType(u, start.shift);
       else clickSelection(u, start.shift);
       if(start.touch&&!defs[u.type].speed)document.querySelector('#phone-tabs [data-panel="actions"]')?.click();
     } else if (

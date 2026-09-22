@@ -44,5 +44,14 @@ function workforceChecks(check){
  check(builders.filter(w=>!chosen.includes(w)).every(w=>w.order===priorWork.get(w.id)),'Other group members retain gathering orders');
  selected=[...builders.slice(0,-1),alive(0).find(u=>u.type==='hero')];updateUI();
  check(![...$('actions').children].some(b=>b.innerHTML.includes('Village Home')),'Action cache follows equal-size changes in group membership');
+ fresh();const materialNode=nodes.find(n=>n.kind==='materials'&&n.x===275);
+ const site=add('quarry',0,materialNode.x,materialNode.y),builder=alive(0).find(u=>u.type==='worker');
+ builder.returnToWork=builder.order;issueOrder(builder,{kind:'build',target:site});finishConstructionOrder(builder);
+ check(builder.order?.kind==='gather'&&builder.order.node===materialNode&&!builder.returnToWork,'Completed quarry builder starts mining instead of returning to supplies');
+ issueOrder(builder,{kind:'build',target:site});issueOrder(builder,{kind:'move',x:400,y:900},true);finishConstructionOrder(builder);
+ check(builder.order?.kind==='move','Explicit queued order overrides automatic mining');
+ issueOrder(builder,{kind:'build',target:site});site.hp=0;finishConstructionOrder(builder);
+ check(builder.order?.kind!=='gather','Destroyed quarry cannot start automatic mining');
+ check(materialsOrderMessage(materialNode).includes('Build a Materials Quarry'),'Missing quarry gets an actionable mining explanation');
  reset();check(nodes.every(n=>resourceWorkReport(n).extracting===0),'Restart cannot retain old extraction claims in its reports');
 }

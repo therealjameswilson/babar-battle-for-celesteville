@@ -121,3 +121,8 @@ function resourceWorkSummary(n, report=resourceWorkReport(n)) {
 function headquartersSummary(b) {
   return `Delivered ${Math.floor(b.deliveredSupplies||0)} S · ${Math.floor(b.deliveredMaterials||0)} M · ${Math.floor(b.deliveredUranium||0)} U. +10 population. Recruits provisioners.`;
 }
+
+function materialsOrderMessage(node) {
+  const report=resourceWorkReport(node);
+  return report.reason ? 'Materials duty assigned. '+report.reason : 'Materials duty assigned. Workers mine, then deliver to a linked palace or home.';
+}

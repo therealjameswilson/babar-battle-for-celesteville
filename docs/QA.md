@@ -1186,3 +1186,15 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Real browser `tests/type-selection-browser.html`: 48 assertions passed across
   390×844, 844×390 and 1280×900, including double-click event and touch-button paths.
   Physical iPhone Safari remains untested.
+
+## v0.56.3 — Materials mining startup
+- Fixed touch selection stealing quarry mining commands from selected provisioners.
+  A tap on a finished quarry assigns Gather; an unfinished quarry assigns Build.
+  The tap retains worker selection and the compact Army / move panel.
+- Quarry builders now mine the completed deposit unless explicit queued orders remain.
+  Destroyed/cancelled sites do not trigger this behavior. Gathering dispatches report
+  missing, unfinished or isolated quarries rather than claiming extraction started.
+- Syntax/assets and deterministic suite passed, including new workforce regressions.
+- Real browser: 21 assertions at 390×844, 844×390 and 1280×900. Built the starting
+  quarry, advanced simulation through construction and physical delivery (170 M),
+  exercised touch assignment and unfinished-site construction. No physical iPhone test.

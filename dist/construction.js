@@ -9,7 +9,13 @@ function constructionWorker(p, append=false) {
   return nearest(p,available.filter(w=>selected.includes(w)))||nearest(p,available);
 }
 function finishConstructionOrder(worker) {
+  const site=worker.order?.target;
+  const deposit=site?.hp>0&&!site.construction&&site.type==='quarry'
+    ? nodes.find(n=>n.kind==='materials'&&dist(n,site)<8&&n.amount>0) : null;
   completeOrder(worker);
+  // Explicit queued orders take precedence over automatic quarry staffing.
+  if(!worker.order&&deposit){worker.order={kind:'gather',node:deposit};worker.returnToWork=null;}
+
   if(!worker.order&&worker.returnToWork)worker.order=worker.returnToWork;
   // Keep automatic gathering only across consecutive construction orders.
   if(worker.order?.kind!=='build')worker.returnToWork=null;
