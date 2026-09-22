@@ -249,3 +249,10 @@ Opening expanded to five scenes / about 40 seconds, incorporating Uranium, nucle
 weapons, Arthur, Civil Defense and leader-only authority. Existing cloud atlas plus
 CSS silhouettes provide nuclear visuals; control, audio and reduced-motion behavior
 are preserved. Browser fixture includes full timed playback and nuclear scene checks.
+
+## v0.56.0
+missiles.js adds conventional ballistic launchers, automatic defense, fair AI firing
+and local Canvas art. Conventional strikes share atomicStrikes for warnings/timing,
+but are excluded from nuclear payload limits and Civil Defense evacuation. Nuclear
+strikes now pass through the same interception hook. H-bombs need two interceptions;
+neutron strikes bypass ballistic defense. Nuclear leader authorization is preserved.

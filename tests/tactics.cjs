@@ -336,3 +336,6 @@ console.log('PASS: Arthur recruitment, uniqueness, nuclear acquisition, neutron 
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'nuclear-authority-checks.js'),'utf8'));
 run('nuclearAuthorityChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: faction leader nuclear authority, personal sight, blockers, headquarters ownership, death and neutron revalidation.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'missile-checks.js'),'utf8'));
+run('missileChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: ballistic faction costs, fog/range, warning, friendly fire, defense coverage/cost/reload/supply, H-bomb layering, AI, research and reset.');

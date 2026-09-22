@@ -2,11 +2,11 @@
 // Fictional endgame ability; all values are game balance, not weapon specifications.
 const ATOMIC={cost:650,materials:200,uranium:40,build:75,warning:18,radius:150,damage:900};
 const HBOMB={cost:1000,materials:350,uranium:80,build:110,warning:28,radius:230,damage:1350};
-function payloadSpec(kind){return kind==='neutron'?NEUTRON:kind==='hydrogen'?HBOMB:ATOMIC;}
-function payloadLabel(kind){return kind==='neutron'?'NEUTRON':kind==='hydrogen'?'H-BOMB':'ATOMIC';}
-function payloadName(kind){return kind==='neutron'?'neutron bomb':kind==='hydrogen'?'H-bomb':'atomic bomb';}
+function payloadSpec(kind){return kind==='ballistic'?BALLISTIC:kind==='neutron'?NEUTRON:kind==='hydrogen'?HBOMB:ATOMIC;}
+function payloadLabel(kind){return kind==='ballistic'?'BALLISTIC':kind==='neutron'?'NEUTRON':kind==='hydrogen'?'H-BOMB':'ATOMIC';}
+function payloadName(kind){return kind==='ballistic'?'ballistic missile':kind==='neutron'?'neutron bomb':kind==='hydrogen'?'H-bomb':'atomic bomb';}
 let atomicStrikes=[],atomicTargetSite=null,atomicAIAt=0;
-function atomicBusy(team){return alive(team).some(b=>b.atomicJob||b.atomicReady)||atomicStrikes.some(s=>s.team===team);}
+function atomicBusy(team){return alive(team).some(b=>b.atomicJob||b.atomicReady)||atomicStrikes.some(s=>s.team===team&&s.kind!=='ballistic');}
 function assembleAtomic(b,kind='atomic'){
   if(!['atomic','hydrogen'].includes(kind))return false;
   const spec=payloadSpec(kind);
@@ -22,7 +22,7 @@ function aimAtomic(b){
   say(payloadLabel(b.atomicKind)+': select a visible target. Blast radius '+spec.radius+'m; friendly fire. Launch gives '+spec.warning+' seconds warning.');return true;
 }
 function launchAtomic(b,p){
-  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||nuclearAuthority(b.team).reason||atomicStrikes.some(s=>s.team===b.team)||!supplied(b)||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>W||p.y<0||p.y>H||!observesPosition(b.team,p))return false;
+  if(!running||paused||ended||!b?.atomicReady||b.hp<=0||nuclearAuthority(b.team).reason||atomicStrikes.some(s=>s.team===b.team&&s.kind!=='ballistic')||!supplied(b)||!Number.isFinite(p.x)||!Number.isFinite(p.y)||p.x<0||p.x>W||p.y<0||p.y>H||!observesPosition(b.team,p))return false;
   const kind=b.atomicKind||'atomic',spec=payloadSpec(kind);
   b.atomicReady=false;
   atomicStrikes.push({team:b.team,site:b,kind,x:p.x,y:p.y,at:t+spec.warning});
@@ -40,16 +40,18 @@ function updateAtomic(dt){
     if(!strikeCommandActive(strike)){
       atomicStrikes=atomicStrikes.filter(s=>s!==strike);say(payloadLabel(strike.kind)+' launch aborted: command link lost. Payload expended.');continue;
     }
+    if(interceptMissile(strike)){atomicStrikes=atomicStrikes.filter(s=>s!==strike);continue;}
     if(t<strike.at)continue;
     const source={type:'factory',team:strike.team,id:strike.site.id,x:strike.x,y:strike.y};
     // Snapshot shelter protection before damage so unit iteration order cannot change survival.
     const protectedWorkers=new Set(units.filter(civilDefenseProtected));
     for(const u of units.filter(u=>u.hp>0&&dist(u,strike)<=spec.radius))
-      damageUnit(source,u,(strike.kind==='neutron'&&!defs[u.type].speed?NEUTRON.buildingDamage:spec.damage)*(1-.5*dist(u,strike)/spec.radius),protectedWorkers.has(u)?.05:1);
-    fx.push(mushroomCloudEffect(strike));
+      damageUnit(source,u,(strike.kind==='neutron'&&!defs[u.type].speed?NEUTRON.buildingDamage:spec.damage)*(1-.5*dist(u,strike)/spec.radius),strike.kind!=='ballistic'&&protectedWorkers.has(u)?.05:1);
+    fx.push(strike.kind==='ballistic'?{x:strike.x,y:strike.y,life:1,max:1,burst:true,r:BALLISTIC.radius}:mushroomCloudEffect(strike));
     battleSound('cannon');say(payloadLabel(strike.kind)+' impact. Both armies inside the blast area take damage.');
     atomicStrikes=atomicStrikes.filter(s=>s!==strike);
   }
+  enemyMissileOrders();
   if(t<atomicAIAt)return;atomicAIAt=t+5;
   const factory=alive(1).find(b=>b.type==='factory'&&!b.construction&&supplied(b));
   if(!factory||!enemyTechnologies.has('atomic'))return;
@@ -80,7 +82,7 @@ function civilDefenseProtected(w){
   return w.hp>0&&w.type==='worker'&&b?.hp>0&&!b.construction&&dist(w,b)<=110;
 }
 function updateCivilDefense(){
-  const warnings=atomicStrikes.filter(strikeCommandActive);
+  const warnings=atomicStrikes.filter(s=>s.kind!=='ballistic'&&strikeCommandActive(s));
   for(const w of units.filter(w=>w.hp>0&&w.type==='worker')){
     if(!warnings.length){
       if(w.civilDefense&&t>=w.civilDefense.until){w.civilDefense=null;w.path=null;w.resolvedDestination=null;}
@@ -129,7 +131,7 @@ function leaderSeesHeadquarters(leader,hq){
 function leaderNuclearActions(a,u){
   const authority=nuclearAuthority(u.team),locked=!!authority.reason;
   for(const b of alive(u.team).filter(b=>b.type==='factory'&&b.atomicReady)){
-    a.push(['Launch '+payloadName(b.atomicKind),authority.reason||'Leader authorization · '+payloadSpec(b.atomicKind).warning+'s warning',()=>aimAtomic(b),locked||!supplied(b)||atomicStrikes.some(s=>s.team===u.team)]);
+    a.push(['Launch '+payloadName(b.atomicKind),authority.reason||'Leader authorization · '+payloadSpec(b.atomicKind).warning+'s warning',()=>aimAtomic(b),locked||!supplied(b)||atomicStrikes.some(s=>s.team===u.team&&s.kind!=='ballistic')]);
   }
   const bike=alive(u.team).find(v=>v.type==='bike');
   if(bike){

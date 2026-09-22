@@ -273,7 +273,8 @@ function drawUnit(u) {
     const row = u.type === 'turret' ? 1 : u.team;
     const height =
       u.type === 'core' ? 150 : u.type === 'factory' ? 126 : u.type === 'forge' ? 113 : 94;
-    if(u.type==='shelter'){
+    if(['silo','interceptor'].includes(u.type))drawMissileBuilding(ctx,u);
+    else if(u.type==='shelter'){
       // Concrete bunker, reinforced entrance and civil-defense triangle.
       ctx.fillStyle='#444c46';ctx.fillRect(-37,-29,74,49);
       ctx.fillStyle='#899083';ctx.beginPath();ctx.moveTo(-42,-29);ctx.lineTo(-28,-49);ctx.lineTo(27,-49);ctx.lineTo(42,-29);ctx.closePath();ctx.fill();
@@ -691,6 +692,7 @@ function drawResourceWork(n,y){
 }
 
 function drawAtomicWarnings(){
+  drawMissileFlights(ctx);
   if(mode==='neutron'&&atomicTargetSite?.hp>0){
     ctx.save();ctx.strokeStyle='#c6d298';ctx.lineWidth=2;ctx.setLineDash([6,6]);
     ctx.beginPath();ctx.arc(atomicTargetSite.x,atomicTargetSite.y,NEUTRON.range,0,Math.PI*2);ctx.stroke();ctx.restore();

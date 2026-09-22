@@ -22,3 +22,6 @@ extended deterrence. The Civil Defense unlock is an original, deliberately narro
 game adaptation. The research price, timing, shelter behavior and protection
 percentage are invented balance rules, not claims from his work. This attribution
 does not add him to Babar's fictional family roster or imply his endorsement.
+
+As of v0.56.0, the same completed skill also unlocks Missile Defense Batteries.
+Their construction and interceptor shots have separate costs; see MISSILES.md.

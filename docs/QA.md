@@ -1163,3 +1163,9 @@ Real browser: 360 assertions passed across the nuclear-authority, atomic, H-bomb
 ## Nuclear opening v0.55.0
 
 Syntax/asset and full deterministic tactical checks passed; cinematic changes do not alter simulation rules. Real browser opening fixture passed 174 checks across 320×568, 390×844, 844×390 and 1280×900, including five-scene text/state, nuclear visual modes, leader authority copy, controls, pause/replay/skip/Escape, mute, reduced motion, frozen simulation and complete 40-second auto playback. Visually reviewed the desktop cloud scene and phone final-order scene. Saved local review screenshots in artifacts/nuclear-opening-desktop.png and artifacts/nuclear-opening-mobile.png. Physical iPhone Safari and speaker listening remain unverified.
+
+## Ballistic missiles and defense v0.56.0
+
+Syntax/assets and full deterministic tactical suite passed. New coverage includes both factions' missile and interceptor payments; target range/fog; launch/reload limits; warning and friendly-fire damage; conventional versus nuclear effects; terminal interception window; supply/resource/coverage/death/construction restrictions; H-bomb two-hit defense; neutron exclusion; three-missile saturation; launcher destruction; research/build costs; fair AI targeting; atomic interception preventing blast and releasing evacuated workers; reset.
+
+Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844×390 and 1280×900. Exercised locked/unlocked build buttons, paid touch placement, conventional launch and countdown, simulation integration and horizontal layout bounds. Inspected launcher, radar battery, flight path and warning ring; no captured errors. Screenshot: artifacts/missile-mobile.png (review-only). Physical iPhone Safari remains unverified.

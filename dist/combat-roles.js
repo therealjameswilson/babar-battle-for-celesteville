@@ -53,6 +53,7 @@ function enemyResearchPlan(buildings) {
   if(t>=180)priorities.push('armor','armor2');
   if(t>=240)priorities.push('rapid');
   if(t>=360)priorities.unshift('damageLimitation');
+  if(t>=420)priorities.push('ballistics');
   if(t>=480)priorities.push('shells','atomic');
   if(t>=780)priorities.push('hydrogen');
   for (const id of priorities) {

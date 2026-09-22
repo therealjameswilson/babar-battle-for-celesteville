@@ -401,3 +401,11 @@ rule for rhino launches. Allied vision does not substitute. See [full rules](doc
 ## Nuclear prologue — v0.55.0
 
 The opening now foreshadows Uranium, atomic/H-bomb escalation, Arthur’s neutron payload, Damage Limitation and Civil Defense, and Babar/Rataxes’s personal headquarters-sight requirement. Local mushroom-cloud art and shelter/command-button silhouettes accompany the new scenes. All five scenes remain skippable; reduced motion uses manual advancement.
+
+## Missiles and defense — v0.56.0
+
+Research **Ballistic command** at Artillery Works, then build a **Ballistic Launcher**
+for conventional long-range strikes. **Damage Limitation** also unlocks **Missile
+Defense Batteries**. Supply and fund batteries to intercept incoming missiles;
+overlapping batteries are needed against H-bombs. Reload gaps allow saturation.
+Nuclear launch authorization remains with the faction leader. See [costs and rules](docs/MISSILES.md).

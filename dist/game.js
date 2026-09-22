@@ -13,6 +13,8 @@ const defs = {
   headquarters: { name: 'Field Headquarters', hp: 1100, r: 38, cost: 400, build: 30 },
   forge: { name: 'Guard School', hp: 850, r: 34, cost: 150, build: 12 },
   factory: { name: 'Artillery Works', hp: 1050, r: 38, cost: 240, materials: 50, build: 18 },
+  silo: {name:'Ballistic Launcher',hp:900,r:32,cost:280,materials:120,build:26},
+  interceptor: {name:'Missile Defense Battery',hp:800,r:30,cost:220,materials:100,build:22},
   shelter: { name: 'Civil Defense', hp: 1800, r: 32, cost: 180, materials: 80, build: 22 },
   quarry: { name: 'Materials Quarry', hp: 600, r: 26, cost: 100, build: 12 },
   relay: { name: 'Village Home', hp: 450, r: 23, cost: 100, build: 9 },
@@ -178,8 +180,9 @@ function say(s) {
   }
 }
 const researchDefs = {
+  ballistics: {name:'Ballistic command',building:'factory',cost:220,materials:80,time:45,description:'Unlock Ballistic Launchers: conventional precision strikes, 900m range, 10s warning. Missile defenses can intercept them.'},
   damageLimitation: {name:'Austin Long: Damage Limitation',building:'forge',cost:150,materials:50,time:40,
-    description:'Unlock Civil Defense shelters and automatic worker evacuation. A fictional skill inspired by Austin Long’s writing on damage limitation; shelter effects are game rules.'},
+    description:'Unlock Civil Defense shelters, automatic worker evacuation and Missile Defense Batteries. A fictional skill inspired by Austin Long’s writing on damage limitation; shelter effects are game rules.'},
   hydrogen: {name:'H-bomb command',building:'factory',requires:'atomic',cost:1000,materials:350,time:120,description:'After Atomic command: unlock H-bomb assembly (1000 Supplies, 350 Materials, 80 Uranium, 110s). Larger 230m blast; 28s warning and friendly fire. Shares the atomic payload limit.'},
   atomic: {name:'Atomic command',building:'factory',requires:'shells',requiresAlso:'armor2',cost:800,materials:300,time:90,description:'Unlock assembly of one atomic bomb per faction at supplied Artillery Works. Assembly: 650 Supplies, 200 Materials, 40 Uranium, 75s. Launch: 18s warning, friendly fire.'},
   rapid: { name: 'Rapid advance doctrine', building:'forge', requires:'drill', cost:180, materials:60, time:35,
@@ -635,12 +638,13 @@ function cancelConstruction(b) {
   say('Construction cancelled. 75% of paid resources recovered.');
   updateUI(true);
 }
+function buildingRequirement(type){return type==='silo'?'Research Ballistic command at Artillery Works.':['shelter','interceptor'].includes(type)?'Research Austin Long: Damage Limitation at a Guard School.':'Complete a Guard School before building Artillery Works.';}
 function buildingCost(type) {
   return Math.ceil(defs[type].cost * (benefits.has('cornelius') ? 0.85 : 1));
 }
 function build(type) {
   if (!running || paused || ended) return;
-  if (!prerequisite(type)) return say(type==='shelter'?'Research Austin Long: Damage Limitation at a Guard School to unlock Civil Defense.':'Complete a Guard School before building Artillery Works.');
+  if (!prerequisite(type)) return say(buildingRequirement(type));
   if (materials < materialCost(type)) return say('Not enough Materials. Build and staff a quarry first.');
   if (ore < buildingCost(type)) return say('Not enough supplies.');
   placing = type;
@@ -676,6 +680,11 @@ function setMode(m) {
 }
 function command(p, append = queueOrders) {
   if (!running || paused || ended) return;
+  if(mode==='ballistic'){
+    if(launchBallistic(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
+    else say('Ballistic launch needs a supplied launcher, 120 S / 40 M, and a visible target within 900m.');
+    return;
+  }
   if(mode==='neutron'){
     if(launchNeutron(atomicTargetSite,p)){mode=null;atomicTargetSite=null;}
     else say(nuclearAuthority(0).reason||'Neutron strike needs Arthur ready, acquired nuclear weapons, 400 S / 120 M / 30 U, and a visible target within 360m.');
@@ -823,6 +832,8 @@ function updateUI(force = false) {
                           ' strength'
                         : 'Ready for orders.'
     : 'Tap a friendly unit or building.';
+  if(u?.type==='silo')$('selected-info').textContent='Conventional missiles · 900m range · 10s warning · 35s reload · 120 Supplies / 40 Materials per shot.';
+  if(u?.type==='interceptor')$('selected-info').textContent='Automatic defense within 260m of impact · 20 Supplies / 10 Materials per interceptor · 12s reload · H-bombs need two hits. Requires supply.';
   if(u?.civilDefense) $('selected-info').textContent='CIVIL DEFENSE · '+(dist(u,u.civilDefense.shelter)<=110?'Under shelter protection.':'Evacuating to shelter.')+' Work resumes after all-clear.';
   if(u && selected.length===1 && u.queue.length && !u.research && !u.construction && populationBlocked(u.team)) $('selected-info').textContent='POPULATION BLOCKED · Build a Village Home. Paid queue and training progress are retained.';
   if (u && selected.length===1 && u.type!=='walker' && combatRole(u)) $('selected-info').textContent = combatRole(u);
@@ -876,12 +887,14 @@ function updateUI(force = false) {
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
   const authorityKey=nuclearAuthority(0).reason;
   const bikeKey=authorityKey+nuclearAcquired[0]+':'+unitUnlocked('bike')+':'+(ore>=400)+':'+(materials>=120)+':'+(uranium>=30)+':'+Math.ceil(Math.max(0,(u?.neutronReadyAt||0)-t))+':'+atomicStrikes.some(s=>s.team===0);
-  const munKey=bikeKey+(uranium>=40)+':'+(uranium>=80)+':'+selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
+  const missileKey=(ore>=20)+':'+(materials>=10)+':'+(ore>=120)+':'+(materials>=40)+':'+Math.ceil(Math.max(0,(u?.missileReadyAt||0)-t))+':'+Math.ceil(Math.max(0,(u?.interceptorReadyAt||0)-t))+':'+atomicStrikes.length;
+  const munKey=missileKey+bikeKey+(uranium>=40)+':'+(uranium>=80)+':'+selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
   if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
     actionKey = key + rapidKey + disciplineKey + munKey;
     let a = [];
     munitionsActions(a,u);
     atomicActions(a,u);
+    missileActions(a,u);
     motorbikeActions(a,u);
     const armed = selected.filter(u=>u.team===0&&fireDisciplineUnit(u));
     if(armed.length) a.push([armed.every(u=>u.holdFire)?'Weapons free':'Hold fire','C · '+armed.filter(u=>u.holdFire).length+'/'+armed.length+' holding fire',toggleFireDiscipline]);
@@ -909,8 +922,8 @@ function updateUI(force = false) {
       }
     }
     if(u&&!u.construction&&((selected.length===1&&workerProducer(u))||selected.every(w=>w.team===0&&w.type==='worker')))
-      for(const type of ['forge','relay','quarry','factory','turret','headquarters','shelter'])
-        a.push([defs[type].name,type==='shelter'&&!prerequisite(type)?'Requires Austin Long: Damage Limitation · Guard School':buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
+      for(const type of ['forge','relay','quarry','factory','turret','headquarters','shelter','silo','interceptor'])
+        a.push([defs[type].name,!prerequisite(type)?buildingRequirement(type):buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
     if (selected.length > 1) {
       for (const type of ['worker','trooper','scout','sapper','walker']) {
         const producers = selected.filter(b => b.team === 0 && produces(b,type) && !b.construction);

@@ -5,7 +5,7 @@ let nuclearAcquired=[false,false];
 function strikeCommandActive(s){return s.site.hp>0&&(s.kind==='neutron'||supplied(s.site));}
 function neutronReady(u){
   return u?.hp>0&&u.type==='bike'&&u.team===0&&nuclearAcquired[0]&&!nuclearAuthority(u.team).reason&&
-    t>=(u.neutronReadyAt||0)&&!atomicStrikes.some(s=>s.team===0)&&
+    t>=(u.neutronReadyAt||0)&&!atomicStrikes.some(s=>s.team===0&&s.kind!=='ballistic')&&
     ore>=NEUTRON.cost&&materials>=NEUTRON.materials&&uranium>=NEUTRON.uranium;
 }
 function aimNeutron(u){
