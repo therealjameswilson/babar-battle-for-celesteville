@@ -25,3 +25,13 @@ does not add him to Babar's fictional family roster or imply his endorsement.
 
 As of v0.56.0, the same completed skill also unlocks Missile Defense Batteries.
 Their construction and interceptor shots have separate costs; see MISSILES.md.
+
+## Reference photograph (v0.56.1)
+`dist/assets/austin-long.jpg` is the unmodified photograph supplied by the project
+owner for this feature. Original photographer/license metadata was not supplied.
+The nuclear decision card shows it when Babar can begin Atomic command at selected
+Artillery Works, while a friendly nuclear project/payload exists, or when scouts
+currently observe a Rhino nuclear project/payload. It also appears for Babar after
+Atomic command research. Hidden enemy projects never trigger the card.
+The card does not pause play; on phones it appears only in Build / train. Its
+expandable attribution distinguishes the fictional rules from Long's research.

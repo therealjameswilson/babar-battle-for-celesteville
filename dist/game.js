@@ -760,6 +760,7 @@ function command(p, append = queueOrders) {
 }
 let actionKey = '';
 function updateUI(force = false) {
+  renderNuclearBriefing();
   renderSubgroups();
   renderProduction();
   $('ore').textContent = Math.floor(ore);

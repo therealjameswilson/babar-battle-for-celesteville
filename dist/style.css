@@ -1730,3 +1730,15 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
 #opening[data-nuclear='arsenal'] .opening-cloud {left:50%;right:auto;bottom:6%;transform:translateX(-50%);width:min(58vw,680px);opacity:.34;}
 #opening[data-nuclear='arsenal'] .opening-rivals>div {opacity:.2;}
 @media(min-width:900px){.opening-shelter,.opening-button{left:82%;bottom:20%;opacity:.48;}}
+
+/* Reference photo stays in the command panel; never pauses or covers the battlefield. */
+#nuclear-briefing[hidden] {display:none;}
+#nuclear-briefing {display:flex;gap:10px;padding:10px;margin:8px 0;border:1px solid #897851;background:#1d2822;color:#e6dfcc;}
+#nuclear-briefing img {width:96px;height:80px;object-fit:cover;object-position:65% center;flex:none;border:1px solid #897851;}
+#nuclear-briefing div {min-width:0;}
+#nuclear-briefing strong {font-size:13px;color:#e4c38b;}
+#nuclear-briefing p {font-size:12px;line-height:1.4;margin:5px 0;}
+#nuclear-briefing summary {font-size:11px;cursor:pointer;}
+@media(max-width:580px){#nuclear-briefing {gap:8px;padding:8px;}#nuclear-briefing img{width:72px;height:72px;}}
+
+@media(max-width:900px),(max-height:500px){aside:not([data-panel='actions']) #nuclear-briefing{display:none;}#nuclear-briefing{flex-shrink:0;max-height:132px;overflow-y:auto;}}

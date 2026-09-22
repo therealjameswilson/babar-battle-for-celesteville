@@ -140,3 +140,27 @@ function leaderNuclearActions(a,u){
     a.push(['Authorize neutron strike',status,()=>aimNeutron(bike),locked||!neutronReady(bike)]);
   }
 }
+
+// Contextual, non-modal reference card. Enemy projects are shown only while observed.
+function nuclearBriefingContext() {
+  const pursuing = b => ['atomic','hydrogen'].includes(b.research?.id) || b.atomicJob || b.atomicReady;
+  const chosen = selected.length === 1 ? selected[0] : null;
+  if (chosen?.team === 0 && chosen.hp > 0 &&
+      ((chosen.type === 'factory' && !chosen.construction &&
+        (pursuing(chosen) || technologies.has('atomic') || !researchRequirement('atomic',0))) ||
+       (chosen.type === 'hero' && technologies.has('atomic')))) return 0;
+  if (alive(0).some(pursuing)) return 0;
+  if (alive(1).some(b => pursuing(b) && visible(b))) return 1;
+  return null;
+}
+function renderNuclearBriefing() {
+  const card = $('nuclear-briefing');
+  if (!card) return;
+  const team = nuclearBriefingContext();
+  card.hidden = team === null;
+  if (team === null) return;
+  $('nuclear-briefing-title').textContent = (team ? 'Rataxes' : 'Babar') + ' · Nuclear decision';
+  $('nuclear-briefing-text').textContent = team
+    ? 'Scouts report a Rhino nuclear project. Prepare Civil Defense, protect supply lines and position missile defenses.'
+    : 'Nuclear research commits scarce supplies. Secure Uranium deliveries, prepare Civil Defense and keep the king in sight of headquarters for launch.';
+}

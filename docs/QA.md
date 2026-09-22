@@ -1169,3 +1169,10 @@ Syntax/asset and full deterministic tactical checks passed; cinematic changes do
 Syntax/assets and full deterministic tactical suite passed. New coverage includes both factions' missile and interceptor payments; target range/fog; launch/reload limits; warning and friendly-fire damage; conventional versus nuclear effects; terminal interception window; supply/resource/coverage/death/construction restrictions; H-bomb two-hit defense; neutron exclusion; three-missile saturation; launcher destruction; research/build costs; fair AI targeting; atomic interception preventing blast and releasing evacuated workers; reset.
 
 Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844×390 and 1280×900. Exercised locked/unlocked build buttons, paid touch placement, conventional launch and countdown, simulation integration and horizontal layout bounds. Inspected launcher, radar battery, flight path and warning ring; no captured errors. Screenshot: artifacts/missile-mobile.png (review-only). Physical iPhone Safari remains unverified.
+
+## v0.56.1 — Austin Long reference photograph
+- Syntax/assets and deterministic tactical suite passed; no combat balance changes.
+- Real browser fixture `tests/nuclear-photo-browser.html`: 21 assertions at 390×844,
+  844×390 and 1280×900. Photo decoded; Babar prerequisite context, observed Rataxes
+  project, hidden enemy project, non-pausing behavior and horizontal bounds passed.
+- Visually inspected the mobile command-panel card. Physical iPhone Safari not tested.

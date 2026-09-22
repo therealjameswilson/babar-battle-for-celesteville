@@ -409,3 +409,8 @@ for conventional long-range strikes. **Damage Limitation** also unlocks **Missil
 Defense Batteries**. Supply and fund batteries to intercept incoming missiles;
 overlapping batteries are needed against H-bombs. Reload gaps allow saturation.
 Nuclear launch authorization remains with the faction leader. See [costs and rules](docs/MISSILES.md).
+
+### Nuclear reference card (0.56.1)
+Austin Long's supplied photograph now accompanies the nuclear decision briefing for
+Babar and observed Rataxes projects. Open Build / train on phones to read it.
+The card does not pause play or reveal hidden enemy research.
