@@ -243,3 +243,9 @@ Nuclear release now requires nuclearAuthority(team): a living hero with individu
 terrain/structure-occluded sight to a completed friendly core/headquarters. Atomic
 and neutron launch revalidate this gate before spending. Launch actions moved to
 Babar; the enemy AI is gated by Rataxes. No new playable-faction selector was added.
+
+## v0.55.0
+Opening expanded to five scenes / about 40 seconds, incorporating Uranium, nuclear
+weapons, Arthur, Civil Defense and leader-only authority. Existing cloud atlas plus
+CSS silhouettes provide nuclear visuals; control, audio and reduced-motion behavior
+are preserved. Browser fixture includes full timed playback and nuclear scene checks.

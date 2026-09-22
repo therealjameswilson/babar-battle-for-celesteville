@@ -1,13 +1,13 @@
 # Two crowns. One border. — 0.42.0
 
-The opening uses three original wartime dispatches: Basil and Rataxes issue an
+The original opening used three wartime dispatches: Basil and Rataxes issue an
 ultimatum; Cornelius and Babar prepare a defense while Celeste protects civilians;
 the final scene hands the rivalry to the player. Dialogue is invented for this
 game, not quotations or canonical events from the books.
 
 `opening.js` creates a native modal with the existing cropped Babar/Rataxes art,
 new landscape, text, progress markers and explicit playback controls. Each of
-three scenes lasts eight seconds. Pause/visibility loss clears timers and stops
+five scenes lasts eight seconds. Pause/visibility loss clears timers and stops
 score voices. Skip, Escape and natural completion return to the mission briefing;
 Take command is still required to start simulation. The start handler also closes
 the modal defensively. Reduced motion disables drift and timed advancement.
@@ -31,3 +31,9 @@ Generation prompt:
 
 Browser fixture: `tests/opening-browser.html`. Physical Safari, speaker listening,
 and full-page screenshot review remain unverified due to preview limitations.
+
+## Nuclear expansion (v0.55.0)
+
+Five scenes now run for about 40 seconds: the ultimatum, Babar’s answer, nuclear escalation, Civil Defense, and final leader authorization. The last three name the actual gameplay systems: Uranium and atomic/H-bomb progression, Arthur’s acquired-weapon neutron ability, Damage Limitation shelter research, automatic evacuation, and each leader’s direct headquarters sight. The introductory card clarifies that nuclear weapons arrive later in the match. No gameplay state or resources are changed by playback.
+
+The new visual layer reuses the local mushroom-cloud atlas with its inspected atomic crop, plus original CSS shelter and command-button silhouettes. No new remote assets, camera shake, full-screen flashes or automatic audio were introduced. Final-scene handling now derives from OPENING_SCENES.length.

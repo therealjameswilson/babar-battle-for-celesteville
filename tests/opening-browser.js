@@ -10,7 +10,17 @@
  q('#opening-play').click();check(q('#opening-play').textContent==='Resume opening','pause');
  q('#opening-next').click();check(q('#opening-title').textContent==='Babar stands.','answer');
  check(q('#opening-reply').textContent.includes('families to safety'),'civilian stakes');
- q('#opening-next').click();check(q('#opening-title').textContent.includes('Two kings'),'rivalry');
+ q('#opening-next').click();check(q('#opening-title').textContent==='The war changes.','nuclear escalation');
+ check(q('#opening-line').textContent.includes('Uranium')&&q('#opening-line').textContent.includes('H-bomb'),'resource and tech stakes');
+ check(q('#opening-reply').textContent.includes('Arthur'),'motorbike foreshadowing');
+ check(q('#opening').dataset.nuclear==='arsenal','cloud scene');
+ q('#opening-next').click();check(q('#opening-title').textContent==='Bring them under cover.','civil defense scene');
+ check(q('#opening-line').textContent.includes('Damage Limitation'),'shelter unlock doctrine');
+ check(q('#opening').dataset.nuclear==='shelter','shelter visual');
+ q('#opening-next').click();check(q('#opening-title').textContent==='Only the king.','leader authority scene');
+ check(q('#opening-line').textContent.includes('direct sight')&&q('#opening-line').textContent.includes('Rataxes'),'both leaders and headquarters sight');
+ check(q('#opening').dataset.nuclear==='authority','button visual');
+ check(q('#opening-next').textContent==='Mission briefing','final scene label');
  for(const b of d.querySelectorAll('.opening-controls button')){const r=b.getBoundingClientRect();check(r.height>=44,'touch size');check(r.left>=0&&r.right<=w+1,'button horizontal bounds');check(r.bottom<=h+1,'button vertical bounds '+w+' '+r.bottom);}
  q('#opening-next').click();check(!q('#opening').open,'ends at briefing');check(g.eval('!running'),'does not launch automatically');
  q('#opening-replay').click();check(q('#opening').open,'replay');
@@ -23,8 +33,8 @@
  }
  const timed=document.createElement('iframe');timed.width=390;timed.height=844;const loaded=new Promise(r=>timed.onload=r);timed.src='../dist/index.html?timed=42';document.querySelector('#games').append(timed);await loaded;
  timed.contentWindow.eval("motionPreference='full';applyMotionPreference();muted=true");timed.contentDocument.querySelector('#opening-play').click();
- document.querySelector('#result').textContent=lines.join('\n')+'\nChecking 24-second playback…';
- await new Promise(r=>setTimeout(r,24500));
+ document.querySelector('#result').textContent=lines.join('\n')+'\nChecking 40-second playback…';
+ await new Promise(r=>setTimeout(r,40500));
  check(!timed.contentDocument.querySelector('#opening').open,'timed ending');check(timed.contentWindow.eval('!running'),'timed ending waits for player');timed.remove();
  document.querySelector('#result').textContent=lines.join('\n')+'\nPASS '+count+' checks';
  }catch(e){document.querySelector('#result').textContent=lines.join('\n')+'\nFAIL '+e.stack;}

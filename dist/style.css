@@ -1712,3 +1712,21 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
   #toast {bottom:6px;left:110px;right:94px;font-size:10px;}
   .field #minimap {bottom:6px;}
 }
+
+/* Nuclear prologue: local artwork and static command-post silhouettes. */
+.opening-nuclear {position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:-1;opacity:0;}
+#opening[data-nuclear='arsenal'] .opening-nuclear,#opening[data-nuclear='shelter'] .opening-nuclear,#opening[data-nuclear='authority'] .opening-nuclear {opacity:1;}
+.opening-cloud {position:absolute;right:4%;bottom:0;width:min(55vw,660px);height:80%;opacity:.16;filter:sepia(.35);}
+.opening-shelter,.opening-button {display:none;position:absolute;bottom:5%;left:50%;transform:translateX(-50%);color:#ccb989;text-align:center;opacity:.22;}
+.opening-shelter {width:180px;height:85px;border:8px solid #a5a48e;border-radius:48px 48px 4px 4px;background:#101b16;}
+.opening-shelter i {display:block;margin:10px auto;width:0;height:0;border-left:14px solid transparent;border-right:14px solid transparent;border-bottom:23px solid #d9ac61;}
+.opening-nuclear b {font:10px monospace;letter-spacing:2px;}
+#opening[data-nuclear='shelter'] .opening-shelter,#opening[data-nuclear='authority'] .opening-button {display:block;}
+.opening-button {width:180px;height:130px;border:2px solid #a49168;background:#19221d;box-shadow:0 0 0 5px #111a15;}
+.opening-button i {display:block;width:64px;height:64px;margin:15px auto 10px;border:7px solid #b29358;border-radius:50%;background:#883d35;box-shadow:inset 0 -8px #512820;}
+#opening[data-nuclear='authority'] .opening-cloud {opacity:.09;}
+@media(max-width:580px){.opening-cloud{width:85vw;right:-14%;height:58%;}.opening-shelter,.opening-button{left:75%;bottom:4%;opacity:.12;}#opening-title{font-size:32px;}#opening-line,#opening-reply{line-height:1.4;}}
+@media(max-height:600px) and (max-width:580px){.opening-body{padding:18px 14px;}#opening-tag{margin-bottom:10px;}#opening-title{font-size:29px;margin-bottom:12px;}#opening-line,#opening-reply{font-size:15px;margin:10px 0;}.opening-progress,.opening-controls{margin-top:12px;}#opening-hint{margin-top:8px;}}
+#opening[data-nuclear='arsenal'] .opening-cloud {left:50%;right:auto;bottom:6%;transform:translateX(-50%);width:min(58vw,680px);opacity:.34;}
+#opening[data-nuclear='arsenal'] .opening-rivals>div {opacity:.2;}
+@media(min-width:900px){.opening-shelter,.opening-button{left:82%;bottom:20%;opacity:.48;}}

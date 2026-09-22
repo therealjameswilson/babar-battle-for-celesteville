@@ -322,7 +322,7 @@ Restart remains available from the field manual (`?`). No installation required.
 
 ## Rivalry opening (0.42.0)
 
-A three-scene, roughly 24-second illustrated opening introduces the border war.
+A five-scene, roughly 40-second illustrated opening introduces the border war and its nuclear endgame.
 Choose Begin opening to enable its original synthesized score, or Skip to briefing.
 Pause, Next scene, mute and Escape remain available. Reduced motion uses static,
 manually advanced scenes. Returning from another app requires Resume opening.
@@ -397,3 +397,7 @@ Select **Babar** to launch atomic/H-bombs or authorize Arthur's neutron strike.
 He must personally see a completed friendly Palace or Field Headquarters, within
 his vision range and without intervening forest/buildings. Rataxes follows the same
 rule for rhino launches. Allied vision does not substitute. See [full rules](docs/NUCLEAR-AUTHORITY.md).
+
+## Nuclear prologue — v0.55.0
+
+The opening now foreshadows Uranium, atomic/H-bomb escalation, Arthur’s neutron payload, Damage Limitation and Civil Defense, and Babar/Rataxes’s personal headquarters-sight requirement. Local mushroom-cloud art and shelter/command-button silhouettes accompany the new scenes. All five scenes remain skippable; reduced motion uses manual advancement.

@@ -1159,3 +1159,7 @@ Real browser: tests/motorbike-browser.html passed 81 assertions at 390×844, 844
 Full deterministic tactics and syntax/asset checks passed. Added paired-faction tests for personal sight/range, forest and structure occlusion, scout/reveal rejection, incomplete/dead/enemy headquarters, completed friendly Field Headquarters, leader death, retained payloads and neutron target-time revalidation. Prior launch fixtures now supply a living leader at headquarters.
 
 Real browser: 360 assertions passed across the nuclear-authority, atomic, H-bomb and motorbike fixtures, each at 390×844, 844×390 and 1280×900. Verified factory launch removal, leader lock explanation, sight-based enablement, leader-authorized touch launches and phone layout bounds. No captured errors in the authority fixture. Review screenshot: artifacts/nuclear-authority-mobile.png. Physical iPhone Safari remains unverified.
+
+## Nuclear opening v0.55.0
+
+Syntax/asset and full deterministic tactical checks passed; cinematic changes do not alter simulation rules. Real browser opening fixture passed 174 checks across 320×568, 390×844, 844×390 and 1280×900, including five-scene text/state, nuclear visual modes, leader authority copy, controls, pause/replay/skip/Escape, mute, reduced motion, frozen simulation and complete 40-second auto playback. Visually reviewed the desktop cloud scene and phone final-order scene. Saved local review screenshots in artifacts/nuclear-opening-desktop.png and artifacts/nuclear-opening-mobile.png. Physical iPhone Safari and speaker listening remain unverified.
