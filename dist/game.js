@@ -13,6 +13,7 @@ const defs = {
   headquarters: { name: 'Field Headquarters', hp: 1100, r: 38, cost: 400, build: 30 },
   forge: { name: 'Guard School', hp: 850, r: 34, cost: 150, build: 12 },
   factory: { name: 'Artillery Works', hp: 1050, r: 38, cost: 240, materials: 50, build: 18 },
+  shelter: { name: 'Civil Defense', hp: 1800, r: 32, cost: 180, materials: 80, build: 22 },
   quarry: { name: 'Materials Quarry', hp: 600, r: 26, cost: 100, build: 12 },
   relay: { name: 'Village Home', hp: 450, r: 23, cost: 100, build: 9 },
   turret: {
@@ -429,10 +430,11 @@ function update(dt) {
   for (const u of [...units]) {
     if (u.hp <= 0) continue;
     const d = defs[u.type];
+    if (civilianEvacuation(u,dt)) continue;
     u.cool = Math.max(0, u.cool - dt);
     if (updateArtillery(u)) continue;
     if (u.construction) {
-      const builders = alive(u.team).filter(w => w.type === 'worker' && w.order?.kind === 'build' && w.order.target === u && dist(w, u) <= u.r + w.r + 12);
+      const builders = alive(u.team).filter(w => w.type === 'worker' && !w.civilDefense && w.order?.kind === 'build' && w.order.target === u && dist(w, u) <= u.r + w.r + 12);
       if (!builders.length) continue;
       const spent = Math.min(dt, u.construction);
       u.construction = Math.max(0, u.construction - dt);
@@ -797,6 +799,8 @@ function updateUI(force = false) {
                   ? 'Trains infantry. Choose weapons or field protection research; research suspends recruitment at this school.'
                   : u.type === 'factory'
                     ? 'Trains artillery. Shell research: +25% gun damage. Screen guns with infantry.'
+                    : u.type === 'shelter'
+                      ? 'Automatic worker evacuation on nuclear warning. Workers within 110m take 95% less nuclear damage. No supply link required. Return to work 3s after all-clear.'
                     : u.type === 'quarry'
                       ? 'Materials: assign provisioners with Gather. 3 extraction slots; needs an unbroken supply link.'
                     : u.type === 'relay'
@@ -811,6 +815,7 @@ function updateUI(force = false) {
                           ' strength'
                         : 'Ready for orders.'
     : 'Tap a friendly unit or building.';
+  if(u?.civilDefense) $('selected-info').textContent='CIVIL DEFENSE · '+(dist(u,u.civilDefense.shelter)<=110?'Under shelter protection.':'Evacuating to shelter.')+' Work resumes after all-clear.';
   if(u && selected.length===1 && u.queue.length && !u.research && !u.construction && populationBlocked(u.team)) $('selected-info').textContent='POPULATION BLOCKED · Build a Village Home. Paid queue and training progress are retained.';
   if (u && selected.length===1 && u.type!=='walker' && combatRole(u)) $('selected-info').textContent = combatRole(u);
   $('tactical-status').textContent = productionGroup ? selected.filter(supplied).length + '/' + selected.length + ' supplied sites · isolated production runs at 25%' : u
@@ -890,7 +895,7 @@ function updateUI(force = false) {
       if (u.type === 'factory') a.push(['Field Artillery', '160 S · 25 M', () => train('walker')]);
     }
     if(u&&!u.construction&&((selected.length===1&&workerProducer(u))||selected.every(w=>w.team===0&&w.type==='worker')))
-      for(const type of ['forge','relay','quarry','factory','turret','headquarters'])
+      for(const type of ['forge','relay','quarry','factory','turret','headquarters','shelter'])
         a.push([defs[type].name,buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
     if (selected.length > 1) {
       for (const type of ['worker','trooper','scout','sapper','walker']) {

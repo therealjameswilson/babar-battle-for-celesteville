@@ -324,3 +324,6 @@ console.log('PASS: H-bomb prerequisites, costs, faction parity, shared cap, payl
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'uranium-checks.js'),'utf8'));
 run('uraniumChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: Uranium gates, extraction, delivery, depletion, faction costs, AI workers and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'civil-defense-checks.js'),'utf8'));
+run('civilDefenseChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: civil defense construction, faction evacuation, protection, cargo/queue preservation, all-clear, abort and reset.');

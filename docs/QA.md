@@ -1135,3 +1135,9 @@ and gameplay rendering completed. Physical iPhone Safari remains unverified.
 Syntax/asset checks and the full deterministic tactics suite passed. Added paired-faction tests for Works access, timed extraction, finite depletion, physical delivery, atomic/H-bomb payment, insufficient funds without partial spending, AI assignment, deposit clearance and reset. Updated earlier nuclear fixtures to provide their now-required resource. The old twelve supply caches remain; three Uranium deposits are additional.
 
 Real Codex browser: tests/uranium-browser.html passed 112 checks at 320×568, 390×844, 844×390 and 1280×900. Exercised assembly buttons at 39/40 U, payment/HUD refresh, touch gathering without pausing, all resource-counter bounds and horizontal overflow. Inspected rendered phone deposit, hauler and compact HUD. No captured browser console errors. This is browser viewport testing, not physical iPhone Safari verification.
+
+## Civil Defense v0.51.0
+
+Full deterministic tactics suite passed, including new tests for paid shelter construction, both-faction evacuation, physical arrival, retained cargo/queued work, H-bomb protection versus exposed-worker death, all-clear, aborted strikes, unusable shelters and reset. Syntax and asset checks passed.
+
+Real browser fixture tests/civil-defense-browser.html passed 78 assertions at 390×844, 844×390 and 1280×900: build action, touch placement/payment without pausing, warning-triggered worker destinations, shared rule checks and layout bounds. Inspected bunker art, workers converging and protection perimeter; no captured console errors. Review screenshot: artifacts/civil-defense-mobile.png (local, excluded from deployment). Physical iPhone Safari remains unverified.

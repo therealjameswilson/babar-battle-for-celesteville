@@ -371,3 +371,9 @@ with reduced-motion support. [Visual references and provenance](docs/MUSHROOM-CL
 ## Uranium — v0.50.0
 
 Three finite deposits (120 U each) now supply nuclear production. Completed Artillery Works unlock gathering: two extraction slots, 4 U per worker per 3 seconds, physical delivery to a supplied base. Uranium starts at zero for both factions. Atomic assembly consumes 40 U; H-bomb assembly consumes 80 U, in addition to Supplies and Materials. Research prices are unchanged. The AI assigns up to two observed-site haulers after 420 seconds and stops stockpiling at 80 U. Deposits and cargo have distinct ochre markings; the phone HUD includes the current stock. These are fictional game balance units.
+
+## Civil Defense — v0.51.0
+
+Build a reinforced Civil Defense shelter for 180 Supplies and 80 Materials (22s, 1,800 HP). Any public nuclear launch warning—including friendly fire—automatically evacuates both factions' provisioners to completed friendly shelters, preferring sites outside the blast warning. Navigation distributes workers around the shelter. Workers within 110m receive 95% nuclear damage reduction; this does not protect them against ordinary weapons. Protection is sampled before each blast so unit iteration order cannot change survival. Supply links are not required. Incomplete or destroyed shelters provide no protection, and distant workers must arrive in time.
+
+Evacuation temporarily overrides movement and pauses work without discarding cargo or queued orders. Work resumes three seconds after the last active warning disappears, including aborted strikes. New orders issued during an alert take effect after all-clear. Without a usable shelter workers continue their orders. Rhino command can pay to build a shelter after seven minutes. Local Canvas bunker art uses concrete walls, a reinforced entrance and a civil-defense triangle; no new external assets.

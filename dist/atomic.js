@@ -30,6 +30,7 @@ function launchAtomic(b,p){
   battleSound('cannon');updateUI(true);return true;
 }
 function updateAtomic(dt){
+  updateCivilDefense();
   for(const b of units.filter(b=>b.hp>0&&b.atomicJob)){
     if(supplied(b))b.atomicJob.progress+=dt;
     if(b.atomicJob.progress>=payloadSpec(b.atomicJob.kind).build){b.atomicKind=b.atomicJob.kind||'atomic';b.atomicJob=null;b.atomicReady=true;if(!b.team)say(payloadName(b.atomicKind)+' ready at the Artillery Works.');updateUI(true);}
@@ -41,8 +42,10 @@ function updateAtomic(dt){
     }
     if(t<strike.at)continue;
     const source={type:'factory',team:strike.team,id:strike.site.id,x:strike.x,y:strike.y};
+    // Snapshot shelter protection before damage so unit iteration order cannot change survival.
+    const protectedWorkers=new Set(units.filter(civilDefenseProtected));
     for(const u of units.filter(u=>u.hp>0&&dist(u,strike)<=spec.radius))
-      damageUnit(source,u,spec.damage*(1-.5*dist(u,strike)/spec.radius));
+      damageUnit(source,u,spec.damage*(1-.5*dist(u,strike)/spec.radius),protectedWorkers.has(u)?.05:1);
     fx.push(mushroomCloudEffect(strike));
     battleSound('cannon');say(payloadLabel(strike.kind)+' impact. Both armies inside the blast area take damage.');
     atomicStrikes=atomicStrikes.filter(s=>s!==strike);
@@ -68,4 +71,36 @@ function atomicActions(a,u){
     const spec=payloadSpec(kind);
     a.push(['Assemble '+payloadName(kind),spec.cost+' S · '+spec.materials+' M · '+spec.uranium+' U · '+spec.build+'s · shared one-payload limit',()=>assembleAtomic(u,kind),atomicBusy(0)||!!u.research||!!u.queue.length||!supplied(u)||ore<spec.cost||materials<spec.materials||uranium<spec.uranium]);
   }
+}
+
+// Public launch warnings trigger civil defense for both factions, including friendly fire.
+function civilDefenseProtected(w){
+  const b=w.civilDefense?.shelter;
+  return w.hp>0&&w.type==='worker'&&b?.hp>0&&!b.construction&&dist(w,b)<=110;
+}
+function updateCivilDefense(){
+  const warnings=atomicStrikes.filter(s=>s.site.hp>0&&supplied(s.site));
+  for(const w of units.filter(w=>w.hp>0&&w.type==='worker')){
+    if(!warnings.length){
+      if(w.civilDefense&&t>=w.civilDefense.until){w.civilDefense=null;w.path=null;w.resolvedDestination=null;}
+      continue;
+    }
+    const shelters=alive(w.team).filter(b=>b.type==='shelter'&&!b.construction);
+    shelters.sort((a,b)=>{
+      const risk=p=>warnings.some(s=>dist(p,s)<payloadSpec(s.kind).radius+110)?10000:0;
+      return risk(a)+dist(w,a)-risk(b)-dist(w,b);
+    });
+    const shelter=shelters[0];
+    if(!shelter){w.civilDefense=null;continue;}
+    if(w.civilDefense?.shelter!==shelter){w.path=null;w.resolvedDestination=null;}
+    w.civilDefense={shelter,until:t+3};
+  }
+}
+function civilianEvacuation(w,dt){
+  const b=w.civilDefense?.shelter;
+  if(!b)return false;
+  if(b.hp<=0||b.construction){w.civilDefense=null;w.path=null;return false;}
+  const angle=(w.id%16)/16*Math.PI*2,radius=60+Math.floor(w.id/16)%2*28;
+  move(w,{x:b.x+Math.cos(angle)*radius,y:b.y+Math.sin(angle)*radius},dt,5);
+  return true;
 }

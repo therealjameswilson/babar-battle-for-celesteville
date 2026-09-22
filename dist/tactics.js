@@ -189,7 +189,7 @@ function updateTactics(dt) {
       u.morale = clamp(u.morale + dt * (officer ? 12 : hospital ? 10 : 4), 0, 100);
     if (hospital && t - (u.hitAt ?? -100) > 5)
       u.hp = Math.min(u.max, u.hp + dt * (u.team === 0 && benefits.has('celeste') ? 6 : 2));
-    if (u.morale < 25 && u.order?.kind !== 'retreat') orderRetreat(u);
+    if (!u.civilDefense && u.morale < 25 && u.order?.kind !== 'retreat') orderRetreat(u);
     if (u.team === 1 && u.hp / u.max < 0.27 && u.order?.kind !== 'retreat') orderRetreat(u);
   }
 }

@@ -69,7 +69,7 @@ function enemyQueue(type) {
 }
 function enemyBuild(type, p) {
   if (enemyBudget < defs[type].cost || enemyMaterials < materialCost(type) || !enemySafe(p) || !validBuild(p,type,1)) return null;
-  const builder = nearest(p,alive(1).filter(w => w.type==='worker' && w.order?.kind!=='build' && w.order?.kind!=='retreat' && !w.carrying));
+  const builder = nearest(p,alive(1).filter(w => w.type==='worker' && !w.civilDefense && w.order?.kind!=='build' && w.order?.kind!=='retreat' && !w.carrying));
   if (!builder) return null;
   enemyBudget -= defs[type].cost; enemyMaterials -= materialCost(type); enemySpent += defs[type].cost;
   const site = add(type,1,p.x,p.y,{construction:defs[type].build,buildDuration:defs[type].build,hp:1,paid:defs[type].cost,paidMaterials:materialCost(type)});
@@ -87,7 +87,7 @@ function enemyFindSite(type, center) {
   return null;
 }
 function enemyAssignWorkers() {
-  const workers=alive(1).filter(u=>u.type==='worker');
+  const workers=alive(1).filter(u=>u.type==='worker'&&!u.civilDefense);
   // Only known, locally visible stocks enter economic planning. No hidden depletion reads.
   const resources=nodes.filter(n=>enemySeesPoint(n) && n.amount>0 && enemySafe(n) &&
     (n.kind!=='materials' || quarryFor(n,1)) && (n.kind!=='uranium'||(t>=420&&uraniumAccess(1)&&enemyUranium<80)) && alive(1).some(b=>(deliveryBase(b)) && supplied(b) && dist(b,n)<520));
@@ -121,7 +121,7 @@ function enemyMacro() {
   // Replace a lost builder without paying for the same foundation twice.
   for (const site of buildings.filter(b=>b.construction)) {
     if (workers.some(w=>w.order?.kind==='build'&&w.order.target===site)) continue;
-    const worker=nearest(site,workers.filter(w=>!w.carrying && !['build','retreat'].includes(w.order?.kind)));
+    const worker=nearest(site,workers.filter(w=>!w.civilDefense && !w.carrying && !['build','retreat'].includes(w.order?.kind)));
     if (worker && enemySafe(site)) { worker.returnToWork=worker.order?.kind==='gather'?worker.order:null; issueOrder(worker,{kind:'build',target:site}); }
   }
   enemyAssignWorkers();
@@ -134,6 +134,7 @@ function enemyMacro() {
     else if (supply(1)>=cap(1)-3 && cap(1)<(easy?40:60)) { type='relay'; site=enemyFindSite(type,core); }
     else if (!buildings.some(b=>b.type==='quarry')) { type='quarry'; site=nodes.find(n=>n.kind==='materials'&&enemySeesPoint(n)&&n.amount>0&&validBuild(n,type,1)); }
     else if (!buildings.some(b=>b.type==='factory') && t>90) { type='factory'; site=enemyFindSite(type,core); }
+    else if(t>420&&!buildings.some(b=>b.type==='shelter')&&enemyBudget>=300&&enemyMaterials>=80){type='shelter';site=enemyFindSite(type,core);}
     // Independent camps are paid only after current reports show home stocks running low.
     else if(enemyBudget>=550&&(site=enemyHeadquartersSite())){type='headquarters';isExpansion=true;}
     // Up to two scouted expansions shorten deliveries; raids can change the route.
@@ -148,7 +149,7 @@ function enemyMacro() {
   // Reserve limited labor for paid repairs, outside observed hostile fire.
   const damaged=buildings.find(b=>!b.construction&&b.hp<b.max*.65&&enemySafe(b));
   if (damaged && enemyBudget>100 && !workers.some(w=>w.order?.kind==='repair')) {
-    const w=nearest(damaged,workers.filter(w=>!w.carrying&&w.order?.kind==='gather'));
+    const w=nearest(damaged,workers.filter(w=>!w.civilDefense&&!w.carrying&&w.order?.kind==='gather'));
     if (w) issueOrder(w,{kind:'repair',target:damaged});
   }
   enemyResearchPlan(buildings);

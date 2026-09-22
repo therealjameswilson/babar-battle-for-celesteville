@@ -148,6 +148,10 @@ function drawUnit(u) {
     ctx.strokeStyle='#e6c06a';ctx.lineWidth=2;ctx.beginPath();
     ctx.ellipse(u.x,u.y+5,u.r+8,(u.r+8)*.6,0,0,Math.PI*2);ctx.stroke();
   }
+  if(u.type==='shelter'&&!u.construction&&(selected.includes(u)||atomicStrikes.length)){
+    ctx.strokeStyle=u.team?RED:BLUE;ctx.lineWidth=1;ctx.setLineDash([5,5]);
+    ctx.beginPath();ctx.arc(u.x,u.y,110,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+  }
   const d = defs[u.type],
     color = u.team ? RED : BLUE;
   ctx.save();
@@ -268,7 +272,17 @@ function drawUnit(u) {
     const row = u.type === 'turret' ? 1 : u.team;
     const height =
       u.type === 'core' ? 150 : u.type === 'factory' ? 126 : u.type === 'forge' ? 113 : 94;
-    if(u.type==='headquarters')drawHeadquarters(u.team);
+    if(u.type==='shelter'){
+      // Concrete bunker, reinforced entrance and civil-defense triangle.
+      ctx.fillStyle='#444c46';ctx.fillRect(-37,-29,74,49);
+      ctx.fillStyle='#899083';ctx.beginPath();ctx.moveTo(-42,-29);ctx.lineTo(-28,-49);ctx.lineTo(27,-49);ctx.lineTo(42,-29);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='#bdbaa0';ctx.lineWidth=3;ctx.strokeRect(-37,-29,74,49);
+      ctx.fillStyle='#151d1a';ctx.fillRect(-12,-14,24,34);
+      ctx.fillStyle='#d9ab62';ctx.beginPath();ctx.moveTo(0,-42);ctx.lineTo(-9,-27);ctx.lineTo(9,-27);ctx.closePath();ctx.fill();
+      ctx.fillStyle=color;ctx.fillRect(-34,15,18,5);ctx.fillRect(16,15,18,5);
+      ctx.fillStyle='#eee0be';ctx.font='bold 10px monospace';ctx.textAlign='center';ctx.fillText('CIVIL DEFENSE',0,34);ctx.textAlign='left';
+    }
+    else if(u.type==='headquarters')drawHeadquarters(u.team);
     else if (u.type === 'quarry') {
       // Local procedural extraction machinery, distinct from supply homes.
       ctx.fillStyle = '#697b7d'; ctx.fillRect(-29, -9, 58, 25);
