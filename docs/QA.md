@@ -1357,3 +1357,9 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390Ã—844, 844Ã
   in earlier QA; assertions completed. Review screenshot:
   artifacts/command-readiness/mobile.png (ignored, not deployed).
 - Preserved the preceding manual victory reports. No weapon balance changes.
+- The first release candidate failed the broader Commander strategy test. Removed
+  unnecessary route-wide shortcutting and kept the repair specific to blocked
+  start connections and unsafe corner advancement. The unchanged defensive
+  Commander scenario then won in 262 simulation seconds with its palace intact.
+- Standalone browser smoke: started Story, selected the army and completed a move
+  around the starting buildings; no standalone console warnings/errors.

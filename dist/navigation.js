@@ -94,6 +94,7 @@ function route(start, goal, radius = 21) {
   if (g < 0) return [];
   // A unit can stand safely near a wall while its cell center is behind it.
   // Connect its exact position to a visible free cell before searching the grid.
+  if(blocked[s]||!clearSegment(start,point(s),radius)){
   const anchors=[];
   for(let y=Math.max(0,Math.floor(start.y/NAV)-3);y<=Math.min(NR-1,Math.floor(start.y/NAV)+3);y++)
     for(let x=Math.max(0,Math.floor(start.x/NAV)-3);x<=Math.min(NC-1,Math.floor(start.x/NAV)+3);x++){
@@ -103,6 +104,7 @@ function route(start, goal, radius = 21) {
   anchors.sort((a,b)=>a.d-b.d);
   if(!anchors.length)return [];
   s=anchors[0].i;
+  }
   const costs = new Float64Array(NC * NR).fill(Infinity),
     parent = new Int32Array(NC * NR).fill(-1),
     closed = new Uint8Array(NC * NR),
@@ -150,8 +152,9 @@ function route(start, goal, radius = 21) {
         path.push(point(i));
         i = parent[i];
       }
-      path.push(point(s));
-      return path.reverse();
+      path.reverse();
+      if(!path.length||!clearSegment(start,path[0],radius))path.unshift(point(s));
+      return path;
     }
     const x = i % NC,
       y = Math.floor(i / NC);
@@ -229,10 +232,8 @@ function move(u, target, dt, stop = 3) {
       u.pathVersion = navVersion;
       u.repathAt = t + 2 + (u.id % 5) * 0.12;
     }
-    while (u.path.length && dist(u, u.path[0]) < 0.5) u.path.shift();
+    while (u.path.length && dist(u, u.path[0]) < 7 && (u.path.length===1 || clearSegment(u,u.path[1],u.r))) u.path.shift();
     if (!u.path.length) return false;
-    // Skip obsolete corners only when the full swept segment remains clear.
-    while(u.path.length>1&&clearSegment(u,u.path[1],u.r+2))u.path.shift();
     waypoint = u.path[0];
   } else u.path = null;
   const speed =
