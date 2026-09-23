@@ -5,7 +5,7 @@ const path = require('node:path');
 const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
 const context = new Proxy(
-  {},
+  { measureText: text => ({width:String(text).length*6.6}) },
   { get: (o, k) => o[k] || (() => {}), set: (o, k, v) => ((o[k] = v), true) }
 );
 function element() {

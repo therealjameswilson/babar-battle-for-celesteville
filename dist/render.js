@@ -121,6 +121,23 @@ function drawFlame(f){
   }
   ctx.restore();
 }
+// Local vector resource sprites stay sharp at device resolution and every zoom level.
+const resourceSprites=Object.fromEntries(['supplies','materials','uranium'].map(kind=>{
+  const image=new Image();image.src='assets/resources/'+kind+'.svg';return [kind,image];
+}));
+function drawResourceSprite(n,showWork){
+  const kind=n.kind||'supplies',image=resourceSprites[kind];
+  if(image?.complete&&image.naturalWidth)ctx.drawImage(image,n.x-36,n.y-35,72,54);
+  else {ctx.fillStyle=kind==='materials'?'#91aeb8':kind==='uranium'?'#b9ab62':'#c3a069';ctx.fillRect(n.x-20,n.y-18,40,30);}
+  const label=resourceName(n).toUpperCase()+' '+resourceLabel(n);
+  ctx.save();ctx.font='bold 11px monospace';ctx.textAlign='center';
+  const width=ctx.measureText(label).width+10;
+  ctx.fillStyle='#101b18e8';ctx.fillRect(n.x-width/2,n.y+22,width,17);
+  ctx.strokeStyle=kind==='materials'?'#8baab5':kind==='uranium'?'#c3af58':'#b99a65';ctx.lineWidth=1;
+  ctx.strokeRect(n.x-width/2,n.y+22,width,17);
+  ctx.fillStyle='#f1e8d0';ctx.fillText(label,n.x,n.y+34);ctx.restore();
+  if(showWork&&resourceObserved(n))drawResourceWork(n,n.y+51);
+}
 function drawTrench(team){
   // Dug earth, traverses, duckboards and sandbag parapet; original local Canvas art.
   ctx.fillStyle='#594b37';ctx.beginPath();ctx.moveTo(-68,-29);ctx.lineTo(-49,-40);ctx.lineTo(-16,-34);ctx.lineTo(20,-41);ctx.lineTo(65,-31);ctx.lineTo(69,25);ctx.lineTo(38,40);ctx.lineTo(1,34);ctx.lineTo(-35,40);ctx.lineTo(-68,28);ctx.closePath();ctx.fill();
@@ -453,32 +470,7 @@ function draw() {
   const showWork=selected.some(u=>u.type==='worker'||u.type==='quarry');
   for (const n of nodes) {
     if (knownResourceAmount(n,0) === 0) continue;
-    if (n.kind === 'uranium') {
-      poly([[n.x-24,n.y+12],[n.x-16,n.y-15],[n.x+5,n.y-22],[n.x+23,n.y+8],[n.x+10,n.y+19]], '#77745b', '#b7ad62');
-      ctx.fillStyle='#ded39a';ctx.font='bold 11px monospace';ctx.fillText('U',n.x-4,n.y+3);
-      ctx.font='10px monospace';ctx.fillText('URANIUM '+resourceLabel(n),n.x-38,n.y+34);
-      if(showWork&&resourceObserved(n))drawResourceWork(n,n.y+47);
-      continue;
-    }
-    if (n.kind === 'materials') {
-      poly([[n.x-25,n.y+12],[n.x-20,n.y-12],[n.x,n.y-23],[n.x+25,n.y+4],[n.x+15,n.y+19]], '#789499', '#344c52');
-      ctx.fillStyle='#dae6db'; ctx.font='10px monospace';
-      ctx.fillText('MATERIALS ' + resourceLabel(n),n.x-44,n.y+34);
-      if(showWork&&resourceObserved(n))drawResourceWork(n,n.y+47);
-      continue;
-    }
-    ctx.fillStyle = '#333c2c';
-    ctx.fillRect(n.x - 22, n.y - 14, 44, 30);
-    for (let i = 0; i < 3; i++) {
-      ctx.fillStyle = '#ad9160';
-      ctx.fillRect(n.x - 20 + i * 14, n.y - 13, 12, 24);
-      ctx.strokeStyle = '#605038';
-      ctx.strokeRect(n.x - 20 + i * 14, n.y - 13, 12, 24);
-    }
-    ctx.fillStyle = '#e5d6a8';
-    ctx.font = '9px monospace';
-    ctx.fillText(resourceLabel(n), n.x - 12, n.y + 26);
-    if(showWork&&resourceObserved(n))drawResourceWork(n,n.y+40);
+    drawResourceSprite(n,showWork);
   }
   ctx.fillStyle = '#373e30';
   ctx.fillRect(depot.x - 43, depot.y - 32, 86, 64);

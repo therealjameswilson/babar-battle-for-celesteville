@@ -461,3 +461,10 @@ Hold fire, retreat and trench entry use the normal controls. Her welcome and Iro
 Parasol council powers remain separate. This combat role is invented for the game.
 Artwork reuses the existing inspected Madame crop from `assets/roster/allies.png`,
 with original Canvas fuel pack, hose/nozzle and flame effects; sound is synthesized.
+
+### Sharper resources (0.59.1)
+Supplies, Materials and Uranium use original local SVG sprites in
+`dist/assets/resources/`: provision crates/sacks, faceted stone/steel bars and
+ore with ochre veins and a marked container. Vector assets retain detail at zoom
+and high device resolution; larger high-contrast name/quantity plates improve phone
+readability. Gathering rules, resource stock and fog-of-war knowledge are unchanged.

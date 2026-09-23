@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="144" viewBox="0 0 192 144">
+<ellipse cx="96" cy="123" rx="85" ry="13" fill="#111b18" opacity=".65"/>
+<g stroke="#272b22" stroke-width="3" stroke-linejoin="round">
+<path d="M17 110 25 64 64 32 98 51 105 111 62 130Z" fill="#686952"/>
+<path d="M25 64 64 32 58 81 17 110Z" fill="#a4a17a"/><path d="M64 32 98 51 75 88 58 81Z" fill="#858568"/>
+<path d="M58 81 75 88 62 130 17 110Z" fill="#4e5544"/>
+<path d="M86 105 102 56 128 36 163 61 173 115 131 129Z" fill="#697052"/>
+<path d="M102 56 128 36 125 89 86 105Z" fill="#a1a879"/><path d="M128 36 163 61 125 89Z" fill="#808963"/>
+<path d="M125 89 163 61 173 115 131 129Z" fill="#535c42"/>
+<path d="M35 65 48 73 42 96 58 104M71 50 79 67 68 83M117 52 111 72 120 83 106 101M151 76 140 94 147 111" fill="none" stroke="#d8bf62" stroke-width="5"/>
+<path d="M88 100 139 100 153 113 153 137 88 137Z" fill="#535d51"/><path d="M88 100 139 100 153 113 102 113Z" fill="#95a188"/>
+<path d="M102 113V137" stroke="#c2c6a4"/>
+<path d="M113 118H143V133H113Z" fill="#d8bd5e"/>
+</g><text x="128" y="130" fill="#20291e" font-family="monospace" font-weight="bold" font-size="14" text-anchor="middle">U</text>
+</svg>

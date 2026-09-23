@@ -1249,3 +1249,14 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   1280×900. Recruited through UI, completed training, inspected unit description,
   decoded existing sprite, and rendered flame attack. Visually inspected Madame.
 - Physical iPhone Safari and audible output not directly verified.
+
+## v0.59.1 — sharper resource sprites
+- Three original local 192×144 SVG assets with distinct silhouettes, material facets,
+  straps, container markings and dark outlines. Resource names/quantities receive
+  high-contrast backplates. No economy or simulation rule changes.
+- Syntax/assets and full deterministic suite passed. Canvas mock now supplies the
+  measureText width used for dynamic label plates.
+- Real browser `tests/resource-art-browser.html`: 18 assertions at 390×844,
+  844×390 and 1280×900, decoding all three sprites and rendering at .72×/1×/1.6×
+  camera zoom. Resource quantities and layout bounds passed. Inspected mobile image.
+- Physical iPhone Safari remains untested.
