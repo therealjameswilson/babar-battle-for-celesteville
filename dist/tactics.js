@@ -226,3 +226,21 @@ function trenchCover(u){
   return ['worker','trooper','scout','sapper','hero'].includes(u.type)&&units.some(b=>
     b.type==='trench'&&b.hp>0&&!b.construction&&Math.abs(u.x-b.x)<=56&&Math.abs(u.y-b.y)<=26);
 }
+
+function trenchInfantry(u){return u.hp>0&&u.team===0&&['worker','trooper','scout','sapper','hero'].includes(u.type);}
+function trenchAt(p){return alive(0).find(b=>b.type==='trench'&&!b.construction&&Math.abs(p.x-b.x)<=65&&Math.abs(p.y-b.y)<=36);}
+function occupyTrench(site,append=false){
+  const crew=selected.filter(trenchInfantry);
+  const slots=[[-36,-18],[0,-18],[36,-18],[-36,18],[0,18],[36,18]].map(([x,y])=>({x:site.x+x,y:site.y+y}));
+  const others=units.filter(u=>u.hp>0&&defs[u.type].speed&&!crew.includes(u));
+  const free=slots.filter(p=>!others.some(u=>dist(u,p)<27||[u.order,...(u.orders||[])].some(o=>o?.trench===site&&dist(o,p)<5)));
+  let assigned=0;
+  for(const u of crew){
+    if(!free.length)break;
+    const p=nearest(u,free);free.splice(free.indexOf(p),1);
+    issueOrder(u,{kind:'move',x:p.x,y:p.y,trench:site},append);assigned++;
+  }
+  say(assigned?`${assigned} troops entering trench. They will hold inside; ${crew.length-assigned} remain on previous orders.`:'Trench full or no infantry selected. Each section has six positions.');
+  mode=null;updateUI(true);return assigned;
+}
+function aimTrench(){if(!running||paused||ended)return;mode='entrench';placing=null;clearUnitTap();say('Tap a completed friendly trench. Up to six infantry take positions and hold inside.');}

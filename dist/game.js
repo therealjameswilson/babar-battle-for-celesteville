@@ -244,6 +244,8 @@ function issueOrder(u, order, append = false) {
   }
 }
 function completeOrder(u) {
+  const trench=u.order?.trench;
+  if(trench?.hp>0&&!trench.construction&&!u.orders?.length&&u.order.kind==='move'){u.order={kind:'hold',x:u.order.x,y:u.order.y,trench};u.path=null;u.resolvedDestination=null;return;}
   u.resolvedDestination = null;
   if (u.order?.kind === 'patrol' && !u.orders?.length && u.order.returnPoint) {
     const leg=u.order;
@@ -580,7 +582,7 @@ function update(dt) {
       }
       if (u.order?.target && !sees(u.team, u.order.target)) u.order = null;
     }
-    if (u.order && d.speed && Number.isFinite(u.order.x) && move(u, u.order, dt, 8)) {
+    if (u.order && u.order.kind!=='hold' && d.speed && Number.isFinite(u.order.x) && move(u, u.order, dt, 8)) {
       completeOrder(u);
     }
   }
@@ -724,6 +726,9 @@ function command(p, append = queueOrders) {
     repairOrder(p, append);
     return;
   }
+  const trench=trenchAt(p);
+  if((!mode||mode==='move'||mode==='entrench')&&trench&&selected.some(trenchInfantry)){occupyTrench(trench,append);return;}
+  if(mode==='entrench'){say('Choose a completed friendly trench.');return;}
   let enemy = nearest(p, alive(1).filter(visible)),
     node = nearest(
       p,
@@ -838,7 +843,7 @@ function updateUI(force = false) {
                           ' strength'
                         : 'Ready for orders.'
     : 'Tap a friendly unit or building.';
-  if(u?.type==='trench')$('selected-info').textContent='Move infantry into the timber-lined excavation for 35% damage reduction. Either faction can use it. No stacking with sandbag cover; no supply relay. Repair restores damaged earthworks.';
+  if(u?.type==='trench')$('selected-info').textContent='Six infantry positions. Select troops and use Enter trench to occupy and hold inside for 35% damage reduction. Either faction can use it. No stacking with sandbag cover; no supply relay. Repair restores damaged earthworks.';
   if(u?.type==='silo')$('selected-info').textContent='Conventional missiles · 900m range · 10s warning · 35s reload · 120 Supplies / 40 Materials per shot.';
   if(u?.type==='interceptor')$('selected-info').textContent='Automatic defense within 260m of impact · 20 Supplies / 10 Materials per interceptor · 12s reload · H-bombs need two hits. Requires supply.';
   if(u?.civilDefense) $('selected-info').textContent='CIVIL DEFENSE · '+(dist(u,u.civilDefense.shelter)<=110?'Under shelter protection.':'Evacuating to shelter.')+' Work resumes after all-clear.';
@@ -937,6 +942,7 @@ function updateUI(force = false) {
         if (producers.length) a.push([defs[type].name, defs[type].cost + ' S' + (materialCost(type) ? ' · ' + materialCost(type) + ' M' : '') + ' · ' + producers.length + ' sites', () => train(type), !unitUnlocked(type)]);
       }
     }
+    if(selected.some(trenchInfantry))a.push(['Enter trench','Tap a finished trench · six positions · hold inside',aimTrench]);
     const guns = selected.filter(a => a.team === 0 && a.type === 'walker');
     if (guns.length) {
       const transitioning = guns.every(a => a.artilleryTransition);

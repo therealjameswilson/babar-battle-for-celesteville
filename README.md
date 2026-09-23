@@ -441,3 +441,11 @@ no trench bonus. Cover does not stack with existing sandbags. Trenches can be
 repaired and destroyed, remain traversable, and do not relay supply or block the
 ruler's sight to headquarters. The original Canvas artwork depicts earth berms,
 sandbags, timber revetments, duckboards and traverses. Sections have a fixed orientation.
+
+### Occupying trenches (0.58.1)
+Select infantry, choose **Enter trench** in Build / train, then tap a completed
+friendly trench. Ordinary Move/right-click orders to a trench work too. Up to six
+troops receive distinct interior positions and automatically Hold after arrival,
+firing at targets in range without chasing out of cover. Occupied/reserved positions
+are skipped; excess selected troops keep their previous orders. Move or Retreat
+releases a position. Explicit queued orders still take precedence over holding.

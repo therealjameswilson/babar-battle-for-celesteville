@@ -17,5 +17,16 @@ function trenchChecks(check){
  cancelConstruction(site);check(ore===480&&materials===95,'cancel refunds 75 percent');
  reset();units=[];const root=add('core',0,300,900),link=add('trench',0,620,900),outpost=add('forge',0,940,900);rebuildSupply();
  check(supplied(link)&&!supplied(outpost),'trenches do not relay supply to distant buildings');
+ reset();running=true;units=[];nextWave=enemySpawn=9999;add('core',0,200,1100);add('core',1,1500,150);
+ const shelter=add('trench',0,500,900),squad=Array.from({length:7},(_,i)=>add('trooper',0,350+i*34,800));
+ selected=squad;command(shelter);
+ check(squad.filter(u=>u.order?.trench===shelter).length===6,'six troops receive interior positions; overflow stays outside');
+ check(new Set(squad.slice(0,6).map(u=>u.order.x+','+u.order.y)).size===6,'positions do not overlap');
+ for(let i=0;i<500;i++)update(.05);
+ check(squad.slice(0,6).every(u=>trenchCover(u)&&u.order?.kind==='hold'),'whole squad arrives inside and holds cover');
+ const extra=add('trooper',0,400,800);selected=[extra];occupyTrench(shelter);
+ check(!extra.order,'full trench does not pull more troops inside');
+ selected=[squad[0]];command({x:350,y:800});
+ check(squad[0].order.kind==='move'&&!squad[0].order.trench,'new order releases trench position');
  reset();
 }

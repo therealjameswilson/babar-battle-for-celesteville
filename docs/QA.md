@@ -1229,3 +1229,14 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   move a guard into the trench and verified arrival/cover. Inspected earthwork art.
 - Physical iPhone Safari remains untested. These are fixed-orientation sections;
   AI troops gain the same cover when occupying them but do not independently dig trenches.
+
+## v0.58.1 — reliable squad placement inside trenches
+- Replaced generic wide movement formations at trench destinations with six interior
+  positions. Troops hold after arrival; occupied/reserved positions are skipped.
+  Added explicit Enter trench control, preserving normal exit and queued orders.
+- Syntax/assets and deterministic suite passed, including six-unit arrival/cover,
+  unique positions, overflow, full trench and exit regressions.
+- Real browser: 69 assertions in `tests/trench-browser.html` at 390×844, 844×390 and
+  1280×900. Touch placement, squad entry, every guard inside cover, automatic Hold,
+  and explicit Enter trench button passed. Visually inspected five troops inside.
+- Physical iPhone Safari remains untested.
