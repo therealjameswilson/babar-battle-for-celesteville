@@ -1376,3 +1376,17 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   The asset test now validates this deployment's canonical URL separately and
   continues requiring all script, stylesheet and image references to exist locally.
 - The JPEG also loaded in the real browser with its expected 1200x627 dimensions.
+
+## v0.59.5 — touch army-to-production selection (2026-09-23)
+- Friendly producer taps include visible roofs and take precedence over nearby
+  troops in touch/production context. Ordinary pending Move/Attack targeting no
+  longer consumes these taps. Build / train and Army clear stale targeting.
+- Syntax/assets and the full deterministic tactics suite passed (bundled Node,
+  direct equivalents of npm run check and npm test).
+- Real-browser touch-production-browser.html: 54 assertions at 390x844, 844x390
+  and 1280x900. Exercises army selection, roof taps, pending Move/Attack, immediate
+  recruitment, nearby troops, stale blueprint cancellation, repair preservation,
+  no accidental pause and horizontal layout bounds. Synthetic touch events in a
+  real browser; physical iPhone Safari remains untested.
+- Existing real-browser default-attack suite: 36 assertions passed, preserving
+  ordinary ground attack-move and explicit passive Move behavior.

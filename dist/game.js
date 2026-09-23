@@ -1026,6 +1026,7 @@ function togglePause() {
   say(paused ? 'Command paused.' : 'Command resumed.');
 }
 function selectArmy() {
+  mode=null;placing=null;atomicTargetSite=null;clearUnitTap();
   selected = alive(0).filter((u) => defs[u.type].damage && defs[u.type].speed);
   updateUI(true);
   say(selected.length + ' elephants selected.');
@@ -1083,6 +1084,21 @@ canvas.addEventListener('pointerup', (e) => {
     wp = world(p),
     drag = Math.hypot(p.x - start.x, p.y - start.y) > 9;
   if (start.pan) {clearUnitTap();return;}
+  // A normal touch on a friendly producer selects it, even after an army order.
+  // Explicit repair, gathering, construction and weapon targets retain priority.
+  if(!drag&&!start.shift&&!placing&&(!mode||mode==='attack'||mode==='move')&&
+      (start.touch||document.querySelector('aside')?.dataset.panel==='actions')){
+    const producer=productionBuildingAt(wp);
+    if(producer){
+      mode=null;atomicTargetSite=null;
+      if(start.typeSelect)selectAllOfType(producer);
+      else if(start.touch)touchUnitSelection(producer,e.timeStamp);
+      else {clearUnitTap();selected=[producer];}
+      updateUI(true);
+      document.querySelector('#phone-tabs [data-panel="'+(producer.construction?'status':'actions')+'"]')?.click();
+      return;
+    }
+  }
   if (mode || placing) {
     command(wp, start.shift || queueOrders);
     return;
