@@ -67,7 +67,7 @@ function rememberedBuildings(team=0) {
   return intel[team].filter(k=>!defs[k.type].speed&&!observesPosition(team,k));
 }
 function inCover(u) {
-  return !!defs[u.type].speed && covers.some((c) => dist(c, u) < c.r);
+  return !!defs[u.type].speed && (covers.some((c) => dist(c, u) < c.r) || trenchCover(u));
 }
 function supplied(b) {
   return linked.has(b.id);
@@ -84,7 +84,7 @@ function rebuildSupply() {
       changed = false;
       for (const b of buildings) {
         if (linked.has(b.id)) continue;
-        for (const a of buildings.filter((a) => linked.has(a.id))) {
+        for (const a of buildings.filter((a) => linked.has(a.id) && a.type!=='trench')) {
           if (dist(a, b) > 360) continue;
           const blockedLine = alive(1 - team).some(
             (e) => defs[e.type].damage && defs[e.type].speed && segmentDistance(e, a, b) < 85
@@ -220,4 +220,9 @@ function enemyThink() {
       ? 'Rhino raiders are breaking away toward a supply position.'
       : 'Basil’s main assault is advancing. Prepare the defenses.'
   );
+}
+
+function trenchCover(u){
+  return ['worker','trooper','scout','sapper','hero'].includes(u.type)&&units.some(b=>
+    b.type==='trench'&&b.hp>0&&!b.construction&&Math.abs(u.x-b.x)<=56&&Math.abs(u.y-b.y)<=26);
 }

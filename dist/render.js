@@ -102,6 +102,18 @@ function atlas(image, col, row, x, y, w, h, building = false) {
   return true;
 }
 // Original Canvas field camp: canvas roof, timber office and faction command flag.
+function drawTrench(team){
+  // Dug earth, traverses, duckboards and sandbag parapet; original local Canvas art.
+  ctx.fillStyle='#594b37';ctx.beginPath();ctx.moveTo(-68,-29);ctx.lineTo(-49,-40);ctx.lineTo(-16,-34);ctx.lineTo(20,-41);ctx.lineTo(65,-31);ctx.lineTo(69,25);ctx.lineTo(38,40);ctx.lineTo(1,34);ctx.lineTo(-35,40);ctx.lineTo(-68,28);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#1c211b';ctx.fillRect(-57,-27,114,54);
+  ctx.strokeStyle='#92764e';ctx.lineWidth=4;ctx.strokeRect(-57,-27,114,54);
+  ctx.strokeStyle='#65543d';ctx.lineWidth=3;
+  for(let x=-51;x<54;x+=10){ctx.beginPath();ctx.moveTo(x,-9);ctx.lineTo(x,9);ctx.stroke();}
+  ctx.fillStyle='#81724f';
+  for(let x=-60;x<60;x+=18){for(const y of [-32,32]){ctx.beginPath();ctx.ellipse(x+7,y,8,4,.1,0,Math.PI*2);ctx.fill();}}
+  ctx.fillStyle='#4b4230';ctx.fillRect(-21,-27,12,21);ctx.fillRect(20,6,12,21);
+  ctx.fillStyle=team?'#a66565':'#85a485';ctx.fillRect(-64,-5,6,10);
+}
 function drawHeadquarters(team) {
   ctx.fillStyle='#34392e';ctx.fillRect(-38,-4,76,30);
   ctx.fillStyle='#8b8464';ctx.beginPath();ctx.moveTo(-46,-4);ctx.lineTo(0,-72);ctx.lineTo(46,-4);ctx.closePath();ctx.fill();
@@ -116,7 +128,8 @@ function drawRememberedBuilding(k) {
   const col=k.type==='core'?0:k.type==='forge'?1:k.type==='factory'?2:3;
   const h=k.type==='core'?150:k.type==='factory'?126:k.type==='forge'?113:94;
   ctx.save();ctx.translate(k.x,k.y);ctx.globalAlpha=.38;
-  if(k.type==='headquarters')drawHeadquarters(1);
+  if(k.type==='trench')drawTrench(1);
+  else if(k.type==='headquarters')drawHeadquarters(1);
   else if(k.type!=='quarry')atlas(buildingSheet,col,1,-h*.49,-h+29,h*.98,h,true);
   ctx.globalAlpha=.7;ctx.strokeStyle='#b9a2a0';ctx.lineWidth=1.5;ctx.setLineDash([4,5]);
   const r=defs[k.type].r;ctx.strokeRect(-r,-r,r*2,r*2);ctx.setLineDash([]);
@@ -278,7 +291,8 @@ function drawUnit(u) {
     const row = u.type === 'turret' ? 1 : u.team;
     const height =
       u.type === 'core' ? 150 : u.type === 'factory' ? 126 : u.type === 'forge' ? 113 : 94;
-    if(['silo','interceptor'].includes(u.type))drawMissileBuilding(ctx,u);
+    if(u.type==='trench')drawTrench(u.team);
+    else if(['silo','interceptor'].includes(u.type))drawMissileBuilding(ctx,u);
     else if(u.type==='shelter'){
       // Concrete bunker, reinforced entrance and civil-defense triangle.
       ctx.fillStyle='#444c46';ctx.fillRect(-37,-29,74,49);
@@ -512,7 +526,7 @@ function draw() {
   }
   drawAtomicWarnings();
   for (const k of rememberedBuildings()) drawRememberedBuilding(k);
-  for (const u of units.filter((u) => unitInViewport(u,cw,ch) && visible(u)).sort((a, b) => a.y - b.y)) {
+  for (const u of units.filter((u) => unitInViewport(u,cw,ch) && visible(u)).sort((a, b) => (a.type==='trench'?-1:0)-(b.type==='trench'?-1:0)||a.y-b.y)) {
     ctx.save();
     if (u.team && !visible(u)) ctx.globalAlpha = 0.42;
     drawUnit(u);

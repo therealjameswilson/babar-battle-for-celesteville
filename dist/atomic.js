@@ -119,7 +119,7 @@ function nuclearAuthority(team){
 function leaderSeesHeadquarters(leader,hq){
   if(dist(leader,hq)>vision(leader))return false;
   const length=dist(leader,hq),dx=hq.x-leader.x,dy=hq.y-leader.y;
-  const blockers=units.filter(b=>b.hp>0&&!defs[b.type].speed&&b!==hq);
+  const blockers=units.filter(b=>b.hp>0&&!defs[b.type].speed&&b.type!=='trench'&&b!==hq);
   // Sample the open segment at <=4m; terrain rectangles and structures occlude sight.
   for(let d=4;d<length-hq.r;d+=4){
     const p={x:leader.x+dx*d/length,y:leader.y+dy*d/length};

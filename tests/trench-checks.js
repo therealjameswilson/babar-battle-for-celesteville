@@ -1,0 +1,21 @@
+function trenchChecks(check){
+ reset();running=true;paused=false;nextWave=enemySpawn=9999;
+ const trench=add('trench',0,500,1050,{construction:16});
+ const guard=add('trooper',0,500,1050),rhino=add('trooper',1,510,1050),gun=add('walker',0,490,1050);
+ check(!trenchCover(guard),'foundation grants no cover');trench.construction=0;
+ check(trenchCover(guard)&&trenchCover(rhino),'both factions can occupy trench');
+ check(!trenchCover(gun),'artillery cannot take infantry trench cover');
+ check(!solidAt(500,1050,10),'completed trench remains traversable');
+ const hp=guard.hp;easy=false;damageUnit(rhino,guard,20);
+ check(Math.abs(hp-guard.hp-13)<.001,'trench reduces damage by 35 percent');
+ guard.x+=70;check(!trenchCover(guard),'outside footprint loses cover');
+ trench.hp=0;guard.x-=70;check(!trenchCover(guard),'destroyed trench loses cover');
+ reset();running=true;ore=500;materials=100;selected=[alive(0).find(u=>u.type==='worker')];build('trench');command({x:570,y:1070});
+ const site=alive(0).find(u=>u.type==='trench');
+ check(!!site&&site.construction&&ore===420&&materials===80,'trench construction paid and assigned');
+ check(alive(0).some(w=>w.order?.target===site&&w.order.kind==='build'),'worker digs trench');
+ cancelConstruction(site);check(ore===480&&materials===95,'cancel refunds 75 percent');
+ reset();units=[];const root=add('core',0,300,900),link=add('trench',0,620,900),outpost=add('forge',0,940,900);rebuildSupply();
+ check(supplied(link)&&!supplied(outpost),'trenches do not relay supply to distant buildings');
+ reset();
+}

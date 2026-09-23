@@ -1218,3 +1218,14 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   select on/offscreen matching troops; the next map tap orders the entire group.
   Slow taps, cancellation, desktop double-click and Same type fallback passed.
 - Physical iPhone Safari remains untested; touch-action:none remains on the canvas.
+
+## v0.58.0 — Field trenches
+- Syntax/assets and deterministic tactical suite passed. New checks cover paid
+  worker construction/refund, completed-only infantry cover, both factions,
+  artillery exclusion, 35% damage reduction, footprint exit/destruction, traversable
+  navigation and prevention of supply relaying through trenches.
+- Real browser `tests/trench-browser.html`: 48 assertions at 390×844, 844×390 and
+  1280×900. Built through touch controls, simulated worker completion, tapped to
+  move a guard into the trench and verified arrival/cover. Inspected earthwork art.
+- Physical iPhone Safari remains untested. These are fixed-orientation sections;
+  AI troops gain the same cover when occupying them but do not independently dig trenches.

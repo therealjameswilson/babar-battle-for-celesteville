@@ -342,3 +342,6 @@ console.log('PASS: ballistic faction costs, fog/range, warning, friendly fire, d
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'shotgun-checks.js'),'utf8'));
 run('shotgunChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: shotgun research, cone, range, faction, friendly exclusions and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'trench-checks.js'),'utf8'));
+run('trenchChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: trench costs, construction, cover, factions, navigation, destruction and refund.');

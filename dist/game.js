@@ -16,6 +16,7 @@ const defs = {
   silo: {name:'Ballistic Launcher',hp:900,r:32,cost:280,materials:120,build:26},
   interceptor: {name:'Missile Defense Battery',hp:800,r:30,cost:220,materials:100,build:22},
   shelter: { name: 'Civil Defense', hp: 1800, r: 32, cost: 180, materials: 80, build: 22 },
+  trench: {name:'Field Trench',hp:700,r:48,cost:80,materials:20,build:16},
   quarry: { name: 'Materials Quarry', hp: 600, r: 26, cost: 100, build: 12 },
   relay: { name: 'Village Home', hp: 450, r: 23, cost: 100, build: 9 },
   turret: {
@@ -662,7 +663,7 @@ function validBuild(p, type, team = 0) {
     p.y > 60 &&
     p.x < W - 60 &&
     p.y < H - 60 &&
-    (type==='headquarters' ? observesPosition(team,p) : alive(team).some((u) => !defs[u.type].speed && !u.construction && dist(u, p) < 310)) &&
+    (type==='headquarters' ? observesPosition(team,p) : alive(team).some((u) => !defs[u.type].speed && u.type!=='trench' && !u.construction && dist(u, p) < 310)) &&
     !solidAt(p.x, p.y, defs[type].r + 24) &&
     units.every((u) => u.hp <= 0 || dist(u, p) > u.r + defs[type].r + 12) &&
     nodes.every((n) => (type === 'quarry' && n === materialSite(p)) || dist(n, p) > defs[type].r + 35)
@@ -837,6 +838,7 @@ function updateUI(force = false) {
                           ' strength'
                         : 'Ready for orders.'
     : 'Tap a friendly unit or building.';
+  if(u?.type==='trench')$('selected-info').textContent='Move infantry into the timber-lined excavation for 35% damage reduction. Either faction can use it. No stacking with sandbag cover; no supply relay. Repair restores damaged earthworks.';
   if(u?.type==='silo')$('selected-info').textContent='Conventional missiles · 900m range · 10s warning · 35s reload · 120 Supplies / 40 Materials per shot.';
   if(u?.type==='interceptor')$('selected-info').textContent='Automatic defense within 260m of impact · 20 Supplies / 10 Materials per interceptor · 12s reload · H-bombs need two hits. Requires supply.';
   if(u?.civilDefense) $('selected-info').textContent='CIVIL DEFENSE · '+(dist(u,u.civilDefense.shelter)<=110?'Under shelter protection.':'Evacuating to shelter.')+' Work resumes after all-clear.';
@@ -927,7 +929,7 @@ function updateUI(force = false) {
       }
     }
     if(u&&!u.construction&&((selected.length===1&&workerProducer(u))||selected.every(w=>w.team===0&&w.type==='worker')))
-      for(const type of ['forge','relay','quarry','factory','turret','headquarters','shelter','silo','interceptor'])
+      for(const type of ['forge','relay','quarry','trench','factory','turret','headquarters','shelter','silo','interceptor'])
         a.push([defs[type].name,!prerequisite(type)?buildingRequirement(type):buildingCost(type)+' S'+(materialCost(type)?' · '+materialCost(type)+' M':''),()=>build(type),!prerequisite(type)]);
     if (selected.length > 1) {
       for (const type of ['worker','trooper','scout','sapper','walker']) {
@@ -1086,6 +1088,7 @@ canvas.addEventListener('pointerup', (e) => {
   } else {
     let u = nearest(wp, alive(0));
     if (u && dist(u, wp) < u.r + 18) {
+      if(start.touch && u.type==='trench' && selected.length && selected.every(w=>defs[w.type].speed)){command({x:u.x,y:u.y});updateUI(true);return;}
       if (start.touch && !start.shift && u.type === 'quarry' && selected.length && selected.every(w=>w.team===0&&w.type==='worker')) {
         if(u.construction) repairOrder({x:u.x,y:u.y},queueOrders);
         else command({x:u.x,y:u.y});

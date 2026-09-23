@@ -28,7 +28,7 @@ function solidAt(x, y, r = 21) {
   if (solidCacheAt !== t || solidCacheCount !== units.length) {
     solidCacheAt = t;
     solidCacheCount = units.length;
-    solidBuildings = units.filter((b) => !defs[b.type].speed);
+    solidBuildings = units.filter((b) => !defs[b.type].speed && b.type!=='trench');
   }
   if (x < r || y < r || x > W - r || y > H - r) return true;
   if (obstacles.some((o) => x > o.x - r && x < o.x + o.w + r && y > o.y - r && y < o.y + o.h + r))
@@ -37,7 +37,7 @@ function solidAt(x, y, r = 21) {
 }
 function rebuildNav() {
   const stamp = units
-    .filter((b) => b.hp > 0 && !defs[b.type].speed)
+    .filter((b) => b.hp > 0 && !defs[b.type].speed && b.type!=='trench')
     .map((b) => b.id)
     .join(',');
   if (stamp === navStamp) return;

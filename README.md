@@ -430,3 +430,14 @@ inside a narrow forward cone, with a 1.5-second reload. Rifles remain available 
 longer range. Cover, armor, suppression and infantry upgrades apply normally.
 Friendly units are excluded from pellet damage. Guards carry an original Canvas
 shotgun overlay with pellet trails and an original synthesized firing sound.
+
+### Field trenches (0.58.0)
+Select provisioners or the palace and choose **Field Trench** in Build / train.
+Each section costs 80 Supplies and 20 Materials, has 700 health and takes 16 seconds
+of worker construction. Move infantry into the 112×52m interior to gain 35% damage
+reduction. On touch, select troops and tap a friendly trench to enter it.
+Either faction can use an intact completed trench; artillery and motorbikes receive
+no trench bonus. Cover does not stack with existing sandbags. Trenches can be
+repaired and destroyed, remain traversable, and do not relay supply or block the
+ruler's sight to headquarters. The original Canvas artwork depicts earth berms,
+sandbags, timber revetments, duckboards and traverses. Sections have a fixed orientation.
