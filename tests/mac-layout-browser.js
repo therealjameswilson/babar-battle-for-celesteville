@@ -28,6 +28,12 @@
     for(const type of ['pointerdown','pointerup'])c.dispatchEvent(new g.PointerEvent(type,{pointerId:2,pointerType:'mouse',button:0,clientX:r.left+p.x,clientY:r.top+p.y,bubbles:true,cancelable:true}));
     check(q('aside').dataset.panel==='status','quarry opens workforce status '+w);
     q('#phone-tabs [data-panel=orders]').click();check(rect('aside').height<=103,'command sheet closes '+w);
+    g.eval("paused=false;ore=500;materials=50;selected=[alive(0).find(u=>u.type==='core')];updateUI(true)");
+    q('#phone-tabs [data-panel=actions]').click();
+    [...q('#actions').querySelectorAll('button')].find(b=>b.textContent.startsWith('Village Home')).click();
+    check(q('aside').dataset.panel==='orders'&&f.contentWindow.eval("placing==='relay'"),'building placement exposes battlefield '+w);
+    q('#phone-tabs [data-panel=status]').click();q('[data-mode=move]').click();
+    check(q('aside').dataset.panel==='orders'&&f.contentWindow.eval("mode==='move'"),'targeted order exposes battlefield '+w);
    } else {
     q('#mission-toggle').click();check(q('#mission-toggle').getAttribute('aria-expanded')==='true'&&g.getComputedStyle(q('.mission strong')).display!=='none','mission expands '+w);
     q('#mission-toggle').click();check(g.getComputedStyle(q('.mission strong')).display==='none','mission collapses '+w);

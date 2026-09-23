@@ -485,3 +485,6 @@ On wider screens, Mission orders expands the objective while the default compact
 report leaves the starting Materials deposit visible. The minimap stays visible
 while scrolling production and research. Deploy again returns directly to the
 briefing with the same difficulty; Watch opening replays the prologue.
+
+Choosing a building or a map-target order closes the compact command sheet so the
+whole battlefield is available for placement and commands.

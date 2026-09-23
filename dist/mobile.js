@@ -24,6 +24,10 @@
   }
   aside.prepend(tabs);
   tabs.firstElementChild.click();
+  // A ready map command needs the entire battlefield, not the command sheet.
+  const chooseBlueprint=build, chooseOrder=setMode;
+  build=function(type){const result=chooseBlueprint(type);if(placing===type)tabs.firstElementChild.click();return result;};
+  setMode=function(order){const result=chooseOrder(order);if(mode===order)tabs.firstElementChild.click();return result;};
   const production=document.createElement('button');production.id='phone-production';
   production.textContent='Production';production.onclick=toggleProduction;
   document.querySelector('aside .quick').append(production);

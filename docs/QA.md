@@ -1285,10 +1285,11 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   chosen difficulty. The prologue remains available with Watch opening.
 - Syntax/assets and full deterministic tactics suite passed. Simulation balance,
   damage and recruitment rules were not changed.
-- Real-browser `tests/mac-layout-browser.html`: 131 assertions across 652×678,
+- Real-browser `tests/mac-layout-browser.html`: 141 assertions across 652×678,
   800×700, 950×700, 951×700, 1024×768, 1280×800, 390×844 and 844×390. Checks include
   header bounds, battlefield space, minimap visibility after scrolling, report
-  expand/collapse, mouse selection and reload/retry in both difficulties.
+  expand/collapse, mouse selection, automatic sheet closing for placement/map orders, and
+  reload/retry in both difficulties.
 - Existing real-browser attack/default-order checks (36) and touch mining checks
   (21) passed. No warnings/errors were captured on the standalone local game.
   The iframe QA runner logged a browser-injected MutationObserver error (no
