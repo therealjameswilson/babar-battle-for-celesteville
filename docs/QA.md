@@ -1269,3 +1269,29 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Real browser `tests/default-attack-browser.html`: 36 assertions across 390×844,
   844×390 and 1280×900. Touch and mouse default commands, explicit Move button,
   phone label and layout bounds passed. Physical iPhone Safari remains untested.
+
+## v0.59.3 — Mac playtest and command-panel fixes
+- Played the published game manually in the Mac in-app browser: started Story,
+  double-clicked guards, attack-moved to and captured the depot, constructed a
+  quarry and observed Materials delivery, recruited guards, set a minimap rally,
+  placed Artillery Works, responded to attacks with F2/F3 and Babar's ability,
+  and used pause. A second local play session reached defeat and restarted.
+  This was an opening/first-assault playtest, not a complete manual victory run.
+- Reproduced a clipped header and obstructed battlefield at 652×678. Compact
+  controls now extend through 950px; mouse building selection opens recruitment
+  or quarry/construction status. Desktop mission orders collapse to a small strip
+  and the minimap remains visible while scrolling the command panel.
+- Retry previously replayed the opening. It now returns to briefing with the
+  chosen difficulty. The prologue remains available with Watch opening.
+- Syntax/assets and full deterministic tactics suite passed. Simulation balance,
+  damage and recruitment rules were not changed.
+- Real-browser `tests/mac-layout-browser.html`: 131 assertions across 652×678,
+  800×700, 950×700, 951×700, 1024×768, 1280×800, 390×844 and 844×390. Checks include
+  header bounds, battlefield space, minimap visibility after scrolling, report
+  expand/collapse, mouse selection and reload/retry in both difficulties.
+- Existing real-browser attack/default-order checks (36) and touch mining checks
+  (21) passed. No warnings/errors were captured on the standalone local game.
+  The iframe QA runner logged a browser-injected MutationObserver error (no
+  MutationObserver exists in game or fixture source); assertions completed.
+- Review screenshot: artifacts/mac-playtest/compact-mac.png (ignored, not deployed).
+  Physical iPhone Safari and a full manual victory remain outside this pass.

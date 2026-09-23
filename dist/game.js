@@ -322,7 +322,7 @@ function reset() {
   heroRecovery = [];
   uiTime = 0;
   panMode = false;
-  cam = { x: 380, y: 870, zoom: window.innerWidth <= 580 || (document.body?.clientHeight || window.innerHeight) <= 500 ? 0.72 : 1 };
+  cam = { x: 380, y: 870, zoom: window.innerWidth <= 950 || (document.body?.clientHeight || window.innerHeight) <= 500 ? 0.72 : 1 };
   for (const [x, y] of [
     [155, 770],
     [140, 840],
@@ -988,6 +988,10 @@ function time(v) {
     String(Math.floor(v / 60)).padStart(2, '0') + ':' + String(Math.floor(v % 60)).padStart(2, '0')
   );
 }
+function restartMission() {
+  try { sessionStorage.setItem('babar-retry-difficulty',easy?'easy':'normal'); } catch {}
+  location.reload();
+}
 function finish(win) {
   closeCameraViews();
   closeProduction();
@@ -1012,7 +1016,7 @@ function finish(win) {
     ' · Waves ' +
     wave +
     '</p><div class="launch"><button id="again">Deploy again →</button></div></div>';
-  $('again').onclick = () => location.reload();
+  $('again').onclick = restartMission;
 }
 function togglePause() {
   if (!running || ended) return;
@@ -1106,7 +1110,10 @@ canvas.addEventListener('pointerup', (e) => {
       } else if (start.typeSelect) selectAllOfType(u, start.shift);
       else if(start.touch)touchUnitSelection(u,e.timeStamp,start.shift);
       else {clearUnitTap();clickSelection(u, start.shift);}
-      if(start.touch&&!defs[u.type].speed)document.querySelector('#phone-tabs [data-panel="actions"]')?.click();
+      if(!defs[u.type].speed && (start.touch || window.innerWidth<=950 || window.innerHeight<=500)) {
+        const panel=u.type==='quarry'||u.construction?'status':'actions';
+        document.querySelector('#phone-tabs [data-panel="'+panel+'"]')?.click();
+      }
     } else if (
       start.touch && selected.length
     ) {
@@ -1211,7 +1218,7 @@ document
   .querySelectorAll('[data-mode]')
   .forEach((b) => (b.onclick = () => setMode(b.dataset.mode)));
 $('restart').onclick = () => {
-  if (confirm('Restart this mission? Current progress will be lost.')) location.reload();
+  if (confirm('Restart this mission? Current progress will be lost.')) restartMission();
 };
 let helpWasPaused = false;
 $('help').onclick = () => {

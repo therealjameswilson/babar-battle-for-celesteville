@@ -50,5 +50,11 @@ const OPENING_SCENES = [
   const replay=document.createElement('button');replay.id='opening-replay';replay.textContent='Watch opening';
   replay.onclick=()=>{scene=0;playing=false;dialog.showModal();show();$('opening-play').focus();};
   document.querySelector('.brief').append(replay);
-  syncMute();dialog.dataset.side='both';dialog.dataset.motion=reducedMotion?'reduced':'full';dialog.showModal();
+  syncMute();dialog.dataset.side='both';dialog.dataset.motion=reducedMotion?'reduced':'full';
+  let retry=null;
+  try {retry=sessionStorage.getItem('babar-retry-difficulty');sessionStorage.removeItem('babar-retry-difficulty');} catch {}
+  if(retry==='easy'||retry==='normal') {
+    $('difficulty').value=retry;
+    $('start').focus();
+  } else dialog.showModal();
 })();

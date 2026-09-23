@@ -1,6 +1,13 @@
 /* Phone presentation and two-finger navigation; simulation rules stay unchanged. */
 (() => {
   const aside = document.querySelector('aside');
+  const report=document.querySelector('.mission'), reportToggle=$('mission-toggle');
+  reportToggle.onclick=()=>{
+    const expanded=report.dataset.expanded!=='true';
+    report.dataset.expanded=String(expanded);
+    reportToggle.setAttribute('aria-expanded',String(expanded));
+    reportToggle.textContent=expanded?'Hide orders':'Mission orders';
+  };
   const tabs = document.createElement('nav');
   tabs.id = 'phone-tabs';
   tabs.setAttribute('aria-label', 'Command panel');

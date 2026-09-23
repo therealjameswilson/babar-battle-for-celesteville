@@ -1570,7 +1570,7 @@ dialog {
 
 /* Phone command deck: one scroll region per tab, with a clear battlefield. */
 #phone-tabs {display:none;}
-@media (max-width:580px), (max-height:500px) and (min-width:581px) {
+@media (max-width:950px), (max-height:500px) and (min-width:581px) {
   html {height:100%;overscroll-behavior:none;}
   body {height:100vh;height:100dvh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overscroll-behavior:none;}
   button {touch-action:manipulation;}
@@ -1681,7 +1681,7 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
 
 /* Phone-first battlefield: compact dock, optional command sheet, deliberate menu. */
 #phone-menu, #phone-production {display:none;}
-@media (max-width:580px), (max-height:500px) and (min-width:581px) {
+@media (max-width:950px), (max-height:500px) and (min-width:581px) {
   header {height:48px;min-height:48px;flex-wrap:nowrap;padding:2px 6px;gap:4px;}
   .resources {width:auto;flex:1;gap:4px;font-size:12px;}
   .resources>span {min-width:0;}
@@ -1710,7 +1710,7 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
   .camera-tools #pan, .camera-tools #camera-views-open {display:none;}
   .camera-tools button {min-width:44px;}
   #toast {bottom:6px;left:110px;right:94px;font-size:10px;}
-  .field #minimap {bottom:6px;}
+  .field #minimap {display:block;position:absolute;right:6px;bottom:6px;width:86px;height:60px;}
 }
 
 /* Nuclear prologue: local artwork and static command-post silhouettes. */
@@ -1742,3 +1742,29 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
 @media(max-width:580px){#nuclear-briefing {gap:8px;padding:8px;}#nuclear-briefing img{width:72px;height:72px;}}
 
 @media(max-width:900px),(max-height:500px){aside:not([data-panel='actions']) #nuclear-briefing{display:none;}#nuclear-briefing{flex-shrink:0;max-height:132px;overflow-y:auto;}}
+
+/* A compact report leaves the starting quarry and approaches visible. */
+.mission {padding:6px 9px;top:8px;left:8px;}
+.mission:not([data-expanded="true"]) > span,
+.mission:not([data-expanded="true"]) > strong {display:none;}
+#mission-toggle {pointer-events:auto;min-height:30px;padding:4px 8px;font-size:11px;}
+.mission #production-open {display:inline-block;margin:0 4px;}
+.mission small {display:inline-block;margin:4px 8px 0 0;font-size:11px;}
+#depot-status {display:block;}
+@media (min-width:951px) and (min-height:501px) {
+  aside #minimap {position:sticky;top:0;z-index:3;background:#202821;box-shadow:0 4px 10px #0009;}
+}
+@media (min-width:951px) and (max-width:1200px) {
+  header {padding:0 12px;gap:6px;}
+  .brand {font-size:26px;gap:6px;}
+  .brand small {font-size:8px;letter-spacing:1px;}
+  .resources {gap:10px;font-size:14px;}
+  .resources>span {min-width:52px;}
+  header button {padding:6px 8px;font-size:12px;}
+  header .court-button {margin-left:0;}
+}
+@media (max-width:950px), (max-height:500px) {
+  #mission-toggle, .mission #production-open {display:none;}
+  .mission {padding:3px 6px;top:5px;left:5px;}
+  .mission small {font-size:10px;}
+}

@@ -477,3 +477,11 @@ an enemy. Clicking an enemy normally still gives focus fire. Default rally point
 send recruits on attack-move; a rally set with explicit Move remains passive.
 Workers/couriers keep their normal movement and gathering, and Enter trench still
 positions infantry then holds inside cover. Hold fire remains an explicit stance.
+
+## Mac command-panel polish (0.59.3)
+Narrow windows up to 950px use the compact command dock. Mouse-click a production
+building to open Build / train; quarries and foundations open their status report.
+On wider screens, Mission orders expands the objective while the default compact
+report leaves the starting Materials deposit visible. The minimap stays visible
+while scrolling production and research. Deploy again returns directly to the
+briefing with the same difficulty; Watch opening replays the prologue.

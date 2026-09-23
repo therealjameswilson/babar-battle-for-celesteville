@@ -703,7 +703,7 @@ function loop(now) {
 }
 function positionMinimap() {
   const narrow =
-    (document.body?.clientWidth || window.innerWidth) <= 580 ||
+    (document.body?.clientWidth || window.innerWidth) <= 950 ||
     (document.body?.clientHeight || window.innerHeight) <= 500;
   const parent = narrow ? document.querySelector('.field') : document.querySelector('aside');
   if (mini.parentElement !== parent) {
