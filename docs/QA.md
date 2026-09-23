@@ -1372,3 +1372,7 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390Ã—844, 844Ã
   JavaScript syntax and existing asset checks pass. Gameplay code is unchanged.
 - Prompt, provenance and crawler verification steps: SHARE-PREVIEW.md.
   A real delivered iMessage/WhatsApp preview is not tested by these checks.
+- Release validation initially treated the canonical page URL as a local file.
+  The asset test now validates this deployment's canonical URL separately and
+  continues requiring all script, stylesheet and image references to exist locally.
+- The JPEG also loaded in the real browser with its expected 1200x627 dimensions.
