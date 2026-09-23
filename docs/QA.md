@@ -1296,3 +1296,64 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   MutationObserver exists in game or fixture source); assertions completed.
 - Review screenshot: artifacts/mac-playtest/compact-mac.png (ignored, not deployed).
   Physical iPhone Safari and a full manual victory remain outside this pass.
+
+## v0.59.3 — complete manual Story victory (2026-09-23)
+- Played the published release in the Mac in-app browser using ordinary mouse,
+  keyboard and UI controls. No simulation injection, accelerated time, resource
+  grants, enemy deletion or victory trigger was used. Paused briefly at the start.
+- Verified the actual end screen: MISSION COMPLETE / Celesteville holds;
+  Time 05:33, Enemy casualties 46, Waves 3. The selected army at victory contained
+  Babar, 24 guards and four deployed/completed field guns; another gun was queued.
+- Opening: continuous Guard School recruitment, quarry, defensive tower, Artillery
+  Works and deployed guns. Added a home and second Guard School, researched
+  coordinated volleys and calibrated shells, captured the central depot and
+  attack-moved up the eastern road with ongoing production and forward rallies.
+  Used Babar's protective ability during combat.
+- Normal construction rejection was recoverable by choosing clearer ground.
+  Production selection recenters the camera: minimap rally orders avoided placing
+  rallies at the wrong world location after that camera change.
+- No gameplay blocker prevented victory. The standalone game's captured console
+  contained no warnings/errors. Victory tab was left open for review.
+- Screenshot: artifacts/victory-playtest/story-victory.png (review-only, ignored).
+  This verifies a complete Story win; Commander victory remains untested manually.
+
+## v0.59.3 — manual Story victory using atomic bombs (2026-09-23)
+- Played the published release in the Mac in-app browser through ordinary UI
+  controls, without injected game state, resource grants or accelerated time.
+- Gathered Materials and Uranium, built the economy and artillery, completed
+  calibrated shells, both field-protection upgrades and Atomic command, then
+  assembled and launched two atomic bombs at Rataxes's fortress.
+- Verified Babar's launch was disabled without direct sight of headquarters and
+  enabled after moving him onto the clear palace approach. A crowded route beside
+  the Guard School required intermediate move waypoints around its outer edge.
+- Used Zephir's 25-second reconnaissance for target visibility. Observed both
+  authorized 18-second launch countdowns; captured the first mushroom cloud.
+  Friendly forces remained outside the strike area. Infantry and artillery then
+  advanced to finish the surviving fortress, with Babar's protective ability.
+- Actual result: MISSION COMPLETE / Celesteville holds; Time 15:39,
+  Enemy casualties 108, Waves 8. No captured console warnings or errors.
+- Review-only screenshots (ignored, not deployed):
+  artifacts/nuclear-victory-playtest/atomic-launch.png,
+  artifacts/nuclear-victory-playtest/atomic-impact.png,
+  artifacts/nuclear-victory-playtest/nuclear-story-victory.png.
+- This verifies a manual Story win using atomic weapons, not an H-bomb or
+  Commander-mode victory. No gameplay source changes were made in this pass.
+
+## v0.59.4 — navigation and nuclear command readiness (2026-09-23)
+- Reproduced a commander stall beside a Guard School; the new regression fails
+  against the previous navigation implementation and passes with clear start
+  connectors, continuous edge checks and precise required corner arrival.
+- Baseline and updated syntax/asset checks and full deterministic tactics suite
+  passed, including queued routes, 24-unit forest crossings, both faction leaders,
+  headquarters positioning, Uranium readiness and paused/missing-HQ guards.
+  npm is unavailable on this Mac; its check/test scripts were run directly with
+  the bundled Node 24 runtime. Existing Python server served the repository on 8002.
+- Real-browser nuclear-command-browser.html: 30 assertions across 1280x800,
+  844x390 and 390x844; readiness text, position button, actual movement to personal
+  headquarters sight, launch enablement, pause guard, 44px touch target, scrolling
+  access and horizontal bounds. This uses explicit test fixtures, not a new manual
+  victory run or physical iPhone Safari test.
+- The iframe runner logged the same browser-injected MutationObserver error seen
+  in earlier QA; assertions completed. Review screenshot:
+  artifacts/command-readiness/mobile.png (ignored, not deployed).
+- Preserved the preceding manual victory reports. No weapon balance changes.

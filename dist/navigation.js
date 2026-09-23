@@ -47,11 +47,24 @@ function rebuildNav() {
     for (let x = 0; x < NC; x++) blocked[y * NC + x] = solidAt(x * NAV + 15, y * NAV + 15) ? 1 : 0;
 }
 function clearSegment(a, b, r = 21) {
-  const n = Math.ceil(dist(a, b) / 12);
-  for (let i = 1; i <= n; i++)
-    if (solidAt(a.x + ((b.x - a.x) * i) / n, a.y + ((b.y - a.y) * i) / n, r)) return false;
-  return true;
+  if(solidAt(a.x,a.y,r)||solidAt(b.x,b.y,r))return false;
+  const dx=b.x-a.x,dy=b.y-a.y,length2=dx*dx+dy*dy;
+  // Exact swept clearance prevents a long shortcut grazing an unsampled corner.
+  for(const o of obstacles){
+    let lo=0,hi=1;
+    for(const [origin,delta,min,max] of [[a.x,dx,o.x-r,o.x+o.w+r],[a.y,dy,o.y-r,o.y+o.h+r]]){
+      if(Math.abs(delta)<1e-9){if(origin<=min||origin>=max){hi=-1;break;}}
+      else {const v=(min-origin)/delta,w=(max-origin)/delta;lo=Math.max(lo,Math.min(v,w));hi=Math.min(hi,Math.max(v,w));}
+    }
+    if(lo<hi&&hi>0&&lo<1)return false;
+  }
+  return !solidBuildings.some(o=>{
+    if(o.hp<=0)return false;
+    const f=length2?clamp(((o.x-a.x)*dx+(o.y-a.y)*dy)/length2,0,1):0;
+    return Math.hypot(a.x+dx*f-o.x,a.y+dy*f-o.y)<o.r+r;
+  });
 }
+
 function cell(p) {
   return clamp(Math.floor(p.y / NAV), 0, NR - 1) * NC + clamp(Math.floor(p.x / NAV), 0, NC - 1);
 }
@@ -72,13 +85,24 @@ function freeCell(p) {
     }
   return best;
 }
-function route(start, goal) {
+function route(start, goal, radius = 21) {
   rebuildNav();
   navStats.searches++;
   let s = cell(start),
     g = cell(goal);
   if (blocked[g]) g = freeCell(goal);
   if (g < 0) return [];
+  // A unit can stand safely near a wall while its cell center is behind it.
+  // Connect its exact position to a visible free cell before searching the grid.
+  const anchors=[];
+  for(let y=Math.max(0,Math.floor(start.y/NAV)-3);y<=Math.min(NR-1,Math.floor(start.y/NAV)+3);y++)
+    for(let x=Math.max(0,Math.floor(start.x/NAV)-3);x<=Math.min(NC-1,Math.floor(start.x/NAV)+3);x++){
+      const i=y*NC+x,p=point(i);
+      if(!blocked[i]&&clearSegment(start,p,radius))anchors.push({i,d:dist(start,p)});
+    }
+  anchors.sort((a,b)=>a.d-b.d);
+  if(!anchors.length)return [];
+  s=anchors[0].i;
   const costs = new Float64Array(NC * NR).fill(Infinity),
     parent = new Int32Array(NC * NR).fill(-1),
     closed = new Uint8Array(NC * NR),
@@ -126,6 +150,7 @@ function route(start, goal) {
         path.push(point(i));
         i = parent[i];
       }
+      path.push(point(s));
       return path.reverse();
     }
     const x = i % NC,
@@ -137,7 +162,7 @@ function route(start, goal) {
           yy = y + dy;
         if (xx < 0 || yy < 0 || xx >= NC || yy >= NR) continue;
         let n = yy * NC + xx;
-        if (blocked[n] || closed[n] || (dx && dy && (blocked[y * NC + xx] || blocked[yy * NC + x])))
+        if (blocked[n] || closed[n] || !clearSegment(point(i),point(n),radius) || (dx && dy && (blocked[y * NC + xx] || blocked[yy * NC + x])))
           continue;
         const c = costs[i] + (dx && dy ? Math.SQRT2 : 1);
         if (c < costs[n]) {
@@ -186,7 +211,7 @@ function move(u, target, dt, stop = 3) {
       dist(goal, u.pathGoal) > 45 ||
       t > (u.repathAt || 0)
     ) {
-      u.path = route(u, goal);
+      u.path = route(u, goal, u.r);
       // A nearest stand-off cell can be an isolated pocket between a building
       // and terrain. Try other approach sides before leaving cargo stranded.
       if(!u.path.length&&stop>5){
@@ -196,7 +221,7 @@ function move(u, target, dt, stop = 3) {
           y:target.y+NAV_DIRECTIONS[i][1]*radius,
         })).filter(p=>!solidAt(p.x,p.y,u.r+2)).sort((a,b)=>dist(a,goal)-dist(b,goal));
         for(const approach of approaches){
-          const path=route(u,approach);
+          const path=route(u,approach,u.r);
           if(path.length){u.path=path;u.approach={target,x:target.x,y:target.y,stop,point:approach};break;}
         }
       }
@@ -204,8 +229,10 @@ function move(u, target, dt, stop = 3) {
       u.pathVersion = navVersion;
       u.repathAt = t + 2 + (u.id % 5) * 0.12;
     }
-    while (u.path.length && dist(u, u.path[0]) < 7) u.path.shift();
+    while (u.path.length && dist(u, u.path[0]) < 0.5) u.path.shift();
     if (!u.path.length) return false;
+    // Skip obsolete corners only when the full swept segment remains clear.
+    while(u.path.length>1&&clearSegment(u,u.path[1],u.r+2))u.path.shift();
     waypoint = u.path[0];
   } else u.path = null;
   const speed =

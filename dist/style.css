@@ -1768,3 +1768,11 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
   .mission {padding:3px 6px;top:5px;left:5px;}
   .mission small {font-size:10px;}
 }
+
+/* Readiness stays scrollable inside the compact command sheet. */
+#nuclear-readiness {padding-left:16px;margin:6px 0;font-size:12px;line-height:1.4;}
+#nuclear-readiness .ready {color:#bbd6a6;}
+#nuclear-readiness .pending {color:#ecd2a2;}
+#nuclear-position {min-height:44px;font-size:12px;width:100%;}
+#nuclear-briefing {align-items:flex-start;}
+@media(max-width:950px),(max-height:500px){#nuclear-briefing{max-height:190px;overflow-y:auto;}}
