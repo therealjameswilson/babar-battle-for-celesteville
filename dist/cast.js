@@ -134,7 +134,7 @@ const COURT = [
     team: 0,
     initials: 'M',
     title: 'A generous welcome',
-    text: 'Add 10 permanent population places. Separate attack: Iron Parasol strikes a visible enemy unit within 220m of Babar for 160 damage, plus 70 to visible enemies within 90m and 30 extra morale loss. Prioritizes Babar’s focus target. Armor and cover apply. 90 supplies, 45s cooldown; no target costs nothing. An invented wartime ability.',
+    text: 'Add 10 permanent population places. Recruit The Old Lady at the palace or Field Headquarters for 200 Supplies and 60 Materials: a unique flamethrower fighter. This wartime role is invented for the game. Separate attack: Iron Parasol strikes a visible enemy unit within 220m of Babar for 160 damage, plus 70 to visible enemies within 90m and 30 extra morale loss. Prioritizes Babar’s focus target. Armor and cover apply. 90 supplies, 45s cooldown; no target costs nothing. An invented wartime ability.',
     cost: 90,
   },
   {

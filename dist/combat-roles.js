@@ -2,10 +2,12 @@
 function armorClass(u) { return u.type === 'walker' || !defs[u.type].speed ? 'armored' : 'light'; }
 function counterBonus(attacker, target) { return attacker.type === 'sapper' && armorClass(target) === 'armored' ? 20 : 0; }
 function unitUnlocked(type, team = 0) {
+  if(type==='madame')return team===0&&!alive(team).some(u=>u.type==='madame'||u.queue.includes('madame'));
   if(type==='bike')return team===0&&!alive(team).some(u=>u.type==='bike'||u.queue.includes('bike'));
   return type !== 'sapper' || alive(team).some(b => b.type === 'factory' && !b.construction);
 }
 function combatRole(u) {
+  if(u.type==='madame')return 'The Old Lady · flamethrower · 100m cone · 26 damage to target, 14 to up to three nearby enemies · 1.2s reload. Friendly troops are spared.';
   if(u.type==='bike')return 'Arthur · fast courier motorbike · no standard weapon. Neutron strike unlocks after your first completed nuclear payload.';
   if (u.type === 'sapper') return 'Light · 10 +20 vs armored · 170m. Weak to guards.';
   if (u.type === 'walker') return 'Armored · siege/splash. Weak to sappers; screen with guards.';

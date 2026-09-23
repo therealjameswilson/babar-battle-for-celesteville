@@ -223,11 +223,11 @@ function enemyThink() {
 }
 
 function trenchCover(u){
-  return ['worker','trooper','scout','sapper','hero'].includes(u.type)&&units.some(b=>
+  return ['worker','trooper','scout','sapper','hero','madame'].includes(u.type)&&units.some(b=>
     b.type==='trench'&&b.hp>0&&!b.construction&&Math.abs(u.x-b.x)<=56&&Math.abs(u.y-b.y)<=26);
 }
 
-function trenchInfantry(u){return u.hp>0&&u.team===0&&['worker','trooper','scout','sapper','hero'].includes(u.type);}
+function trenchInfantry(u){return u.hp>0&&u.team===0&&['worker','trooper','scout','sapper','hero','madame'].includes(u.type);}
 function trenchAt(p){return alive(0).find(b=>b.type==='trench'&&!b.construction&&Math.abs(p.x-b.x)<=65&&Math.abs(p.y-b.y)<=36);}
 function occupyTrench(site,append=false){
   const crew=selected.filter(trenchInfantry);

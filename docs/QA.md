@@ -1240,3 +1240,12 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   1280×900. Touch placement, squad entry, every guard inside cover, automatic Hold,
   and explicit Enter trench button passed. Visually inspected five troops inside.
 - Physical iPhone Safari remains untested.
+
+## v0.59.0 — The Old Lady battlefield unit
+- Syntax/assets and deterministic suite passed: paid recruitment, queued/alive
+  uniqueness, actual deployment, primary/cone damage, friendly/rear exclusions,
+  Hold fire, replacement after loss and reset. Existing council checks still pass.
+- Real browser `tests/old-lady-browser.html`: 42 assertions at 390×844, 844×390 and
+  1280×900. Recruited through UI, completed training, inspected unit description,
+  decoded existing sprite, and rendered flame attack. Visually inspected Madame.
+- Physical iPhone Safari and audible output not directly verified.

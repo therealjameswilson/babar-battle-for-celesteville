@@ -345,3 +345,6 @@ console.log('PASS: shotgun research, cone, range, faction, friendly exclusions a
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'trench-checks.js'),'utf8'));
 run('trenchChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: trench costs, construction, cover, factions, navigation, destruction and refund.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'old-lady-checks.js'),'utf8'));
+run('oldLadyChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: Old Lady recruitment, uniqueness, cone, friendly exclusions, hold fire, loss and reset.');

@@ -68,8 +68,8 @@ function selectIdleWorkers() {
 }
 function workerProducer(b) { return b.type==='core'||b.type==='headquarters'; }
 function deliveryBase(b) { return workerProducer(b)||b.type==='relay'; }
-function produces(b,type) { return type==='worker'?workerProducer(b):b.type===producerFor(type); }
-function producerFor(type) { return type === 'worker' ? 'core' : ['walker','bike'].includes(type) ? 'factory' : 'forge'; }
+function produces(b,type) { return ['worker','madame'].includes(type)?workerProducer(b):b.type===producerFor(type); }
+function producerFor(type) { return ['worker','madame'].includes(type) ? 'core' : ['walker','bike'].includes(type) ? 'factory' : 'forge'; }
 function readyProducers(type) {
   return selected.filter(u => u.team === 0 && u.hp > 0 && produces(u,type) && !u.construction && !u.research && !u.atomicJob && u.queue.length < 5)
     .sort((a,b) => a.queue.reduce((sum, item) => sum + defs[item].time, defs[type].time-a.progress) / (supplied(a) ? 1 : .25) -

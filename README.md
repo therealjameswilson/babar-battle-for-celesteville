@@ -449,3 +449,15 @@ troops receive distinct interior positions and automatically Hold after arrival,
 firing at targets in range without chasing out of cover. Occupied/reserved positions
 are skipped; excess selected troops keep their previous orders. Move or Retreat
 releases a position. Explicit queued orders still take precedence over holding.
+
+### The Old Lady's flamethrower (0.59.0)
+Recruit **The Old Lady** at the Royal Palace or Field Headquarters for 200 Supplies,
+60 Materials and 25 seconds. One can be deployed or queued at a time; she uses one
+population place and can be recruited again after falling. Her 220 health and 72m/s
+speed make her a short-range support fighter: 100m range, 26 base damage to the
+primary target and 14 to up to three visible enemies in a forward cone, every 1.2s.
+Normal armor/cover apply; allies are excluded. Move, attack-move, focus fire,
+Hold fire, retreat and trench entry use the normal controls. Her welcome and Iron
+Parasol council powers remain separate. This combat role is invented for the game.
+Artwork reuses the existing inspected Madame crop from `assets/roster/allies.png`,
+with original Canvas fuel pack, hose/nozzle and flame effects; sound is synthesized.

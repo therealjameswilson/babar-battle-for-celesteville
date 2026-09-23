@@ -102,6 +102,25 @@ function atlas(image, col, row, x, y, w, h, building = false) {
   return true;
 }
 // Original Canvas field camp: canvas roof, timber office and faction command flag.
+const oldLadySheet=new Image();oldLadySheet.src='assets/roster/allies.png';
+function drawOldLady(u){
+  ctx.save();if(Math.cos(u.angle)<0)ctx.scale(-1,1);
+  ctx.fillStyle='#505c42';ctx.fillRect(-23,-43,13,30);
+  if(oldLadySheet.complete&&oldLadySheet.naturalWidth)crispSprite(ctx,oldLadySheet,1115,576,264,443,-22,-66,43,72);
+  ctx.strokeStyle='#191f1b';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-18,-23);ctx.quadraticCurveTo(-5,8,10,-21);ctx.stroke();
+  ctx.fillStyle='#383e35';ctx.fillRect(6,-27,26,6);ctx.fillStyle='#bfa165';ctx.fillRect(28,-28,7,8);
+  ctx.restore();
+  ctx.fillStyle='#f2e2b9';ctx.font='bold 11px Georgia';ctx.textAlign='center';ctx.fillText('The Old Lady',0,-73);ctx.textAlign='left';
+}
+function drawFlame(f){
+  ctx.save();ctx.translate(f.x,f.y-24);ctx.rotate(f.angle);
+  for(let i=0;i<7;i++){
+    const x=20+i*12,w=6+i*1.8;
+    ctx.fillStyle=i%2?'#ffb741':'#e66d24';ctx.beginPath();ctx.ellipse(x,0,w,w*.75,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#ffe7a0';ctx.beginPath();ctx.ellipse(x,-1,w*.6,w*.35,0,0,Math.PI*2);ctx.fill();
+  }
+  ctx.restore();
+}
 function drawTrench(team){
   // Dug earth, traverses, duckboards and sandbag parapet; original local Canvas art.
   ctx.fillStyle='#594b37';ctx.beginPath();ctx.moveTo(-68,-29);ctx.lineTo(-49,-40);ctx.lineTo(-16,-34);ctx.lineTo(20,-41);ctx.lineTo(65,-31);ctx.lineTo(69,25);ctx.lineTo(38,40);ctx.lineTo(1,34);ctx.lineTo(-35,40);ctx.lineTo(-68,28);ctx.closePath();ctx.fill();
@@ -184,7 +203,8 @@ function drawUnit(u) {
     ctx.fillStyle = '#d7edc827';
     ctx.fill();
   }
-  if(u.type==='bike')drawArthurMotorbike(ctx,u);
+  if(u.type==='madame')drawOldLady(u);
+  else if(u.type==='bike')drawArthurMotorbike(ctx,u);
   else if (d.speed) {
     const height = u.type === 'hero' ? 80 : u.type === 'walker' ? 73 : 59,
       width = height * 0.61;
@@ -572,7 +592,8 @@ function draw() {
   }
   for (const f of fx) {
     ctx.globalAlpha = f.life / f.max;
-    if (f.nuclearCloud) {
+    if(f.flame){drawFlame(f);}
+    else if (f.nuclearCloud) {
       drawMushroomCloud(ctx,f,reducedMotion);
     } else if (f.shellImpact) {
       drawShellImpact(ctx,f,reducedMotion);

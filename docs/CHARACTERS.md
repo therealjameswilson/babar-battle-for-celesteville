@@ -106,3 +106,7 @@ not new character illustrations. Only Babar and Rataxes remain named field units
 
 This is a principal-cast roster with selected adventure guests, not a claim to
 catalogue every incidental character in Jean and Laurent de Brunhoff’s books.
+
+As of 0.59.0, Madame (The Old Lady) is also a unique recruitable flamethrower unit
+at the palace or Field Headquarters. Her battlefield role and weapon are fictional
+game inventions; the relationship and existing council entry are unchanged.

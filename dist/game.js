@@ -29,6 +29,7 @@ const defs = {
     damage: 21,
     rate: 0.85,
   },
+  madame: {name:'The Old Lady',hp:220,r:16,cost:200,materials:60,time:25,speed:72,range:100,damage:26,rate:1.2},
   bike: { name: 'Arthur’s Motorbike', hp: 180, r: 16, cost: 180, materials: 60, time: 20, speed: 155 },
   worker: { name: 'Provisioner', hp: 85, r: 13, cost: 50, time: 6, speed: 84 },
   trooper: {
@@ -423,10 +424,11 @@ function shoot(u, v) {
       damageUnit(u, a, SIEGE.damage, a === v || distance <= 22 ? 1 : distance <= 43 ? .5 : .25);
     }
     fx.push({ x: v.x, y: v.y, life: .55, max: .55, shellImpact: true, r: SIEGE.radius });
-  } else if(buckshot) fireBuckshot(u,v);
+  } else if(u.type==='madame')fireMadameFlame(u,v);
+  else if(buckshot) fireBuckshot(u,v);
   else damageUnit(u, v, d.damage);
-  fx.push({ x: u.x, y: u.y, tx: v.x, ty: v.y, life: .3, max: .3, team: u.team, heavy: u.type === 'walker' });
-  battleSound(buckshot ? 'shotgun' : u.type === 'walker' ? 'cannon' : 'shot');
+  if(u.type!=='madame')fx.push({ x: u.x, y: u.y, tx: v.x, ty: v.y, life: .3, max: .3, team: u.team, heavy: u.type === 'walker' });
+  battleSound(u.type==='madame'?'flame':buckshot ? 'shotgun' : u.type === 'walker' ? 'cannon' : 'shot');
   return true;
 }
 
@@ -612,8 +614,8 @@ function update(dt) {
 }
 function train(type) {
   if (!running || paused || ended) return;
-  if (!defs[type] || !['worker','trooper','scout','sapper','walker','bike'].includes(type)) return;
-  if (!unitUnlocked(type)) return say(type==='bike'?'Arthur is already deployed or being recruited.':'Complete Artillery Works to equip Field Sappers.');
+  if (!defs[type] || !['worker','trooper','scout','sapper','walker','bike','madame'].includes(type)) return;
+  if (!unitUnlocked(type)) return say(type==='madame'?'The Old Lady is already deployed or being recruited.':type==='bike'?'Arthur is already deployed or being recruited.':'Complete Artillery Works to equip Field Sappers.');
   const b = readyProducers(type)[0];
   if (!b) return say('Select a ready production building. Research or full queues block recruitment.');
   if (ore < defs[type].cost) return say('Not enough supplies.');
@@ -898,7 +900,7 @@ function updateUI(force = false) {
   const rapidKey=selected.filter(rapidInfantry).map(u=>`${u.id}:${rapidReady(u)}:${Math.ceil(Math.max(0,(u.rapidReadyAt||0)-t))}`).join(',');
   const disciplineKey=selected.map(u=>u.holdFire?'H':'F').join('') + selected.filter(u=>u.type==='hero').map(u=>Math.ceil(Math.max(0,(u.strikeReadyAt||0)-t))+':'+(u.commandEnergy>=35)).join(',');
   const authorityKey=nuclearAuthority(0).reason;
-  const bikeKey=authorityKey+nuclearAcquired[0]+':'+unitUnlocked('bike')+':'+(ore>=400)+':'+(materials>=120)+':'+(uranium>=30)+':'+Math.ceil(Math.max(0,(u?.neutronReadyAt||0)-t))+':'+atomicStrikes.some(s=>s.team===0);
+  const bikeKey=unitUnlocked('madame')+':'+authorityKey+nuclearAcquired[0]+':'+unitUnlocked('bike')+':'+(ore>=400)+':'+(materials>=120)+':'+(uranium>=30)+':'+Math.ceil(Math.max(0,(u?.neutronReadyAt||0)-t))+':'+atomicStrikes.some(s=>s.team===0);
   const missileKey=(ore>=20)+':'+(materials>=10)+':'+(ore>=120)+':'+(materials>=40)+':'+Math.ceil(Math.max(0,(u?.missileReadyAt||0)-t))+':'+Math.ceil(Math.max(0,(u?.interceptorReadyAt||0)-t))+':'+atomicStrikes.length;
   const munKey=missileKey+bikeKey+(uranium>=40)+':'+(uranium>=80)+':'+selected.map(b=>[!!b.atomicReady,Math.ceil(b.atomicJob?.progress||0),atomicBusy(b.team)].join(':')).join(',')+':'+(ore>=650)+':'+(materials>=200)+':'+(ore>=1000)+':'+(materials>=350)+Math.floor(munitions)+':'+(ore>=60)+':'+(materials>=20)+':'+selected.map(v=>[Math.ceil(Math.max(0,(v.munitionsReadyAt||0)-t)),(v.heavyRoundsUntil||0)>t,(v.disciplineUntil||0)>t,supplied(v)].join(',')).join(';');
   if (force || key + rapidKey + disciplineKey + munKey !== actionKey) {
@@ -922,6 +924,7 @@ function updateUI(force = false) {
         a.push(['Royal strike',t<(u.strikeReadyAt||0)?Math.ceil(u.strikeReadyAt-t)+'s cooldown':'F · 35 energy · 60 damage · 100m',()=>royalStrike(u),u.commandEnergy<35||t<(u.strikeReadyAt||0)]);
       }
       if (u.type === 'hero') a.push(['Babar: Stand together', Math.max(0, u.commandReadyAt - t) > 0 ? Math.ceil(u.commandReadyAt - t) + 's cooldown' : '50 energy · Q', () => commanderAbility(u)]);
+      if (workerProducer(u)) a.push(['The Old Lady','200 S · 60 M · 25s · flamethrower · unique',()=>train('madame'),!unitUnlocked('madame')]);
       if (workerProducer(u)) a.push(['Provisioner', '● 50', () => train('worker')]);
       if (u.type === 'forge') {
         a.push(['Elephant Guard', '60', () => train('trooper')]);

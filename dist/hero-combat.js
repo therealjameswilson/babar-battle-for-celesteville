@@ -53,3 +53,13 @@ function madameAttack() {
   say('Madame’s Iron Parasol breaks the line. '+victims.length+' enemy units struck.');
   updateUI(true);renderCourt();return true;
 }
+
+function fireMadameFlame(u,target){
+  const angle=Math.atan2(target.y-u.y,target.x-u.x);
+  const others=alive(1-u.team).filter(v=>v!==target&&sees(u.team,v)&&dist(u,v)<=100&&
+    Math.cos(Math.atan2(v.y-u.y,v.x-u.x)-angle)>=Math.cos(.45))
+    .sort((a,b)=>dist(u,a)-dist(u,b)||a.id-b.id).slice(0,3);
+  damageUnit(u,target,26);
+  for(const v of others)damageUnit(u,v,14);
+  fx.push({x:u.x,y:u.y,angle,flame:true,life:.4,max:.4});
+}
