@@ -186,7 +186,12 @@ run(
 assert.equal(run('ended'), true);
 // The static deployment is self-contained, including artwork.
 const html = fs.readFileSync(path.join(root, 'dist/index.html'), 'utf8');
-for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g))
+// Canonical metadata identifies the public page; it is not a downloaded asset.
+const assetHtml = html.replace(/<link\b[^>]*\brel="canonical"[^>]*>/g, tag => {
+  assert(tag.includes('href="https://therealjameswilson.github.io/babar-battle-for-celesteville/"'), 'canonical URL must identify this deployment');
+  return '';
+});
+for (const match of assetHtml.matchAll(/(?:src|href)="([^"#]+)"/g))
   assert(fs.existsSync(path.join(root, 'dist', match[1].split('?')[0])), match[1]);
 for (const file of ['characters.png', 'buildings.png'])
   assert(fs.statSync(path.join(root, 'dist/assets', file)).size > 1000);
