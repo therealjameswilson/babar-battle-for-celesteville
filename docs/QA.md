@@ -1363,3 +1363,12 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390Ã—844, 844Ã
   Commander scenario then won in 262 simulation seconds with its palace intact.
 - Standalone browser smoke: started Story, selected the army and completed a move
   around the starting buildings; no standalone console warnings/errors.
+
+## Share-preview cover (2026-09-23)
+- Added a generated Babar/Rataxes cover, exported as a 1200x627 JPEG (~327 KB).
+  Visually inspected the final JPEG: readable title, both leaders and no clipping.
+- Verified static Open Graph and large-image card metadata, matching absolute
+  HTTPS image URLs, declared dimensions and an image size below 500 KB.
+  JavaScript syntax and existing asset checks pass. Gameplay code is unchanged.
+- Prompt, provenance and crawler verification steps: SHARE-PREVIEW.md.
+  A real delivered iMessage/WhatsApp preview is not tested by these checks.
