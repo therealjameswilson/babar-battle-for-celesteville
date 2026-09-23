@@ -488,3 +488,13 @@ briefing with the same difficulty; Watch opening replays the prologue.
 
 Choosing a building or a map-target order closes the compact command sheet so the
 whole battlefield is available for placement and commands.
+
+## Command readiness (0.59.4)
+
+The nuclear briefing lists research, committed or missing Uranium, payload assembly,
+launch-site supply, the king's personal headquarters sight and target visibility
+requirements. **Position at headquarters** selects Babar, finds a reachable clear
+approach to a completed friendly headquarters, and queues Move then Hold. It does
+not launch a weapon or replace reconnaissance. Launch checks still apply at targeting.
+Navigation connects each unit's exact position to a clear grid point and checks
+continuous clearance before skipping corners, avoiding stalls beside buildings.

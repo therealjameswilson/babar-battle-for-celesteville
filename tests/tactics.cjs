@@ -351,3 +351,6 @@ console.log('PASS: Old Lady recruitment, uniqueness, cone, friendly exclusions, 
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'default-attack-checks.js'),'utf8'));
 run('defaultAttackChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: default attack-move, explicit Move, focus fire, queues, rally and actual engagement.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'navigation-command-checks.js'),'utf8'));
+run('navigationCommandChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: crowded school routing, faction headquarters positioning, readiness and command guards.');

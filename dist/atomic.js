@@ -133,6 +133,7 @@ function leaderNuclearActions(a,u){
   for(const b of alive(u.team).filter(b=>b.type==='factory'&&b.atomicReady)){
     a.push(['Launch '+payloadName(b.atomicKind),authority.reason||'Leader authorization · '+payloadSpec(b.atomicKind).warning+'s warning',()=>aimAtomic(b),locked||!supplied(b)||atomicStrikes.some(s=>s.team===u.team&&s.kind!=='ballistic')]);
   }
+  if(technologies.has('atomic'))a.push(['Position at headquarters','Move Babar to a reachable launch-authority position',positionAtHeadquarters,!authority.leader]);
   const bike=alive(u.team).find(v=>v.type==='bike');
   if(bike){
     const status=authority.reason||(!nuclearAcquired[u.team]?'Complete your first atomic or H-bomb':
@@ -159,8 +160,51 @@ function renderNuclearBriefing() {
   const team = nuclearBriefingContext();
   card.hidden = team === null;
   if (team === null) return;
+  $('nuclear-readiness').hidden=!!team;
+  $('nuclear-position').hidden=!!team;
+  if(!team){
+    $('nuclear-readiness').innerHTML=nuclearReadiness().map(([ok,label,value])=>'<li class="'+(ok?'ready':'pending')+'"><b>'+label+':</b> '+value+'</li>').join('');
+    $('nuclear-position').disabled=paused||ended||!nuclearAuthority(0).leader;
+  }
   $('nuclear-briefing-title').textContent = (team ? 'Rataxes' : 'Babar') + ' · Nuclear decision';
   $('nuclear-briefing-text').textContent = team
     ? 'Scouts report a Rhino nuclear project. Prepare Civil Defense, protect supply lines and position missile defenses.'
     : 'Nuclear research commits scarce supplies. Secure Uranium deliveries, prepare Civil Defense and keep the king in sight of headquarters for launch.';
 }
+
+// Find a reachable, clear command position; never teleport or grant allied sight.
+function headquartersPosition(leader){
+  if(!leader||leader.hp<=0)return null;
+  const candidates=[];
+  for(const hq of alive(leader.team).filter(b=>['core','headquarters'].includes(b.type)&&!b.construction))
+    for(const extra of [36,66,96])for(let i=0;i<16;i++){
+      const angle=i*Math.PI/8,r=hq.r+leader.r+extra;
+      const p={x:hq.x+Math.cos(angle)*r,y:hq.y+Math.sin(angle)*r};
+      if(!solidAt(p.x,p.y,leader.r+2)&&leaderSeesHeadquarters({...leader,...p},hq))candidates.push(p);
+    }
+  candidates.sort((a,b)=>dist(leader,a)-dist(leader,b));
+  return candidates.find(p=>clearSegment(leader,p,leader.r)||route(leader,p,leader.r).length)||null;
+}
+function positionAtHeadquarters(){
+  if(!running||paused||ended)return false;
+  const leader=nuclearAuthority(0).leader,p=headquartersPosition(leader);
+  if(!p){say('No clear route to headquarters. Clear an approach or build a connected Field Headquarters.');return false;}
+  selected=[leader];issueOrder(leader,{kind:'move',...p});issueOrder(leader,{kind:'hold'},true);mode='select';placing=null;
+  say('Babar is moving to a clear headquarters approach. Launch authority is checked on arrival.');
+  updateUI(true);return true;
+}
+function nuclearReadiness(){
+  const factories=alive(0).filter(b=>b.type==='factory'&&!b.construction);
+  const ready=factories.find(b=>b.atomicReady),job=factories.find(b=>b.atomicJob);
+  const spec=payloadSpec(ready?.atomicKind||job?.atomicJob?.kind||'atomic');
+  const authority=nuclearAuthority(0);
+  return [
+    [technologies.has('atomic'),'Atomic research',technologies.has('atomic')?'complete':'required'],
+    [!!ready||!!job||uranium>=spec.uranium,'Uranium',ready||job?'committed to payload':uranium+' / '+spec.uranium],
+    [!!ready,'Payload',ready?payloadName(ready.atomicKind)+' ready':job?Math.ceil(spec.build-job.atomicJob.progress)+'s assembly':'assemble at Artillery Works'],
+    [!!ready&&supplied(ready),'Launch site',ready?(supplied(ready)?'supplied':'isolated — restore supply line'):'payload required'],
+    [!authority.reason,'Commander',authority.reason?'needs clear headquarters sight':'headquarters in sight'],
+    [false,'Target','choose a currently visible location; scout or use council reconnaissance'],
+  ];
+}
+$('nuclear-position').addEventListener('click',positionAtHeadquarters);

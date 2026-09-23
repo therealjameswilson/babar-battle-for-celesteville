@@ -589,3 +589,11 @@ This increment follows Blizzard's [special-control guide](https://news.blizzard.
 and [simplified-control guide](https://news.blizzard.com/en-us/article/6640645/game-guide-simplified-controls).
 It is a focused control improvement; “10%” is treated as a modest increment,
 not a measurable fidelity score.
+
+### Command readiness, 0.59.4
+Navigation keeps the 30m grid, connects the actual start position to a visible free
+cell, validates swept edges, and skips waypoints only across clear segments.
+Required corner waypoints are reached before advancing; the former 7m tolerance
+could turn into a building. `atomic.js` owns readiness data and reachable HQ
+position selection; its button issues standard Move/Hold orders without changing
+resources, visibility or launch rules. Browser fixture: nuclear-command-browser.html.
