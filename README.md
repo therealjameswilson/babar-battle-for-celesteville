@@ -498,3 +498,11 @@ approach to a completed friendly headquarters, and queues Move then Hold. It doe
 not launch a weapon or replace reconnaissance. Launch checks still apply at targeting.
 Navigation connects each unit's exact position to a clear grid point and checks
 continuous clearance before skipping corners, avoiding stalls beside buildings.
+
+## Touch production selection (0.59.5)
+
+Tap a friendly Palace, Guard School, Artillery Works or Field Headquarters to
+switch from troops to its production controls. The visible roof counts as part
+of the tap target. Build / train cancels pending targeting or construction
+placement, so a leftover order cannot consume the building tap. Explicit Repair,
+Gather, trench and weapon targeting retain their intended commands.

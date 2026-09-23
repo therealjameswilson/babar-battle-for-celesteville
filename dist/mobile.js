@@ -17,6 +17,9 @@
     button.dataset.panel = key;
     button.onclick = () => {
       aside.dataset.panel = key;
+      if(key==='actions'){
+        mode=null;placing=null;atomicTargetSite=null;clearUnitTap();
+      }
       if(key!=='orders')closeProduction();
       tabs.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
     };

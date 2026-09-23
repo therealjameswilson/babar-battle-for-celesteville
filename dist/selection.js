@@ -86,3 +86,12 @@ function renderSubgroups() {
     holder.appendChild(button);
   }
 }
+
+// Match the visible producer artwork, including roofs above the ground footprint.
+// In production context a soldier standing in front must not steal the tap.
+function productionBuildingAt(p){
+  return alive(0).filter(b=>['core','forge','factory','headquarters'].includes(b.type)).filter(b=>{
+    const height=b.type==='core'?150:b.type==='factory'?126:b.type==='forge'?113:94;
+    return Math.abs(p.x-b.x)<=height*.49 && p.y>=b.y-height+29 && p.y<=b.y+29;
+  }).sort((a,b)=>b.y-a.y)[0]||null;
+}
