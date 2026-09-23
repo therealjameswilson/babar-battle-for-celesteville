@@ -484,7 +484,7 @@ function update(dt) {
         if (u.rally) {
           n.order = type === 'worker' && u.rally.node && knownResourceAmount(u.rally.node,u.team)!==0
             ? { kind: 'gather', node: u.rally.node }
-            : { kind: 'move', x: u.rally.x, y: u.rally.y };
+            : { kind: u.rally.orderKind || defaultGroundOrder(n), x: u.rally.x, y: u.rally.y };
         }
         if(u.team===1&&type==='scout'&&!alive(1).some(s=>s!==n&&s.recon)){enemyScoutSent=true;n.recon=true;enemyReconThink();}
         u.queue.shift();
@@ -686,6 +686,7 @@ function setMode(m) {
   );
   updateUI(true);
 }
+function defaultGroundOrder(u){return defs[u.type].damage>0?'attack':'move';}
 function command(p, append = queueOrders) {
   clearUnitTap();
   if (!running || paused || ended) return;
@@ -739,19 +740,19 @@ function command(p, append = queueOrders) {
   if (enemy && dist(p, enemy) > enemy.r + 22) enemy = null;
   if (node && dist(p, node) > 40) node = null;
   const producers = selected.filter(u => mode !== 'patrol' && ['core', 'headquarters', 'forge', 'factory'].includes(u.type));
-  for (const b of producers) b.rally = { x: clamp(p.x, 25, W - 25), y: clamp(p.y, 25, H - 25), node };
+  for (const b of producers) b.rally = { x: clamp(p.x, 25, W - 25), y: clamp(p.y, 25, H - 25), node, orderKind:mode==='move'?'move':null };
   if (producers.length) say('Production rally point set. Provisioners gather when rallied to supplies.');
   let movers = selected.filter((u) => defs[u.type].speed);
   movers.forEach((u, i) => {
     if (mode !== 'patrol' && u.type === 'worker' && node) issueOrder(u, { kind: 'gather', node }, append);
     else if (mode === 'gather') return;
-    else if (mode !== 'patrol' && enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy, forceFire: true }, append);
+    else if (mode !== 'patrol' && mode !== 'move' && enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy, forceFire: true }, append);
     else {
       let cols = Math.ceil(Math.sqrt(movers.length)),
         ox = ((i % cols) - (cols - 1) / 2) * 40,
         oy = (Math.floor(i / cols) - (Math.ceil(movers.length / cols) - 1) / 2) * 40;
       issueOrder(u, {
-        kind: mode === 'patrol' ? 'patrol' : mode === 'attack' ? 'attack' : 'move',
+        kind: mode === 'patrol' ? 'patrol' : mode === 'attack' ? 'attack' : mode === 'move' ? 'move' : defaultGroundOrder(u),
         x: clamp(p.x + ox, 25, W - 25),
         y: clamp(p.y + oy, 25, H - 25),
       }, append);
@@ -764,7 +765,7 @@ function command(p, append = queueOrders) {
         ? (node.kind === 'uranium' ? 'Uranium duty assigned. Requires completed Artillery Works; deliver cargo to a linked base.' : node.kind === 'materials' ? materialsOrderMessage(node) : 'Supplies gathering started.')
         : enemy
           ? 'Concentrate fire on the marked target.'
-          : 'Orders confirmed.'
+          : movers.some(u=>u.order?.kind==='attack')?'Attack-move confirmed. Troops engage enemies along the route.':'Move confirmed.'
     );
   } else if (!producers.length) say('Select mobile units first.');
   mode = null;

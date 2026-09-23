@@ -348,3 +348,6 @@ console.log('PASS: trench costs, construction, cover, factions, navigation, dest
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'old-lady-checks.js'),'utf8'));
 run('oldLadyChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: Old Lady recruitment, uniqueness, cone, friendly exclusions, hold fire, loss and reset.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'default-attack-checks.js'),'utf8'));
+run('defaultAttackChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: default attack-move, explicit Move, focus fire, queues, rally and actual engagement.');

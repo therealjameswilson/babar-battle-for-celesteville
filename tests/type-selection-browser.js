@@ -17,7 +17,7 @@ for(const [w,h] of [[390,844],[844,390],[1280,900]]){
  check(g.eval('selected.length===1&&selected[0]===anchor'),'first tap selects one');tap(p);
  check(g.eval('selected.length===3&&!paused'),'second touch tap selects all matching troops without dblclick');
  tap({x:p.x+90,y:p.y+90});
- check(g.eval("selected.length===3&&selected.every(u=>u.order?.kind==='move')"),'next touch move commands whole group');
+ check(g.eval("selected.length===3&&selected.every(u=>u.order?.kind==='attack')"),'next touch attack-move commands whole group');
  g.eval('clearUnitTap();selected=[]');tap(p);c.dispatchEvent(new g.PointerEvent('pointercancel',{pointerId:1,bubbles:true}));tap(p);
  check(g.eval('selected.length===1'),'cancelled gesture cannot trigger double selection');
  g.eval('clearUnitTap();touchUnitSelection(anchor,1000);touchUnitSelection(anchor,1500)');

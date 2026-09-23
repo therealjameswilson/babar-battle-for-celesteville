@@ -4,7 +4,7 @@
   const tabs = document.createElement('nav');
   tabs.id = 'phone-tabs';
   tabs.setAttribute('aria-label', 'Command panel');
-  for (const [key, label] of [['orders','Army / move'],['actions','Build / train'],['status','More orders']]) {
+  for (const [key, label] of [['orders','Army / attack'],['actions','Build / train'],['status','More orders']]) {
     const button = document.createElement('button');
     button.textContent = label;
     button.dataset.panel = key;

@@ -9,7 +9,7 @@ function minimapChecks(check){
  check(cam.x===W*.6&&cam.y===H*.7&&selected[0]===unit,'Minimap drag pans without losing selection');
  const camera=JSON.stringify(cam);
  minimapDown(event(.4,.4,2));
- check(unit.order?.kind==='move'&&unit.order.x===W*.4&&JSON.stringify(cam)===camera,'Minimap right-click moves units without moving camera');
+ check(unit.order?.kind==='attack'&&unit.order.x===W*.4&&JSON.stringify(cam)===camera,'Minimap right-click attack-moves troops without moving camera');
  minimapDown(event(.6,.4,2,true));
  check(unit.orders?.length===1,'Shift right-click queues a minimap waypoint');
  mode='attack';minimapDown(event(.5,.5));minimapUp(event(.5,.5));

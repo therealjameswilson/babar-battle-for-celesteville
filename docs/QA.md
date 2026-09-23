@@ -1260,3 +1260,12 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   844×390 and 1280×900, decoding all three sprites and rendering at .72×/1×/1.6×
   camera zoom. Resource quantities and layout bounds passed. Inspected mobile image.
 - Physical iPhone Safari remains untested.
+
+## v0.59.2 — default troop attack-move
+- Syntax/assets and deterministic suite passed, including default armed/unarmed
+  orders, explicit Move over enemies, queued waypoints, focus fire, new recruits at
+  rally points and actual damage to an enemy encountered along the route.
+- Updated minimap, trench-exit and touch-group expectations to the requested rule.
+- Real browser `tests/default-attack-browser.html`: 36 assertions across 390×844,
+  844×390 and 1280×900. Touch and mouse default commands, explicit Move button,
+  phone label and layout bounds passed. Physical iPhone Safari remains untested.

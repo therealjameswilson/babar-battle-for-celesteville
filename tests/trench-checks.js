@@ -27,6 +27,6 @@ function trenchChecks(check){
  const extra=add('trooper',0,400,800);selected=[extra];occupyTrench(shelter);
  check(!extra.order,'full trench does not pull more troops inside');
  selected=[squad[0]];command({x:350,y:800});
- check(squad[0].order.kind==='move'&&!squad[0].order.trench,'new order releases trench position');
+ check(squad[0].order.kind==='attack'&&!squad[0].order.trench,'new order releases trench position');
  reset();
 }

@@ -468,3 +468,12 @@ Supplies, Materials and Uranium use original local SVG sprites in
 ore with ochre veins and a marked container. Vector assets retain detail at zoom
 and high device resolution; larger high-contrast name/quantity plates improve phone
 readability. Gathering rules, resource stock and fog-of-war knowledge are unchanged.
+
+### Attack-move by default (0.59.2)
+Ordinary ground taps/right-clicks now attack-move armed troops: they engage enemies
+along the route. The phone tab reads **Army / attack**. Choose **Move** under More
+orders (desktop M) to travel without stopping to fight, including when clicking over
+an enemy. Clicking an enemy normally still gives focus fire. Default rally points
+send recruits on attack-move; a rally set with explicit Move remains passive.
+Workers/couriers keep their normal movement and gathering, and Enter trench still
+positions infantry then holds inside cover. Hold fire remains an explicit stance.
