@@ -23,6 +23,8 @@ document.querySelector('#run').onclick=async()=>{
   })()`);
   check(rendered.signal,'real rendered audio output');check(rendered.silent,'master gain silences output');
   g.eval('audioContext=new AudioContext();audioGraph=null;muted=false;startAudio();stopAudioVoices()');
+  for(const kind of ['shot','shotgun','cannon','flame']){g.eval('effectTimes.clear();battleSound('+JSON.stringify(kind)+',{x:cam.x,y:cam.y,team:0})');check(g.eval('audioVoices.size>0'),'positioned '+kind);}
+  g.eval('stopAudioVoices()');
   for(const key of ['master','music','effects','interface']){const input=d.querySelector('#audio-'+key);input.value=37;input.dispatchEvent(new g.Event('input'));check(g.eval('audioLevels.'+key+'===.37'),'slider '+key);}
   check(JSON.parse(g.localStorage.getItem('babar-audio-levels')).music===.37,'mix persisted');
   g.eval("(()=>{const original=Math.random;Math.random=()=>{throw Error('simulation random consumed')};try{noise(audioContext.currentTime,.123,.02,500)}finally{Math.random=original}})()");check(true,'audio randomness independent');

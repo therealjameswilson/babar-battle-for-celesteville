@@ -114,7 +114,7 @@ function battleSound(kind,position=null){
   const now=audioContext.currentTime,previous=effectTimes.get(kind)??-Infinity;
   if(now-previous<(kind==='shot'?.045:.09))return;
   effectTimes.set(kind,now);lastSound=now;
-  const pan=position?clamp((position.x-cam.x)/Math.max(250,cw/cam.zoom/2),-1,1):0;
+  const pan=position?clamp((position.x-cam.x)/Math.max(250,canvas.clientWidth/cam.zoom/2),-1,1):0;
   const distance=position?Math.hypot(position.x-cam.x,position.y-cam.y):0;
   const volume=1/(1+distance/700);
   if(kind==='cannon'){

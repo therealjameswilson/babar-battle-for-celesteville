@@ -1408,3 +1408,22 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Browser tooling emitted its known MutationObserver error around iframe setup;
   no MutationObserver code exists in the client. No game exception was observed.
 - This is an audio milestone, not completion of the broader console-quality goal.
+
+## Controller integration — 0.61.0
+
+- Real-browser fixture `tests/controller-browser.html` feeds standard Gamepad
+  samples into the same polling function used in the rendered game. It covers
+  opening/briefing navigation, difficulty, selection, default attack, recruitment,
+  production cycling, same-type selection, cancel, both sticks, zoom, pause/resume,
+  modal focus and return, pointer handoff and disconnect pause.
+- A stale/removed menu focus now moves focus before confirming anything, preventing
+  a replacement action from firing unexpectedly after the selection changes.
+- Physical gamepad mappings, haptic feedback and subjective controller feel remain
+  unverified. The API uses physical button positions rather than brand labels.
+- Expanded audio browser fixture verifies all four positional weapon effects. This
+  caught an out-of-scope canvas-width reference in 0.60.0; fixed to use the actual
+  canvas element. Twenty real Web Audio assertions now pass.
+
+- Controller fixture passed 27 assertions at each of 1280×800, 390×844 and
+  844×390. Visual inspection confirmed focus rings on production controls.
+  Native pointer/keyboard handoff preserves the existing focused control.

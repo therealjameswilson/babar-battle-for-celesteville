@@ -515,3 +515,22 @@ nuclear launches. Rifles, shotguns, artillery and flame weapons have distinct
 layered effects, positioned across the stereo field. Muting/backgrounding silences
 the master mix; pausing clears the battle score. Sound requires interaction first.
 No audio files, network services or runtime dependencies are required.
+
+## Controller commands (0.61.0)
+
+A browser-standard gamepad can operate the opening, briefing, battlefield and
+menus. Press any button to activate it. Face buttons are described by physical
+position so Nintendo and Xbox printed labels cannot be confused:
+
+- Left stick: tactical cursor. Right stick: camera. Triggers: zoom.
+- South: select a friendly unit/building, or order the selection at the cursor.
+  Troops attack-move by default; explicit commands retain their normal rules.
+- West: command panel. D-pad: navigate; South: confirm; East: return/cancel.
+  Left/right adjusts sliders and difficulty.
+- North: select all of the selected unit's type. Left bumper: army.
+  Right bumper: cycle production sites and open recruitment.
+- Start: pause/resume. Disconnecting the active controller pauses the battle.
+
+Touching/clicking or using the keyboard switches back immediately. The controller
+can regain control on its next input. Browser samples test the command integration;
+physical controller compatibility and feel still require hardware testing.

@@ -29,3 +29,8 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   this upgrade. Physical iPhone Safari and controller experience remain unverified.
 - Audio foundation ships in 0.60.0. Browser graph/controls checks pass;
   hardware listening review remains open. Other acceptance areas remain open.
+
+- Controller foundation (0.61.0): dual-stick battlefield input, production and
+  menu navigation, focus outlines, prompts, input handoff and disconnect pause.
+  Browser-standard samples pass; physical controller feel remains unverified.
+  Presentation redesign, onboarding, save/resume and integrated polish remain open.

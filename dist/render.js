@@ -688,6 +688,7 @@ function loop(now) {
   const elapsed=last===null?0:Math.max(0,(now-last)/1000||0);
   const dt=Math.min(elapsed,.05);
   last = now;
+  if(typeof pollController==='function'&&typeof navigator!=='undefined'&&navigator.getGamepads)pollController(navigator.getGamepads(),dt,now);
   if (running && !paused && !ended) {
     const pan = (420 * dt) / cam.zoom;
     if (keys.ArrowLeft) cam.x -= pan;
