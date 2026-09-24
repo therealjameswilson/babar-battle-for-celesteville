@@ -506,3 +506,12 @@ switch from troops to its production controls. The visible roof counts as part
 of the tap target. Build / train cancels pending targeting or construction
 placement, so a leftover order cannot consume the building tap. Explicit Repair,
 Gather, trench and weapon targeting retain their intended commands.
+
+## Sound mix (0.60.0)
+
+The field manual contains saved Master, Music, Battlefield and Interface levels.
+The original procedural score gains percussion under fire and warning tones during
+nuclear launches. Rifles, shotguns, artillery and flame weapons have distinct
+layered effects, positioned across the stereo field. Muting/backgrounding silences
+the master mix; pausing clears the battle score. Sound requires interaction first.
+No audio files, network services or runtime dependencies are required.

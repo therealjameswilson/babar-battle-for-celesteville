@@ -1390,3 +1390,21 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   real browser; physical iPhone Safari remains untested.
 - Existing real-browser default-attack suite: 36 assertions passed, preserving
   ordinary ground attack-move and explicit passive Move behavior.
+
+## 0.60.0 audio release — 2026-09-24
+
+- Local syntax/assets and deterministic tactics checks passed. No balance rules changed.
+- Real in-app Chromium browser: `tests/audio-browser.html` passed 16 assertions:
+  gesture-created AudioContext, four real gain buses, nonzero OfflineAudioContext
+  rendering and master silence, four volume controls/persistence, RNG independence,
+  48-voice ceiling/explicit cleanup, and score pause/resume.
+- The browser reports a running hardware AudioContext but its device clock stalls
+  near 0.005s. Offline rendering verifies the actual Web Audio graph; this is not
+  a hardware listening or real-time voice-expiry verification. Those remain open.
+- Visual inspection caught low-contrast sound settings; corrected with explicit
+  parchment text. Phone field manual remains scrollable with a visible Close button.
+- Touch production browser regression passed all 54 assertions at 390×844,
+  844×390, and 1280×900, including switching from army orders to recruitment.
+- Browser tooling emitted its known MutationObserver error around iframe setup;
+  no MutationObserver code exists in the client. No game exception was observed.
+- This is an audio milestone, not completion of the broader console-quality goal.

@@ -1776,3 +1776,10 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
 #nuclear-position {min-height:44px;font-size:12px;width:100%;}
 #nuclear-briefing {align-items:flex-start;}
 @media(max-width:950px),(max-height:500px){#nuclear-briefing{max-height:190px;overflow-y:auto;}}
+
+.audio-settings{border:1px solid #8a805f;border-radius:12px;padding:16px;margin:16px 0;background:#172820;display:grid;grid-template-columns:1fr;gap:6px;}
+.audio-settings legend{font-weight:bold;color:#e5c886;padding:0 8px;}
+.audio-settings label{display:flex;justify-content:space-between;align-items:center;}
+.audio-settings input{width:100%;min-height:36px;accent-color:#dbc080;touch-action:pan-y;}
+.audio-settings button{min-height:44px;margin-top:8px;}
+#help-dialog .audio-settings,#help-dialog .audio-settings p,#help-dialog .audio-settings button{color:#f3ead1;}
