@@ -1471,3 +1471,8 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390Ã—844, 844Ã
   pause surface.
 - Full release CI, live deployment, physical controller/iPhone and listening review
   remain separate gates. This entry does not claim those checks have passed.
+- Final checkpoint fixture: 23 assertions per layout, 69 total. Existing presentation
+  regression: 74 assertions pass. It caught a landscape launch-button overflow
+  when a save existed; Continue/New battle now share a row on short screens.
+  Existing desktop controller regression: 29 assertions pass with a saved battle.
+  Screenshot: `artifacts/checkpoints/desktop-resume.png` (local review artifact).

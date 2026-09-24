@@ -96,3 +96,13 @@ body[data-motion=reduced] button{transition:none;}
 @media(max-height:500px){#pause-panel{max-height:calc(100dvh - 20px);}}
 
 #pause-shade{position:fixed;inset:0;z-index:24;background:#09130c66;}#pause-shade[hidden]{display:none;}
+
+.battle-launch{display:grid;gap:8px;}
+#continue-battle{min-height:50px;background:#304e3c;border-color:#b6a36e;color:#f3e6c5;font-weight:bold;}
+#checkpoint-brief{font-size:11px;line-height:1.4;color:#a8bca6;margin:0;}
+#checkpoint-brief:empty{display:none;}
+@media(max-height:500px) and (min-width:581px){
+ .battle-launch{grid-template-columns:1fr 1fr;}
+ .battle-launch button{font-size:11px;min-height:44px;}
+ #continue-battle[hidden]+#start{grid-column:1/-1;}
+}
