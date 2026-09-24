@@ -1494,3 +1494,37 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   controller regression passes 31 assertions per layout (93 total), including the
   briefing checkbox. Screenshots: `artifacts/field-adviser/desktop.png` and
   `artifacts/field-adviser/phone.png` (local review artifacts, not deployed).
+
+## Published 0.64.0 — manual Story victory, 2026-09-24
+
+- Played the live GitHub Pages release in the Mac in-app browser using ordinary
+  mouse/keyboard controls. Started a new Story match with the field adviser.
+  No injected state, accelerated simulation, granted resources or forced outcome.
+- Victory at **06:19** mission time after **3 assault waves**, with **56 enemy
+  losses** and **40 units remaining** on the after-action report. The final selected
+  army contained Babar, 28 Elephant Guards and 5 Field Artillery units. No nukes
+  were used. Browser console warnings/errors were empty.
+- Physical supplies/materials gathering, quarry construction, grouped recruitment,
+  artillery production, upgrades, producer rally points, depot capture/recapture,
+  default attack-move, gun deployment and council recovery supported the win.
+  Early losses and an enemy raid were recoverable without restarting. Council
+  pauses were ordinary player actions. No hard progression blocker was found.
+- Local review evidence: `artifacts/victory-0.64/story-victory.png` and
+  `artifacts/victory-0.64/result.txt`. These ignored artifacts are not deployed.
+- **Stumbling block: desktop minimap overlap.** After scrolling the command
+  sidebar, its sticky minimap obscures selected-building queue/status text and
+  unit subgroup controls. Reserve space for the map and scroll commands beneath
+  it; production remained possible through the report. Highest-priority UI fix.
+- **Stumbling block: misleading order confirmation.** A combat-only army ordered
+  near a supply cache receives “Supplies gathering started.” despite moving under
+  attack orders. The toast chooses the clicked resource rather than the orders
+  actually issued. Report actual worker/combat orders, including mixed selections.
+- **Stumbling block: unaffordable whole-army abilities.** With 34 selected combat
+  units, Heavy rounds costs 272 MU and Smoke cover 204 MU against a 100-MU storage
+  cap. Disabled buttons do not explain selecting fewer units. Show the affordable
+  group size beside each ability; preserve the existing per-unit costs.
+- Softer friction: later research lists are crowded, and the benefit of forward
+  production rally points deserves earlier guidance. The adviser helped the opening.
+- This entry records findings, not fixes. No gameplay code changed for this audit.
+  No frame-rate measurement, manual Commander victory, physical iPhone/controller
+  verification or hardware listening test was performed in this session.
