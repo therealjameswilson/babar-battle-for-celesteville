@@ -1476,3 +1476,21 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   when a save existed; Continue/New battle now share a row on short screens.
   Existing desktop controller regression: 29 assertions pass with a saved battle.
   Screenshot: `artifacts/checkpoints/desktop-resume.png` (local review artifact).
+
+## Field-adviser candidate 0.64.0 — 2026-09-24
+
+- Full deterministic tactics suite passes. New adviser rule checks verify physical
+  deliveries, completed recruitment, scout sight, worker-loss recovery, opt-out,
+  reset and absence of forced pause. Checkpoint regression remains passing.
+- Real browser adviser checks at desktop, 390×844 portrait and 844×390 landscape
+  exercise actual delivery, paid recruitment, quarry construction and materials
+  delivery, selection/order preservation, guidance completion, saved milestones,
+  recovery and panel bounds. Later reconnaissance/capture/artillery conditions use
+  fixture state; this is not a complete manual playthrough.
+- Existing presentation suite passes all 74 assertions with the adviser checkbox
+  and a pre-existing local save, including landscape launch-button visibility.
+- Final adviser browser suite: 29 assertions per layout (87 total), including
+  controller navigation inside the adviser and Back without forced pause. Existing
+  controller regression passes 31 assertions per layout (93 total), including the
+  briefing checkbox. Screenshots: `artifacts/field-adviser/desktop.png` and
+  `artifacts/field-adviser/phone.png` (local review artifacts, not deployed).

@@ -17,7 +17,9 @@ document.querySelector('iframe').onload=async()=>{
   run('controller.focus=null;controllerFocus()');check(run('controller.focus.id')===(hasCheckpoint?'continue-battle':'difficulty'),'briefing prioritizes available saved battle');
   if(hasCheckpoint)run('controller.focus=$("difficulty");controllerFocus()');
   press(15);check(d.querySelector('#difficulty').selectedIndex===1,'difficulty selection');
-  press(14);press(13);if(hasCheckpoint)press(13);check(run("controller.focus.id==='start'"),'D-pad reaches start');
+  press(14);press(13);
+  if(d.querySelector('#guide-enabled')){check(run('controller.focus.id')==='guide-enabled','D-pad reaches adviser option');press(0);check(!d.querySelector('#guide-enabled').checked,'controller toggles adviser');press(0);press(13);}
+  if(hasCheckpoint)press(13);check(run("controller.focus.id==='start'"),'D-pad reaches start');
   press(0);check(run('running&&!paused'),'South starts game');
   run('nextWave=enemySpawn=9999;ore=3000;materials=1000');
   press(4);check(run("selected.length>1&&selected.every(u=>defs[u.type].damage&&defs[u.type].speed)"),'bumper selects army');

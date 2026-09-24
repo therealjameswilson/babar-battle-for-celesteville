@@ -552,3 +552,8 @@ Battle continuity: use **Pause → Save checkpoint** or **Save & return to brief
 **Continue saved battle** restores the latest local checkpoint, paused. Autosaves
 run every 30 seconds of battle. Saves belong to the current browser; see
 [checkpoint architecture and limitations](docs/CHECKPOINTS.md).
+
+New players can leave **Field adviser** enabled on the briefing. Cornelius offers
+six live lessons, including getting materials mining started, with normal
+selection/placement shortcuts. It never pauses combat or grants free resources.
+See [field-adviser behavior and tests](docs/FIELD-ADVISER.md).

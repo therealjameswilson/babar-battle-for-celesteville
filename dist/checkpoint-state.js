@@ -65,7 +65,7 @@ function checkpointState(){
     depot,enemyBudget,enemySpent,linked,intel,logbook,supplyClock,resourceMemory,
     enemyResourceReports,enemyThreatReports,enemyScoutSent,enemyReconNextAt,
     atomicStrikes,atomicAIAt,nuclearAcquired,controlGroups,queueOrders,cameraViews,
-    navVersion,attackReports,attackCursor,attackToneAt};
+    navVersion,attackReports,attackCursor,attackToneAt,fieldGuide:typeof guideProgress==='undefined'?null:guideProgress};
 }
 function validateCheckpointState(s){
   const fail=()=>{throw Error('This checkpoint contains invalid game state');};
@@ -99,6 +99,7 @@ function validateCheckpointState(s){
   for(const [id,report] of s.enemyThreatReports)if(!Number.isInteger(id)||!point(report)||!finite(report.at))fail();
   for(const map of s.resourceMemory)for(const amount of map.values())if(!finite(amount,0))fail();
   for(const report of s.enemyResourceReports.values())if(!point(report)||!finite(report.amount,0)||!finite(report.at))fail();
+  if(s.fieldGuide&&(typeof s.fieldGuide.enabled!=='boolean'||!Number.isInteger(s.fieldGuide.startUid)||s.fieldGuide.startUid<0||s.fieldGuide.startUid>s.uid||!Array.isArray(s.fieldGuide.done)||s.fieldGuide.done.length>6||s.fieldGuide.done.some(id=>!['supplies','recruit','materials','scout','depot','artillery'].includes(id))))fail();
   const ids=new Set();
   for(const u of s.units){
     if(!u||!Object.hasOwn(defs,u.type)||![0,1].includes(u.team)||!Number.isInteger(u.id)||u.id<1||u.id>s.uid||ids.has(u.id))fail();
@@ -155,6 +156,7 @@ function applyCheckpoint(record){
   $('overlay').classList.add('hidden');$('pause').textContent='Resume';$('pan').setAttribute('aria-pressed','false');
   $('queue-orders').setAttribute('aria-pressed',String(queueOrders));
   if($('difficulty'))$('difficulty').value=easy?'easy':'normal';
+  if(typeof restoreFieldGuide==='function')restoreFieldGuide(s.fieldGuide);
   actionKey='';uiTime=t;updateAttackAlert();updateUI(true);
   $('toast').textContent='Checkpoint restored. Return to command when ready.';toastUntil=t+5;
   if(typeof updatePresentation==='function')updatePresentation();

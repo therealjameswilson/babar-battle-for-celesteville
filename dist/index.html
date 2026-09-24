@@ -26,8 +26,8 @@
     <meta name="twitter:description" content="Two crowns. One border. Build, command, and defend Celesteville in a free browser strategy game." />
     <meta name="twitter:image" content="https://therealjameswilson.github.io/babar-battle-for-celesteville/assets/share-cover-v1.jpg" />
     <meta name="twitter:image:alt" content="Babar and Lord Rataxes above a fortified kingdom, with the game title." />
-    <link rel="stylesheet" href="style.css?v=0.63.0-checkpoints1" />
-    <link rel="stylesheet" href="presentation.css?v=0.63.0-checkpoints1" />
+    <link rel="stylesheet" href="style.css?v=0.64.0-adviser1" />
+    <link rel="stylesheet" href="presentation.css?v=0.64.0-adviser1" />
   </head>
   <body>
     <header>
@@ -52,12 +52,18 @@
           tabindex="0"
         ></canvas>
         <div class="mission" data-expanded="false">
+          <button id="guide-toggle" hidden aria-expanded="false" aria-controls="guide-panel">Field adviser</button>
           <button id="mission-toggle" aria-expanded="false">Mission orders</button>
           <span>OPERATIONS ORDER 01 · HOLD THE BORDER</span
           ><strong>Protect Celesteville. Capture Rataxes’s fortress.</strong
           ><button id="production-open" title="Production overview (F4)" aria-expanded="false" aria-controls="production-panel">Production · F4</button><small id="phase">Assault expected in 02:00</small
           ><small id="depot-status">Central depot contested</small><button id="attack-alert" aria-live="polite" hidden title="Jump to recent attacks (F3)"></button>
         </div>
+        <section id="guide-panel" hidden aria-labelledby="guide-title">
+          <div class="guide-heading"><small>CORNELIUS · FIELD ADVISER</small><button id="guide-close" aria-label="Close field adviser">×</button></div>
+          <h2 id="guide-title"></h2><p id="guide-copy"></p>
+          <button id="guide-action"></button><button id="guide-dismiss">Dismiss guidance</button>
+        </section>
         <section id="production-panel" aria-labelledby="production-title" hidden>
           <div class="production-heading"><h2 id="production-title">Production report</h2><button id="production-close" aria-label="Close production report">×</button></div>
           <p id="production-capacity"></p>
@@ -111,6 +117,7 @@
                   <option value="normal">Commander · Contested supply</option>
                 </select>
                 <p id="difficulty-note">More time to prepare, lighter enemy damage, and a stronger chance to recover.</p>
+                <label class="guide-option"><input type="checkbox" id="guide-enabled" checked> Field adviser · learn while playing</label>
                 <div class="battle-launch"><button id="continue-battle" hidden>Continue saved battle →</button>
                 <button id="start">Take command →</button></div><p id="checkpoint-brief" role="status"></p>
               </div>
@@ -198,7 +205,7 @@
     <dialog id="help-dialog" aria-labelledby="help-title">
       <div class="court-heading">
         <h2 id="help-title">Field manual</h2>
-        <button id="help-close">Close</button>
+        <button id="help-close">Close</button><button id="guide-help">Show field adviser</button>
       </div>
       <fieldset class="audio-settings"><legend>Sound mix</legend>
         <p>Adjust the score, battlefield and command feedback separately.</p>
@@ -290,43 +297,44 @@
       <div id="group-actions"></div>
       <button id="groups-close">Return to command</button>
     </dialog>
-    <script src="cast.js?v=0.63.0-checkpoints1"></script>
-    <script src="game.js?v=0.63.0-checkpoints1"></script>
-    <script src="simulation-clock.js?v=0.63.0-checkpoints1"></script>
-    <script src="camera-views.js?v=0.63.0-checkpoints1"></script>
-    <script src="minimap-input.js?v=0.63.0-checkpoints1"></script>
-    <script src="selection.js?v=0.63.0-checkpoints1"></script>
-    <script src="alerts.js?v=0.63.0-checkpoints1"></script>
-    <script src="combat-roles.js?v=0.63.0-checkpoints1"></script>
-    <script src="munitions.js?v=0.63.0-checkpoints1"></script>
-    <script src="economy.js?v=0.63.0-checkpoints1"></script>
-    <script src="construction.js?v=0.63.0-checkpoints1"></script>
-    <script src="production.js?v=0.63.0-checkpoints1"></script>
-    <script src="artillery.js?v=0.63.0-checkpoints1"></script>
-    <script src="navigation.js?v=0.63.0-checkpoints1"></script>
-    <script src="fire-discipline.js?v=0.63.0-checkpoints1"></script>
-    <script src="mushroom-clouds.js?v=0.63.0-checkpoints1"></script>
+    <script src="cast.js?v=0.64.0-adviser1"></script>
+    <script src="game.js?v=0.64.0-adviser1"></script>
+    <script src="simulation-clock.js?v=0.64.0-adviser1"></script>
+    <script src="camera-views.js?v=0.64.0-adviser1"></script>
+    <script src="minimap-input.js?v=0.64.0-adviser1"></script>
+    <script src="selection.js?v=0.64.0-adviser1"></script>
+    <script src="alerts.js?v=0.64.0-adviser1"></script>
+    <script src="combat-roles.js?v=0.64.0-adviser1"></script>
+    <script src="munitions.js?v=0.64.0-adviser1"></script>
+    <script src="economy.js?v=0.64.0-adviser1"></script>
+    <script src="construction.js?v=0.64.0-adviser1"></script>
+    <script src="production.js?v=0.64.0-adviser1"></script>
+    <script src="artillery.js?v=0.64.0-adviser1"></script>
+    <script src="navigation.js?v=0.64.0-adviser1"></script>
+    <script src="fire-discipline.js?v=0.64.0-adviser1"></script>
+    <script src="mushroom-clouds.js?v=0.64.0-adviser1"></script>
     <script src="motorbike.js?v=0.59.2"></script>
     <script src="missiles.js?v=0.59.2"></script>
-    <script src="atomic.js?v=0.63.0-checkpoints1"></script>
-    <script src="hero-combat.js?v=0.63.0-checkpoints1"></script>
-    <script src="tactics.js?v=0.63.0-checkpoints1"></script>
-    <script src="enemy-recon.js?v=0.63.0-checkpoints1"></script>
-    <script src="enemy-operations.js?v=0.63.0-checkpoints1"></script>
-    <script src="enemy-economy.js?v=0.63.0-checkpoints1"></script>
-    <script src="audio.js?v=0.63.0-checkpoints1"></script>
-    <script src="character-art.js?v=0.63.0-checkpoints1"></script>
-    <script src="court.js?v=0.63.0-checkpoints1"></script>
-    <script src="commander-animation.js?v=0.63.0-checkpoints1"></script>
-    <script src="mobile.js?v=0.63.0-checkpoints1"></script>
-    <script src="battlefield-art.js?v=0.63.0-checkpoints1"></script>
-    <script src="opening.js?v=0.63.0-checkpoints1"></script>
+    <script src="atomic.js?v=0.64.0-adviser1"></script>
+    <script src="hero-combat.js?v=0.64.0-adviser1"></script>
+    <script src="tactics.js?v=0.64.0-adviser1"></script>
+    <script src="enemy-recon.js?v=0.64.0-adviser1"></script>
+    <script src="enemy-operations.js?v=0.64.0-adviser1"></script>
+    <script src="enemy-economy.js?v=0.64.0-adviser1"></script>
+    <script src="audio.js?v=0.64.0-adviser1"></script>
+    <script src="character-art.js?v=0.64.0-adviser1"></script>
+    <script src="court.js?v=0.64.0-adviser1"></script>
+    <script src="commander-animation.js?v=0.64.0-adviser1"></script>
+    <script src="mobile.js?v=0.64.0-adviser1"></script>
+    <script src="battlefield-art.js?v=0.64.0-adviser1"></script>
+    <script src="opening.js?v=0.64.0-adviser1"></script>
     <div id="controller-cursor" hidden aria-hidden="true"></div>
     <div id="controller-hints" hidden aria-label="Controller commands"></div>
-    <script src="controller.js?v=0.63.0-checkpoints1"></script>
-    <script src="presentation.js?v=0.63.0-checkpoints1"></script>
-    <script src="checkpoint-state.js?v=0.63.0-checkpoints1"></script>
-    <script src="checkpoint-ui.js?v=0.63.0-checkpoints1"></script>
-    <script src="render.js?v=0.63.0-checkpoints1"></script>
+    <script src="controller.js?v=0.64.0-adviser1"></script>
+    <script src="presentation.js?v=0.64.0-adviser1"></script>
+    <script src="checkpoint-state.js?v=0.64.0-adviser1"></script>
+    <script src="checkpoint-ui.js?v=0.64.0-adviser1"></script>
+    <script src="field-guide.js?v=0.64.0-adviser1"></script>
+    <script src="render.js?v=0.64.0-adviser1"></script>
   </body>
 </html>
