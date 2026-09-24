@@ -40,12 +40,18 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   Three-layout browser QA passes; full battlefield visual/game-feel upgrade remains
   open alongside save/resume, onboarding and integrated performance/playtests.
 
-- Continuity candidate (0.63.0): local versioned checkpoints, paused Continue,
+- Continuity release (0.63.0): local versioned checkpoints, paused Continue,
   autosave, save-and-briefing and result retry with backup recovery. Engine and
-  browser reload/storage coverage added. Publication and integrated playtests
-  remain open; the broader objective is not complete.
+  browser reload/storage coverage added. Published successfully, with checkpoint
+  compatibility verified on the live 0.64.0 release.
 
-- First-play guidance candidate (0.64.0): optional live field adviser with six
+- First-play guidance release (0.64.0): optional live field adviser with six
   observed milestones, normal selection/placement shortcuts, recovery advice and
   checkpointed progress. Desktop and phone-size browser checks cover its core
-  flow. Full-match playtests, broader battlefield polish and performance remain.
+  flow. PR #9 merged; main checks and Pages deployment succeeded for ca17aa1.
+- Integrated manual Story play on published 0.64.0: victory in 06:19, three waves,
+  56 enemy losses, 40 surviving units; ordinary browser controls without simulation
+  shortcuts. QA.md records minimap overlap, misleading resource-order feedback and
+  whole-army munitions affordability as follow-up issues. Manual Commander play,
+  broader battlefield polish, measured frame pacing and hardware verification
+  remain open. The broader objective is not complete.

@@ -234,7 +234,7 @@ let controlGroups = {}, queueOrders = false;
 function issueOrder(u, order, append = false) {
   if (append && u.order && u.order.kind !== 'hold') {
     u.orders ||= [];
-    if (u.orders.length >= 16) return;
+    if (u.orders.length >= 16) return false;
     u.orders.push(order);
   } else {
     u.order = order;
@@ -243,6 +243,7 @@ function issueOrder(u, order, append = false) {
     u.followup = null;
     u.path = null;
   }
+  return true;
 }
 function completeOrder(u) {
   const trench=u.order?.trench;
@@ -744,31 +745,36 @@ function command(p, append = queueOrders) {
   for (const b of producers) b.rally = { x: clamp(p.x, 25, W - 25), y: clamp(p.y, 25, H - 25), node, orderKind:mode==='move'?'move':null };
   if (producers.length) say('Production rally point set. Provisioners gather when rallied to supplies.');
   let movers = selected.filter((u) => defs[u.type].speed);
+  const issued = [];
+  const assign = (u, order) => { if (issueOrder(u, order, append)) issued.push(order); };
   movers.forEach((u, i) => {
-    if (mode !== 'patrol' && u.type === 'worker' && node) issueOrder(u, { kind: 'gather', node }, append);
+    if (mode !== 'patrol' && u.type === 'worker' && node) assign(u, { kind: 'gather', node });
     else if (mode === 'gather') return;
-    else if (mode !== 'patrol' && mode !== 'move' && enemy && defs[u.type].damage) issueOrder(u, { kind: 'attack', target: enemy, forceFire: true }, append);
+    else if (mode !== 'patrol' && mode !== 'move' && enemy && defs[u.type].damage) assign(u, { kind: 'attack', target: enemy, forceFire: true });
     else {
       let cols = Math.ceil(Math.sqrt(movers.length)),
         ox = ((i % cols) - (cols - 1) / 2) * 40,
         oy = (Math.floor(i / cols) - (Math.ceil(movers.length / cols) - 1) / 2) * 40;
-      issueOrder(u, {
+      assign(u, {
         kind: mode === 'patrol' ? 'patrol' : mode === 'attack' ? 'attack' : mode === 'move' ? 'move' : defaultGroundOrder(u),
         x: clamp(p.x + ox, 25, W - 25),
         y: clamp(p.y + oy, 25, H - 25),
-      }, append);
+      });
     }
   });
-  if (movers.length) {
+  if (issued.length) {
     fx.push({ x: p.x, y: p.y, life: 0.7, max: 0.7, ring: true });
-    say(
-      mode === 'patrol' ? 'Patrol established. Units engage visible threats and return to their route.' : node
-        ? (node.kind === 'uranium' ? 'Uranium duty assigned. Requires completed Artillery Works; deliver cargo to a linked base.' : node.kind === 'materials' ? materialsOrderMessage(node) : 'Supplies gathering started.')
-        : enemy
-          ? 'Concentrate fire on the marked target.'
-          : movers.some(u=>u.order?.kind==='attack')?'Attack-move confirmed. Troops engage enemies along the route.':'Move confirmed.'
-    );
-  } else if (!producers.length) say('Select mobile units first.');
+    const messages = [];
+    if (issued.some(o => o.kind === 'gather')) messages.push(node.kind === 'uranium'
+      ? 'Uranium duty assigned. Requires completed Artillery Works; deliver cargo to a linked base.'
+      : node.kind === 'materials' ? materialsOrderMessage(node) : 'Supplies gathering assigned.');
+    if (issued.some(o => o.kind === 'patrol')) messages.push('Patrol established. Units engage visible threats and return to their route.');
+    if (issued.some(o => o.kind === 'attack' && o.target)) messages.push('Concentrate fire on the marked target.');
+    if (issued.some(o => o.kind === 'attack' && !o.target)) messages.push('Attack-move confirmed. Troops engage enemies along the route.');
+    if (issued.some(o => o.kind === 'move')) messages.push('Move confirmed.');
+    say((append ? 'Queued orders: ' : '') + messages.join(' '));
+  } else if (movers.length) say(mode === 'gather' ? 'Select provisioners and a resource deposit to gather.' : 'Order queues full. Disable Queue or clear existing orders.');
+  else if (!producers.length) say('Select mobile units first.');
   mode = null;
   updateUI(true);
 }

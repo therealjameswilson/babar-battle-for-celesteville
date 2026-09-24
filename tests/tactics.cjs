@@ -354,3 +354,6 @@ console.log('PASS: default attack-move, explicit Move, focus fire, queues, rally
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'navigation-command-checks.js'),'utf8'));
 run('navigationCommandChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: crowded school routing, faction headquarters positioning, readiness and command guards.');
+run(require('node:fs').readFileSync(require('node:path').join(__dirname,'command-feedback-checks.js'),'utf8'));
+run('commandFeedbackChecks((ok,label)=>{if(!ok)throw Error(label)})');
+console.log('PASS: command feedback and munitions affordability.');

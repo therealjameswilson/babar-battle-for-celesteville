@@ -39,8 +39,12 @@ function spendMunitions(kind) {
 function munitionsActions(actions,u) {
   for(const [kind,label,cost,hint] of [['rounds','Heavy rounds',8,'+50% damage · 15s'],['smoke','Smoke cover',6,'−25% incoming damage · 12s']]){
     const troops=munitionsTroops(kind);
+    const affordable = Math.floor(munitions / cost);
+    const guidance = !troops.length ? 'Already active on this selection' : troops.length > affordable
+      ? (affordable ? `Select ${affordable} or fewer ready troops · ${Math.floor(munitions)}/${MUNITIONS.cap} MU stored` : `Need ${cost} MU per troop · replenish at a workshop or hold the depot`)
+      : `${troops.length} ready`;
     if(selected.some(v=>v.team===0&&defs[v.type].damage&&defs[v.type].speed))
-      actions.push([label,`${troops.length*cost} MU · ${troops.length} ready · ${hint}`,()=>spendMunitions(kind),!troops.length||munitions<troops.length*cost]);
+      actions.push([label,`${troops.length*cost} MU · ${guidance} · ${hint}`,()=>spendMunitions(kind),!troops.length||munitions<troops.length*cost]);
   }
   if(selected.length===1&&u?.team===0&&['forge','factory'].includes(u.type)&&!u.construction){
     const wait=Math.ceil(Math.max(0,(u.munitionsReadyAt||0)-t));
