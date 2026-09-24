@@ -13,9 +13,11 @@ document.querySelector('iframe').onload=async()=>{
   function press(index){run(`qaPad.buttons[${index}]={pressed:true,value:1};pollController([qaPad],.016,qaStamp+=200);qaPad.buttons[${index}]={pressed:false,value:0};pollController([qaPad],.016,qaStamp+=200)`);}
   check(run('controllerAxis(.15)===0&&controllerAxis(-1)===-1'),'stick deadzone');
   press(1);check(!d.querySelector('#opening').open,'East skips opening');
-  run('controllerFocus()');check(run("controller.focus.id==='difficulty'"),'briefing focus stays inside briefing');
+  const hasCheckpoint=!d.querySelector('#continue-battle').hidden;
+  run('controller.focus=null;controllerFocus()');check(run('controller.focus.id')===(hasCheckpoint?'continue-battle':'difficulty'),'briefing prioritizes available saved battle');
+  if(hasCheckpoint)run('controller.focus=$("difficulty");controllerFocus()');
   press(15);check(d.querySelector('#difficulty').selectedIndex===1,'difficulty selection');
-  press(14);press(13);check(run("controller.focus.id==='start'"),'D-pad reaches start');
+  press(14);press(13);if(hasCheckpoint)press(13);check(run("controller.focus.id==='start'"),'D-pad reaches start');
   press(0);check(run('running&&!paused'),'South starts game');
   run('nextWave=enemySpawn=9999;ore=3000;materials=1000');
   press(4);check(run("selected.length>1&&selected.every(u=>defs[u.type].damage&&defs[u.type].speed)"),'bumper selects army');

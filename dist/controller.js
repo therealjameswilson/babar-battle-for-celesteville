@@ -29,7 +29,7 @@ function controllerFocus(delta=0){
   const list=controllerControls();if(!list.length)return;
   let index=list.indexOf(controller.focus);
   if(index<0&&controller.focus)index=list.findIndex(el=>el.textContent===controller.focus.textContent&&el.tagName===controller.focus.tagName);
-  index=index<0?Math.max(0,(!running&&!ended?list.indexOf($('difficulty')):0)):(index+delta+list.length)%list.length;
+  index=index<0?Math.max(0,(!running&&!ended?list.indexOf($('continue-battle')&&!$('continue-battle').hidden?$('continue-battle'):$('difficulty')):0)):(index+delta+list.length)%list.length;
   controller.focus?.classList.remove('controller-focus');
   controller.focus=list[index];controller.focus.classList.add('controller-focus');
   controller.focus.focus({preventScroll:true});controller.focus.scrollIntoView({block:'nearest',inline:'nearest'});
@@ -88,7 +88,7 @@ function controllerConfirm(){
     if(el.tagName==='SELECT'||el.matches('input[type="range"]'))return;
     const previousMode=mode,previousPlacing=placing;
     el.click();uiSound();
-    if(mode!==previousMode||placing!==previousPlacing||el.id==='start'||el.id==='opening-skip')controllerPanel(false);
+    if(mode!==previousMode||placing!==previousPlacing||el.id==='start'||el.id==='continue-battle'||el.id==='opening-skip')controllerPanel(false);
     else if(!controllerControls().includes(el))controllerFocus();
   }else controllerSelect();
 }

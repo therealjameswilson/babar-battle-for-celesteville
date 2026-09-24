@@ -547,3 +547,8 @@ Pause opens a command card with a force/supply report, resume, council and sound
 settings. Returning from settings preserves the paused state. Victory and defeat
 have an after-action report and retry button that preserves difficulty. Presentation
 transitions honor both the system and the in-game reduced-motion setting.
+
+Battle continuity: use **Pause → Save checkpoint** or **Save & return to briefing**.
+**Continue saved battle** restores the latest local checkpoint, paused. Autosaves
+run every 30 seconds of battle. Saves belong to the current browser; see
+[checkpoint architecture and limitations](docs/CHECKPOINTS.md).

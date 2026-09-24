@@ -39,3 +39,8 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   categories, restyled desktop command surface, pause card and after-action report.
   Three-layout browser QA passes; full battlefield visual/game-feel upgrade remains
   open alongside save/resume, onboarding and integrated performance/playtests.
+
+- Continuity candidate (0.63.0): local versioned checkpoints, paused Continue,
+  autosave, save-and-briefing and result retry with backup recovery. Engine and
+  browser reload/storage coverage added. Publication and integrated playtests
+  remain open; the broader objective is not complete.

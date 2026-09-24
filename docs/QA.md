@@ -1452,3 +1452,27 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   phone landscape sizes (87 total), including South/East resume from the pause card.
 - Direct browser keyboard interaction: Master volume advanced 75→76 with ArrowRight
   and returned to 75 with ArrowLeft; the engine did not intercept the slider.
+
+## Checkpoint candidate 0.63.0 — 2026-09-24
+
+- Engine: syntax/atlas checks, full tactics suite, and new checkpoint checks pass.
+  Graph identity, worker/deposit references, production progress, paused restore,
+  exact ten-second continuation, invalid-version/state rejection without mutation,
+  incoming ballistic countdown, and a developed 200-second battle with council
+  powers are covered. These use the deterministic harness, not a browser.
+- Real IAB browser: checkpoint fixture at 1280×800, 390×844 and 844×390.
+  Reload into Continue, preserved worker/queue state, pause/resume, backup recovery,
+  quota failure messaging, periodic autosave, pagehide save, result preservation
+  and return from defeat to checkpoint. Phone sizes are responsive desktop-browser
+  frames, not physical iPhone Safari.
+- Direct browser input: Start → Pause → Save & return to briefing → Continue.
+  The restored pause card is visible and usable. Visual inspection found redundant
+  canvas pause text behind the card; the renderer now defers to the presentation
+  pause surface.
+- Full release CI, live deployment, physical controller/iPhone and listening review
+  remain separate gates. This entry does not claim those checks have passed.
+- Final checkpoint fixture: 23 assertions per layout, 69 total. Existing presentation
+  regression: 74 assertions pass. It caught a landscape launch-button overflow
+  when a save existed; Continue/New battle now share a row on short screens.
+  Existing desktop controller regression: 29 assertions pass with a saved battle.
+  Screenshot: `artifacts/checkpoints/desktop-resume.png` (local review artifact).
