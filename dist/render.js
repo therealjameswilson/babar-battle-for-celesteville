@@ -636,7 +636,7 @@ function draw() {
     ctx.fillRect(down.x, down.y, pointer.x - down.x, pointer.y - down.y);
     ctx.strokeRect(down.x, down.y, pointer.x - down.x, pointer.y - down.y);
   }
-  if (paused) {
+  if (paused && typeof updatePresentation!=='function') {
     ctx.fillStyle = '#18332760';
     ctx.fillRect(0, 0, cw, ch);
     ctx.fillStyle = '#fff3d1';

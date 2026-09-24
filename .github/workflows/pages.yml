@@ -19,6 +19,7 @@ jobs:
           node-version: '24'
       - run: npm run check
       - run: npm test
+      - run: npm run test:checkpoint
       - run: npm run test:balance
       - run: npm run test:compositions
       - run: npm run test:commander

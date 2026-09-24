@@ -52,6 +52,7 @@ function renderDebrief(win){
     <p class="debrief-doctrine">${win?'A combined force wins the ground. A working supply line keeps it.':'Scout the approaches. Keep infantry ahead of artillery. Withdraw wounded troops to supplied homes.'}</p>
     <div class="launch"><button id="again">${win?'Command another battle':'Regroup and try again'} →</button></div>
   </section>`;
+  if(typeof offerCheckpointRetry==='function')offerCheckpointRetry();
   $('again').onclick=restartMission;$('again').focus({preventScroll:true});
   if(typeof controller!=='undefined'&&controller.active){controller.focus=$('again');controllerFocus();}
 }
