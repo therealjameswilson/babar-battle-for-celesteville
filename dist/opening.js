@@ -17,7 +17,7 @@ const OPENING_SCENES = [
   function syncMute(){ $('opening-mute').textContent=muted?'Sound off':'Sound on';$('opening-mute').setAttribute('aria-pressed',String(muted));if(bus)bus.gain.value=muted?0:.07; }
   function score(){
     stopScore();if(!audioContext||muted||!playing)return;
-    const now=audioContext.currentTime;bus=audioContext.createGain();bus.gain.value=.07;bus.connect(audioContext.destination);
+    const now=audioContext.currentTime;bus=audioContext.createGain();bus.gain.value=.07;bus.connect(audioBus('music'));
     // Original low fifth and restrained drum pulses; all voices stop on skip/pause.
     for(const [hz,delay,length,type] of [[65.41,0,5,'triangle'],[98,0,5,'sine'],[130.81,1.7,3,'triangle'],[55,0,.3,'sine'],[55,1.4,.3,'sine'],[49,2.8,.4,'sine']]){
       const o=audioContext.createOscillator(),gain=audioContext.createGain();o.type=type;o.frequency.value=hz;

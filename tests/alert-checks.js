@@ -27,14 +27,15 @@ function alertChecks(check){
   const savedX=cam.x;$('court-dialog').open=true;attackCursor=0;jumpToAttack();
   check(cam.x===savedX,'Council dialog prevents the attack shortcut moving the map behind it');
   $('court-dialog').open=false;finish(false);check($('attack-alert').hidden,'End-of-match hides the actionable attack banner');
-  const oldAudio=audioContext,oldMuted=muted;let notes=0;
-  const parameter={setValueAtTime(){},exponentialRampToValueAtTime(){}};
-  const fake={state:'running',currentTime:0,destination:{},createOscillator(){notes++;return{frequency:{},connect(){return{connect(){}}},start(){},stop(){}}},createGain(){return{gain:parameter}}};
+  const oldAudio=audioContext,oldMuted=muted,oldGraph=audioGraph;let notes=0;
+  const parameter={setValueAtTime(){},setTargetAtTime(){},exponentialRampToValueAtTime(){}};
+  const node=()=>({connect(){return this;},disconnect(){}});
+  const fake={state:'running',currentTime:0,destination:{},createOscillator(){notes++;return{...node(),frequency:parameter,start(){},stop(){}}},createGain(){return{...node(),gain:parameter}},createDynamicsCompressor(){return{...node(),threshold:{},knee:{},ratio:{},attack:{},release:{}}}};
   try{
-    audioContext=fake;muted=false;attackSound();check(notes===2,'Attack dispatch uses two synthesized notes');
+    audioGraph=null;audioContext=fake;muted=false;attackSound();check(notes===2,'Attack dispatch uses two synthesized notes');
     muted=true;attackSound();check(notes===2,'Muted attack reports create no audio nodes');
     muted=false;fake.state='suspended';attackSound();check(notes===2,'Attack reports do not resume suspended audio');
     audioContext=null;attackSound();check(audioContext===null,'Attack report cannot start audio before user interaction');
-  }finally{audioContext=oldAudio;muted=oldMuted;}
+  }finally{stopAudioVoices();audioContext=oldAudio;audioGraph=oldGraph;muted=oldMuted;}
   reset();check(!attackReports.length&&attackCursor===0&&$('attack-alert').hidden,'Restart clears attack locations and hides the banner');
 }

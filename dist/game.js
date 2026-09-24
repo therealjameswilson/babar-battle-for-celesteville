@@ -428,7 +428,7 @@ function shoot(u, v) {
   else if(buckshot) fireBuckshot(u,v);
   else damageUnit(u, v, d.damage);
   if(u.type!=='madame')fx.push({ x: u.x, y: u.y, tx: v.x, ty: v.y, life: .3, max: .3, team: u.team, heavy: u.type === 'walker' });
-  battleSound(u.type==='madame'?'flame':buckshot ? 'shotgun' : u.type === 'walker' ? 'cannon' : 'shot');
+  battleSound(u.type==='madame'?'flame':buckshot ? 'shotgun' : u.type === 'walker' ? 'cannon' : 'shot',u);
   return true;
 }
 
@@ -993,6 +993,7 @@ function restartMission() {
   location.reload();
 }
 function finish(win) {
+  resultSound(win);
   closeCameraViews();
   closeProduction();
   ended = true;
