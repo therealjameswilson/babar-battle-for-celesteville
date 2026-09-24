@@ -1528,3 +1528,21 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - This entry records findings, not fixes. No gameplay code changed for this audit.
   No frame-rate measurement, manual Commander victory, physical iPhone/controller
   verification or hardware listening test was performed in this session.
+
+## Command clarity fixes — 0.64.1
+
+- Fixed the three findings from the manual Story victory: desktop minimap now
+  scrolls in normal flow without covering selection status; order confirmations
+  describe successfully issued orders (including mixed and queued selections);
+  munitions buttons show affordable ready-unit counts and replenishment advice.
+- Phone action titles stack above descriptions so longer advice cannot squeeze
+  titles into individual letters. Per-unit costs, reserve cap and combat balance
+  are unchanged.
+- Syntax/assets and full deterministic tactics checks pass, including 11 new
+  command-feedback/affordability assertions. Real-browser fixture passes 16 desktop
+  and 14 per phone orientation checks (44 total). These arrange selections and
+  resources; they are regression checks, not another manual victory or physical
+  iPhone verification.
+- Existing touch-production browser regression passes all 54 assertions, including
+  switching from army selection to building recruitment. Visual inspection caught
+  narrow phone titles; the stacked layout above resolves that issue.

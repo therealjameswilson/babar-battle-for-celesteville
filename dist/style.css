@@ -1752,7 +1752,8 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
 .mission small {display:inline-block;margin:4px 8px 0 0;font-size:11px;}
 #depot-status {display:block;}
 @media (min-width:951px) and (min-height:501px) {
-  aside #minimap {position:sticky;top:0;z-index:3;background:#202821;box-shadow:0 4px 10px #0009;}
+  /* Keep map and commands in normal flow: scrolling must never cover status. */
+  aside #minimap {position:static;float:none;display:block;margin:0 auto 12px;background:#202821;}
 }
 @media (min-width:951px) and (max-width:1200px) {
   header {padding:0 12px;gap:6px;}
@@ -1794,3 +1795,9 @@ button[aria-pressed='true'] {background:#c9b37d;color:#151e19;}
 #controller-cursor[hidden],#controller-hints[hidden]{display:none;}
 
 dialog #controller-hints{position:sticky;top:0;bottom:auto;left:auto;transform:none;width:auto;max-width:100%;margin:0 0 12px;z-index:50;}
+
+/* Long affordability guidance must not squeeze phone action titles into letters. */
+@media (max-width:950px), (max-height:500px) {
+  aside #actions button {display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;}
+  aside #actions button small {width:100%;}
+}
