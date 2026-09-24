@@ -700,6 +700,7 @@ function loop(now) {
     soundscape();
   }
   advanceSimulation(elapsed);
+  if(typeof updatePresentation==='function')updatePresentation();
   draw();
   requestAnimationFrame(loop);
 }

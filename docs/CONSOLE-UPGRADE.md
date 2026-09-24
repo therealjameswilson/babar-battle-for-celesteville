@@ -34,3 +34,8 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   menu navigation, focus outlines, prompts, input handoff and disconnect pause.
   Browser-standard samples pass; physical controller feel remains unverified.
   Presentation redesign, onboarding, save/resume and integrated polish remain open.
+
+- Presentation foundation (0.62.0): illustrated responsive briefing, command
+  categories, restyled desktop command surface, pause card and after-action report.
+  Three-layout browser QA passes; full battlefield visual/game-feel upgrade remains
+  open alongside save/resume, onboarding and integrated performance/playtests.

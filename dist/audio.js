@@ -11,6 +11,7 @@ try {
 function applyMotionPreference() {
   reducedMotion = motionPreference === 'reduced' ||
     (motionPreference === 'system' && !!motionMedia?.matches);
+  document.body?.setAttribute('data-motion',reducedMotion?'reduced':'full');
   $('motion-preference').value = motionPreference;
   $('motion-status').textContent = reducedMotion
     ? 'Reduced motion: static infantry poses, no walking bob or drifting dust.'

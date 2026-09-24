@@ -977,8 +977,10 @@ function updateUI(force = false) {
       b.onclick = fn;
       b.disabled = !!disabled;
       holder.appendChild(b);
+      if(typeof classifyAction==='function')b.dataset.category=classifyAction(name);
     }
   }
+  if(typeof renderActionFilters==='function')renderActionFilters();
   document
     .querySelectorAll('[data-mode]')
     .forEach((b) => b.classList.toggle('active', b.dataset.mode === mode));
@@ -1018,6 +1020,7 @@ function finish(win) {
     wave +
     '</p><div class="launch"><button id="again">Deploy again →</button></div></div>';
   $('again').onclick = restartMission;
+  if(typeof renderDebrief==='function')renderDebrief(win);
 }
 function togglePause() {
   if (!running || ended) return;
@@ -1025,6 +1028,7 @@ function togglePause() {
   resetSimulationClock();
   $('pause').textContent = paused ? 'Resume' : 'Pause';
   say(paused ? 'Command paused.' : 'Command resumed.');
+  if(typeof updatePresentation==='function')updatePresentation();
 }
 function selectArmy() {
   mode=null;placing=null;atomicTargetSite=null;clearUnitTap();
@@ -1154,7 +1158,8 @@ canvas.addEventListener(
   { passive: false }
 );
 window.addEventListener('keydown', (e) => {
-  if (e.target.tagName === 'SELECT') return;
+  if (['SELECT','INPUT','TEXTAREA'].includes(e.target.tagName)||e.target.isContentEditable||$('help-dialog').open) return;
+  if(e.target.tagName==='BUTTON'&&[' ','Enter'].includes(e.key))return;
   if (cameraViewKey(e)) return;
   if ([' ', 'F2', 'F3', 'F4', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key))
     e.preventDefault();

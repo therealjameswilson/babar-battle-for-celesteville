@@ -18,7 +18,7 @@ function controllerModal(){
 }
 function controllerControls(){
   const modal=controllerModal();
-  const root=modal||(!running||ended?$('overlay')||document:document);
+  const root=modal||(paused&&controllerVisible($('pause-panel'))?$('pause-panel'):null)||(!running||ended?$('overlay')||document:document);
   const controls=[...root.querySelectorAll('button,input,select,summary')].filter(controllerVisible);
   // During battle, the command panel starts with recruitment/abilities, then
   // offers the regular command, production, council and settings controls.
@@ -29,7 +29,7 @@ function controllerFocus(delta=0){
   const list=controllerControls();if(!list.length)return;
   let index=list.indexOf(controller.focus);
   if(index<0&&controller.focus)index=list.findIndex(el=>el.textContent===controller.focus.textContent&&el.tagName===controller.focus.tagName);
-  index=index<0?0:(index+delta+list.length)%list.length;
+  index=index<0?Math.max(0,(!running&&!ended?list.indexOf($('difficulty')):0)):(index+delta+list.length)%list.length;
   controller.focus?.classList.remove('controller-focus');
   controller.focus=list[index];controller.focus.classList.add('controller-focus');
   controller.focus.focus({preventScroll:true});controller.focus.scrollIntoView({block:'nearest',inline:'nearest'});
@@ -51,6 +51,7 @@ function controllerCancel(){
     if(close)close.click();else if(modal.tagName==='DIALOG')modal.close();
     controllerPanel(false);return;
   }
+  if(paused&&running&&!ended){togglePause();controllerPanel(false);return;}
   if(controller.panel){controllerPanel(false);return;}
   mode=null;placing=null;atomicTargetSite=null;clearUnitTap();updateUI(true);
 }
@@ -81,7 +82,7 @@ function controllerAdjust(direction){
   }else controllerFocus(direction);
 }
 function controllerConfirm(){
-  if(controller.panel||controllerModal()||!running||ended){
+  if(controller.panel||controllerModal()||paused||!running||ended){
     if(!controllerControls().includes(controller.focus)){controllerFocus();return;}
     const el=controller.focus;if(!el)return;
     if(el.tagName==='SELECT'||el.matches('input[type="range"]'))return;
@@ -106,7 +107,7 @@ function controllerRender(){
   const hints=$('controller-hints'),hintParent=modal||document.body;
   if(hints.parentElement!==hintParent)hintParent.insertBefore(hints,hintParent.firstChild);
   hints.hidden=false;
-  const text=modal||controller.panel||!running||ended
+  const text=modal||controller.panel||paused||!running||ended
     ? 'D-pad Navigate · South Confirm · East Back · Left/Right Adjust'
     : paused?'Start Resume · West Commands'
     : 'Left stick Cursor · Right stick Camera · South Select / order · West Commands · North Same type · LB Army · RB Production · Start Pause';
@@ -135,8 +136,8 @@ function pollController(pads,dt,stamp){
   }
   if(!controller.active)return;
   if(pressed(1)){controllerCancel();controllerRender();return;}
-  if(pressed(9)&&running&&!ended&&!controllerModal()){togglePause();controllerPanel(false);}
-  const menu=!!controllerModal()||controller.panel||!running||ended;
+  if(pressed(9)&&running&&!ended&&!controllerModal()){controllerPanel(false);togglePause();}
+  const menu=!!controllerModal()||controller.panel||paused||!running||ended;
   if(menu){
     const direction=buttons[13]?1:buttons[12]?-1:buttons[15]?1:buttons[14]?-1:0;
     if(direction&&(pressed(12)||pressed(13)||pressed(14)||pressed(15)||stamp>=controller.repeatAt)){

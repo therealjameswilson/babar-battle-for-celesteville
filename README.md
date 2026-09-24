@@ -534,3 +534,16 @@ position so Nintendo and Xbox printed labels cannot be confused:
 Touching/clicking or using the keyboard switches back immediately. The controller
 can regain control on its next input. Browser samples test the command integration;
 physical controller compatibility and feel still require hardware testing.
+
+## Command presentation (0.62.0)
+
+The illustrated mission briefing explains supply, combined forces and the fortress
+objective, with explicit difficulty descriptions. Landscape phones can expand
+Mission orders without pushing the deployment controls off screen. During play,
+large production menus offer All, Recruit, Build, Research, Orders and Queue
+categories. Selecting a different force or building returns to All.
+
+Pause opens a command card with a force/supply report, resume, council and sound
+settings. Returning from settings preserves the paused state. Victory and defeat
+have an after-action report and retry button that preserves difficulty. Presentation
+transitions honor both the system and the in-game reduced-motion setting.
