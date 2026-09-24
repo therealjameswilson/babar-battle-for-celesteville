@@ -44,3 +44,8 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   autosave, save-and-briefing and result retry with backup recovery. Engine and
   browser reload/storage coverage added. Publication and integrated playtests
   remain open; the broader objective is not complete.
+
+- First-play guidance candidate (0.64.0): optional live field adviser with six
+  observed milestones, normal selection/placement shortcuts, recovery advice and
+  checkpointed progress. Desktop and phone-size browser checks cover its core
+  flow. Full-match playtests, broader battlefield polish and performance remain.

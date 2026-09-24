@@ -14,7 +14,8 @@ function controllerVisible(el){
 }
 function controllerModal(){
   return [...document.querySelectorAll('dialog[open]')].at(-1)||
-    (controllerVisible($('opening'))?$('opening'):null);
+    (controllerVisible($('opening'))?$('opening'):null)||
+    (!paused&&controllerVisible($('guide-panel'))?$('guide-panel'):null);
 }
 function controllerControls(){
   const modal=controllerModal();
@@ -47,7 +48,7 @@ function controllerPanel(open,blur=true){
 function controllerCancel(){
   const modal=controllerModal();
   if(modal){
-    const close=modal.querySelector('#opening-skip,#help-close,#court-close,#groups-close');
+    const close=modal.querySelector('#opening-skip,#help-close,#court-close,#groups-close,#guide-close');
     if(close)close.click();else if(modal.tagName==='DIALOG')modal.close();
     controllerPanel(false);return;
   }

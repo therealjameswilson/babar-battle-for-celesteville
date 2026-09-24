@@ -359,6 +359,7 @@ function reset() {
   rebuildSupply();
   observeResources();
   selected = [units[0]];
+  if(typeof resetFieldGuide==='function')resetFieldGuide();
   $('pan').setAttribute('aria-pressed', 'false');
   $('pause').textContent = 'Pause';
   updateAttackAlert();

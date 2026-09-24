@@ -701,6 +701,7 @@ function loop(now) {
   }
   advanceSimulation(elapsed);
   if(typeof updatePresentation==='function')updatePresentation();
+  if(typeof updateFieldGuide==='function')updateFieldGuide();
   draw();
   requestAnimationFrame(loop);
 }

@@ -1,0 +1,53 @@
+(async()=>{
+ const out=document.querySelector('#result'),f=document.createElement('iframe');
+ const size=new URLSearchParams(location.search).get('size')||'desktop';
+ [f.width,f.height]=size==='phone'?[390,844]:size==='landscape'?[844,390]:[1280,800];
+ const ready=new Promise(r=>f.onload=r);f.src='../dist/?guide-qa=1';document.body.append(f);await ready;
+ const g=f.contentWindow,d=g.document,run=s=>g.eval(s);let count=0;
+ const check=(v,label)=>{if(!v)throw Error(label);count++;};
+ try{
+  d.querySelector('#opening-skip').click();d.querySelector('#start').click();run('nextWave=enemySpawn=9999;updateFieldGuide(true)');
+  check(!d.querySelector('#guide-toggle').hidden,'adviser available');
+  d.querySelector('#guide-toggle').click();check(!d.querySelector('#guide-panel').hidden,'open adviser');
+  check(d.querySelector('#guide-title').textContent==='Bring supplies home','starts with economy');
+  check(run('controllerControls().every(el=>el.closest("#guide-panel"))'),'controller navigation stays in adviser');
+  run('controllerCancel()');check(d.querySelector('#guide-panel').hidden&&!run('paused'),'controller Back closes without pausing');
+  d.querySelector('#guide-toggle').click();
+  const timeBefore=run('t');check(!run('paused'),'guidance never pauses');
+  d.querySelector('#guide-action').click();check(run('selected.length===1&&selected[0].type==="worker"'),'select worker');
+  check(run('selected[0].order.kind==="gather"'),'selection preserves existing order');
+  check(d.querySelector('#guide-panel').hidden,'show-me clears battlefield');
+  run('for(let i=0;i<600;i++)update(.05);updateFieldGuide(true)');
+  check(run('guideProgress.done.includes("supplies")'),'physical deliveries finish supply lesson');
+  d.querySelector('#guide-toggle').click();check(d.querySelector('#guide-title').textContent==='Recruit your first reinforcement','recruitment follows supply');
+  d.querySelector('#guide-action').click();check(run('selected[0].type==="forge"'),'open school');
+  const before=run('ore');run('train("trooper")');check(run('selected[0].queue.includes("trooper")'),'normal paid recruitment starts');
+  check(run('ore')<before,'no free tutorial recruitment');
+  run('for(let i=0;i<400;i++)update(.05);updateFieldGuide(true)');
+  check(run('guideProgress.done.includes("recruit")'),'finished reinforcement completes lesson');
+  d.querySelector('#guide-toggle').click();check(d.querySelector('#guide-title').textContent==='Start materials deliveries','materials lesson');
+  const order=run('JSON.stringify(alive(0).find(u=>u.type==="worker").order)'),funds=run('ore');
+  d.querySelector('#guide-action').click();check(run('placing==="quarry"'),'normal quarry placement armed');
+  check(run('ore')===funds,'opening placement does not spend');
+  check(run('JSON.stringify(alive(0).find(u=>u.type==="worker").order)')===order,'opening placement does not issue an order');
+  run('const qnode=nodes.find(n=>n.kind==="materials"&&n.x<800);command(qnode);');
+  run('for(let i=0;i<2200;i++)update(.05);updateFieldGuide(true)');
+  check(run('guideProgress.done.includes("materials")'),'built quarry mines and delivers materials');
+  run('const scoutGuide=add("scout",0,depot.x-50,depot.y);updateFieldGuide(true)');
+  check(run('guideProgress.done.includes("scout")'),'scout own sight completes reconnaissance');
+  run('depot.team=0;updateFieldGuide(true)');check(run('guideProgress.done.includes("depot")'),'capture observed');
+  run('add("walker",0,500,800);updateFieldGuide(true)');check(run('guideProgress.done.includes("artillery")'),'combined force observed');
+  check(d.querySelector('#guide-toggle').textContent.includes('complete'),'completion visible');
+  run('const guideSave=createCheckpoint("guide-qa");guideProgress.done=[];applyCheckpoint(readCheckpoint(guideSave));updateFieldGuide(true)');
+  check(run('guideProgress.done.length===6'),'checkpoint retains completed lessons');
+  run('paused=false;updatePresentation()');d.querySelector('#guide-toggle').click();
+  const rect=d.querySelector('#guide-panel').getBoundingClientRect();check(rect.left>=0&&rect.right<=Number(f.width)&&rect.top>=0&&rect.bottom<=Number(f.height),'panel fits');
+  d.querySelector('#guide-dismiss').click();check(d.querySelector('#guide-toggle').hidden,'dismiss removes guidance');
+  run('guideProgress.enabled=true;guideProgress.done=[];alive(0).filter(u=>u.type==="worker").forEach(u=>u.hp=0);updateFieldGuide(true)');
+  check(d.querySelector('#guide-title').textContent==='Replace your provisioners','lost workers show recovery');
+  check(run('t')>timeBefore,'battle continued during guide');
+  out.textContent=`PASS ${count} field-adviser browser checks (${size}). Actual deliveries, paid recruitment, quarry construction/mining, recovery, save state and layout.`;
+ }catch(e){out.textContent='FAIL '+e.stack;}
+ finally{run('running=false');}
+ const preview=document.createElement('button');preview.textContent='Preview field adviser';preview.onclick=()=>run('reset();running=true;guideOpen=true;updateFieldGuide(true)');document.body.prepend(preview);
+})();
