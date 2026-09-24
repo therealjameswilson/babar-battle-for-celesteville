@@ -597,3 +597,14 @@ Required corner waypoints are reached before advancing; the former 7m tolerance
 could turn into a building. `atomic.js` owns readiness data and reachable HQ
 position selection; its button issues standard Move/Hold orders without changing
 resources, visibility or launch rules. Browser fixture: nuclear-command-browser.html.
+
+## Command presentation
+
+`presentation.js` manages disposable command-category selection, pause-card display,
+briefing adaptation and result reports; `presentation.css` holds its responsive
+visuals. Engine orders/costs are unchanged. `updateUI` assigns action categories
+and refreshes the filters. `togglePause` refreshes the pause card immediately;
+rendering reconciles visibility when native dialogs open or close. Controller
+navigation treats the pause card as its current menu without replacing engine
+pause state. The briefing reuses the local illustrated share cover (provenance in
+`SHARE-PREVIEW.md`). Presentation state will not belong in saved simulation data.

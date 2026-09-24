@@ -1427,3 +1427,28 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Controller fixture passed 27 assertions at each of 1280×800, 390×844 and
   844×390. Visual inspection confirmed focus rings on production controls.
   Native pointer/keyboard handoff preserves the existing focused control.
+
+## Command presentation — 0.62.0
+
+- Real Chromium browser: 74 presentation assertions across 1280×800, 390×844
+  and 844×390. Verified local hero art, responsive briefing, visible landscape
+  deployment button, difficulty descriptions, command categories, recruitment,
+  category persistence/reset, pause-card bounds, settings pause preservation,
+  resume, victory/loss reports and real reload/retry with retained difficulty.
+- Those victory/loss assertions arrange fixture outcomes; they are UI verification,
+  not full gameplay victories. Earlier manual wins remain baseline evidence only.
+- Touch-production regression: all 54 assertions passed with the new interface.
+- Desktop and phone visual inspection caught landscape deployment scrolling and
+  a clipped pause card; mission details now collapse on short landscape screens,
+  and the pause card uses viewport bounds. Both remain scrollable when needed.
+- Syntax/assets and deterministic tactics checks passed. No balance changes.
+- The front-end/pause/HUD milestone is implemented; richer battlefield animation,
+  save/resume, first-play guidance, performance work and complete playtests remain.
+
+- Keyboard focus wraps inside briefing/results and the pause card; the pause
+  backdrop prevents accidental commands behind it. Manual reduced-motion disables
+  the new transitions. Range/select inputs keep native keyboard behavior.
+- Controller regression passed 29 assertions at each of desktop, phone portrait and
+  phone landscape sizes (87 total), including South/East resume from the pause card.
+- Direct browser keyboard interaction: Master volume advanced 75→76 with ArrowRight
+  and returned to 75 with ArrowLeft; the engine did not intercept the slider.

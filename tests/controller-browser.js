@@ -32,13 +32,15 @@ document.querySelector('iframe').onload=async()=>{
   const x=run('controller.cursor.x');run('qaPad.axes[0]=1;pollController([qaPad],.05,qaStamp+=200);qaPad.axes[0]=0');check(run('controller.cursor.x')>x,'left stick moves cursor');
   const zoom=run('cam.zoom');press(7);check(run('cam.zoom')>zoom,'trigger zoom');
   press(9);check(run('paused'),'Start pauses');press(9);check(run('!paused'),'Start resumes');
+  press(9);press(0);check(run('!paused'),'South resumes through pause card');
+  press(9);press(1);check(run('!paused'),'East resumes through pause card');
   run('controllerPanel(true)');
   if(run('controllerVisible($("help"))'))run('controller.focus=$("help")');
   else {run('controller.focus=document.querySelector("#phone-menu summary")');press(0);run('controller.focus=[...document.querySelectorAll("#phone-menu button")].find(b=>b.textContent==="Field manual")');}
   press(0);
   check(d.querySelector('#help-dialog').open,'controller opens manual');
   check(run("controllerControls().every(el=>el.closest('#help-dialog'))"),'focus trapped to modal');
-  press(1);await new Promise(r=>setTimeout(r,50));check(!d.querySelector('#help-dialog').open&&run('!paused'),'Back closes and resumes');
+  const closed=new Promise(r=>d.querySelector('#help-dialog').addEventListener('close',r,{once:true}));press(1);await closed;check(!d.querySelector('#help-dialog').open&&run('!paused'),'Back closes and resumes');
   run("document.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true}))");check(run('!controller.active'),'pointer switches input mode');
   press(4);check(run('controller.active'),'controller can regain input');
   run('$("zoom-in").focus();document.dispatchEvent(new KeyboardEvent("keydown",{key:"Tab",bubbles:true}))');
@@ -48,5 +50,5 @@ document.querySelector('iframe').onload=async()=>{
   check(d.documentElement.scrollWidth<=Number(document.querySelector('iframe').width),'layout fits');
   const demo=document.createElement('button');demo.textContent='Preview controller command panel';demo.onclick=()=>{run('qaPad.connected=true;paused=false;controller.previous=[]');press(5);};document.body.insertBefore(demo,out);
   out.textContent='PASS '+count+' controller browser assertions (standard samples; physical controller untested).';
- }catch(e){out.textContent='FAIL '+e.stack;}
+ }catch(e){out.textContent='FAIL '+e.stack+' '+run('JSON.stringify({paused,helpWasPaused,helpOpen:$("help-dialog").open,panel:controller.panel,focus:controller.focus?.id})');}
 };

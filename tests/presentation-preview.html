@@ -1,0 +1,4 @@
+<!doctype html><meta charset="utf-8"><title>Presentation review</title><style>body{margin:0;background:#101b18}iframe{border:0;display:block}</style><iframe title="Game preview"></iframe><script>
+const q=new URLSearchParams(location.search),f=document.querySelector('iframe');f.width=Number(q.get('w'))||1280;f.height=Number(q.get('h'))||800;
+f.onload=()=>{const d=f.contentDocument;d.querySelector('#opening-skip').click();if(q.get('stage')==='pause'){d.querySelector('#start').click();d.querySelector('#pause').click();}};f.src='../dist/';
+</script>
