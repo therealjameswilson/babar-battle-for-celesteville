@@ -1598,3 +1598,20 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   unavailable. Preview logs contain the previously observed tooling MutationObserver
   error; no client exception was observed in the fixture.
 - No new manual match, sustained frame-rate, controller or audio-listening claim.
+
+## Book commander poses — 0.67.0
+
+- Syntax/assets and full deterministic tactics suite pass. New tests cover all 32
+  native alpha crops, feet/muzzle anchors, actual hero rendering routes, reduced
+  flashes, wrong-unit rejection and book-profile fallback. Existing commander
+  cadence/facing/expiry tests remain in force through the shared pose selector.
+- Browser Canvas fixture: 66 checks at desktop, portrait and landscape dimensions
+  (198 total). Inspected all poses, reduced-motion miniatures and actual battlefield
+  captures; rendering preserves unit positions and health. Artifacts are in
+  `artifacts/book-commanders-0.67/`, not deployed content. These are browser Canvas
+  exports, not full-page screenshots or a new manual gameplay completion.
+- Attempted live Commander-mode play through ordinary controls. Difficulty changed
+  successfully; Start clicks then timed out both through the locator and native
+  browser input route. The briefing remained visible. No match was started or
+  victory claimed. Requested that the owner wake/unlock the Mac and reopen the
+  browser panel; interactive verification remains open pending a usable surface.
