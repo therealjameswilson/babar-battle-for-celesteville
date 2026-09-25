@@ -49,3 +49,42 @@ phases; comparisons must account for that. Next refine the probe to compare the
 same simulated interval, record long-frame causes, and validate physical input.
 Keep unrelated QA games closed during measurements. No production optimization
 has been claimed from this investigation.
+
+## Fixed-interval probe and nearest lookup — 0.65.1
+
+The probe now seeds reset and runs the same 25 simulated seconds, warming 0–5s
+and sampling exactly 400 steps from 5–25s. It records loaded art dimensions,
+unit-state fingerprint and inclusive phase timings. Default mode measures RAF;
+`?clock=manual` drives one update/draw from a parent timer every 50ms, reports
+**CPU costs only**, and deliberately has zero frame-spacing samples. `render=off`
+remains available. `compare` alternates original/candidate nearest lookups on the
+same visible-enemy lists, 40 warm-up plus 200 measured batches per implementation,
+ten repetitions per batch. DOM output includes the candidate's loaded source.
+
+Use an explicit new document and script revision URL after source changes.
+Iframe reload alone returned stale game scripts during this investigation.
+Early candidate comparisons affected by this cannot support optimization claims.
+A transient preview constraint prevented RAF progression and screenshot capture;
+timer-paced Canvas execution worked. No current FPS or new visual QA claim follows.
+
+The retained production change caches the best distance inside `nearest`, avoiding
+recalculation for every candidate. This preserves candidate order, ties and the
+existing visibility/targeting sequence. A 100-candidate call computes 100 distances
+instead of 198. All tactical tests and 300 seeded lookup comparisons pass.
+
+Final paired real-browser CPU measurement on 87 combat units:
+
+| Lookup batch | Mean | Median | p95 |
+| --- | --- | --- | --- |
+| Original | 0.0448 ms | 0.0400 ms | 0.0500 ms |
+| Cached best distance | 0.02645 ms | 0.0300 ms | 0.0400 ms |
+
+This is approximately 41% less **lookup** CPU time in this microbenchmark, not a
+41% faster game. An earlier independent paired sample was 0.04175 versus 0.02570ms.
+Total simulation time varied across runs, so no whole-frame speedup is established.
+The complete 25-second battle matches baseline positions/health exactly (106
+surviving entities). The source and compact evidence are recorded in
+`performance/nearest-0.65.1.json`; raw local runs are in
+`artifacts/performance-0.65/`. More invasive targeting/separation experiments were
+removed. Next: restore valid RAF measurements, profile sustained long frames and
+inspect input response on physical hardware.

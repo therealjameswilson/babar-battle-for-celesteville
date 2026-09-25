@@ -388,7 +388,13 @@ function visible(u) {
   return sees(0, u);
 }
 function nearest(u, list) {
-  return list.reduce((best, a) => (!best || dist(u, a) < dist(u, best) ? a : best), null);
+  if (!list.length) return null;
+  let best = list[0], bestDistance = dist(u, best);
+  for (let i = 1; i < list.length; i++) {
+    const distance = dist(u, list[i]);
+    if (distance < bestDistance) { best = list[i]; bestDistance = distance; }
+  }
+  return best;
 }
 function damageUnit(u, v, baseDamage, scale = 1) {
   if (v.hp <= 0) return;

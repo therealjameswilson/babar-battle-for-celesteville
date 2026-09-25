@@ -55,3 +55,14 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   whole-army munitions affordability as follow-up issues. Manual Commander play,
   broader battlefield polish, measured frame pacing and hardware verification
   remain open. The broader objective is not complete.
+
+- 0.64.1 resolved the three command issues from manual Story play; 98 browser
+  assertions cover feedback, mobile production selection and command layout.
+- 0.65.0 book-reference presentation is published: principal figures, buildings,
+  portraits, terrain, interface and cover now use ink/watercolor styling. 155
+  browser fixture checks passed. Secondary portraits and specialist vehicles
+  remain to be reconciled with the artwork (BOOK-AESTHETIC.md).
+- 0.65.1 candidate: fixed-interval battle profiling and measured nearest-lookup
+  CPU reduction with identical outcomes. This does not establish sustained frame
+  pacing. Manual Commander play, hardware audio/controller/iPhone verification,
+  and remaining art/animation polish are still open; the objective remains active.

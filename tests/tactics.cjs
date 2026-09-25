@@ -357,3 +357,5 @@ console.log('PASS: crowded school routing, faction headquarters positioning, rea
 run(require('node:fs').readFileSync(require('node:path').join(__dirname,'command-feedback-checks.js'),'utf8'));
 run('commandFeedbackChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: command feedback and munitions affordability.');
+
+require('./nearest.cjs');
