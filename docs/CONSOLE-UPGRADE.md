@@ -87,9 +87,15 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   102 browser fixture assertions cover three layouts; broader acceptance remains
   open, including manual Commander play, sustained frame pacing and hardware QA.
 
-- 0.70.0 candidate: the quarry, field headquarters, shelter, launcher, missile
+- 0.70.0 published: the quarry, field headquarters, shelter, launcher, missile
   defense and trench now share the book style, including fog-memory silhouettes.
   Damage/construction overlays and faction identifiers remain readable. 189
   authored browser assertions cover three layouts. A fresh manual Commander Start
   attempt still timed out and screenshot capture failed; the broader goal remains
   active, with input/frame pacing, hardware audio/controller and secondary art open.
+
+- 0.71.0 candidate: complete directional Old Lady and Arthur/motorbike sprites
+  replace the mirrored profile and portrait collage. The flame plume originates
+  at measured nozzles and converges on the struck target; damage rules are retained.
+  Secondary roster portraits, gun-crew animation and the integrated manual/hardware
+  acceptance gates remain open.

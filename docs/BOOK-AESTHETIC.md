@@ -197,3 +197,40 @@ Building damage, construction opacity, selection footprints, defense range and
 six trench slots retain their existing rules/overlays. Loading falls back to the
 previous procedural drawings. Unknown types now explicitly return false from the
 base book-building renderer instead of accidentally selecting an unrelated frame.
+
+## The Old Lady and Arthur — 0.71.0
+
+Built-in image generation produced these final local assets:
+
+- `dist/assets/book/old-lady-motion.png`: 1254×1254 RGBA, 16 measured crops. Source
+  `exec-aab1a347-9682-4a2e-bf2a-daf0fb6c7984.png`, corrected north-fire version
+  `exec-751106e3-ce44-4745-84d4-a715b846ec23.png` (the latter is deployed).
+- `dist/assets/book/arthur-bike.png`: 1536×1024 RGBA, eight irregular measured crops.
+  Source `exec-c410139e-8d8a-4cfa-8e8a-0059ffa27cea.png`.
+
+Old Lady prompt: use the top-right human in the existing book council atlas as
+identity/style reference. Four columns E/right, S/front, W/left, N/back; four rows
+idle, left-foot stride, right-foot stride, braced firing. Preserve white curls,
+red dress, black shoes; compact olive pack, hose and fictional nozzle held at waist
+height. Fine ink/flat watercolor, consistent full-body scale, transparent gutters,
+no fire, shadow, caption or background. Correction prompt: preserve the other 15
+figures; make only the bottom-right figure rear-facing, braced and firing due north,
+nozzle pointing twelve o'clock close to her head, not diagonally right. Final
+native crops were remeasured and alpha-checked after correction.
+
+Arthur prompt: identity from bottom-right Arthur in the existing leaders atlas;
+book unit atlas for ink/watercolor style. Complete grey elephant riding a vintage
+teal motorbike, two black wheels, brass lamp, brown saddle and luggage; white/blue
+sailor shirt and cap, red shorts, messenger bag. Four columns E, S, W, N and two rows
+parked / slight forward riding lean with changed wheel spokes. Front/rear views
+have narrow aligned wheels; profile shows both. 1536×1024 transparent RGBA, full
+wheels/cap and generous gutters; no weapon, nuclear marking, blur, background,
+shadow or text. No detached portrait collage.
+
+`book-specialist-heroes.js` owns pose and feet/nozzle anchors. The Old Lady holds
+her actual shot bearing for the 0.4-second flame lifetime. Arthur uses parked and
+riding silhouettes. Reduced motion freezes movement pose. Original loading
+fallbacks remain; the book-profile fallback for the Old Lady now faces her weapon.
+Canvas draws original ink-edged flame layers, fading without moving the camera.
+Effect target coordinates are presentation metadata; combat damage/range/costs
+are unchanged. Generated originals remain in the session generated-images folder.

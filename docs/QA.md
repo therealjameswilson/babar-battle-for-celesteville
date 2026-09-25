@@ -1666,3 +1666,22 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   Manual Commander, sustained frame pacing and physical hardware review remain open.
 - Prior 0.69.0 deployment succeeded in run 36084979841. Live index, depot renderer
   and depot asset matched merged commit a4d89b0827d2b1345ff1afcc8ca72575a1240a80.
+
+## Specialist heroes — 0.71.0
+
+- Syntax/assets and deterministic tactics pass. Alpha checks cover 24 native
+  crops and feet anchors. Pose checks cover four directions, both walking strides,
+  stopped state, actual shot bearing/expiry, future-shot rejection, reduced motion
+  and missing-sheet fallback.
+- Authored real-browser fixture: 92 assertions per desktop/portrait/landscape
+  layout (276 total). Four real `shoot` calls inflict damage and produce matching
+  directional firing poses and effect destinations. Actual battlefield rendering
+  routes through both atlases without changing unit state.
+- Inspected all poses and three battlefield Canvas exports in
+  `artifacts/special-heroes-0.71/`. Visual review corrected the north-facing nozzle,
+  replaced circular flame rings with a compact plume and aligned its endpoint with
+  the struck unit. These tests are not a manual match or physical-device review.
+- 0.70.0 publication succeeded in run 36085754387. Live index, specialist renderer
+  and building atlas match merged commit 52fcec8703add14a0cb2e80f7950d56a72d6595e.
+- Existing manual-input, sustained frame-pacing and hardware verification gaps
+  remain open; this release does not establish the full console-quality objective.

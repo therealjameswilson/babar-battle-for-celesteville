@@ -570,3 +570,8 @@ assigned/hauling counts remain in the selection report.
 book-style atlas, with shared live/fog-memory silhouettes and faction pennants.
 Crop bounds are measured independently. Procedural drawings remain the loading
 fallback; damage, construction, cover and defense-range mechanics are unchanged.
+
+`dist/book-specialist-heroes.js` provides the Old Lady's directional walking/firing
+poses and Arthur's complete motorbike views. Flame effects use measured nozzle
+anchors and the struck target's position; their visual alignment does not alter
+combat rules. Reduced motion retains aim while freezing movement poses.
