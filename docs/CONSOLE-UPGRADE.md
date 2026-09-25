@@ -62,7 +62,12 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   portraits, terrain, interface and cover now use ink/watercolor styling. 155
   browser fixture checks passed. Secondary portraits and specialist vehicles
   remain to be reconciled with the artwork (BOOK-AESTHETIC.md).
-- 0.65.1 candidate: fixed-interval battle profiling and measured nearest-lookup
+- 0.65.1 published: fixed-interval battle profiling and measured nearest-lookup
   CPU reduction with identical outcomes. This does not establish sustained frame
   pacing. Manual Commander play, hardware audio/controller/iPhone verification,
   and remaining art/animation polish are still open; the objective remains active.
+
+- 0.66.0 candidate: book-style infantry now has four directional views and two
+  distance-driven strides, shot-facing recoil, a stable reduced-motion pose and
+  image-loading fallbacks. The remaining commanders/workers still use the book
+  profile treatment; secondary portraits and specialist art are not yet complete.

@@ -15,3 +15,5 @@ require('./commander-animation.cjs');
 require('./mushroom-clouds.cjs');
 
 require('./book-art.cjs');
+
+require('./book-motion.cjs');

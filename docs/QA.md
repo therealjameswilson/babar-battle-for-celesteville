@@ -1582,3 +1582,19 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   new screenshots or physical iPhone/controller play is claimed. RAF callbacks
   and screenshot capture were unavailable in this preview session; parent timers
   could drive authored test code. See PERFORMANCE.md for methods and limits.
+
+## Directional book infantry — 0.66.0
+
+- Syntax/assets and motion checks cover four directions, two distance-driven
+  strides, idle, shot direction/expiry, reduced motion and image-loading fallback.
+  All 16 measured alpha crops stay within native bounds with unclipped outlines.
+- Real-browser fixture: 62 checks each at 1280×800, 390×844 and 844×390 (186 total).
+  It executes the actual Canvas renderer, confirms the new infantry path is used,
+  and verifies that drawing does not change unit positions or health.
+- Inspected browser-rendered pose sheets at native game scale and enlarged scale,
+  plus battlefield Canvas captures for all three sizes. Review artifacts are local
+  in `artifacts/book-motion-0.66/`; they are Canvas exports, not full-page UI
+  screenshots or physical-device tests. Native preview screenshot capture remained
+  unavailable. Preview logs contain the previously observed tooling MutationObserver
+  error; no client exception was observed in the fixture.
+- No new manual match, sustained frame-rate, controller or audio-listening claim.
