@@ -81,8 +81,15 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   physical pickup/delivery transition. Worker art is now coherent with infantry
   and leaders; support portraits, specialist vehicles and integrated play remain.
 
-- 0.69.0 candidate: an illustrated open supply yard, accurate capture ring and
+- 0.69.0 published: an illustrated open supply yard, accurate capture ring and
   separate ownership/income card replace the overlapping depot placeholder.
   Resource work labels gain contrast and uranium names its correct prerequisite.
   102 browser fixture assertions cover three layouts; broader acceptance remains
   open, including manual Commander play, sustained frame pacing and hardware QA.
+
+- 0.70.0 candidate: the quarry, field headquarters, shelter, launcher, missile
+  defense and trench now share the book style, including fog-memory silhouettes.
+  Damage/construction overlays and faction identifiers remain readable. 189
+  authored browser assertions cover three layouts. A fresh manual Commander Start
+  attempt still timed out and screenshot capture failed; the broader goal remains
+  active, with input/frame pacing, hardware audio/controller and secondary art open.

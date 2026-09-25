@@ -565,3 +565,8 @@ at +2/s when enemy troops interrupt the player's +0.5/s Munitions income.
 `dist/depot-art.js` owns this presentation; capture and income rules remain in the
 simulation modules. Worker overlays show occupied extraction slots; detailed
 assigned/hauling counts remain in the selection report.
+
+`dist/book-specialists.js` renders the six specialist structures from a local
+book-style atlas, with shared live/fog-memory silhouettes and faction pennants.
+Crop bounds are measured independently. Procedural drawings remain the loading
+fallback; damage, construction, cover and defense-range mechanics are unchanged.
