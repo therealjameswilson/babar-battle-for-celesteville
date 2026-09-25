@@ -1,0 +1,40 @@
+{
+  "version": "fixed-interval-v3",
+  "nearestSource": "function nearest(u, list) {\n  if (!list.length) return null;\n  let best = list[0], bestDistance = dist(u, best);\n  for (let i = 1; i < list.length; i++) {\n    const distance = dist(u, list[i]);\n    if (distance < bestDistance) { best = list[i]; bestDistance = distance; }\n  }\n  return best;\n}",
+  "visibility": "visible",
+  "viewport": [
+    964,
+    617
+  ],
+  "artReady": [
+    1536,
+    1536,
+    1181
+  ],
+  "simulatedInterval": [
+    5,
+    25
+  ],
+  "simulationSteps": 400,
+  "survivingUnits": 106,
+  "clock": "timer-paced-cpu-only",
+  "renderEnabled": true,
+  "fingerprintMatchesBaseline": true,
+  "fingerprintSHA256": "6f2d74f3cf16336ce905b1607c9fbf48eff613ce76ae8f302147e642686d517d",
+  "pairedNearest": {
+    "units": 87,
+    "equivalent": true,
+    "original": {
+      "samples": 200,
+      "meanMs": 0.0447999999970197,
+      "medianMs": 0.04000000059604645,
+      "p95Ms": 0.05
+    },
+    "candidate": {
+      "samples": 200,
+      "meanMs": 0.026450000002980284,
+      "medianMs": 0.029999998211860657,
+      "p95Ms": 0.04000000059604645
+    }
+  }
+}

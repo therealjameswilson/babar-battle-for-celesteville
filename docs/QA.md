@@ -1569,3 +1569,16 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Existing touch-production regression also passes all 54 browser assertions.
   Total for this pass: 155 real-browser fixture assertions. Local screenshots in
   `artifacts/book-0.65/` are review evidence, not deployed game assets.
+
+## Nearest lookup / performance probe — 0.65.1
+
+- Syntax/asset checks and full tactical suite pass. Added 300 seeded target-identity
+  comparisons, empty/single/equidistant cases, and distance-evaluation counts.
+- Real-browser timer-paced Canvas battle covers 25 simulated seconds, 400 sampled
+  steps, and loaded book art. Final positions/health exactly match the 0.65.0
+  baseline. Paired lookup test chooses identical targets for 87 combat units;
+  mean batch CPU cost changes from 0.0448 to 0.02645ms.
+- This is a narrow CPU optimization. No sustained frame-rate gain, manual victory,
+  new screenshots or physical iPhone/controller play is claimed. RAF callbacks
+  and screenshot capture were unavailable in this preview session; parent timers
+  could drive authored test code. See PERFORMANCE.md for methods and limits.
