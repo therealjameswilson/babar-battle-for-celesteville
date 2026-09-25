@@ -246,6 +246,7 @@ function drawUnit(u) {
       width = height * 0.61;
     const bob = !reducedMotion && u.movingUntil > t ? Math.sin(t * 9 + u.id) * 1.1 : 0;
     ctx.save();
+    const illustratedGun=u.type==='walker'&&bookGunReady(u.team);
     const directional=drawBookUnit(ctx,u,t,reducedMotion) || drawCommanderSprite(ctx,u,t,reducedMotion) || drawDirectionalInfantry(u,bob);
     if (!directional) {
       if (Math.cos(u.angle) < 0) ctx.scale(-1, 1);
@@ -262,7 +263,7 @@ function drawUnit(u) {
       ctx.beginPath();ctx.moveTo(-15,-20);ctx.lineTo(-7,-10);ctx.moveTo(-7,-20);ctx.lineTo(-15,-10);ctx.stroke();
     }
     ctx.restore();
-    // Direction indicator and physical field gun rotate with the firing bearing.
+    // Precise bearing indicator and fallback cannon rotate independently of the four-view art.
     ctx.save();
     ctx.rotate(u.angle);
     ctx.strokeStyle = color;
@@ -271,7 +272,7 @@ function drawUnit(u) {
     ctx.moveTo(u.r + 3, 0);
     ctx.lineTo(u.r + 10, 0);
     ctx.stroke();
-    if (u.type === 'walker') {
+    if (u.type === 'walker' && !illustratedGun) {
       if (artilleryLocked(u)) {
         ctx.strokeStyle = '#b7a783'; ctx.lineWidth = 5;
         for (const sign of [-1, 1]) { ctx.beginPath(); ctx.moveTo(-6, sign * 7); ctx.lineTo(-25, sign * 26); ctx.stroke(); }
@@ -290,7 +291,7 @@ function drawUnit(u) {
       ctx.fillStyle='#b3b8af';ctx.fillRect(16,-4,17,3);ctx.fillRect(16,1,17,3);
       ctx.fillStyle='#151b18';ctx.fillRect(31,-4,3,8);
     }
-    if (u.type !== 'hero' && t - (u.firedAt ?? -10) < 0.12) {
+    if (u.type !== 'hero' && !illustratedGun && t - (u.firedAt ?? -10) >= 0 && t - (u.firedAt ?? -10) < 0.12) {
       ctx.fillStyle = '#e4c47e';
       ctx.beginPath();
       ctx.arc(u.type === 'walker' ? 40 : 24, 0, u.type === 'walker' ? 7 : 4, 0, Math.PI * 2);
@@ -307,7 +308,7 @@ function drawUnit(u) {
       ctx.font = 'bold 10px sans-serif'; ctx.textAlign = 'center';
       ctx.fillStyle = '#eee3bd'; ctx.strokeStyle = '#202b25'; ctx.lineWidth = 3;
       const label = u.artilleryTransition ? (u.artilleryTransition.deploy ? 'DEPLOY ' : 'PACK ') + Math.ceil(u.artilleryTransition.until - t) + 's' : 'SIEGE';
-      ctx.strokeText(label, 0, -72); ctx.fillText(label, 0, -72); ctx.textAlign = 'left';
+      ctx.strokeText(label, 0, -60); ctx.fillText(label, 0, -60); ctx.textAlign = 'left';
     }
     if (u.type === 'scout') {
       ctx.strokeStyle = '#dfd6ad';
@@ -601,6 +602,8 @@ function draw() {
       ctx.beginPath();
       ctx.arc(f.x, f.y, (1 - f.life / f.max) * 40 + 5, 0, Math.PI * 2);
       ctx.stroke();
+    } else if(drawBookGunShot(ctx,f,reducedMotion)) {
+      // Shell presentation begins at the illustrated barrel; hit rules stay in shoot().
     } else {
       const p = 1 - f.life / f.max;
       ctx.fillStyle = f.team ? '#d78768' : '#f7e694';
