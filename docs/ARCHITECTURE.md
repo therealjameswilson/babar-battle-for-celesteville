@@ -1,4 +1,4 @@
-# Architecture and balance — current through 0.35.0
+# Architecture and balance — current overview (0.73.0)
 
 Classic scripts share one simulation state, preserving the prototype’s dependency-free deployment. Script order in index.html is authoritative: cast and game declarations first, fixed-clock and command/economy/combat modules next, navigation and tactics before enemy controllers, then audio, court and renderer/startup. No ES-module server requirement.
 
@@ -10,6 +10,28 @@ Classic scripts share one simulation state, preserving the prototype’s depende
 | court.js / cast.js | Roster and support mechanics; relationship metadata |
 | render.js | Terrain, atlas crops, directional facing, guns, smoke, damage, fog, minimap |
 | audio.js | Original synthesized rifle/cannon/percussion effects, gesture startup and mute |
+
+The overview below describes the current client. Dated sections later in this
+file record implementation history; newer feature documents supersede their
+original limitations. `defs` and each subsystem's constants remain authoritative
+for base balance; research, council powers and difficulty apply modifiers.
+
+| Current subsystem | Modules and boundary |
+| --- | --- |
+| Fixed simulation and navigation | `simulation-clock.js`, `navigation.js`; 20 Hz gameplay with interpolated drawing |
+| Economy and army | `economy.js`, `construction.js`, `production.js`, `munitions.js`, `artillery.js`, `combat-roles.js`; shared paid rules |
+| Enemy intelligence | `enemy-recon.js`, `enemy-operations.js`, `enemy-economy.js`; current sight and remembered reports |
+| Advanced weapons and safety | `atomic.js`, `hero-combat.js`, `mushroom-clouds.js`; game-only abstract payloads, authority, defense and visual feedback |
+| Input | `selection.js`, `mobile.js`, `minimap-input.js`, `camera-views.js`, `controller.js`; normal commands reused by mouse/touch/gamepad |
+| Front end and continuity | `presentation.js`, `field-guide.js`, `checkpoint-state.js`, `checkpoint-ui.js`; local paused resume and disposable UI state |
+| Book presentation | `book-art.js`, `book-commanders.js`, `book-workers.js`, `book-specialist-heroes.js`, `book-specialists.js`, `book-guns.js`, `book-roster.js`, `depot-art.js`, `battlefield-art.js`; measured local art crops, no simulation writes |
+| Audio | `audio.js`; gesture-created Web Audio, layered procedural score, spatial effects, persistent master/music/effects/interface levels |
+
+`dist/` is authored deployable source. There is no npm dependency installation or
+build step. `npm run check` and `npm test` are syntax/asset and deterministic-rule
+checks; browser fixtures live under `tests/` and require serving the repository
+root. `npm start` serves only `dist/` for ordinary play. GitHub's Pages workflow
+runs the extended tactical suites and publishes only `dist/`.
 
 ## Rules
 
@@ -25,6 +47,8 @@ Visibility is sampled once each simulation step, symmetric for both armies. Hidd
 | Artillery | 160 S + 25 M | 240 | 43 | 270 mobile; 90–390 deployed | 48 / 2.8s mobile; 72 / 3.6s deployed | Armored siege; friendly splash when deployed |
 | Sapper | 90 S + 20 M | 105 | 83 | 170 | 10 (+20 vs armored) / 1.2s | Anti-armor; requires Artillery Works |
 | Commander | 100 to recover | 640 | 72 | 100 | 24 / 0.85s | Officer aura and rally |
+| The Old Lady | 200 S + 60 M | 220 | 72 | 100 | 26 / 1.2s, 14 cone splash | Unique adult flamethrower unit |
+| Arthur's Motorbike | 180 S + 60 M | 180 | 155 | — | — | Fast unique unit; neutron ability after nuclear acquisition |
 
 Palace/Guard School/Artillery Works/home/tower cost 400/150/240/100/160 Supplies; Artillery Works also costs 50 Materials. Headquarters cost 400 Supplies; quarries cost 100. Starting structures are free. Tower range 190; artillery can engage beyond it. Population: palace 20, home 10, maximum 100. Training queue maximum 5. See `defs` for construction and training times.
 
@@ -41,13 +65,30 @@ Morale: 100 maximum, ordinary hits remove 12, artillery removes 26. Below 25, au
 
 ## Rendering and performance
 
-Faction base rings, health/morale bars, four-way infantry art, mirrored commander/worker art and rotating field guns provide direction and identification. Moving units produce restrained dust; firing has muzzle flashes and projectile feedback. Damaged buildings show cracks, a dark breach below 35% HP, and smoke. Reduced motion removes idle/walk bobbing and drifting dust/smoke animation; there is no camera shake.
+Faction rings, health/morale bars and four-view book-style infantry, commanders,
+workers, specialist heroes and gun crews provide direction and identification.
+Distance-driven strides, cargo and deployed gun trails communicate actual state.
+Firing effects use measured muzzle anchors where available. Damaged buildings
+retain cracks, breaches and smoke. Reduced motion suppresses gait/recoil and
+drifting effects; the new commander/gun flashes are also disabled. There is no
+camera shake. `BOOK-AESTHETIC.md` records the
+current assets, per-sheet pose limits and provenance.
 
-Visibility sets and static collision candidates are cached once per simulation step. The current 69-object browser fixture measured draw mean/p95 1.02/1.60ms and simulation work per display frame 0.78/2.80ms over 120 frames; see QA.md for measurement scope. The renderer caps device pixel ratio at 2.
+Visibility sets and static collision candidates are cached once per simulation
+step. `crispSprite` caches scaled crops under a roughly 3-million-pixel (~12 MiB)
+budget. Battlefield DPR is bounded by both 3× and a roughly 3-million-pixel surface
+budget. Offscreen units are culled before sprite work. Older timing samples do not
+prove the current build's sustained frame pacing; see `PERFORMANCE.md` and the
+current acceptance audit in `CONSOLE-UPGRADE.md`.
 
 ## Expansion boundary
 
-No campaign, accounts, multiplayer, paid APIs, save system, or backend. Characters other than Babar and Rataxes retain council/civilian/history roles. Full eight-direction animation and additional named officer sprites are future work.
+One static single-player skirmish; no campaign, accounts, multiplayer, paid APIs
+or backend. Versioned local checkpoints support resume without offline progress
+or cloud storage (`CHECKPOINTS.md`). Babar, Rataxes, the Old Lady and Arthur's bike
+have battlefield roles; the full 33-entry council/archive retains its other
+civilian, support and historical functions. Children remain civilian support.
+Four-view art is implemented; full eight-direction animation is not claimed.
 
 Control groups and rally points: Ctrl/Command + digit stores friendly living unit IDs;
 adding Shift appends. A digit recalls surviving members. Reset clears the groups.

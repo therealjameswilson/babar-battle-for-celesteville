@@ -106,9 +106,44 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   manual Commander victory, sustained frame pacing and physical device/audio/
   controller acceptance remain open; the full objective is not complete.
 
-- 0.73.0 candidate: integrated directional gun-and-crew art replaces the old
+- 0.73.0 published: integrated directional gun-and-crew art replaces the old
   officer/geometric cannon combination, with paired strides, deployed trails and
   muzzle-anchored flash/recoil/shell effects. Both factions retain existing combat
   and transition rules. The main unit/structure/roster art reconciliation is now
   implemented. Integrated manual Commander, sustained frame pacing, listening and
   physical iPhone/controller acceptance still require evidence; goal remains open.
+
+## Integrated acceptance audit — 2026-09-24, 0.73.0
+
+Scope is still the entire quality/interaction objective above. Source inspected:
+merged `a4651dbf25db0529e4c4bb065a8b5f2fae95437b`. The preceding goal turn made
+implementation progress (gun art, actual-shot fixtures and merged PR #20).
+
+| Requirement | Evidence inspected | Current assessment / next proof |
+| --- | --- | --- |
+| Cohesive presentation | Current `book-*` helpers/assets, `presentation.*`, complete roster resolver, 0.65–0.73 rendered Canvas boards and browser layouts | Main art reconciliation implemented. Latest full-page/in-motion review remains unavailable; static boards alone do not prove integrated feel. |
+| Mouse/touch/controller interaction | `selection.js`, `mobile.js`, `controller.js`; 0.61 synthetic standard-pad checks, 0.64.1/0.59.5 production regressions; current Start retry | Existing command coverage; current ordinary input blocked before match start. Physical controller and iPhone remain unverified. |
+| Sound | `audio.js` four buses/limiter, adaptive original procedural score, spatial effects, gesture/mute/pause lifecycle; real Web Audio fixture | Graph/offline evidence only. Audible battle mix, device-clock voice expiry and physical listening still need review. |
+| Complete play | Manual 0.64 Story victory at 06:19; current tactical/strategy CI; actual-shot artillery fixture | Current Commander ordinary-input victory missing. Scripted matches and injected fixture shots are not substitutes. |
+| Continuity | `checkpoint-state.js`/`checkpoint-ui.js`, `CHECKPOINTS.md`, browser reload/paused Continue checks | Implemented, with existing roundtrip/backup evidence. Must include save/resume in the final integrated match. |
+| Performance | `simulation-clock.js`, culling/cache code, nearest paired CPU results, current RAF probe | Narrow CPU evidence only. Current probe stayed at t=0 with no loop/update/draw calls despite running/visible state; no new FPS or input-latency claim. |
+| Release | PR #20 merged; main run 36090026150 completed successfully; live index, game/render/book-art/book-guns scripts and both gun atlases byte-match a4651db | Verified publication of 0.73.0. This does not close interactive or hardware gates. |
+
+Environment revalidation: closed 14 obsolete version previews after their DOM
+showed untouched 00:00 briefing screens. Preserved tabs containing started or
+completed matches. A fresh 0.73 Commander selector changed normally; semantic Start
+click timed out, briefing stayed visible and clock remained 00:00. Screenshot
+capture failed. The existing fixed-interval RAF probe loaded the 0.73 scripts but
+two observations remained t=0, running=true, paused=false, visibility=visible,
+calls={}. A separate foreground-visible attempt using native Start input also
+returned an Input.dispatchMouseEvent timeout; no match began. Temporary audit
+pages were closed and browser visibility restored. This rules out the tested
+idle-tab cleanup and foreground setting as sufficient recovery, without claiming
+the root cause is known.
+
+The Mac/browser session must become usable for ordinary input and RAF timing before
+those gates can be completed. The pending request to wake/unlock the Mac and reopen
+Codex's browser remains relevant. Physical iPhone/controller access and listening
+review are separate evidence gaps. No completed work is discarded; the objective
+is not complete. No new gameplay rule or speculative performance change was made
+in response to the tooling failures.

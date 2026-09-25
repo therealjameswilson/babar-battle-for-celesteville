@@ -1723,3 +1723,18 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390Ã—844, 844Ã
 - 0.72.0 passed GitHub checks and deployed in run 36088661363. Live index, gallery
   HTML/JS/CSS, art resolver/manifest and all four new sheets matched merged commit
   27522b76aaa2a7e5e92ef9dcde76533f2843558d.
+
+## 0.73.0 publication and integrated retry
+
+- Main workflow 36090026150 completed all release checks and Pages deployment.
+  Live index, game/render/book-art/book-guns scripts and both gun atlases byte-match
+  a4651dbf25db0529e4c4bb065a8b5f2fae95437b.
+- Closed 14 obsolete untouched briefing previews; preserved started matches. Fresh
+  ordinary Commander Start still timed out with briefing visible and clock 00:00.
+  Screenshot capture failed. Foreground native Start also timed out. The fixed-
+  interval probe loaded 0.73 scripts but remained t=0 with no loop/draw/update calls
+  in two observations, despite running/visible status. No new frame-rate sample,
+  manual match, audible listening or physical-device acceptance is established.
+- Full remaining requirements and evidence are recorded in CONSOLE-UPGRADE.md.
+  Architecture overview corrected for actual local saves, current renderer/modules
+  and adult specialist units. No simulation change was made during this audit.
