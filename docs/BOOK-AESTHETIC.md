@@ -234,3 +234,11 @@ fallbacks remain; the book-profile fallback for the Old Lady now faces her weapo
 Canvas draws original ink-edged flame layers, fading without moving the camera.
 Effect target coordinates are presentation metadata; combat damage/range/costs
 are unchanged. Generated originals remain in the session generated-images folder.
+
+## Complete council and archive roster — 0.72.0
+
+Four new alpha sheets reconcile the remaining 25 entries with the book treatment;
+all 33 portraits/full figures and source downloads now share one art resolver.
+The archive interface uses cream paper/green ink. Measured crop manifests, source
+IDs, prompt set and interpretation limits are in CHARACTER-ART.md. This closes
+the secondary roster-art gap; directional gun-crew animation remains unfinished.

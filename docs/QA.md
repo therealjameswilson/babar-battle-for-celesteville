@@ -1685,3 +1685,22 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   and building atlas match merged commit 52fcec8703add14a0cb2e80f7950d56a72d6595e.
 - Existing manual-input, sustained frame-pacing and hardware verification gaps
   remain open; this release does not establish the full console-quality objective.
+
+## Complete book roster — 0.72.0
+
+- Syntax/assets and deterministic tactics suites pass. New alpha checks cover all
+  25 full figures, portrait bounds and complete 33-entry book-art coverage.
+- Authored real-browser fixture passes 269 checks at each of 1280×800, 390×844
+  and 844×390 (807 total): all 33 actual gallery SVG portraits and figures, matching
+  source download links, six image decodes, search/empty/clear states, all council
+  tabs and no horizontal overflow. These are fixture-driven checks, not manual
+  touch or controller input.
+- Inspected real-browser Canvas exports of all 33 portraits and full figures in
+  `artifacts/roster-0.72/`. Corrected the first history atlas for overlapping crop
+  rectangles. Full-page screenshot capture still returned “Unable to capture
+  screenshot”. Existing browser-tooling MutationObserver errors remain; no game
+  exception was observed in the fixture. Manual Commander, frame pacing, physical
+  iPhone/controller and audible listening gates remain open.
+- Prior 0.71.0 release passed all GitHub checks and deployed in run 36086851627.
+  Live index, hero helper/combat/renderer and both specialist hero atlases matched
+  merged commit bcf0a02b8d53edd79076519f00a0ebaabfac9a1f.

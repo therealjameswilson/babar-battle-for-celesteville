@@ -22,7 +22,7 @@ for (const member of COURT) {
   origin.className = 'origin';
   origin.textContent = member.book || 'Television / film crossover';
   const download = document.createElement('a');
-  download.href = CHARACTER_ART[member.id].sheet;
+  download.href = characterArtFor(member.id).sheet;
   download.download = '';
   download.textContent = 'Download source sprite sheet';
   card.append(heading, sprite, relation, origin, download);

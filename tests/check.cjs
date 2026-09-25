@@ -25,3 +25,5 @@ require('./book-workers.cjs');
 require('./book-specialists.cjs');
 
 require('./book-specialist-heroes.cjs');
+
+require("./book-roster.cjs");

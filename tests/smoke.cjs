@@ -102,6 +102,7 @@ for (const file of [
   'audio.js',
   'character-art.js',
   'book-art.js',
+  'book-roster.js',
   'court.js',
   'commander-animation.js',
   'book-commanders.js',
