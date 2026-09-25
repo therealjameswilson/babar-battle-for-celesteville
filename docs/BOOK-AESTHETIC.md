@@ -125,3 +125,26 @@ The generated sprites are copied unresampled. Alpha-edge tests cover every crop;
 visual Canvas inspection covers stances, muzzle placement and selection-ring
 alignment. This is a two-stride animation with separate idle/fire poses, not a
 full many-frame gait. Worker/support/vehicle art extension remains open.
+
+## Provisioner cargo and direction — 0.68.0
+
+Built-in image generation produced `dist/assets/book/elephant-worker.png` and
+`dist/assets/book/rhino-worker.png`, both native 1254×1254 RGBA. Each contains 16
+figures: four facings, two empty-handed strides and two loaded strides. Measured
+irregular crops and foot anchors are recorded in `book-workers.js`. Files were
+copied unresampled, preserving generated alpha.
+
+Prompt set: use existing `units.png` provisioners as identity/style references;
+four columns east/south/west/north, paired rows empty-handed walking followed by
+paired rows carrying a compact wood crate in both hands. Alternate forward foot,
+consistent full-body scale, generous alpha gutters, no shadows/background/text.
+Elephants: grey skin, cream short-sleeved shirt, blue trousers, black shoes, no hat.
+Rhinos: pink-grey skin, white horn, cream short-sleeved shirt, charcoal trousers,
+black shoes and pointed black cap, no epaulettes. Fine ink and flat watercolor;
+back-facing cargo is occluded naturally by the body, never painted onto the back.
+
+`bookWorkerPose` uses actual `carrying > 0`, facing and traveled distance. There
+is no crate on an empty worker. Loaded workers retain a colored S/M/U badge above
+the head, including from behind. Delivery removes both crate and badge. Reduced
+motion freezes stride while preserving cargo; existing profile art remains the
+image-loading fallback. Rules and extraction/delivery values are unchanged.

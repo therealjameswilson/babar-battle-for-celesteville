@@ -71,7 +71,12 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   distance-driven strides, shot-facing recoil, a stable reduced-motion pose and
   image-loading fallbacks. The remaining commanders/workers still use the book
   profile treatment; secondary portraits and specialist art are not yet complete.
-- 0.67.0 candidate: both leaders now have matching book-style idle, paired stride
+- 0.67.0 published: both leaders now have matching book-style idle, paired stride
   and firing poses in four directions, with measured feet/muzzle anchors and the
   existing reduced-motion/cadence behavior. Manual Commander verification was
   retried but browser clicks timed out before Start; interactive play remains open.
+
+- 0.68.0 candidate: directional book provisioners distinguish empty-handed travel
+  from actual carried cargo, with readable S/M/U badges. Browser checks include a
+  physical pickup/delivery transition. Worker art is now coherent with infantry
+  and leaders; support portraits, specialist vehicles and integrated play remain.
