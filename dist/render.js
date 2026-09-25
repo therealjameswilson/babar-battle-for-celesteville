@@ -104,9 +104,10 @@ function atlas(image, col, row, x, y, w, h, building = false) {
 // Original Canvas field camp: canvas roof, timber office and faction command flag.
 const oldLadySheet=new Image();oldLadySheet.src='assets/roster/allies.png';
 function drawOldLady(u){
+  if(drawBookSpecialHero(ctx,u,t,reducedMotion)){specialHeroLabel(ctx,'The Old Lady',-65);return;}
   ctx.save();if(Math.cos(u.angle)<0)ctx.scale(-1,1);
   ctx.fillStyle='#505c42';ctx.fillRect(-23,-43,13,30);
-  if(bookCouncilSheet.complete&&bookCouncilSheet.naturalWidth){const [x,y,w,h]=BOOK_COUNCIL_FRAMES[2];crispSprite(ctx,bookCouncilSheet,x,y,w,h,-18,-66,72*w/h,72);}
+  if(bookCouncilSheet.complete&&bookCouncilSheet.naturalWidth){const [x,y,w,h]=BOOK_COUNCIL_FRAMES[2];ctx.save();ctx.scale(-1,1);crispSprite(ctx,bookCouncilSheet,x,y,w,h,18-72*w/h,-66,72*w/h,72);ctx.restore();}
   else if(oldLadySheet.complete&&oldLadySheet.naturalWidth)crispSprite(ctx,oldLadySheet,1115,576,264,443,-22,-66,43,72);
   ctx.strokeStyle='#191f1b';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-18,-23);ctx.quadraticCurveTo(-5,8,10,-21);ctx.stroke();
   ctx.fillStyle='#383e35';ctx.fillRect(6,-27,26,6);ctx.fillStyle='#bfa165';ctx.fillRect(28,-28,7,8);
@@ -114,12 +115,25 @@ function drawOldLady(u){
   ctx.fillStyle='#f2e2b9';ctx.font='bold 11px Georgia';ctx.textAlign='center';ctx.fillText('The Old Lady',0,-73);ctx.textAlign='left';
 }
 function drawFlame(f){
-  ctx.save();ctx.translate(f.x,f.y-24);ctx.rotate(f.angle);
-  for(let i=0;i<7;i++){
-    const x=20+i*12,w=6+i*1.8;
-    ctx.fillStyle=i%2?'#ffb741':'#e66d24';ctx.beginPath();ctx.ellipse(x,0,w,w*.75,0,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#ffe7a0';ctx.beginPath();ctx.ellipse(x,-1,w*.6,w*.35,0,0,Math.PI*2);ctx.fill();
-  }
+  const muzzle=bookLadySheet.complete&&bookLadySheet.naturalWidth?bookLadyMuzzle(f.angle):{x:20*Math.cos(f.angle),y:-24+20*Math.sin(f.angle)};
+  const phase=clamp(f.life/f.max,0,1);
+  const dx=(f.tx??f.x+96*Math.cos(f.angle))-f.x-muzzle.x;
+  const dy=(f.ty??f.y+96*Math.sin(f.angle))-24-f.y-muzzle.y;
+  const length=Math.max(12,Math.hypot(dx,dy)),ripple=reducedMotion?0:Math.sin((1-phase)*25)*1.5;
+  ctx.save();ctx.translate(f.x+muzzle.x,f.y+muzzle.y);ctx.rotate(Math.atan2(dy,dx));
+  ctx.globalAlpha*=Math.sqrt(phase)*.88;
+  ctx.fillStyle='#d96b29';ctx.strokeStyle='#935134';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,-2);ctx.lineTo(length*.25,-5);
+  ctx.lineTo(length*.48,-3);ctx.lineTo(length*.68,-10-ripple);
+  ctx.lineTo(length*.78,-6);ctx.lineTo(length,-2);
+  ctx.lineTo(length*.88,8+ripple);ctx.lineTo(length*.7,12);
+  ctx.lineTo(length*.48,6);ctx.lineTo(length*.25,5);ctx.lineTo(0,2);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#edbd4f';ctx.beginPath();ctx.moveTo(0,-1);
+  ctx.quadraticCurveTo(length*.35,-3,length*.56,1);
+  ctx.lineTo(length*.8,-2);ctx.lineTo(length*.7,6);
+  ctx.quadraticCurveTo(length*.4,4,0,1);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#f8e5aa';ctx.beginPath();ctx.moveTo(0,-1);
+  ctx.lineTo(length*.48,1);ctx.lineTo(length*.3,3);ctx.lineTo(0,1);ctx.closePath();ctx.fill();
   ctx.restore();
 }
 // Local vector resource sprites stay sharp at device resolution and every zoom level.

@@ -31,6 +31,7 @@ function motorbikeActions(a,u){
 const arthurBikePortrait=new Image();
 arthurBikePortrait.src='assets/roster/leaders.png';
 function drawArthurMotorbike(c,u){
+  if(typeof drawBookSpecialHero==='function'&&drawBookSpecialHero(c,u,t,reducedMotion)){specialHeroLabel(c,'ARTHUR',-61);return;}
   c.save();if(Math.cos(u.angle)<0)c.scale(-1,1);
   c.strokeStyle='#131b18';c.lineWidth=5;
   for(const x of [-20,20]){c.fillStyle='#202824';c.beginPath();c.arc(x,4,12,0,Math.PI*2);c.fill();c.strokeStyle='#a3a898';c.lineWidth=2;c.stroke();c.beginPath();c.moveTo(x-7,4);c.lineTo(x+7,4);c.stroke();}

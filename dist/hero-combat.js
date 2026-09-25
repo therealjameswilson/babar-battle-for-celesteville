@@ -61,5 +61,5 @@ function fireMadameFlame(u,target){
     .sort((a,b)=>dist(u,a)-dist(u,b)||a.id-b.id).slice(0,3);
   damageUnit(u,target,26);
   for(const v of others)damageUnit(u,v,14);
-  fx.push({x:u.x,y:u.y,angle,flame:true,life:.4,max:.4});
+  fx.push({x:u.x,y:u.y,tx:target.x,ty:target.y,angle,flame:true,life:.4,max:.4});
 }
