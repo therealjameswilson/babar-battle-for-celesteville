@@ -106,6 +106,7 @@ for (const file of [
   'commander-animation.js',
   'book-commanders.js',
   'book-workers.js',
+  'depot-art.js',
   'battlefield-art.js',
   'render.js',
 ])

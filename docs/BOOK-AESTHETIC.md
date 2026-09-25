@@ -148,3 +148,26 @@ is no crate on an empty worker. Loaded workers retain a colored S/M/U badge abov
 the head, including from behind. Delivery removes both crate and badge. Reduced
 motion freezes stride while preserving cargo; existing profile art remains the
 image-loading fallback. Rules and extraction/delivery values are unchanged.
+
+## Central supply yard — 0.69.0
+
+- Final asset: `dist/assets/book/depot.png`, 1254×1254 RGBA, generated with the
+  built-in image-generation tool. Original retained as
+  `exec-cd78c2a3-e907-4518-946a-eb77bdadeda3.png` in the session's generated-images
+  directory. Reference: the game's existing `assets/book/buildings.png` atlas.
+- Native alpha crop `[116,290,1056,718]` has transparent margins and no clipped
+  opaque outline. The renderer draws it at 112×76 world pixels; the faction flag
+  and capture ring are Canvas overlays. No photographed book page is deployed.
+- Prompt: “Use case: illustration-story. Create ONE new game sprite, using the
+  attached existing game building atlas ONLY as style reference. Subject: a small
+  open-sided quartermaster supply yard, cream canvas awning with restrained
+  teal-green stripes, four timber posts, a few wooden supply crates and beige
+  provision sacks clustered at front-right, with ample open walk-through space.
+  Match the reference's fine black ink outlines, simple watercolor flat fills,
+  vintage French children's-book charm and slightly elevated front three-quarter
+  view. Readable clean silhouette at 110 pixels wide. No characters, no fixed
+  faction flags, no text or logos, no weapons, no surrounding landscape, no cast
+  shadow or glow. One whole object centered with generous transparent margins,
+  no cropping. Genuinely transparent RGBA background. This is an open walk-through
+  objective, not an enclosed building. Keep palette cream, teal and ochre wood.
+  Square output.”

@@ -1629,3 +1629,20 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   three sizes. Files are local review artifacts in `artifacts/book-workers-0.68/`.
   Full-page screenshot/input timeouts and hardware/manual play limitations remain
   as previously recorded; no new FPS or controller claim is made.
+
+## Central depot readability — 0.69.0
+
+- Syntax/assets and deterministic tactics checks cover the unchanged stock target,
+  normal worker gathering command, depot/resource label spacing, income and
+  interruption text, actual enemy interruption/restoration, and drawing without
+  changes to units/resources/economy. The native alpha crop is unclipped.
+- Real-browser authored fixture: 34 assertions each at desktop 1280×800, portrait
+  390×844 and landscape 844×390 (102 total). Inspected four ownership/income states
+  and actual battlefield Canvas exports in `artifacts/depot-0.69/`.
+- Rendering exposed the existing incorrect “QUARRY NEEDED” uranium label. It now
+  names Artillery Works; compact high-contrast work labels replace pale text that
+  overlapped neighboring icons. Tests distinguish Materials and Uranium prompts.
+- These are Canvas exports and authored checks, not manual match completion,
+  full-page screenshots or physical iPhone verification. The previously observed
+  browser-tooling MutationObserver error remains in the log; no game exception
+  was observed by this fixture. Manual input/frame-pacing limitations remain open.

@@ -359,3 +359,5 @@ run('commandFeedbackChecks((ok,label)=>{if(!ok)throw Error(label)})');
 console.log('PASS: command feedback and munitions affordability.');
 
 require('./nearest.cjs');
+
+require('./depot.cjs');
