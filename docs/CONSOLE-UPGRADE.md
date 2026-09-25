@@ -76,7 +76,13 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   existing reduced-motion/cadence behavior. Manual Commander verification was
   retried but browser clicks timed out before Start; interactive play remains open.
 
-- 0.68.0 candidate: directional book provisioners distinguish empty-handed travel
+- 0.68.0 published: directional book provisioners distinguish empty-handed travel
   from actual carried cargo, with readable S/M/U badges. Browser checks include a
   physical pickup/delivery transition. Worker art is now coherent with infantry
   and leaders; support portraits, specialist vehicles and integrated play remain.
+
+- 0.69.0 candidate: an illustrated open supply yard, accurate capture ring and
+  separate ownership/income card replace the overlapping depot placeholder.
+  Resource work labels gain contrast and uranium names its correct prerequisite.
+  102 browser fixture assertions cover three layouts; broader acceptance remains
+  open, including manual Commander play, sustained frame pacing and hardware QA.

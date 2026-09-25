@@ -126,10 +126,12 @@ function drawFlame(f){
 const resourceSprites=Object.fromEntries(['supplies','materials','uranium'].map(kind=>{
   const image=new Image();image.src='assets/resources/'+kind+'.svg';return [kind,image];
 }));
-function drawResourceSprite(n,showWork){
+function drawResourceSprite(n,showWork,omitIcon=false){
   const kind=n.kind||'supplies',image=resourceSprites[kind];
-  if(image?.complete&&image.naturalWidth)ctx.drawImage(image,n.x-36,n.y-35,72,54);
-  else {ctx.fillStyle=kind==='materials'?'#91aeb8':kind==='uranium'?'#b9ab62':'#c3a069';ctx.fillRect(n.x-20,n.y-18,40,30);}
+  if(!omitIcon){
+    if(image?.complete&&image.naturalWidth)ctx.drawImage(image,n.x-36,n.y-35,72,54);
+    else {ctx.fillStyle=kind==='materials'?'#91aeb8':kind==='uranium'?'#b9ab62':'#c3a069';ctx.fillRect(n.x-20,n.y-18,40,30);}
+  }
   const label=resourceName(n).toUpperCase()+' '+resourceLabel(n);
   ctx.save();ctx.font='bold 11px monospace';ctx.textAlign='center';
   const width=ctx.measureText(label).width+10;
@@ -463,33 +465,13 @@ function draw() {
   ctx.fillText('Northern approach', 600, 365);
   ctx.fillText('Southern road', 610, 1150);
   ctx.textAlign = 'left';
+  drawDepotYard(ctx);
   const showWork=selected.some(u=>u.type==='worker'||u.type==='quarry');
   for (const n of nodes) {
     if (knownResourceAmount(n,0) === 0) continue;
-    drawResourceSprite(n,showWork);
+    drawResourceSprite(n,showWork,isDepotStock(n));
   }
-  ctx.fillStyle = '#373e30';
-  ctx.fillRect(depot.x - 43, depot.y - 32, 86, 64);
-  ctx.strokeStyle = depot.team === 0 ? BLUE : depot.team === 1 ? RED : '#c9b780';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(depot.x - 43, depot.y - 32, 86, 64);
-  ctx.fillStyle = '#9a8961';
-  ctx.fillRect(depot.x - 26, depot.y - 14, 24, 28);
-  ctx.fillRect(depot.x + 5, depot.y - 14, 24, 28);
-  ctx.font = 'bold 12px monospace';
-  ctx.fillStyle = '#344b34';
-  ctx.textAlign = 'center';
-  ctx.fillText('CENTRAL DEPOT', depot.x, depot.y - 43);
-  ctx.fillText(
-    depot.team === 0 ? (munitionsIncome()?'SECURED +2 S / +0.5 MU':'MUNITIONS INTERRUPTED') : depot.team === 1 ? 'RHINO SHIPMENTS' : 'HOLD 8s TO CAPTURE',
-    depot.x,
-    depot.y + 50
-  );
-  ctx.textAlign = 'left';
-  if (depot.progress) {
-    ctx.fillStyle = '#c6a665';
-    ctx.fillRect(depot.x - 40, depot.y + 36, (80 * Math.abs(depot.progress)) / 8, 4);
-  }
+  drawDepotStatus(ctx);
   if (placing || selected.some((u) => !defs[u.type].speed)) {
     const sites = alive(0).filter((u) => !defs[u.type].speed && !u.construction);
     for (let i = 0; i < sites.length; i++)
@@ -716,11 +698,23 @@ positionMinimap();
 reset();
 requestAnimationFrame(loop);
 
+function resourceWorkText(n,report){
+ const state=report.state;
+ const warning=state==='working'?'':state==='isolated'?'SUPPLY CUT':
+   state==='construction'?'BUILDING':state==='missing'?
+   (n.kind==='uranium'?'ARTILLERY WORKS NEEDED':'QUARRY NEEDED'):state.toUpperCase();
+ return [`${report.extracting}/${report.slots} working`,warning];
+}
 function drawResourceWork(n,y){
- const r=resourceWorkReport(n);
- ctx.font='9px monospace';ctx.fillStyle=r.state==='working'?'#e1ca82':'#e4b3a0';
- ctx.fillText(`${r.extracting}/${r.slots} extracting · ${r.assigned} assigned`,n.x-58,y);
- if(r.state!=='working')ctx.fillText(r.state==='isolated'?'SUPPLY CUT':r.state==='construction'?'BUILDING':r.state==='missing'?'QUARRY NEEDED':r.state.toUpperCase(),n.x-40,y+12);
+ const lines=resourceWorkText(n,resourceWorkReport(n));
+ ctx.save();ctx.font='bold 9px monospace';ctx.textAlign='center';
+ lines.forEach((line,i)=>{
+  if(!line)return;
+  const width=ctx.measureText(line).width+6,base=y+i*12;
+  ctx.fillStyle='#f3e9cfee';ctx.fillRect(n.x-width/2,base-9,width,12);
+  ctx.fillStyle=i?'#813f31':'#344b34';ctx.fillText(line,n.x,base);
+ });
+ ctx.restore();
 }
 
 function drawAtomicWarnings(){

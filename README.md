@@ -557,3 +557,11 @@ New players can leave **Field adviser** enabled on the briefing. Cornelius offer
 six live lessons, including getting materials mining started, with normal
 selection/placement shortcuts. It never pauses combat or grants free resources.
 See [field-adviser behavior and tests](docs/FIELD-ADVISER.md).
+
+The central depot uses an open book-style supply yard. Its dashed ring marks the
+90px capture area; combat troops take eight seconds to capture it. The adjacent
+card separates ownership/income from the gatherable stock label. Supplies continue
+at +2/s when enemy troops interrupt the player's +0.5/s Munitions income.
+`dist/depot-art.js` owns this presentation; capture and income rules remain in the
+simulation modules. Worker overlays show occupied extraction slots; detailed
+assigned/hauling counts remain in the selection report.
