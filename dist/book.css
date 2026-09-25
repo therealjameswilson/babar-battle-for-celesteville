@@ -1,0 +1,68 @@
+/* Book-reference palette. Keep the established responsive geometry and controls. */
+:root{color-scheme:light;--bg:#f4ecd4;--panel:#f4ecd4;--text:#293e35;--muted:#58604b;--gold:#a97b22;--line:#8b9874;--command-paper:#f4ecd4;--command-ink:#293e35;--command-brass:#b89438;}
+body,header,aside,footer{background:#f4ecd4;color:#293e35;}
+header{border-bottom:2px solid #526749;}
+.brand,.brand small,.crown{color:#ab382d;}
+.brand{font-family:'Trebuchet MS',Arial,sans-serif;letter-spacing:2px;}
+.resources,.resources small,.resources>span,.resources b{color:#364c3b;}
+button,select{background:#e4e8cd;color:#293e35;border-color:#77866a;border-radius:3px;box-shadow:none;}
+button:hover{background:#d1dec1;}
+button:disabled{opacity:1;color:#656a56;background:#ecebdc;border-color:#b6baa3;}
+button small,#actions button small{color:inherit;}
+button[aria-pressed=true],#phone-tabs button[aria-pressed=true]{background:#edd479;color:#293e35;border-color:#7b713d;}
+button:focus-visible,select:focus-visible{outline:3px solid #a83e31;outline-offset:2px;}
+.field{background:#dde0b6;}
+.mission{background:#f6efddeb;color:#34472e;border:1px solid #677b55;box-shadow:none;}
+.mission small,.mission strong,.mission span,#depot-status{color:#3b5034;}
+#toast{background:#f7efdaef;color:#293e35;border-color:#718260;text-shadow:none;}
+aside .selection{background:#e7ebd4;color:#293e35;border:1px solid #879574;border-radius:3px;box-shadow:none;}
+.selection h2,.selection .eyebrow,#selected-info,#tactical-status,.panel-title,.hint,.orders .eyebrow{color:#364d3b;}
+#health{background:#c2c9a9;}#health i{background:#598559;}
+#selection-groups button,#action-filters button{background:#e6ead1;color:#304831;border-color:#879676;}
+#selection-groups button[aria-pressed=true],#action-filters button[aria-pressed=true]{background:#ebd477;color:#293e35;}
+#minimap{border:2px solid #50674b;border-radius:2px;box-shadow:none;}
+#overlay{background:#e9dfc3;}
+#overlay .briefing-screen,#overlay .debrief,#overlay .debrief.lost{background:#f8f0da;color:#293e35;border:1px solid #7d8b69;border-radius:4px;box-shadow:7px 9px 0 #60765124;}
+.brief-art{background:#f4ecd4;border-radius:0;}
+.brief-art img{aspect-ratio:3/2;border:0;border-radius:0;box-shadow:none;}
+.operation-seal,.operation-seal small,.operation-seal>span,.brief-doctrine{color:#466d53;}
+.brief-doctrine i{background:#849674;}
+.brief-command{border-color:#a9b394;}
+.brief-command .eyebrow,.brief.briefing-screen h1,#overlay .debrief h1,.debrief-mark{color:#a73d2f;}
+.brief.briefing-screen h1{font-family:'Trebuchet MS',Arial,sans-serif;letter-spacing:.4px;}
+.brief-lead,.brief-objectives b,.brief-objectives span,.brief-objectives li::before,.brief-command .launch label,#difficulty-note,.input-legend,#checkpoint-brief,#brief-orders>summary{color:#3e543f;}
+.brief-command .launch select{background:#f8f4e6;color:#293e35;border-color:#849474;}
+.brief-command #start,.debrief #again,#pause-resume,#continue-battle,#guide-action{background:#38734f;color:#fff8df;border:1px solid #294e37;box-shadow:none;}
+.brief-command #start:hover,.debrief #again:hover,#pause-resume:hover{background:#285d3e;transform:none;}
+.briefing-screen #opening-replay{background:#e5e9cd;color:#354b3b;border-color:#95a080;border-radius:0;}
+#pause-panel,#guide-panel{background:#f5edd8f7;color:#293e35;border-color:#7d8d6a;border-radius:4px;box-shadow:4px 7px 0 #263f3629;}
+#pause-panel h2,#pause-panel p:not(.eyebrow),#pause-report,#guide-panel h2,#guide-copy,.guide-heading small,#guide-dismiss{color:#344c3a;}
+.pause-secondary button{background:#e3e8cc;color:#304730;border-color:#849574;}
+#guide-toggle{color:#304730;}
+#overlay .debrief>p,#overlay .debrief .eyebrow,.debrief-stats b,.debrief-stats span{color:#3e543f;}
+.debrief-stats>div{background:#e7ead1;border-color:#9aa886;border-radius:2px;}
+#opening{background:#f4ecd4;color:#293e35;}
+#opening::backdrop{background:#e9dfc3;}
+.opening-sky{background:linear-gradient(#f4ecd4cc,#f4ecd4ed),url('assets/book/cover.png') center/cover;}
+#opening-copy{text-shadow:none;}
+#opening-title,#opening-tag{color:#a43c2c;}
+#opening-speaker,#opening-reply,#opening-hint{color:#3e543f;}
+.opening-controls button{background:#e4e8cd;color:#293e35;}
+.opening-rivals>div{filter:none;}
+.opening-progress .current{background:#ae4433;}
+dialog{background:#f4ecd4;color:#293e35;border-color:#7d8f6c;}
+dialog h2,dialog h3,dialog p,dialog small,dialog label,dialog summary{color:#354e3b;}
+.court-card,.character-card{background:#e7ead3;color:#293e35;border-color:#879573;}
+#nuclear-briefing{background:#e5e8cf;color:#293e35;border-color:#8a9874;}
+#nuclear-briefing strong,#nuclear-readiness .ready{color:#2d6347;}#nuclear-readiness .pending{color:#8e472f;}
+@media(max-width:950px),(max-height:500px){
+ aside,aside[data-panel=actions],aside[data-panel=status],#phone-tabs{background:#f4ecd4;}
+ .mobile-menu,header details[open]{background:#f4ecd4;color:#293e35;}
+}
+#actions button,#actions .research-action,#production-rows button,#production-all{background:#e4e8cd;color:#293e35;border-color:#829370;border-radius:3px;}
+#actions button:hover{background:#d0dec0;border-color:#5c7954;}
+#actions button:disabled{background:#eeeddc;color:#666b57;border-color:#b2b99d;}
+#production-panel,#camera-views-panel{background:#f4ecd4;color:#293e35;border-color:#81916a;box-shadow:3px 4px 0 #405a3526;}
+header .court-button{color:#365a3b;}
+.brief.briefing-screen h1{text-shadow:none;}
+.member-portrait,.rhino .member-portrait{background:#f1e7ca;}

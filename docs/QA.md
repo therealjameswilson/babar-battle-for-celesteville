@@ -1546,3 +1546,26 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Existing touch-production browser regression passes all 54 assertions, including
   switching from army selection to building recruitment. Visual inspection caught
   narrow phone titles; the stacked layout above resolves that issue.
+
+## Book-reference aesthetic — 0.65.0
+
+- Replaced principal battlefield sprites, eight buildings, eight main character
+  portraits, opening/briefing/share art and terrain/UI palette using the owner's
+  book photographs as references. Source photographs are not deployed.
+- Syntax/assets and full tactical suite pass. New alpha tests inspect all 22
+  unit/building/council crops for native-size bounds and unclipped outlines.
+- Real-browser presentation regression: 74 assertions across desktop and phone
+  layouts. Book-art fixture: 9 per layout (27 total), covering sheet decoding,
+  rendering without simulation mutation, portrait routing/native dimensions,
+  readable action colors, horizontal overflow and pause/resume.
+- Visual inspection corrected dark legacy action backgrounds, faint cover labels,
+  cramped building gutters, and the generated crown mistakenly placed on an
+  administrator. Phone portrait/landscape use the established command-sheet layout.
+- Book figures have mirrored profiles and a procedural distance-driven gait;
+  original four-facing sprite sheets remain as fallback. Secondary portraits and
+  specialist vehicles are the remaining art extension (see BOOK-AESTHETIC.md).
+- This is rendered regression/visual QA, not a new full-match victory, measured
+  frame-rate improvement or a physical iPhone test.
+- Existing touch-production regression also passes all 54 browser assertions.
+  Total for this pass: 155 real-browser fixture assertions. Local screenshots in
+  `artifacts/book-0.65/` are review evidence, not deployed game assets.

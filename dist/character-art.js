@@ -501,10 +501,10 @@ const CHARACTER_ART = {
 // SVG viewports crop the original local PNG losslessly and retain its alpha.
 // No image manipulation, remote fetch, or animation loop is needed.
 function characterArtMarkup(id, portrait = false) {
-  const art = CHARACTER_ART[id];
+  const art = (typeof BOOK_CHARACTER_ART!=="undefined" && BOOK_CHARACTER_ART[id]) || CHARACTER_ART[id];
   if (!art) return '';
   const crop = portrait ? art.portrait : art.frame;
   return '<svg class="character-art" aria-hidden="true" viewBox="' + crop.join(' ') +
     '" xmlns="http://www.w3.org/2000/svg"><image href="' + art.sheet +
-    '" width="1536" height="1024" /></svg>';
+    '" width="'+(art.width||1536)+'" height="'+(art.height||1024)+'" /></svg>';
 }
