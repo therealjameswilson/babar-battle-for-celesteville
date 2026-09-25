@@ -21,3 +21,5 @@ require('./book-motion.cjs');
 require('./book-commanders.cjs');
 
 require('./book-workers.cjs');
+
+require('./book-specialists.cjs');

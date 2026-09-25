@@ -60,6 +60,7 @@ function drawBookUnit(c,u,now,minimizeMotion=false){
  c.restore();return true;
 }
 function drawBookBuilding(c,u,height){
+ if(!['turret','relay','core','forge','factory'].includes(u.type))return false;
  const index=u.type==='turret'?7:u.type==='relay'?3:({core:0,forge:1,factory:2}[u.type]??-1)+(u.team?4:0);
  const frame=BOOK_BUILDING_FRAMES[index];
  if(!frame||!bookBuildingSheet.complete||!bookBuildingSheet.naturalWidth)return false;

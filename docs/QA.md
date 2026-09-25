@@ -1646,3 +1646,23 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   full-page screenshots or physical iPhone verification. The previously observed
   browser-tooling MutationObserver error remains in the log; no game exception
   was observed by this fixture. Manual input/frame-pacing limitations remain open.
+
+## Specialist structures — 0.70.0
+
+- Full syntax/assets and deterministic tactics suites pass. Six native alpha crops
+  have no clipped opaque outlines. Both factions, unsupported types, and image
+  loading fallback are checked; base atlas routing rejects specialist types.
+- Real-browser fixture passes 63 assertions at desktop, portrait and landscape
+  sizes (189 total). It verifies actual renderer calls for six types across two
+  factions, heavy damage and construction; drawing preserves unit state. Fog-memory
+  records remain unchanged. All six normally assigned trench positions grant cover.
+  The fixture places soldiers at their assigned destinations to inspect the artwork;
+  it does not claim to play their journey through ordinary input.
+- Inspected native-scale structure board and battlefield Canvas exports at all
+  three sizes. Labels moved above HQ/shelter to avoid health bars; isolation and
+  last-seen text gained contrast. Artifacts: `artifacts/specialists-0.70/`.
+- Fresh ordinary Commander attempt: difficulty selection worked, Start click timed
+  out, briefing remained visible and screenshot capture failed. No match started.
+  Manual Commander, sustained frame pacing and physical hardware review remain open.
+- Prior 0.69.0 deployment succeeded in run 36084979841. Live index, depot renderer
+  and depot asset matched merged commit a4d89b0827d2b1345ff1afcc8ca72575a1240a80.

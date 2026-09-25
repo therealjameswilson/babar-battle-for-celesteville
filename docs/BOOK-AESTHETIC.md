@@ -171,3 +171,29 @@ image-loading fallback. Rules and extraction/delivery values are unchanged.
   no cropping. Genuinely transparent RGBA background. This is an open walk-through
   objective, not an enclosed building. Keep palette cream, teal and ochre wood.
   Square output.”
+
+## Specialist structures — 0.70.0
+
+Final local asset: `dist/assets/book/specialist-buildings.png`, 1536×1024 RGBA.
+Built-in image-generation output `exec-7ed17fd7-42cb-4c71-a021-fc207eccbf50.png`,
+retained in the session generated-images folder. The existing book buildings atlas
+was the style reference. Six independently measured crops in `book-specialists.js`
+have clear alpha margins; Canvas supplies the faction pennants and status labels.
+
+Prompt: create a 3-column × 2-row atlas, thin black ink contours and simple flat
+watercolor in a vintage French storybook aesthetic; 1536×1024 transparent RGBA,
+35px gutters, whole sprites, slightly elevated front three-quarter view, readable
+at 90px. Top: timber quarry gantry/hanging stone bucket/ore pile/cream shed; cream
+field headquarters with green pitched roof, arched entry and staff maps; low rounded
+ochre civil-defense bunker, broad reinforced doorway and small blue triangle.
+Bottom: fictional single upright ivory rocket on a low cream hatch platform;
+prominent oval teal radar dish with two short interceptor tubes on a platform;
+empty wide WWI earth trench with sandbag parapet, duckboards and open interior.
+Neutral cream, teal, ochre and warm grey; no faction flags, characters, labels,
+logos, background, cast shadows or glow. Reference used only for style.
+
+`drawBookSpecialist` shares the same atlas for live and remembered structures.
+Building damage, construction opacity, selection footprints, defense range and
+six trench slots retain their existing rules/overlays. Loading falls back to the
+previous procedural drawings. Unknown types now explicitly return false from the
+base book-building renderer instead of accidentally selecting an unrelated frame.

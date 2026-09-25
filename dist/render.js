@@ -167,12 +167,14 @@ function drawRememberedBuilding(k) {
   const col=k.type==='core'?0:k.type==='forge'?1:k.type==='factory'?2:3;
   const h=k.type==='core'?150:k.type==='factory'?126:k.type==='forge'?113:94;
   ctx.save();ctx.translate(k.x,k.y);ctx.globalAlpha=.38;
-  if(k.type==='trench')drawTrench(1);
+  const remembered={type:k.type,team:1};
+  if(drawBookSpecialist(ctx,remembered)||drawBookBuilding(ctx,remembered,h)){}
+  else if(k.type==='trench')drawTrench(1);
   else if(k.type==='headquarters')drawHeadquarters(1);
   else if(k.type!=='quarry')atlas(buildingSheet,col,1,-h*.49,-h+29,h*.98,h,true);
   ctx.globalAlpha=.7;ctx.strokeStyle='#b9a2a0';ctx.lineWidth=1.5;ctx.setLineDash([4,5]);
   const r=defs[k.type].r;ctx.strokeRect(-r,-r,r*2,r*2);ctx.setLineDash([]);
-  ctx.fillStyle='#e0ccbb';ctx.font='10px monospace';ctx.textAlign='center';
+  ctx.fillStyle='#715746';ctx.font='10px monospace';ctx.textAlign='center';
   ctx.fillText('LAST SEEN '+time(t-k.seen)+' AGO',0,46);ctx.restore();
 }
 function drawUnit(u) {
@@ -326,7 +328,8 @@ function drawUnit(u) {
     const row = u.type === 'turret' ? 1 : u.team;
     const height =
       u.type === 'core' ? 150 : u.type === 'factory' ? 126 : u.type === 'forge' ? 113 : 94;
-    if(u.type==='trench')drawTrench(u.team);
+    if(drawBookSpecialist(ctx,u)){}
+    else if(u.type==='trench')drawTrench(u.team);
     else if(['silo','interceptor'].includes(u.type))drawMissileBuilding(ctx,u);
     else if(u.type==='shelter'){
       // Concrete bunker, reinforced entrance and civil-defense triangle.
@@ -384,9 +387,9 @@ function drawUnit(u) {
     ctx.fillRect(-u.r, 25, (u.r * 2 * u.morale) / 100, 3);
   }
   if (!d.speed && !supplied(u) && !u.construction) {
-    ctx.fillStyle = '#d39b6b';
+    ctx.fillStyle = '#f2e6ca';ctx.fillRect(-28,45,56,13);
     ctx.font = '10px monospace';
-    ctx.textAlign = 'center';
+    ctx.textAlign = 'center';ctx.fillStyle='#813f31';
     ctx.fillText('ISOLATED', 0, 55);
   }
   ctx.globalAlpha = 1;
