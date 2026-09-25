@@ -94,8 +94,14 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   attempt still timed out and screenshot capture failed; the broader goal remains
   active, with input/frame pacing, hardware audio/controller and secondary art open.
 
-- 0.71.0 candidate: complete directional Old Lady and Arthur/motorbike sprites
+- 0.71.0 published: complete directional Old Lady and Arthur/motorbike sprites
   replace the mirrored profile and portrait collage. The flame plume originates
   at measured nozzles and converges on the struck target; damage rules are retained.
   Secondary roster portraits, gun-crew animation and the integrated manual/hardware
   acceptance gates remain open.
+
+- 0.72.0 candidate: all 33 council/gallery figures now share the book presentation,
+  including the remaining 25 portraits/full figures and matching download links.
+  807 browser fixture assertions pass across three layouts. Gun-crew animation,
+  manual Commander victory, sustained frame pacing and physical device/audio/
+  controller acceptance remain open; the full objective is not complete.

@@ -1,4 +1,8 @@
-# Character artwork — 0.37.0
+# Character artwork
+
+Current display set: **0.72.0 book roster** (see the update below). The original 0.37.0 provenance and fallback assets are retained for traceability.
+
+## Original roster — 0.37.0
 
 All 33 existing roster members now have a portrait crop and a complete, single-pose sprite. The family/council displays the portraits; `dist/characters.html` shows both views with search and sheet downloads. These assets do not add battlefield units or change support powers. Historical characters remain tributes, and children remain civilian support.
 
@@ -41,3 +45,72 @@ The first leaders draft was replaced to improve spacing. Hidden RGB colors in tr
 ## Verification
 
 `tests/character-art.cjs` runs from `npm run check`: decodes all PNG scanlines, verifies the exact roster mapping, real transparency, image sizes, valid crops and no opaque pixels cut at full-body crop edges. `tests/art-browser.html` exercises actual browser image decodes, Canvas alpha, gallery search and all council tabs at desktop/mobile widths. See `QA.md` for the observed run and remaining screenshot limitation.
+
+## Complete book roster — 0.72.0
+
+All 33 council/gallery entries now resolve through `characterArtFor(id)` to the
+book treatment. Eight principal figures retain `book-art.js`; the remaining 25
+use `book-roster.js`. SVG portrait/full-body views and gallery download links use
+the same resolver, fixing the older-sheet download mismatch. The gallery now uses
+cream paper, green ink and restrained red accents to match the command post.
+No relationships, support powers, recruitment or combat rules changed.
+
+Final assets, copied unmodified from built-in image generation (no CLI/API fallback):
+
+| Repository path | Generated source ID | Figures |
+|---|---|---|
+| `dist/assets/book/roster-children.png` | e29ca8ea-63a5-4563-8a04-0e5f9d0611ba | Pom, Flora, Alexander / Isabelle, Badou, Victor |
+| `dist/assets/book/roster-friends.png` | abae0ba1-1e70-4b92-9001-48dfd03ce01b | Arthur, Zephir, Truffles / Periwinkle, Lady Rataxes, Rhudi |
+| `dist/assets/book/roster-history.png` | bce9727f-140f-4963-a4c2-01a38bcc7b15 | Babar's mother, Celeste's mother, Old Tusk, Old King / Grifaton, Colin, Nadine, blank |
+| `dist/assets/book/roster-adventures.png` | 7923684e-43dc-4707-aa61-75021f9a4c75 | Princess Isabelle, Eleonore, Crustadele / Father Christmas, Duck, Polomoche |
+
+All are 1536×1024 RGBA with original alpha. The manifest records individually
+measured bounds; history uses four columns, others three. Never infer crop bounds
+from that layout. A first history sheet was rejected because wide figures crossed
+neighboring crop rectangles. Its corrected generation shrank the figures and
+increased spacing. Historical figures remain tributes; children retain civilian
+roles. Duck, Polomoche and less-documented costumes remain game interpretations.
+The supplied book photographs and text are not distributed.
+
+### Final prompt set
+
+Shared style-transfer instruction: redraw the existing roster identities with the
+simple fine black ink, dot eyes, flat restrained watercolor and clean silhouettes
+of `assets/book/council.png`. Identity references are the earlier local roster
+sheets, not newly scraped images. Preserve entire figures, clothes, props, ears,
+tails and feet. Transparent PNG atlas; no text, scenery, glow, ground shadows or
+visible grid. Do not add characters, weapons, military roles or age children up.
+
+- Children: three columns/two rows. Pom: gray elephant, white shirt with blue
+  collar, blue shorts, plans. Flora: pink dress/bow and map. Alexander: yellow
+  collar, blue shorts, tousled hair, message bag. Isabelle: green romper/bonnet,
+  pink trim and toy. Badou: blue explorer jacket/red scarf/tan shorts/binoculars.
+  Victor: small rhino, cream/purple shirt, brown shorts, friendship letter.
+- Friends: three columns/two rows. Arthur: white/blue sailor shirt/cap, red shorts,
+  satchel, standing without bike. Zephir: brown monkey, red cap, yellow shirt,
+  binoculars/satchel, curled tail. Truffles: white chef toque/apron, red neckerchief,
+  bread basket. Periwinkle: lavender dress, teal cardigan, medical bag with yellow
+  cross. Lady Rataxes: purple hat/dress, pearls, plans. Rhudi: green/white shirt and
+  green shorts. Simplify shading to clean ink and flat fills.
+- History: four columns/two rows; final bottom-right cell empty. Babar's mother:
+  unadorned gray quadruped elephant. Celeste's mother: standing gray elephant in
+  green shawl. Old Tusk: elderly long-tusk elephant, brown cloak, wooden staff.
+  Old King: gold crown, purple/white-trimmed robe. Grifaton: white-mustached human
+  professor, red expedition hat/coat, notebook/satchel. Colin: young boy, brown
+  hair, blue shirt, brown shorts, backpack. Nadine: young girl, brown bob, yellow
+  dress, green cardigan, message. Final correction: preserve figures/poses/order,
+  shrink each into its own rectangular cell with generous transparent spacing;
+  no overlapping outlines or new props.
+- Adventures: three columns/two rows. Princess Isabelle: brown monkey princess,
+  pink dress, crown, flower necklace, curling tail. Eleonore: young human mermaid,
+  long brown hair, ivory blouse, teal tail. Crustadele: elderly human mermaid,
+  white bun, round glasses, lavender shawl, teal tail. Father Christmas: red coat,
+  white fur trim/beard, sack of presents. Duck: small tan terrier, dark ears, red
+  collar. Polomoche: shaggy brown horned monster, curved horns and tail. Use prior
+  game interpretations, simplify hatching, remove glow and realistic rendering.
+
+`tests/book-roster.cjs` checks completeness, alpha boundaries and crop resolution.
+`tests/book-roster-browser.html` exercises real decoded assets, actual gallery SVG
+attributes/downloads, search and council tabs at desktop/phone/landscape sizes.
+Canvas contact boards are review artifacts under `artifacts/roster-0.72/`, not
+full-page screenshots. These are single poses, not battlefield animation cycles.
