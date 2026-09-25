@@ -106,7 +106,8 @@ const oldLadySheet=new Image();oldLadySheet.src='assets/roster/allies.png';
 function drawOldLady(u){
   ctx.save();if(Math.cos(u.angle)<0)ctx.scale(-1,1);
   ctx.fillStyle='#505c42';ctx.fillRect(-23,-43,13,30);
-  if(oldLadySheet.complete&&oldLadySheet.naturalWidth)crispSprite(ctx,oldLadySheet,1115,576,264,443,-22,-66,43,72);
+  if(bookCouncilSheet.complete&&bookCouncilSheet.naturalWidth){const [x,y,w,h]=BOOK_COUNCIL_FRAMES[2];crispSprite(ctx,bookCouncilSheet,x,y,w,h,-18,-66,72*w/h,72);}
+  else if(oldLadySheet.complete&&oldLadySheet.naturalWidth)crispSprite(ctx,oldLadySheet,1115,576,264,443,-22,-66,43,72);
   ctx.strokeStyle='#191f1b';ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(-18,-23);ctx.quadraticCurveTo(-5,8,10,-21);ctx.stroke();
   ctx.fillStyle='#383e35';ctx.fillRect(6,-27,26,6);ctx.fillStyle='#bfa165';ctx.fillRect(28,-28,7,8);
   ctx.restore();
@@ -207,7 +208,7 @@ function drawUnit(u) {
   const rendered=renderedPosition(u);
   ctx.translate(rendered.x, rendered.y);
   ctx.globalAlpha = u.construction ? 0.65 : 1;
-  ctx.fillStyle = '#10181288';
+  ctx.fillStyle = '#6b70502b';
   ctx.beginPath();
   ctx.ellipse(0, 6, u.r * 1.25, u.r * 0.65, 0, 0, Math.PI * 2);
   ctx.fill();
@@ -227,7 +228,7 @@ function drawUnit(u) {
       width = height * 0.61;
     const bob = !reducedMotion && u.movingUntil > t ? Math.sin(t * 9 + u.id) * 1.1 : 0;
     ctx.save();
-    const directional=drawCommanderSprite(ctx,u,t,reducedMotion) || drawDirectionalInfantry(u,bob);
+    const directional=drawBookUnit(ctx,u,t,reducedMotion) || drawCommanderSprite(ctx,u,t,reducedMotion) || drawDirectionalInfantry(u,bob);
     if (!directional) {
       if (Math.cos(u.angle) < 0) ctx.scale(-1, 1);
       const col = { hero: 0, worker: 1, trooper: 2, walker: 3, scout: 2, sapper: 2 }[u.type];
@@ -350,7 +351,7 @@ function drawUnit(u) {
       ctx.fillStyle = '#9caeb2'; ctx.fillRect(17,-18,18,15);
       ctx.fillStyle = color; ctx.fillRect(-24, 11, 48, 4);
     } else if (
-      !atlas(buildingSheet, col, row, -height * 0.49, -height + 29, height * 0.98, height, true)
+      !drawBookBuilding(ctx,u,height) && !atlas(buildingSheet, col, row, -height * 0.49, -height + 29, height * 0.98, height, true)
     ) {
       ctx.fillStyle = color;
       ctx.fillRect(-u.r, -u.r, u.r * 2, u.r * 2);
@@ -453,16 +454,16 @@ function draw() {
       ctx.restore();
     }
     ctx.font = '10px monospace';
-    ctx.fillStyle = '#ddd1b0';
+    ctx.fillStyle = '#465a3c';
     ctx.fillText('COVER −35% DAMAGE', c.x - 60, c.y + 20);
   }
   ctx.textAlign = 'center';
   ctx.font = 'bold 15px Georgia';
-  ctx.fillStyle = '#d5c7a2';
+  ctx.fillStyle = '#5e744c';
   ctx.fillText('CELESTEVILLE', 345, 1160);
-  ctx.fillStyle = '#cd9c88';
+  ctx.fillStyle = '#985846';
   ctx.fillText('RHINOLAND', 1440, 70);
-  ctx.fillStyle = '#c7c5a177';
+  ctx.fillStyle = '#647b4d99';
   ctx.font = 'italic 21px Georgia';
   ctx.fillText('Northern approach', 600, 365);
   ctx.fillText('Southern road', 610, 1150);
@@ -481,7 +482,7 @@ function draw() {
   ctx.fillRect(depot.x - 26, depot.y - 14, 24, 28);
   ctx.fillRect(depot.x + 5, depot.y - 14, 24, 28);
   ctx.font = 'bold 12px monospace';
-  ctx.fillStyle = '#efe0bb';
+  ctx.fillStyle = '#344b34';
   ctx.textAlign = 'center';
   ctx.fillText('CENTRAL DEPOT', depot.x, depot.y - 43);
   ctx.fillText(
@@ -645,7 +646,7 @@ function draw() {
     ctx.fillText('COMMAND PAUSED', cw / 2, ch / 2);
     ctx.textAlign = 'left';
   }
-  mc.fillStyle = '#435340';
+  mc.fillStyle = '#d9dfba';
   mc.fillRect(0, 0, 300, 210);
   mc.fillStyle = '#c3bb8b';
   mc.beginPath();
@@ -655,7 +656,7 @@ function draw() {
   mc.lineTo(58, 158);
   mc.fill();
   for (const o of obstacles) {
-    mc.fillStyle = '#233d2c';
+    mc.fillStyle = '#719665';
     mc.fillRect((o.x / W) * 300, (o.y / H) * 210, (o.w / W) * 300, (o.h / H) * 210);
   }
   mc.fillStyle = depot.team === 0 ? BLUE : depot.team === 1 ? RED : '#c9b780';

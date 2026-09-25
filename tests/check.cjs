@@ -13,3 +13,5 @@ console.log('PASS: final atlas dimensions and alpha channel');
 require('./character-art.cjs');
 require('./commander-animation.cjs');
 require('./mushroom-clouds.cjs');
+
+require('./book-art.cjs');

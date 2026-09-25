@@ -101,6 +101,7 @@ for (const file of [
   'enemy-recon.js', 'enemy-operations.js', 'enemy-economy.js',
   'audio.js',
   'character-art.js',
+  'book-art.js',
   'court.js',
   'commander-animation.js',
   'battlefield-art.js',
