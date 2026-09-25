@@ -1704,3 +1704,22 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Prior 0.71.0 release passed all GitHub checks and deployed in run 36086851627.
   Live index, hero helper/combat/renderer and both specialist hero atlases matched
   merged commit bcf0a02b8d53edd79076519f00a0ebaabfac9a1f.
+
+## Directional gun crews — 0.73.0
+
+- Syntax/assets and deterministic tactics pass. Native alpha checks cover 32 poses,
+  ground/muzzle anchors and actual book-renderer routing. Shared pose checks cover
+  stopped, paired travel strides, deployment/packing, actual shot bearing/expiry,
+  future-shot rejection, reduced motion and image/older-saved-effect fallbacks.
+- Real-browser fixture passes 249 assertions per desktop/portrait/landscape size
+  (747 total). Sixteen `shoot` calls cover both factions, mobile/deployed modes and
+  four directions using targets inside actual faction sight; damage and shot
+  metadata are verified. Real deploy/pack transitions retain their full delays.
+  Actual battlefield drawing routes through both sheets and preserves unit state.
+- Inspected pose, firing and battle Canvas exports under `artifacts/guns-0.73/`.
+  These authored fixtures are not manual matches, page screenshots, measured FPS
+  or physical-device/controller tests. Prior manual/browser capture limitations
+  remain open; no new manual or hardware acceptance claim is made.
+- 0.72.0 passed GitHub checks and deployed in run 36088661363. Live index, gallery
+  HTML/JS/CSS, art resolver/manifest and all four new sheets matched merged commit
+  27522b76aaa2a7e5e92ef9dcde76533f2843558d.

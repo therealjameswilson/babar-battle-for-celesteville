@@ -100,8 +100,15 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   Secondary roster portraits, gun-crew animation and the integrated manual/hardware
   acceptance gates remain open.
 
-- 0.72.0 candidate: all 33 council/gallery figures now share the book presentation,
+- 0.72.0 published: all 33 council/gallery figures now share the book presentation,
   including the remaining 25 portraits/full figures and matching download links.
   807 browser fixture assertions pass across three layouts. Gun-crew animation,
   manual Commander victory, sustained frame pacing and physical device/audio/
   controller acceptance remain open; the full objective is not complete.
+
+- 0.73.0 candidate: integrated directional gun-and-crew art replaces the old
+  officer/geometric cannon combination, with paired strides, deployed trails and
+  muzzle-anchored flash/recoil/shell effects. Both factions retain existing combat
+  and transition rules. The main unit/structure/roster art reconciliation is now
+  implemented. Integrated manual Commander, sustained frame pacing, listening and
+  physical iPhone/controller acceptance still require evidence; goal remains open.

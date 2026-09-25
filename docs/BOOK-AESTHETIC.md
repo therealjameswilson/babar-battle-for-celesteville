@@ -242,3 +242,51 @@ all 33 portraits/full figures and source downloads now share one art resolver.
 The archive interface uses cream paper/green ink. Measured crop manifests, source
 IDs, prompt set and interpretation limits are in CHARACTER-ART.md. This closes
 the secondary roster-art gap; directional gun-crew animation remains unfinished.
+
+## Directional field-gun crews — 0.73.0
+
+Two local 1254×1254 RGBA atlases replace the book-profile officer and geometric
+cannon combination. Each faction has four directions, stopped mobile/paired travel
+strides/deployed rows. `book-guns.js` stores measured alpha bounds, ground anchors
+and barrel centers; no equal-cell crops. Green elephant uniforms and cream/red
+rhino uniforms match the army. Faction rings and precise bearing indicators remain.
+
+The renderer selects strides from distance travelled, stops gait during deployment
+or packing, and shows spread trails only after deployment completes. Actual shot
+bearing is retained for .35s; a brief restrained flash, recoil and smoke originate
+at the measured muzzle. Shells begin there and reach the existing impact position.
+Reduced motion disables gait/recoil/flash/smoke and displays the shell at impact.
+Existing range, sight, damage, splash and transition costs are unchanged. Presentation
+metadata on effects preserves the firing mode even if the unit later packs. Older
+saved effects or unavailable images retain the previous rendering fallback.
+
+### Final assets and prompt set
+
+Built-in image-generation tool; no CLI/API fallback and no pixel edits. Selected
+outputs were copied unmodified with alpha into:
+
+- `dist/assets/book/elephant-guns.png`: source
+  `exec-b4b7e0a2-f186-446a-9b49-8df12a265336.png`.
+- `dist/assets/book/rhino-guns.png`: source
+  `exec-d23d569b-a8c7-48bf-8f36-2bdea8d71d9e.png`.
+
+Shared generation prompt: illustration-story animation atlas using the existing
+book unit sheet for identity/style. Fine black outlines, dot eyes, simple flat
+watercolor. One adult gunner physically handling a wheeled field cannon per sprite;
+olive barrel, brass breech, two spoked wheels, wood/olive carriage. Four columns
+E/S/W/N with actual forward/back views; four rows stopped mobile, left-foot stride,
+right-foot stride, braced deployed with spread trails. Keep gunner/cannon proportions
+and wheel anchors consistent. Complete trunks/horns, barrels, wheels and feet;
+true alpha, no text/grid, scenery, glow, shadows, smoke or baked-in muzzle flashes.
+
+Elephant prompt: gray elephant in green greatcoat, black sidecap, gold buttons,
+matching `units.png` top-right. Rhino counterpart prompt: preserve elephant atlas
+layout, use `units.png` bottom-right rhinoceros with cream greatcoat/red epaulettes,
+black sidecap/trousers, burgundy carriage fittings. No crowns, rifles or extra units.
+Final correction on each: shrink individual figures approximately 20% within their
+own cells to create generous transparent gutters, preserving all poses and equipment.
+The first wider sheets were rejected because deployed trails approached neighbors.
+
+32 native alpha frames, all anchors and 16 muzzle positions are checked. Browser
+contact boards cover all poses and 16 actual shots; those are rendered evidence,
+not proof of sustained animation timing or manual control responsiveness.

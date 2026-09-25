@@ -38,6 +38,7 @@ function drawBookInfantry(c,u,now,minimizeMotion=false) {
  c.restore();return true;
 }
 function drawBookUnit(c,u,now,minimizeMotion=false){
+ if(typeof drawBookGun==='function'&&drawBookGun(c,u,now,minimizeMotion))return true;
  if(typeof drawBookWorker==='function'&&drawBookWorker(c,u,now,minimizeMotion))return true;
  if(typeof drawBookCommander==='function'&&drawBookCommander(c,u,now,minimizeMotion))return true;
  if(drawBookInfantry(c,u,now,minimizeMotion))return true;

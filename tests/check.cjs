@@ -27,3 +27,5 @@ require('./book-specialists.cjs');
 require('./book-specialist-heroes.cjs');
 
 require("./book-roster.cjs");
+
+require("./book-guns.cjs");

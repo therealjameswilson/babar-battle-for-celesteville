@@ -435,7 +435,11 @@ function shoot(u, v) {
   } else if(u.type==='madame')fireMadameFlame(u,v);
   else if(buckshot) fireBuckshot(u,v);
   else damageUnit(u, v, d.damage);
-  if(u.type!=='madame')fx.push({ x: u.x, y: u.y, tx: v.x, ty: v.y, life: .3, max: .3, team: u.team, heavy: u.type === 'walker' });
+  if(u.type!=='madame')fx.push({
+    x: u.x, y: u.y, tx: v.x, ty: v.y, life: .3, max: .3, team: u.team,
+    heavy: u.type === 'walker',
+    ...(u.type==='walker'?{gun:{angle:u.firedAngle,deployed:!!u.deployed}}:{})
+  });
   battleSound(u.type==='madame'?'flame':buckshot ? 'shotgun' : u.type === 'walker' ? 'cannon' : 'shot',u);
   return true;
 }
