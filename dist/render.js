@@ -299,12 +299,7 @@ function drawUnit(u) {
       ctx.lineTo(5, -55);
       ctx.stroke();
     }
-    if (u.type === 'worker' && u.carrying) {
-      ctx.fillStyle = u.cargoKind === 'uranium' ? '#b7ad62' : u.cargoKind === 'materials' ? '#97b4bb' : '#ac9062';
-      ctx.fillRect(12, -27, 10, 8);
-      ctx.strokeStyle = '#332f25';
-      ctx.strokeRect(12, -27, 10, 8);
-    }
+    if(typeof drawWorkerCargo==='function')drawWorkerCargo(ctx,u);
     if (u.type === 'hero') {
       ctx.fillStyle = '#fff6d6';
       ctx.strokeStyle = '#20392b';

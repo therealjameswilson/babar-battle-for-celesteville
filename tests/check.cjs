@@ -19,3 +19,5 @@ require('./book-art.cjs');
 require('./book-motion.cjs');
 
 require('./book-commanders.cjs');
+
+require('./book-workers.cjs');

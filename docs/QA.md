@@ -1615,3 +1615,17 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   browser input route. The briefing remained visible. No match was started or
   victory claimed. Requested that the owner wake/unlock the Mac and reopen the
   browser panel; interactive verification remains open pending a usable surface.
+
+## Book provisioners — 0.68.0
+
+- Syntax/assets and full tactics suite pass. New tests inspect 32 native crop/foot
+  bounds, direction/stride/cargo states, reduced motion, S/M/U labels and fallback.
+- Real-browser fixture passes 122 checks each in desktop, portrait and landscape
+  layouts (366 total). It advances the actual engine through supply collection
+  and delivery: unloaded -> loaded -> unloaded poses follow real cargo changes.
+  Canvas drawing preserves health, position and cargo. This authored fixture is
+  not an ordinary-input manual match.
+- Inspected all empty/loaded poses and actual battlefield Canvas captures at the
+  three sizes. Files are local review artifacts in `artifacts/book-workers-0.68/`.
+  Full-page screenshot/input timeouts and hardware/manual play limitations remain
+  as previously recorded; no new FPS or controller claim is made.
