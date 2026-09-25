@@ -97,3 +97,31 @@ firing briefly holds a matching direction with restrained recoil. Scouts and
 sappers share the infantry atlas. This is a two-pose walk, not a full gait cycle.
 The existing profile and legacy sprite paths remain loading/error fallbacks.
 The artwork changes no simulation rules, target selection or unit costs.
+
+## Book commanders — 0.67.0
+
+Two new built-in image-generation outputs are stored locally as
+`dist/assets/book/babar-motion.png` and `dist/assets/book/rataxes-motion.png`,
+each 1254×1254 RGBA with 16 figures. They use `units.png` as the character/style
+reference. `book-commanders.js` records measured native crop/foot/muzzle anchors.
+The renderer reuses `commanderPose`: idle, two walking poses switching every 16
+traveled pixels, and a 0.24-second firing pose in four directions. Recent shots
+control facing; the short muzzle flash respects reduced motion. The book profile
+and original commander atlases remain loading fallbacks.
+
+Prompt set (built-in tool, no API fallback):
+- Babar: 4×4 transparent atlas; grey elephant, dot eyes, round ears, long trunk,
+  yellow crown, green three-piece suit, white shirt, black bow tie/shoes. Columns
+  east/south/west/north, rows idle/left-foot stride/right-foot stride/pistol firing.
+  Full-body consistent scale, ink/flat watercolor, generous alpha gutters, no
+  background/shadows/text, no painted muzzle flashes. North shot aims away/up.
+- Rataxes: same layout/style, pink-grey rhino, prominent white horn, round-tipped
+  crown, yellow ornate tunic/trousers, red epaulettes, black boots. Pistol only in
+  firing row, foreshortened front/back aim. Preserve his broad silhouette.
+- Babar revision: change only the bottom-right firing arm/pistol from sideways to
+  raised, foreshortened northward aim. Keep the other figures and transparency.
+
+The generated sprites are copied unresampled. Alpha-edge tests cover every crop;
+visual Canvas inspection covers stances, muzzle placement and selection-ring
+alignment. This is a two-stride animation with separate idle/fire poses, not a
+full many-frame gait. Worker/support/vehicle art extension remains open.

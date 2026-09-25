@@ -67,7 +67,11 @@ requires. Do not mark the goal complete on the strength of unit tests alone.
   pacing. Manual Commander play, hardware audio/controller/iPhone verification,
   and remaining art/animation polish are still open; the objective remains active.
 
-- 0.66.0 candidate: book-style infantry now has four directional views and two
+- 0.66.0 published: book-style infantry now has four directional views and two
   distance-driven strides, shot-facing recoil, a stable reduced-motion pose and
   image-loading fallbacks. The remaining commanders/workers still use the book
   profile treatment; secondary portraits and specialist art are not yet complete.
+- 0.67.0 candidate: both leaders now have matching book-style idle, paired stride
+  and firing poses in four directions, with measured feet/muzzle anchors and the
+  existing reduced-motion/cadence behavior. Manual Commander verification was
+  retried but browser clicks timed out before Start; interactive play remains open.
