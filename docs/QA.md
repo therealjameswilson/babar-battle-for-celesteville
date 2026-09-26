@@ -1738,3 +1738,14 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Full remaining requirements and evidence are recorded in CONSOLE-UPGRADE.md.
   Architecture overview corrected for actual local saves, current renderer/modules
   and adult specialist units. No simulation change was made during this audit.
+
+### Resumed interactive check — 2026-09-25
+
+- Fresh local 0.73 Commander session: selecting difficulty worked; native mouse
+  Start timed out. Keyboard Enter on the Start button dismissed the briefing and
+  displayed the advancing-enemy dispatch. This narrows the input limitation:
+  keyboard activation works, so Start itself is not universally blocked.
+- A later DOM observation still showed 00:00 with the briefing hidden and document
+  visible. Screenshot capture failed; the browser error log was empty. There is
+  still no usable animated match or performance sample, and the cause remains
+  unproven. No simulation or rendering workaround was introduced for this failure.
