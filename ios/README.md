@@ -1,7 +1,7 @@
 # Native iPhone app
 
 Open `Babar.xcodeproj` in Xcode and select the shared **Babar** scheme. The native
-app version is 1.0 (build 1), bundling game 0.74.0. Minimum iOS is 17.0. This is a
+app version is 1.0 (build 2), bundling game 0.74.0. Minimum iOS is 17.0. This is a
 UIKit application with the local Canvas game hosted in WKWebView, not a Safari
 Home Screen link. No npm packages, network server, remote code, tracking SDK or
 runtime key are required. The build copies authored `../dist/` into `Client/`
@@ -38,8 +38,8 @@ recovery before submission. Test on a physical iPhone too.
    material. The fan-game label is not evidence of a license.
 2. Sign into your Apple Developer account in **Xcode → Settings → Accounts**.
    Select its paid-program team in **Babar → Signing & Capabilities**. No team ID
-   or credentials are committed. The proposed bundle ID is
-   `com.therealjameswilson.babar`; confirm availability before registering it.
+   or credentials are committed. The registered bundle ID is
+   `com.therealjameswilson.babar`.
 3. Choose a real iPhone for signed device testing. After acceptance, select
    **Any iOS Device → Product → Archive** with automatic signing enabled.
 4. In Organizer, validate and distribute to App Store Connect. Create the app
@@ -53,3 +53,16 @@ metadata, or App Store Connect API credentials. The original crown icon derives
 from `python3 scripts/app-icons.py --ios` (Pillow) at 1024px; it contains no external art. The bundled
 privacy policy is `Babar/native-privacy.html`; host that policy at a public HTTPS
 URL before submitting the store record.
+
+## Verified distribution setup — 2026-10-04
+
+Paid membership and App Store Connect access were verified in the owner account.
+An Apple Distribution signed IPA passed signature and bundle checks. App record:
+https://appstoreconnect.apple.com/apps/6819053311/distribution
+Build 1 uploaded and processed (Ready to Submit). Build 2 fixes saving while
+rhinos capture the depot; see docs/QA.md for runtime evidence. No public Apple
+review submission or release has been made. Team identity and signing material
+remain outside the repository.
+
+Build 2 upload completed successfully on 2026-10-04; Apple processing was pending
+at upload completion. Further native UI work stopped when the Mac locked.

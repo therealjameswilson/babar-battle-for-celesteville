@@ -1,7 +1,10 @@
 # App Store submission draft — native 1.0 (game 0.74.0)
 
-Status: locally prepared native project. Not uploaded, signed for distribution,
-reviewed by Apple or available in TestFlight/App Store.
+Status: signed for Apple distribution; app record 6819053311 created and build 1
+uploaded and processed (Ready to Submit). Build 2 fixes a checkpoint bug found
+in simulator QA. Not publicly released or submitted for Apple review.
+
+App record: https://appstoreconnect.apple.com/apps/6819053311/distribution
 
 ## Proposed listing (subject to content rights and account confirmation)
 
@@ -9,7 +12,7 @@ reviewed by Apple or available in TestFlight/App Store.
 - Subtitle: Command and defend the kingdom
 - Primary category: Games; Strategy
 - Support: https://github.com/therealjameswilson/babar-battle-for-celesteville/issues
-- Bundle ID: com.therealjameswilson.babar (proposed; not registered by this work)
+- Bundle ID: com.therealjameswilson.babar (registered)
 - Privacy policy: source in `ios/Babar/native-privacy.html`; public URL pending.
 - Price, countries and seller name: account owner must choose/confirm.
 
@@ -48,14 +51,17 @@ final binary rather than treating this document as a submitted declaration.
 
 ## Remaining gates
 
-- Apple Developer paid membership/team and App Store Connect access.
+- Paid membership and App Store Connect access verified; no further enrollment needed.
 - Content-distribution rights confirmed by the owner; no licensing assumption.
 - Signed physical-device and simulator play, audio, lifecycle/save and orientation QA.
 - Current real screenshots for the required device sizes; no fabricated screenshots.
 - Public privacy URL, listing availability/pricing, final age/privacy/export forms.
-- Signed archive validation, upload, TestFlight acceptance and Apple review.
+- TestFlight testing and Apple review; distribution signing and initial upload succeeded.
 
 Official references:
 - https://developer.apple.com/documentation/xcode/preparing-your-app-for-distribution
 - https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/
 - https://developer.apple.com/app-store/review/guidelines/
+
+Build 2 upload completed successfully on 2026-10-04; Apple processing was pending
+at upload completion. Further native UI work stopped when the Mac locked.

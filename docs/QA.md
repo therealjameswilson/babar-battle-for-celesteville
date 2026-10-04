@@ -1755,3 +1755,32 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
   identity exists, but paid membership/team and content rights are unconfirmed.
 - Unsigned archive: `/tmp/Babar-1.0.xcarchive` (temporary local artifact, not source).
   See `ios/README.md` to reproduce. No certificates/profiles/secrets are committed.
+
+## Native iPhone 1.0 build 2 follow-up — 2026-10-04
+
+This follow-up supersedes the earlier locked-computer/signing limitations above.
+Paid membership was verified, distribution export/signature verification passed,
+and Apple processed build 1 (Ready to Submit). App ID 6819053311; no public release.
+
+Real iPhone 18 Pro / iOS 27 simulator interaction in Device Hub verified first
+launch, briefing dismissal, Story start, gathering, pause/resume, portrait and
+landscape layout, production selection/recruitment, checkpoint save, returning
+to briefing and continuing the saved 00:27 battle. Longer play exposed rejected
+saves: the validator incorrectly prohibited negative rhino depot capture progress.
+Build 2 accepts signed progress within the real capture threshold; regression
+checks cover negative progress, rejection outside the threshold, and a restored
+early battle through ordinary enemy scouting. Direct Node equivalents of npm
+run check, npm test, and checkpoint checks passed; these are simulation checks.
+Both native simulator build and generic-device archive succeeded; 101 bundled
+client files match source.
+
+Build 2 actual native UI: restored the earlier save, played past one minute,
+autosaved at 00:58, manually saved at 01:04, then backgrounded and reopened.
+Returned paused at 01:05 with Saved at 01:05 and matching resources. No save
+failure recurred. Screenshots are local review artifacts under
+artifacts/native-1.0/ (not deployed game assets or App Store listing screenshots).
+Physical iPhone, audio, full native battle completion, opposite landscape,
+archive/privacy dismissal and WebKit process recovery remain unverified.
+
+Build 2 upload completed successfully on 2026-10-04; Apple processing was pending
+at upload completion. Further native UI work stopped when the Mac locked.
