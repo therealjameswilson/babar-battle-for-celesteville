@@ -575,3 +575,23 @@ fallback; damage, construction, cover and defense-range mechanics are unchanged.
 poses and Arthur's complete motorbike views. Flame effects use measured nozzle
 anchors and the struck target's position; their visual alignment does not alter
 combat rules. Reduced motion retains aim while freezing movement poses.
+
+## Install on iPhone (0.74)
+
+Open the published game in **Safari → Share → Add to Home Screen**. Enable
+**Open as Web App** if shown, then Add. Launch the Babar icon, open the field
+manual and wait for **Ready for offline play** before disconnecting. The first
+complete download is about 61 MB; no account is needed. Portrait and landscape
+use the existing touch layout and safe-area spacing.
+
+This is an installable web app, not an App Store/TestFlight binary. Saves are local
+and may be separate between Safari and the installed app. Removing the app or
+clearing its website data can erase them. iOS may reclaim cached storage; open
+online again if offline launch stops working. Updates download in the background
+and activate only after all Babar windows close, never halfway through a battle.
+
+Offline packaging: `dist/sw.js` caches one complete release at a time, scoped to
+this GitHub project. `dist/offline-files.js` fingerprints every deployed file.
+After editing any client file, run `npm run cache:refresh` and then the normal
+checks. The tracked output needs no build step. The original geometric crown icon
+is reproducible with `scripts/app-icons.py` (Pillow); no book image is used in it.

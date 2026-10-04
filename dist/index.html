@@ -3,6 +3,11 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <link rel="manifest" href="app.webmanifest" />
+    <link rel="apple-touch-icon" href="assets/app/icon-180.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Babar" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="theme-color" content="#f4ecd4" />
     <meta
       name="description"
@@ -208,6 +213,13 @@
         <h2 id="help-title">Field manual</h2>
         <button id="help-close">Close</button><button id="guide-help">Show field adviser</button>
       </div>
+      <section class="app-install" aria-labelledby="app-install-title">
+        <h3 id="app-install-title">Install on iPhone</h3>
+        <p>Open this page in Safari. Tap Share, then Add to Home Screen. Turn on Open as Web App if shown, then tap Add.</p>
+        <p>Launch Babar from your Home Screen for a full-screen game. Open it once online and wait for the offline download before playing without a connection.</p>
+        <p id="app-offline-status" role="status">Checking offline availability…</p>
+        <p>Saves stay in this browser or installed app. They may not transfer between them. Removing the app or clearing website data can erase saves.</p>
+      </section>
       <fieldset class="audio-settings"><legend>Sound mix</legend>
         <p>Adjust the score, battlefield and command feedback separately.</p>
         <label for="audio-master">Master <output id="audio-master-value">75%</output></label><input id="audio-master" type="range" min="0" max="100" value="75">
@@ -345,5 +357,6 @@
     <script src="checkpoint-ui.js?v=0.73.0-book-guns2"></script>
     <script src="field-guide.js?v=0.73.0-book-guns2"></script>
     <script src="render.js?v=0.73.0-book-guns2"></script>
+    <script src="iphone-app.js?v=0.74.0"></script>
   </body>
 </html>
