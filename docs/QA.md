@@ -1739,3 +1739,19 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - Remaining device check: Safari Add to Home Screen, launch online, wait for Ready
   for offline play in the field manual, close/reopen in airplane mode, start/resume
   a battle in portrait and landscape, then verify a subsequent online update.
+
+## Native iPhone 1.0 / game 0.74.0 — 2026-10-04
+
+- Xcode 27.0 simulator Debug build and unsigned generic-iOS Release archive both
+  succeeded. `scripts/check-ios-bundle.py` passed on both products: 101 deployed
+  client files match source, with native privacy policy, compiled icon catalog,
+  iPhone-only family, expected bundle identifier/version and executable.
+- Native source includes safe-area layout, default persistent WebKit data store,
+  background save/pause, local archive/privacy sheets, external-link routing and
+  WebKit termination recovery. These behaviors still require runtime acceptance.
+- No interactive simulator, physical-device, signing, upload or Apple approval is
+  claimed. Computer-use reported the Mac locked and automatic unlock unavailable;
+  the operator must unlock it before UI testing. A local development signing
+  identity exists, but paid membership/team and content rights are unconfirmed.
+- Unsigned archive: `/tmp/Babar-1.0.xcarchive` (temporary local artifact, not source).
+  See `ios/README.md` to reproduce. No certificates/profiles/secrets are committed.

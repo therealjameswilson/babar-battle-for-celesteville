@@ -595,3 +595,10 @@ this GitHub project. `dist/offline-files.js` fingerprints every deployed file.
 After editing any client file, run `npm run cache:refresh` and then the normal
 checks. The tracked output needs no build step. The original geometric crown icon
 is reproducible with `scripts/app-icons.py` (Pillow); no book image is used in it.
+
+## Native App Store project
+
+`ios/Babar.xcodeproj` packages this game and its assets as a native iPhone binary
+using UIKit and WKWebView. See `ios/README.md` for simulator/device builds, signing,
+and lifecycle behavior; `docs/app-store/SUBMISSION.md` records the remaining App
+Store gates. A Home Screen installation is separate from Apple distribution.
