@@ -49,3 +49,14 @@ tick(4000);
 run('const developed=readCheckpoint(createCheckpoint("developed"));applyCheckpoint(developed)');
 assert(run('benefits.size>0&&t>199'),'developed economy and council powers restore');
 console.log('PASS: developed battle with all available friendly council powers round trips.');
+
+// A rhino capture has signed negative progress and must remain saveable.
+run('reset();running=true;depot.progress=-3.5');
+run('applyCheckpoint(readCheckpoint(createCheckpoint("rhino-capture")))');
+assert.equal(run('depot.progress'),-3.5);
+for(const invalid of [-8.1,8.1])assert.throws(()=>run(`{const s=checkpointState();s.depot={...s.depot,progress:${invalid}};validateCheckpointState(s)}`));
+// Exercise ordinary enemy scouting/capture after a restored early checkpoint.
+run('reset();easy=true;running=true;');tick(540);
+run('applyCheckpoint(readCheckpoint(createCheckpoint("early")));paused=false');
+for(let i=0;i<40;i++){tick(20);run('readCheckpoint(createCheckpoint("live"))');}
+console.log('PASS: signed depot capture and live enemy timeline remain saveable.');

@@ -83,7 +83,8 @@ function validateCheckpointState(s){
   for(const benefit of s.benefits)if(!COURT.some(c=>c.id===benefit))fail();
   if(!s.usedPowers||!s.controlGroups||typeof s.usedPowers!=='object'||typeof s.controlGroups!=='object')fail();
   if(!s.cam||!finite(s.cam.x,0,W)||!finite(s.cam.y,0,H)||!finite(s.cam.zoom,.3,2))fail();
-  if(!s.depot||![-1,0,1].includes(s.depot.team)||!finite(s.depot.progress,0,100)||!finite(s.depot.x,0,W)||!finite(s.depot.y,0,H))fail();
+  // Capture progress is signed: elephants advance positive, rhinos negative.
+  if(!s.depot||![-1,0,1].includes(s.depot.team)||!finite(s.depot.progress,-8,8)||!finite(s.depot.x,0,W)||!finite(s.depot.y,0,H))fail();
   const point=p=>p&&finite(p.x,-100,W+100)&&finite(p.y,-100,H+100);
   const entity=u=>point(u)&&Object.hasOwn(defs,u.type)&&[0,1].includes(u.team)&&Number.isInteger(u.id)&&finite(u.hp);
   function order(o){

@@ -5,3 +5,9 @@ node_modules/
 .DS_Store
 .openai/
 artifacts/
+# Local Apple signing/build output
+DerivedData/
+*.xcarchive/
+*.ipa
+*.xcuserstate
+xcuserdata/
