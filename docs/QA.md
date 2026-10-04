@@ -1723,3 +1723,19 @@ Real browser: tests/missile-browser.html passed 156 assertions at 390×844, 844�
 - 0.72.0 passed GitHub checks and deployed in run 36088661363. Live index, gallery
   HTML/JS/CSS, art resolver/manifest and all four new sheets matched merged commit
   27522b76aaa2a7e5e92ef9dcde76533f2843558d.
+
+## 0.74.0 — iPhone Home Screen app
+
+- Added project-relative standalone manifest, Apple touch icon/launch metadata,
+  installation help, and a complete versioned service-worker offline snapshot.
+- Direct Node equivalents of `npm run check` and `npm test` passed. App tests cover
+  icon dimensions, full inventory fingerprint, scoped cache cleanup, offline root
+  and query-string launch routing, non-GET/out-of-scope exclusion, atomic download
+  failure and no forced activation during a running session. These are simulated
+  service-worker tests, not Safari installation or offline browser verification.
+- Inspected the generated 512px crown icon. Portrait/landscape safe-area and save
+  lifecycle code are unchanged. No physical iPhone or real-browser app test is
+  claimed: the computer-use browser inventory on 2026-10-04 returned no browsers.
+- Remaining device check: Safari Add to Home Screen, launch online, wait for Ready
+  for offline play in the field manual, close/reopen in airplane mode, start/resume
+  a battle in portrait and landscape, then verify a subsequent online update.
