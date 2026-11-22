@@ -138,13 +138,45 @@ function drawFlame(f){
 }
 // Local vector resource sprites stay sharp at device resolution and every zoom level.
 const resourceSprites=Object.fromEntries(['supplies','materials','uranium'].map(kind=>{
-  const image=new Image();image.src='assets/resources/'+kind+'.svg';return [kind,image];
+  const image=new Image();image.src='assets/resources/'+kind+'.svg?v=storybook2';return [kind,image];
 }));
+// Never flash the old placeholder squares on first paint or after a failed image load.
+function drawResourceFallback(c,kind,x,y){
+  c.save();c.translate(x,y);c.lineJoin='round';c.lineCap='round';
+  const path=(points,fill,stroke='#35362a',width=1.4)=>{
+    c.beginPath();points.forEach(([a,b],i)=>i?c.lineTo(a,b):c.moveTo(a,b));
+    if(fill){c.closePath();c.fillStyle=fill;c.fill();}c.strokeStyle=stroke;c.lineWidth=width;c.stroke();
+  };
+  c.fillStyle='#242d234f';c.beginPath();c.ellipse(0,12,33,7,0,0,Math.PI*2);c.fill();
+  if(kind==='supplies'){
+    path([[-30,-9],[-9,-18],[13,-11],[12,8],[-10,15],[-30,8]],'#a27445');
+    path([[-30,-9],[-9,-18],[13,-11],[-10,-3]],'#d8b275');
+    path([[-10,-3],[13,-11],[12,8],[-10,15]],'#855737');
+    path([[-27,-6],[-14,11],[-14,-2],[-27,6]],null,'#d0a66a',2.4);
+    path([[11,9],[7,2],[10,-9],[15,-17],[12,-22],[25,-22],[23,-16],[27,-9],[30,5],[26,10],[18,13]],'#c7b995');
+    path([[13,-17],[23,-17]],null,'#6d5437',2.6);
+    path([[15,0],[22,0],[22,7],[15,7]],'#3c6248','#3c6248');
+  }else if(kind==='materials'){
+    path([[-30,8],[-24,-8],[-12,-18],[0,-15],[7,7],[-12,15]],'#718b8e');
+    path([[-24,-8],[-12,-18],[-12,1],[-30,8]],'#b4c7be');
+    path([[-5,5],[6,-12],[17,-21],[29,-10],[32,7],[19,13]],'#607d83');
+    path([[6,-12],[17,-21],[19,-5],[-5,5]],'#bcccbd');
+    path([[-19,12],[23,9],[31,13],[-9,17]],'#a8b0a2');
+  }else{
+    path([[-29,6],[-24,-9],[-11,-21],[2,-16],[8,9],[-10,14]],'#858c58');
+    path([[-24,-9],[-11,-21],[-10,-4],[-29,6]],'#b7b77a');
+    path([[1,8],[6,-8],[18,-17],[30,-7],[31,10],[20,16]],'#767d51');
+    path([[-21,-6],[-15,-3],[-17,5],[-8,9],[0,4]],null,'#e1c565',3);
+    path([[13,-10],[12,-3],[20,0],[17,8],[24,12]],null,'#e1c565',3);
+    path([[-5,9],[10,6],[15,10],[15,15],[-5,16]],'#a08148');
+  }
+  c.restore();
+}
 function drawResourceSprite(n,showWork,omitIcon=false){
   const kind=n.kind||'supplies',image=resourceSprites[kind];
   if(!omitIcon){
-    if(image?.complete&&image.naturalWidth)ctx.drawImage(image,n.x-36,n.y-35,72,54);
-    else {ctx.fillStyle=kind==='materials'?'#91aeb8':kind==='uranium'?'#b9ab62':'#c3a069';ctx.fillRect(n.x-20,n.y-18,40,30);}
+    if(image?.complete&&image.naturalWidth)ctx.drawImage(image,n.x-40,n.y-43,80,60);
+    else drawResourceFallback(ctx,kind,n.x,n.y);
   }
   const label=resourceName(n).toUpperCase()+' '+resourceLabel(n);
   ctx.save();ctx.font='bold 11px monospace';ctx.textAlign='center';
@@ -433,6 +465,32 @@ function drawUnit(u) {
   if (u.research) {ctx.fillStyle='#e4cf91';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('RESEARCH',0,57);}
   ctx.restore();
 }
+
+/* Dry-stone cover: short uneven courses, warm sunlit edges and contact shadows. */
+function drawStorybookCover(c,x,y){
+ c.save();c.translate(x,y-20);c.lineJoin='round';c.lineCap='round';
+ c.fillStyle='#33433168';c.beginPath();c.ellipse(0,8,56,11,-.09,0,Math.PI*2);c.fill();
+ const stones=[
+   [-43,2,20,13],[-25,1,22,15],[-4,0,24,14],[17,-1,24,14],[39,-2,19,13],
+   [-46,-6,15,9],[-31,-7,20,10],[-12,-8,21,10],[8,-9,21,10],[28,-11,20,10],[44,-9,14,8]
+ ];
+ stones.forEach(([a,b,w,h],i)=>{
+  const l=a-w/2,r=a+w/2,top=b-h/2,base=b+h/2;
+  c.beginPath();c.moveTo(l,base-2);c.lineTo(l+1,top+3);c.lineTo(l+5,top+.5+(i%2));c.lineTo(r-4,top);c.lineTo(r,top+3);c.lineTo(r-1,base-1);c.lineTo(l+5,base);c.closePath();
+  const light=i>4?'#c4bd99':'#aaa888',g=c.createLinearGradient(0,top,0,base);
+  g?.addColorStop(0,light);g?.addColorStop(1,i%3===0?'#657153':'#777a60');
+  c.fillStyle=g||light;c.fill();c.strokeStyle='#4a5039';c.lineWidth=1.25;c.stroke();
+  c.beginPath();c.moveTo(l+3,top+4);c.lineTo(l+7,top+2);c.lineTo(r-5,top+1.8);
+  c.strokeStyle='#e1d5acba';c.lineWidth=1;c.stroke();
+  if(i%3===0){c.beginPath();c.moveTo(a+1,top+4);c.lineTo(a-1,b+1);c.lineTo(a+2,base-2);c.strokeStyle='#5c654d8c';c.lineWidth=.75;c.stroke();}
+ });
+ c.strokeStyle='#60744d';c.lineWidth=1.4;
+ for(const [a,b] of [[-52,8],[-22,10],[30,7],[50,4]]){
+  c.beginPath();c.moveTo(a,b);c.quadraticCurveTo(a-3,b-4,a-6,b-5);c.moveTo(a,b);c.quadraticCurveTo(a+2,b-5,a+5,b-7);c.stroke();
+ }
+ c.restore();
+}
+
 function draw() {
   const cw = canvas.clientWidth,
     ch = canvas.clientHeight,
@@ -458,16 +516,7 @@ function draw() {
     ctx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
     ctx.stroke();
     ctx.setLineDash([]);
-    for (let i = 0; i < 7; i++) {
-      ctx.save();
-      ctx.translate(c.x - 45 + i * 15, c.y - 20);
-      ctx.rotate(-0.1);
-      ctx.fillStyle = '#a39a74';
-      ctx.fillRect(-7, -5, 14, 10);
-      ctx.strokeStyle = '#595d42';
-      ctx.strokeRect(-7, -5, 14, 10);
-      ctx.restore();
-    }
+    drawStorybookCover(ctx,c.x,c.y);
     ctx.font = '10px monospace';
     ctx.fillStyle = '#465a3c';
     ctx.fillText('COVER −35% DAMAGE', c.x - 60, c.y + 20);
