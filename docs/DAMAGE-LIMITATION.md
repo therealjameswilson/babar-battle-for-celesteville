@@ -37,3 +37,11 @@ phones, does not pause play, and does not reveal hidden enemy activity.
 The separate Damage Limitation readiness race is not the classic combat rules.
 It uses an invented civic technology ladder, protection and emergency dialogue.
 A completed ladder never counts as a win unless that side's ruler survives.
+
+### Separate fictional newspaper artwork
+The optional newspaper disclosure contains an earlier owner-selected image, *The
+final edition: America rebuilds* (created July 17, 2026). It depicts an invented
+President Austin Long and is explicitly framed as satire before the image, not
+a source of real statements, advice, or endorsements. The asset is a web-size
+JPEG encoding of the same complete artwork, with no crop or other substitutions.
+It is not the earlier MIT lecture photograph.

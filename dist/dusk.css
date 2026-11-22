@@ -34,3 +34,9 @@ body{background:#141d1f}
 #open-damage-race,.damage-invite{grid-column:1/-1}
 #open-damage-race{min-height:44px;color:#f5e8c3;background:#3b4b41;border:1px solid #a48b5d}
 @media(max-height:500px){.launch .damage-invite{display:none}}
+.race-satire{margin-block:1rem .25rem;border-top:1px solid var(--night-line);padding-block:.55rem}
+.race-satire summary{cursor:pointer;color:var(--night-gold);padding:.4rem 0;min-height:2.75rem;box-sizing:border-box}
+.race-satire summary:focus-visible{outline:2px solid #fff1be;outline-offset:2px}
+.race-satire figure{margin:.35rem 0 0}
+.race-satire figcaption{padding:.65rem .8rem;color:#fff1d1;background:#483524;border:1px solid #c8a471;font-size:1rem;line-height:1.4}
+.race-satire img{display:block;width:100%;height:auto;margin-top:.55rem}

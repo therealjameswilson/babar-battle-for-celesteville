@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="style.css?v=0.73.0-book-guns2" />
     <link rel="stylesheet" href="presentation.css?v=0.73.0-book-guns2" />
     <link rel="stylesheet" href="book.css?v=0.73.0-book-guns2" />
-      <link rel="stylesheet" href="dusk.css?v=1" />
+      <link rel="stylesheet" href="dusk.css?v=2" />
   </head>
   <body>
     <header>
@@ -127,7 +127,14 @@
                 <label class="guide-option"><input type="checkbox" id="guide-enabled" checked> Field adviser · learn while playing</label>
                 <button type="button" id="open-damage-race">Play Damage Limitation</button>
                 <p class="damage-invite">A separate, fictional preparedness race. Finish the civic technology ladder first and keep your own leader alive.</p>
-                <dialog id="damage-race" aria-labelledby="race-title"><header><strong id="race-title">Babar versus Rataxes: Damage Limitation</strong><button type="button" id="race-close" aria-label="Close Damage Limitation">Close</button></header><p>The object is to limit harm during an imagined nuclear crisis. Complete the civic ladder first, keep your king or lord alive, and protect as many people as you can. No real-world weapons or targets are simulated in this mode.</p><label>Choose your crown <select id="race-side"><option value="0">King Babar</option><option value="1">Lord Rataxes</option></select></label><button type="button" id="race-start">Start readiness race</button><button type="button" id="race-mute">Sound on</button><section id="race-play" hidden><p id="race-board" role="status" aria-live="polite"></p><ol id="race-ladder"></ol><div class="race-actions"><button type="button" data-race="research">Advance preparedness</button><button type="button" data-race="protect">Protect the crown and neighbors</button><button type="button" data-race="talk">Open an emergency hotline</button></div></section></dialog>
+                <dialog id="damage-race" aria-labelledby="race-title"><header><strong id="race-title">Babar versus Rataxes: Damage Limitation</strong><button type="button" id="race-close" aria-label="Close Damage Limitation">Close</button></header><p>The object is to limit harm during an imagined nuclear crisis. Complete the civic ladder first, keep your king or lord alive, and protect as many people as you can. No real-world weapons or targets are simulated in this mode.</p><label>Choose your crown <select id="race-side"><option value="0">King Babar</option><option value="1">Lord Rataxes</option></select></label><button type="button" id="race-start">Start readiness race</button><button type="button" id="race-mute">Sound on</button><section id="race-play" hidden><p id="race-board" role="status" aria-live="polite"></p><ol id="race-ladder"></ol><div class="race-actions"><button type="button" data-race="research">Advance preparedness</button><button type="button" data-race="protect">Protect the crown and neighbors</button><button type="button" data-race="talk">Open an emergency hotline</button></div></section>
+                  <details class="race-satire"><summary>Fictional newspaper satire</summary>
+                    <figure aria-labelledby="race-satire-label">
+                      <figcaption id="race-satire-label"><strong>Fictional satire: not a real newspaper or advisory.</strong><br />The artwork invents a fictional presidency, statements and public health claims. The real Austin Long did not make or endorse those statements. Do not rely on this artwork for emergency or health guidance.</figcaption>
+                      <img src="assets/austin-long-fictional-newspaper.jpg" width="928" height="1200" alt="A fabricated American Herald front page depicts Austin Long as a fictional president beside an illustration of a ruined city." loading="lazy" decoding="async">
+                    </figure>
+                  </details>
+                </dialog>
                 <div class="battle-launch"><button id="continue-battle" hidden>Continue saved battle →</button>
                 <button id="start">Take command →</button></div><p id="checkpoint-brief" role="status"></p>
               </div>
