@@ -48,3 +48,22 @@ body{background:#141d1f}
 .opening-satire-crop{position:relative;width:clamp(3.3rem,13vmin,5.8rem);aspect-ratio:289/340;overflow:hidden;border:1px solid #aa8e61;background:#25312c;flex:none}
 .opening-satire-crop img{display:block;position:absolute;max-width:none;width:382%;height:auto;left:-274%;top:-74%;pointer-events:none}
 @media(max-height:530px){#opening .opening-body{padding-block:1rem}#opening .opening-satire{margin-top:.4rem;padding-block:.25rem}.opening-satire-crop{width:3rem}#opening .opening-satire span{font-size:.81rem}}
+
+/* Keep the portrait in the first screen of both the opening and its briefing. */
+#opening .opening-satire{margin:0 0 .65rem}
+#opening .opening-satire-crop{width:clamp(3.45rem,14vmin,5.8rem)}
+.brief-art .opening-satire{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:.65rem;margin:0 0 .65rem;padding:.45rem .55rem;color:var(--night-ink);background:#17201e;border:1px solid #9e8053;text-align:left}
+.brief-art .opening-satire strong{display:block;color:var(--night-gold)}
+.brief-art .opening-satire span{font-size:.875rem;line-height:1.25}
+.brief-art .opening-satire img{width:382%;max-width:none;aspect-ratio:auto;object-fit:initial;border:0;filter:none}
+.brief-art #opening-replay{margin-top:.25rem;min-height:44px}
+@media(max-width:580px){
+  #opening .opening-body{padding-top:max(1rem,env(safe-area-inset-top))}
+  #opening-tag{margin-bottom:.45rem}
+  #opening-title{margin-block:.15rem .55rem}
+  #opening-line,#opening-reply{margin:.55rem 0}
+  #opening .opening-progress,#opening .opening-controls{margin-top:.65rem}
+}
+@media(max-height:530px){#opening .opening-satire-crop{width:3.25rem}}
+
+@media(max-height:400px){#opening .opening-body{padding-block:.6rem}#opening .opening-controls,#opening .opening-progress{margin-top:.55rem}}
