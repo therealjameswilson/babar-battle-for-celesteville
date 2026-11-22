@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {ladder,startRace,stepRace} from '../dist/damage-race.mjs';
+const play=(...actions)=>actions.reduce(stepRace,startRace());
+const won=play('research','research','protect','research','research','protect','research');
+assert.equal(won.out,'win');
+assert.equal(won.sides[0].step,ladder.length);
+assert.ok(won.sides[0].leader>0);
+assert.strictEqual(stepRace(won,'research'),won);
+const losing=play(...Array(9).fill('protect'));
+assert.equal(losing.out,'loss');
+assert.ok(losing.sides[1].leader>0);
+const destroyed={turn:5,sides:[{step:4,leader:1,shelter:0,harm:1},{step:2,leader:3,shelter:1,harm:0}],out:null};
+assert.equal(stepRace(destroyed,'research').out,'loss-no-winner');
+const crisis={turn:1,sides:[{step:0,leader:3,shelter:0,harm:0},{step:0,leader:3,shelter:0,harm:0}],out:null};
+assert.equal(stepRace(crisis,'talk').sides[0].harm,0);
+assert.equal(stepRace(crisis,'research').sides[0].harm,2);
+assert.equal(crisis.sides[0].harm,0);
+console.log('PASS: fictional readiness ladder, both crown checks, de-escalation and no post-result mutation');

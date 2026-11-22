@@ -1,0 +1,36 @@
+/* Low-light presentation only. No change to original painterly sprites or simulation. */
+:root{--night-ink:#eee1bd;--night-muted:#c3b98f;--night:#151f20;--night-panel:#1d2928;--night-line:#76684b;--night-gold:#e1b778}
+body{background:#141d1f}
+#opening,#opening::backdrop{background:#151e20;color:var(--night-ink)}
+.opening-sky{background:linear-gradient(180deg,#172122a8,#151e20f6),url('assets/book/cover.png') center/cover}
+#opening-title,#opening-tag{color:var(--night-gold)}
+#opening-speaker,#opening-reply,#opening-hint,#opening-copy{color:var(--night-ink)}
+.opening-controls button{background:#2e3932;color:var(--night-ink);border-color:#8a7651}
+.opening-rivals>div{filter:drop-shadow(0 8px 12px #080d0e)}
+.opening-progress .current{background:#d69e66}
+.briefing-screen{background:linear-gradient(166deg,#243130,#172021 64%);color:var(--night-ink)}
+.briefing-screen h1,.briefing-screen h2,.briefing-screen h3,.briefing-screen .eyebrow{color:var(--night-gold)}
+.briefing-screen #opening-replay{background:#303a31;color:var(--night-ink);border-color:#8a7651}
+.damage-art{margin:.75rem 0;max-width:24rem}
+.damage-art svg{display:block;width:100%;border:1px solid #75654b}
+.damage-art figcaption{font-size:.875rem;line-height:1.4;margin-top:.35rem}
+.damage-invite{font-size:.93rem;color:var(--night-muted)}
+#damage-race{width:min(42rem,calc(100% - 2rem));box-sizing:border-box;max-height:calc(100% - 2rem);overflow:auto;color:var(--night-ink);background:var(--night-panel);border:1px solid var(--night-line);padding:1.1rem}
+#damage-race::backdrop{background:#0b1114cc}
+#damage-race header,.race-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.55rem}
+#damage-race header{justify-content:space-between}
+#damage-race #race-board{padding:.6rem;border:1px solid var(--night-line)}
+#damage-race button,#damage-race select{min-height:2.75rem;margin:0;color:var(--night-ink);background:#34443c;border:1px solid #a68b5e;padding:.3rem .45rem}
+#damage-race button:disabled{opacity:.55}
+#damage-race button:focus-visible,#damage-race select:focus-visible{outline:2px solid #fff1be;outline-offset:2px}
+#overlay .briefing-screen{color:var(--night-ink);background:linear-gradient(165deg,#253331,#172021 70%);border-color:#796649;box-shadow:7px 10px #0c1316a8}
+.brief.briefing-screen h1,.briefing-screen .brief-command .eyebrow{color:var(--night-gold)}
+.briefing-screen :is(.brief-lead,.brief-objectives b,.brief-objectives span,.brief-objectives li::before,.brief-command .launch label,#difficulty-note,.input-legend,#checkpoint-brief,#brief-orders>summary,#battle-rules-note){color:var(--night-ink)}
+.briefing-screen .brief-command{border-color:#675e49}
+.briefing-screen .brief-art{background:#272c25}
+.briefing-screen .brief-art img{filter:brightness(.78) saturate(.82)}
+.briefing-screen :is(.operation-seal,.operation-seal small,.operation-seal>span,.brief-doctrine){color:#e8cea0}
+#game{filter:brightness(.93) saturate(.84) contrast(1.045)}
+#open-damage-race,.damage-invite{grid-column:1/-1}
+#open-damage-race{min-height:44px;color:#f5e8c3;background:#3b4b41;border:1px solid #a48b5d}
+@media(max-height:500px){.launch .damage-invite{display:none}}

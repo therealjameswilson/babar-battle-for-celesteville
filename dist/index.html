@@ -13,7 +13,7 @@
       name="description"
       content="Lead Babar, his elephant kingdom, family and royal council against Lord Rataxes in a storybook real-time strategy game."
     />
-    <title>Babar — The Siege of Celesteville</title>
+    <title>Babar versus Rataxes — The Siege of Celesteville</title>
     <link rel="canonical" href="https://therealjameswilson.github.io/babar-battle-for-celesteville/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Babar: The Siege of Celesteville" />
@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="style.css?v=0.73.0-book-guns2" />
     <link rel="stylesheet" href="presentation.css?v=0.73.0-book-guns2" />
     <link rel="stylesheet" href="book.css?v=0.73.0-book-guns2" />
+      <link rel="stylesheet" href="dusk.css?v=1" />
   </head>
   <body>
     <header>
@@ -124,6 +125,9 @@
                 </select>
                 <p id="difficulty-note">More time to prepare, lighter enemy damage, and a stronger chance to recover.</p>
                 <label class="guide-option"><input type="checkbox" id="guide-enabled" checked> Field adviser · learn while playing</label>
+                <button type="button" id="open-damage-race">Play Damage Limitation</button>
+                <p class="damage-invite">A separate, fictional preparedness race. Finish the civic technology ladder first and keep your own leader alive.</p>
+                <dialog id="damage-race" aria-labelledby="race-title"><header><strong id="race-title">Babar versus Rataxes: Damage Limitation</strong><button type="button" id="race-close" aria-label="Close Damage Limitation">Close</button></header><p>The object is to limit harm during an imagined nuclear crisis. Complete the civic ladder first, keep your king or lord alive, and protect as many people as you can. No real-world weapons or targets are simulated in this mode.</p><label>Choose your crown <select id="race-side"><option value="0">King Babar</option><option value="1">Lord Rataxes</option></select></label><button type="button" id="race-start">Start readiness race</button><button type="button" id="race-mute">Sound on</button><section id="race-play" hidden><p id="race-board" role="status" aria-live="polite"></p><ol id="race-ladder"></ol><div class="race-actions"><button type="button" data-race="research">Advance preparedness</button><button type="button" data-race="protect">Protect the crown and neighbors</button><button type="button" data-race="talk">Open an emergency hotline</button></div></section></dialog>
                 <div class="battle-launch"><button id="continue-battle" hidden>Continue saved battle →</button>
                 <button id="start">Take command →</button></div><p id="checkpoint-brief" role="status"></p>
               </div>
@@ -149,12 +153,11 @@
           <div id="selection-groups" role="group" aria-label="Selection subgroups" hidden></div>
         </div>
         <section id="nuclear-briefing" hidden aria-label="Nuclear strategy briefing">
-          <img src="assets/austin-long.jpg" alt="Austin Long speaking at a lecture" width="1180" height="750">
           <div><strong id="nuclear-briefing-title">Nuclear strategy</strong>
           <p id="nuclear-briefing-text"></p>
           <ul id="nuclear-readiness" aria-label="Nuclear readiness"></ul>
           <button id="nuclear-position">Position at headquarters</button>
-          <details><summary>Austin Long · research reference</summary><p>Damage Limitation informs this game’s Civil Defense research. These are fictional game rules, not quotations or an endorsement. Photograph supplied by the project owner.</p></details></div>
+          <details><summary>Austin Long · research reference</summary><figure class="damage-art"><svg viewBox="0 0 260 96" role="img" aria-labelledby="damage-art-title"><title id="damage-art-title">Original illustration: a shelter canopy protecting three figures under a dark sky</title><path fill="#172524" d="M0 0h260v96H0z"/><circle fill="#d4a263" cx="206" cy="25" r="14"/><path fill="#283c34" d="M0 75l42-25 42 19 43-29 48 35 48-22 37 16v27H0z"/><path fill="#ead8ac" d="M38 71l65-39 65 39h-13l-52-28-52 28z"/><path stroke="#ead8ac" stroke-width="4" d="M62 69v19m81-19v19"/><g fill="#d4a263"><circle cx="87" cy="65" r="5"/><circle cx="104" cy="60" r="6"/><circle cx="122" cy="65" r="5"/><path d="M82 73h10v15H82zm16-3h12v18H98zm19 3h10v15h-10z"/></g></svg><figcaption>Protect people first. Original game illustration; not a portrait or endorsement.</figcaption></figure><p>Inspired by Austin Long, “Damage Limitation in the 21st Century,” in Brad Roberts (ed.), <i>Counterforce in Contemporary U.S. Nuclear Strategy</i> (LLNL/CGSR, May 2025), pp. 66–86. Protection, deterrence and escalation risk inform the fictional choices here. All costs, effects and technology are invented game rules. No affiliation or endorsement is implied; the author’s views are personal, not Joint Staff or Department of Defense policy.</p></details></div>
         </section>
         <nav id="action-filters" aria-label="Command categories" hidden></nav>
         <div id="actions"></div>
@@ -334,7 +337,8 @@
     <script src="enemy-recon.js?v=0.73.0-book-guns2"></script>
     <script src="enemy-operations.js?v=0.73.0-book-guns2"></script>
     <script src="enemy-economy.js?v=0.73.0-book-guns2"></script>
-    <script src="audio.js?v=0.73.0-book-guns2"></script>
+    <script src="audio.js?v=dusk1"></script>
+    <script type="module" src="damage-race.mjs?v=1"></script>
     <script src="character-art.js?v=0.73.0-book-guns2"></script>
     <script src="book-art.js?v=0.73.0-book-guns2"></script>
     <script src="book-guns.js?v=0.73.0-book-guns2"></script>

@@ -130,22 +130,27 @@ function scoreIntensity(){
   if(typeof atomicStrikes!=='undefined'&&atomicStrikes.length)return 2;
   return alive(0).some(u=>t-(u.hitAt??-100)<7)?1:0;
 }
-// Original eight-bar theme: low strings, a restrained melodic line and drums
-// increase in density under fire. Scheduling uses the audio clock, not frame rate.
-function soundscape(){
-  if(!audioReady()||!running||paused||ended||audioLevels.music===0)return;
+// Original Dusk at Celesteville score: a low, uneven procession with dry
+// percussion and a narrow minor motif. Uses only locally synthesized voices.
+function soundscape(race=false){
+  if(!audioReady()||(!race&&(!running||paused||ended))||audioLevels.master===0||audioLevels.music===0)return;
   const now=audioContext.currentTime;
   if(scoreAt<now-.5){scoreAt=now+.03;scoreStep=0;}
   if(scoreAt>now+.12)return;
-  const intensity=scoreIntensity(),beat=scoreStep%8,bar=Math.floor(scoreStep/8)%4;
-  const roots=[65.406,51.913,58.27,49],root=roots[bar],at=scoreAt;
-  if(beat===0){tone(root,at,2.6,.047);tone(root*1.5,at+.04,2.4,.024,'music','sine',-.25);}
-  const melody=[2,3,2.5,2.25,2,1.5,1.7818,1.5];
-  if(beat%2===0)tone(root*melody[beat],at,.75,.026+intensity*.006,'music','triangle',.2);
-  if(beat%4===0||intensity&&beat%2===0)tone(85,at,.22,.055+intensity*.015,'music','sine',0,38);
-  if(intensity&&beat%4===2)noise(at,.12,.04,1700,-.15,'music');
-  if(intensity===2)tone(root*4,at,.18,.018,'music','triangle',beat%2?.3:-.3);
-  scoreAt+=.375;scoreStep++;musicBeat=t;
+  const intensity=race?0:scoreIntensity(),beat=scoreStep%8,bar=Math.floor(scoreStep/8)%8;
+  const roots=[55,55,43.654,48.999,55,51.913,43.654,41.203],root=roots[bar],at=scoreAt;
+  if(beat===0){
+    tone(root,at,2.9,.047,'music','triangle',-.19);
+    tone(root*1.499,at+.07,2.6,.026,'music','sine',.29);
+    tone(root*.5,at+.11,2.4,.026,'music','sine',0);
+  }
+  const phrases=[[0,0,2,0,0,2.3784,0,0],[0,0,0,2,0,1.7818,0,0]];
+  const note=phrases[Math.floor(bar/2)%2][beat];
+  if(note)tone(root*note,at+.02,.83,.017+intensity*.004,'music','triangle',.17);
+  if(beat===0||beat===3||beat===6&&intensity)tone(72,at,.27,.039+intensity*.013,'music','sine',0,32);
+  if(beat===5||intensity&&beat===2)noise(at,.14,.025+intensity*.006,720,-.16,'music');
+  if(beat===7&&bar%2===1)tone(root*1.1225,at,.35,.014,'music','triangle',-.22);
+  scoreAt+=.39;scoreStep++;musicBeat=t;
 }
 function uiSound(kind='confirm'){
   if(!audioReady())return;
@@ -178,6 +183,19 @@ for(const key of Object.keys(AUDIO_DEFAULTS))$('audio-'+key)?.addEventListener('
 });
 $('audio-preview')?.addEventListener('click',()=>{startAudio();uiSound();battleSound('cannon');});
 $('mute').onclick=()=>{muted=!muted;try{localStorage.setItem('babar-muted',String(muted));}catch{}startAudio();};
+let raceScoreTimer=null;
+const raceDialog=$('damage-race');
+function stopRaceScore(){
+  if(raceScoreTimer!==null)clearInterval(raceScoreTimer);
+  raceScoreTimer=null;stopAudioVoices('music');scoreAt=0;scoreStep=0;
+}
+$('race-start')?.addEventListener('click',()=>{
+  startAudio();stopRaceScore();
+  raceScoreTimer=setInterval(()=>{if(raceDialog?.open)soundscape(true);else stopRaceScore();},70);
+});
+$('race-mute')?.addEventListener('click',()=>$('mute').click());
+raceDialog?.addEventListener('close',stopRaceScore);
+raceDialog?.addEventListener('race-finished',stopRaceScore);
 document.addEventListener('visibilitychange',updateAudioMix);
 document.addEventListener('click',e=>{if(e.target.closest?.('button')&&!e.target.closest('#mute,#opening-mute,#audio-preview'))uiSound();});
 renderAudioControls();muteLabel();
